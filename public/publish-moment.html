@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布朋友圈 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .publish-page {
+      min-height: 100vh;
+      padding: 80px 20px 60px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .publish-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+    .publish-header h1 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      letter-spacing: 8px;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+
+    .back-home-bar {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 14px 24px;
+      background: linear-gradient(to bottom, var(--bg-primary) 70%, transparent);
+    }
+    .back-home-bar a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.3s;
+    }
+    .back-home-bar a:hover { color: var(--accent-gold); }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0;
+      padding: 12px 4px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-bottom-color: var(--accent-gold);
+    }
+    .form-group textarea {
+      min-height: 120px;
+      line-height: 1.8;
+      resize: vertical;
+    }
+    .form-group input[type="file"] {
+      border-bottom: none;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+    .form-group input[type="file"]::-webkit-file-upload-button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      cursor: pointer;
+      margin-right: 12px;
+      font-family: var(--font-sans);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      position: sticky;
+      bottom: 20px;
+      padding: 16px 0;
+      background: linear-gradient(to top, var(--bg-primary) 60%, transparent);
+    }
+    .btn-primary {
+      background: var(--accent-gold);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      color: var(--bg-primary);
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: opacity 0.2s;
+      font-family: var(--font-sans);
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      font-family: var(--font-sans);
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .sortable-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .sortable-item {
+      position: relative;
+      cursor: grab;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+      aspect-ratio: 1;
+      background: var(--bg-secondary);
+    }
+    .sortable-item.dragging {
+      opacity: 0.3;
+      transform: scale(0.92);
+      border-color: var(--accent-gold);
+    }
+    .sortable-item:hover { border-color: var(--accent-gold); }
+    .sortable-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    .sortable-item .order-num {
+      position: absolute;
+      top: 4px; left: 4px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      font-size: 11px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .sortable-item .del-btn {
+      position: absolute;
+      top: 4px; right: 4px;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.2s;
+      border: none;
+      padding: 0;
+    }
+    .sortable-item:hover .del-btn { opacity: 1; }
+    .sortable-item .del-btn:hover { background: var(--accent-red); }
+    /* 拖动时的占位插槽 */
+    .sortable-placeholder {
+      border-radius: 6px;
+      border: 2px dashed rgba(201,169,110,0.4);
+      background: rgba(201,169,110,0.05);
+      aspect-ratio: 1;
+    }
+    .sortable-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .success-msg {
+      background: rgba(7,193,96,0.1);
+      color: #07c160;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      display: none;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.2); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="unified-back">← 返回主页</a>
+
+  <div class="publish-page">
+    <div class="publish-header">
+      <h1>发布朋友圈</h1>
+    </div>
+
+    <div class="success-msg" id="successMsg">发布成功！</div>
+
+    <form id="momentForm">
+      <div class="form-group">
+        <label>类型</label>
+        <select id="momentType">
+          <option value="moment">朋友圈（图片+文字）</option>
+          <option value="diary">日记（纯文字）</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>日期</label>
+        <input type="datetime-local" id="momentDate" required>
+      </div>
+      <div class="form-group">
+        <label>内容</label>
+        <textarea id="momentContent" placeholder="写点什么..." required></textarea>
+      </div>
+      <div class="form-group" id="momentImageGroup">
+        <label>图片（最多9张）</label>
+        <input type="file" id="momentImages" multiple accept="image/*">
+        <div class="sortable-grid" id="momentPreview"></div>
+        <div class="sortable-hint" id="momentHint" style="display:none;">💡 拖动调整顺序，双击删除</div>
+      </div>
+      <div class="form-group" id="momentVideoGroup">
+        <label>视频（最多1个）</label>
+        <input type="file" id="momentVideo" accept="video/*">
+        <div class="video-preview-wrap" id="videoPreview" style="display:none;">
+          <video id="videoPreviewEl" controls style="max-width:100%;border-radius:8px;margin-top:8px;"></video>
+          <button type="button" class="btn-secondary" style="margin-top:8px;font-size:12px;padding:6px 14px;" onclick="clearVideo()">删除视频</button>
+        </div>
+      </div>
+      <div class="form-group" id="momentLocationGroup">
+        <label>📍 位置</label>
+        <input type="text" id="momentLocation" placeholder="输入位置，如：广州" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 4px;color:var(--text-primary);font-size:14px;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderBottomColor='var(--accent-gold)'" onblur="this.style.borderBottomColor='rgba(255,255,255,0.08)'">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">发布</button>
+        <button type="button" class="btn-secondary" onclick="resetForm()">重置</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('momentDate').value = now.toISOString().slice(0, 16);
+
+    let momentFiles = [];
+    let dragSrcIdx = null;
+    let videoFile = null;
+
+    document.getElementById('momentType').onchange = function() {
+      const isMoment = this.value === 'moment';
+      document.getElementById('momentImageGroup').style.display = isMoment ? 'block' : 'none';
+      document.getElementById('momentVideoGroup').style.display = isMoment ? 'block' : 'none';
+    };
+
+    // ===== 视频 =====
+    document.getElementById('momentVideo').onchange = function() {
+      const file = this.files[0];
+      if (!file) return;
+      videoFile = file;
+      const url = URL.createObjectURL(file);
+      document.getElementById('videoPreviewEl').src = url;
+      document.getElementById('videoPreview').style.display = 'block';
+      document.getElementById('momentImageGroup').style.display = 'none';
+    };
+    function clearVideo() {
+      videoFile = null;
+      document.getElementById('momentVideo').value = '';
+      document.getElementById('videoPreview').style.display = 'none';
+      document.getElementById('videoPreviewEl').src = '';
+      document.getElementById('momentImageGroup').style.display = 'block';
+    }
+
+    // ===== 图片上传（追加模式） =====
+    document.getElementById('momentImages').onchange = function() {
+      const newFiles = Array.from(this.files).slice(0, 9 - momentFiles.length);
+      if (newFiles.length === 0) return;
+      newFiles.forEach(file => {
+        momentFiles.push({ file, preview: URL.createObjectURL(file) });
+      });
+      this.value = '';
+      renderMomentPreview();
+    };
+
+    // ===== 渲染预览 =====
+    function renderMomentPreview() {
+      const grid = document.getElementById('momentPreview');
+      grid.innerHTML = '';
+      if (momentFiles.length === 0) {
+        document.getElementById('momentHint').style.display = 'none';
+        return;
+      }
+      document.getElementById('momentHint').style.display = 'block';
+
+      momentFiles.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'sortable-item';
+        div.draggable = true;
+        div.dataset.index = i;
+        div.innerHTML = `
+          <span class="order-num">${i+1}</span>
+          <img src="${item.preview}" draggable="false">
+          <button class="del-btn" data-idx="${i}" title="删除">×</button>
+        `;
+
+        div.querySelector('.del-btn').addEventListener('click', e => {
+          e.stopPropagation();
+          const idx = parseInt(e.currentTarget.dataset.idx);
+          URL.revokeObjectURL(momentFiles[idx].preview);
+          momentFiles.splice(idx, 1);
+          renderMomentPreview();
+        });
+
+        div.addEventListener('dragstart', e => {
+          dragSrcIdx = parseInt(div.dataset.index);
+          div.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        div.addEventListener('dragend', () => {
+          div.classList.remove('dragging');
+          dragSrcIdx = null;
+        });
+        div.addEventListener('dragover', e => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+        });
+        div.addEventListener('drop', e => {
+          e.stopPropagation(); e.preventDefault();
+          const dst = parseInt(div.dataset.index);
+          if (dragSrcIdx === null || dragSrcIdx === dst) return;
+          const temp = momentFiles[dragSrcIdx];
+          momentFiles.splice(dragSrcIdx, 1);
+          momentFiles.splice(dst, 0, temp);
+          renderMomentPreview();
+        });
+
+        grid.appendChild(div);
+      });
+    }
+
+    // ===== 发布 =====
+    document.getElementById('momentForm').onsubmit = async e => {
+      e.preventDefault();
+      const data = new FormData();
+      data.append('content', document.getElementById('momentContent').value);
+      data.append('type', document.getElementById('momentType').value);
+      data.append('display_date', document.getElementById('momentDate').value);
+      data.append('location', document.getElementById('momentLocation').value);
+      momentFiles.forEach(item => data.append('images', item.file));
+      if (videoFile) data.append('video', videoFile);
+      try {
+        const res = await fetch('/api/posts', { method: 'POST', body: data, credentials: 'same-origin' });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error);
+        showSuccess(); resetForm();
+      } catch(err) { alert(err.message); }
+    };
+
+    // ===== 重置（完全清空） =====
+    function resetForm() {
+      document.getElementById('momentForm').reset();
+      // 释放所有 object URLs
+      momentFiles.forEach(item => URL.revokeObjectURL(item.preview));
+      momentFiles = [];
+      renderMomentPreview();
+      clearVideo();
+      document.getElementById('momentLocation').value = '';
+      const n = new Date();
+      n.setMinutes(n.getMinutes() - n.getTimezoneOffset());
+      document.getElementById('momentDate').value = n.toISOString().slice(0, 16);
+    }
+
+    function showSuccess() {
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+  </script>
+</body>
+</html>

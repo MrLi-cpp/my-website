@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登录 / 注册</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+</head>
+<body style="overflow-y:auto;">
+  <div class="auth-container">
+    <div class="auth-box" id="loginBox">
+      <h2>🔐 登录</h2>
+      <form id="loginForm">
+        <input type="text" name="username" placeholder="用户名" required inputmode="latin" autocapitalize="off" spellcheck="false" autocomplete="username">
+        <input type="password" name="password" placeholder="密码" required inputmode="latin" autocapitalize="off" spellcheck="false" autocomplete="current-password">
+        <button type="submit" class="btn-primary">登录</button>
+      </form>
+      <div class="auth-switch">
+        还没有账号？<a href="#" onclick="showRegister()">立即注册</a>
+      </div>
+      <div class="auth-switch" style="margin-top:8px;font-size:12px;">
+        <a href="/">← 返回首页</a>
+      </div>
+    </div>
+
+    <div class="auth-box" id="registerBox" style="display:none;">
+      <h2>📝 注册</h2>
+      <form id="registerForm">
+        <input type="text" name="username" placeholder="用户名（至少2位）" required minlength="2">
+        <input type="password" name="password" placeholder="密码（至少4位）" required minlength="4">
+        <button type="submit" class="btn-primary">注册</button>
+      </form>
+      <div class="auth-switch">
+        已有账号？<a href="#" onclick="showLogin()">去登录</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    function showLogin() {
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('registerBox').style.display = 'none';
+    }
+    function showRegister() {
+      document.getElementById('loginBox').style.display = 'none';
+      document.getElementById('registerBox').style.display = 'block';
+    }
+
+    document.getElementById('loginForm').onsubmit = async e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      try {
+        const res = await post('/api/login', data);
+        alert('登录成功！');
+        location.href = '/';
+      } catch (err) {
+        alert(err.message || '登录失败');
+      }
+    };
+
+    document.getElementById('registerForm').onsubmit = async e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      try {
+        const res = await post('/api/register', data);
+        alert('注册成功！');
+        location.href = '/';
+      } catch (err) {
+        alert(err.message || '注册失败');
+      }
+    };
+  </script>
+</body>
+</html>

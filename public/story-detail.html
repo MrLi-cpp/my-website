@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的故事 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .story-detail-page { min-height: 100vh; padding: 80px 20px 60px; }
+    .story-detail-inner { max-width: 960px; margin: 0 auto; }
+    .story-detail-header { text-align: center; margin-bottom: 40px; padding-top: 20px; }
+    .story-detail-header h1 { font-family: var(--font-serif); font-size: 32px; letter-spacing: 8px; font-weight: 400; }
+    .story-detail-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 3px; margin-top: 8px; }
+    .story-detail-sep { text-align: center; margin-bottom: 40px; font-size: 14px; color: var(--accent-gold); letter-spacing: 8px; opacity: 0.6; }
+
+    /* 7:3 固定宽度布局 */
+    .story-layout { display: block; max-width: 720px; margin: 0 auto; }
+    .story-text { width: 100%; max-width: 100%; }
+
+    .story-paragraph {
+      font-size: 15px; line-height: 2.4; color: var(--text-secondary);
+      margin-bottom: 32px; text-indent: 2em;
+      font-family: "KaiTi", "STKaiti", "SimKai", var(--font-serif), serif;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      text-align: justify;
+    }
+
+    /* 编辑按钮（仅管理员可见） */
+    .story-edit-btn {
+      display: none;
+      position: fixed; bottom: 80px; right: 32px;
+      z-index: 1000; width: 52px; height: 52px;
+      border-radius: 50%; background: var(--accent-red);
+      border: none; color: #fff; font-size: 20px;
+      cursor: pointer; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(192,57,43,0.3);
+      transition: transform 0.3s;
+    }
+    .story-edit-btn:hover { transform: scale(1.1); }
+    .story-edit-btn.show { display: flex; }
+
+    .story-empty { text-align: center; padding: 80px 20px; font-family: "KaiTi", "STKaiti", "SimKai", serif; }
+    .story-empty .empty-sep { font-size: 14px; color: var(--accent-gold); letter-spacing: 8px; margin-bottom: 20px; opacity: 0.6; }
+    .story-empty .empty-title { font-size: 20px; color: var(--accent-gold); letter-spacing: 6px; margin-bottom: 12px; }
+    .story-empty .empty-desc { font-size: 13px; color: var(--text-muted); letter-spacing: 2px; line-height: 2; }
+
+    /* 底部分隔线 */
+    .story-bottom-sep {
+      text-align: center;
+      margin-top: 48px;
+      font-size: 14px;
+      color: var(--accent-gold);
+      letter-spacing: 8px;
+      opacity: 0.4;
+    }
+
+    /* 移动端：堆叠 */
+    @media (max-width: 640px) {
+      .story-layout { max-width: 100%; padding: 0 16px; }
+      .story-detail-header h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body style="background:var(--bg-primary);">
+
+  <a href="/story.html" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回上一级</a>
+
+  <div class="story-detail-page">
+    <div class="story-detail-inner" id="storyInner">
+      <!-- 动态加载 -->
+    </div>
+  </div>
+
+  <a href="#" class="story-edit-btn" id="storyEditBtn" title="编辑">✏️</a>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    const section = new URLSearchParams(location.search).get('section');
+    const sectionMap = { primary: '小学', middle: '初中', high: '高中', university: '大学' };
+    const sectionHint = { primary: '雅居乐小学 5班', middle: '番禺执信 2班', high: '执信中学 2班', university: '华工Ai3班' };
+
+    async function loadStory() {
+      const inner = document.getElementById('storyInner');
+      if (!sectionMap[section]) {
+        inner.innerHTML = `
+          <div class="story-empty">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">页面不存在</div>
+            <div class="empty-desc"><a href="/story.html" style="color:var(--accent-gold);">返回我的故事</a></div>
+          </div>`;
+        return;
+      }
+
+      try {
+        const story = await get('/api/story/' + section);
+        const paragraphs = story.paragraphs || [];
+
+        let textHtml = '';
+        if (paragraphs.length > 0) {
+          textHtml = paragraphs.map((p, i) =>
+            `<div class="story-paragraph" data-idx="${i}">${escapeHtml(p).replace(/\n/g, '<br>')}</div>`
+          ).join('');
+        } else {
+          // 无内容时左文字区留白
+          textHtml = '<div style="min-height:120px;"></div>';
+        }
+
+        // 底部：大学无内容时显示「故事待续」，其他只显示 — · —
+        const bottomHtml = (section === 'university' && paragraphs.length === 0)
+          ? `<div class="story-bottom-sep">— · —</div>
+            <div class="story-empty" style="padding:20px 0 40px;">
+              <div class="empty-title">故事待续</div>
+              <div class="empty-desc">这里的内容正在书写中，敬请期待</div>
+            </div>`
+          : `<div class="story-bottom-sep">— · —</div>`;
+
+        inner.innerHTML = `
+          <div class="story-detail-header">
+            <h1>${sectionMap[section]}</h1>
+            <p>${sectionHint[section]}</p>
+          </div>
+          <div class="story-detail-sep">— · —</div>
+          <div class="story-layout">
+            <div class="story-text">${textHtml}</div>
+          </div>
+          ${bottomHtml}
+        `;
+
+        // 管理员显示编辑按钮
+        loadUser().then(u => {
+          if (u && u.is_admin) {
+            const btn = document.getElementById('storyEditBtn');
+            btn.classList.add('show');
+            btn.href = `/story-edit.html?section=${section}`;
+          }
+        });
+
+      } catch (err) {
+        inner.innerHTML = `
+          <div class="story-empty">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    loadStory();
+  </script>
+</body>
+</html>

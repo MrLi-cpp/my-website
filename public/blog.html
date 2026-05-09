@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>博客 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    .blog-page { min-height: 100vh; padding: 80px 20px 60px; }
+    .blog-header { text-align: center; margin-bottom: 56px; padding-top: 20px; }
+    .blog-header h1 { font-family: var(--font-serif); font-size: 36px; letter-spacing: 10px; font-weight: 400; }
+    .blog-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 4px; margin-top: 10px; }
+    .blog-header-line { width: 40px; height: 1px; background: var(--accent-gold); margin: 16px auto 0; opacity: 0.4; }
+
+    /* 小红书风格瀑布流 */
+    .blog-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      column-count: 4;
+      column-gap: 16px;
+    }
+    .blog-card {
+      break-inside: avoid;
+      margin-bottom: 16px;
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+      border: none;
+    }
+    .blog-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    }
+
+    /* 封面图 — 小红书竖图比例 3:4 */
+    .blog-cover-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--bg-secondary);
+    }
+    .blog-cover-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .blog-card:hover .blog-cover-wrap img { transform: scale(1.06); }
+    .blog-cover-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px;
+      background: linear-gradient(160deg, rgba(40,36,30,0.9), rgba(26,23,20,0.95));
+      text-align: center;
+      gap: 12px;
+    }
+    .blog-cover-placeholder .cover-title {
+      font-family: var(--font-serif);
+      font-size: 22px; font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.6;
+      letter-spacing: 2px;
+      word-break: break-all;
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-cover-placeholder .cover-sep {
+      width: 24px; height: 1px;
+      background: var(--accent-gold);
+      opacity: 0.4;
+    }
+    .blog-cover-placeholder .cover-desc {
+      font-size: 11px; color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 卡片内容 — 极简 */
+    .blog-card-body { padding: 12px 14px 14px; }
+    .blog-card-title {
+      font-size: 15px; font-weight: 500; color: var(--text-primary);
+      line-height: 1.5; margin-bottom: 10px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .blog-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 11px; color: var(--text-muted); letter-spacing: 1px;
+    }
+    .blog-card-footer .left { display: flex; align-items: center; gap: 4px; }
+    .blog-card-footer .right { display: flex; align-items: center; gap: 4px; }
+
+    /* 骨架屏 */
+    .blog-skeleton {
+      column-count: 4; column-gap: 16px;
+    }
+    .skeleton-card {
+      break-inside: avoid; margin-bottom: 16px;
+      background: var(--bg-card); border-radius: 16px; overflow: hidden;
+    }
+    .skeleton-cover { width: 100%; aspect-ratio: 3/4; background: var(--bg-secondary); animation: pulse 1.5s infinite; }
+    .skeleton-body { padding: 12px 14px 14px; }
+    .skeleton-line { height: 14px; background: var(--bg-secondary); border-radius: 4px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
+    .skeleton-line.short { width: 60%; }
+
+    /* 详情页 */
+    .blog-detail { display: none; min-height: 100vh; }
+    .blog-detail-inner { max-width: 680px; margin: 0 auto; padding: 20px 20px 60px; }
+    .blog-back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-muted); font-size: 13px; cursor: pointer;
+      margin-bottom: 32px; letter-spacing: 1px; transition: color 0.2s;
+    }
+    .blog-back-btn:hover { color: var(--accent-gold); }
+    .blog-detail-cover {
+      width: 100%; aspect-ratio: 21/9; object-fit: cover; border-radius: 12px;
+      margin-bottom: 40px; box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .blog-detail-title {
+      font-family: var(--font-serif); font-size: 32px; font-weight: 400;
+      letter-spacing: 4px; line-height: 1.4; margin-bottom: 20px;
+    }
+    .blog-detail-meta {
+      display: flex; gap: 20px; align-items: center;
+      font-size: 12px; color: var(--text-muted); letter-spacing: 2px;
+      margin-bottom: 32px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; row-gap: 8px;
+    }
+    .blog-detail-author { display: flex; align-items: center; gap: 8px; }
+    .blog-detail-author img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+    .blog-detail-author .author-placeholder {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--accent-gold);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: var(--bg-primary);
+    }
+    .blog-detail-content {
+      font-size: 15px; line-height: 2.2; color: var(--text-secondary);
+    }
+    .blog-detail-content p { margin-bottom: 1.6em; }
+    .blog-detail-content h2 {
+      font-family: var(--font-serif); font-size: 24px; color: var(--text-primary);
+      margin: 2em 0 0.8em; letter-spacing: 3px; font-weight: 400;
+      padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .blog-detail-content h3 {
+      font-size: 19px; color: var(--text-primary); margin: 1.6em 0 0.6em;
+      letter-spacing: 2px; font-weight: 500;
+    }
+    .blog-detail-content blockquote {
+      border-left: 3px solid var(--accent-gold); padding-left: 20px; margin: 1.5em 0;
+      color: var(--text-muted); font-style: italic; line-height: 1.8;
+    }
+    .blog-detail-content pre {
+      background: var(--bg-secondary); padding: 16px; border-radius: 8px;
+      overflow-x: auto; font-size: 13px; margin: 1em 0; border: 1px solid var(--border);
+    }
+    .blog-detail-content code {
+      background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px;
+      font-size: 13px;
+    }
+    .blog-detail-content pre code { background: none; padding: 0; }
+    .blog-detail-content img { max-width: 100%; border-radius: 8px; margin: 1em 0; }
+
+    /* 底部互动区 */
+    .blog-detail-footer {
+      margin-top: 48px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .blog-detail-actions { display: flex; gap: 16px; margin-bottom: 20px; }
+    .blog-detail-action {
+      background: none; border: 1px solid var(--border); border-radius: 8px;
+      padding: 10px 24px; color: var(--text-muted); cursor: pointer;
+      transition: all 0.2s; font-size: 13px; letter-spacing: 1px;
+      font-family: var(--font-sans);
+    }
+    .blog-detail-action:hover { border-color: var(--accent-gold); color: var(--accent-gold); transform: scale(1.08); box-shadow: 0 0 16px rgba(201,169,110,0.1); }
+    .blog-detail-action.liked { border-color: var(--accent-red); color: var(--accent-red); }
+    /* 点赞用户列表 */
+    .blog-likers-bar {
+      font-size: 13px; color: var(--accent-gold);
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px; margin-bottom: 24px; line-height: 1.6;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .blog-likers-bar .likers-label { flex-shrink: 0; font-size: 16px; }
+    .blog-likers-bar .likers-names { word-break: break-all; }
+    .blog-likers-bar .likers-names span { color: var(--accent-gold); font-weight: 500; }
+
+    /* 评论时间 */
+    .blog-comment-time {
+      font-size: 11px; color: var(--text-muted); margin-left: auto;
+      letter-spacing: 1px; flex-shrink: 0;
+    }
+
+    /* 追评 / 回复 */
+    .blog-comment-replies {
+      margin-top: 8px; margin-left: 36px;
+      border-left: 2px solid rgba(201,169,110,0.15);
+      padding-left: 12px;
+    }
+    .blog-comment-reply {
+      padding: 8px 0; font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.02);
+    }
+    .blog-comment-reply:last-child { border-bottom: none; }
+    .blog-comment-reply-author { color: var(--accent-gold); font-weight: 500; }
+    .blog-comment-reply-text { color: var(--text-secondary); line-height: 1.6; }
+    .blog-comment-reply-to { color: var(--text-muted); font-size: 11px; }
+
+    /* 底部操作弹窗 */
+    .comment-action-sheet {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--bg-card); border-top: 1px solid var(--border);
+      border-radius: 20px 20px 0 0;
+      padding: 16px 20px 32px;
+      z-index: 10000;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .comment-action-sheet.active { transform: translateY(0); }
+    .comment-action-sheet-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+      z-index: 9999; opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .comment-action-sheet-overlay.active { opacity: 1; pointer-events: auto; }
+    .comment-action-btn {
+      display: block; width: 100%; text-align: center;
+      padding: 14px; font-size: 15px; color: var(--text-primary);
+      background: none; border: none; border-bottom: 1px solid var(--border);
+      cursor: pointer; letter-spacing: 2px;
+      transition: all 0.2s;
+    }
+    .comment-action-btn:last-child { border-bottom: none; }
+    .comment-action-btn:hover { color: var(--accent-gold); background: rgba(201,169,110,0.05); }
+    .comment-action-btn.danger { color: #c0392b; }
+    .comment-action-btn.danger:hover { background: rgba(192,57,43,0.08); }
+    .comment-action-cancel {
+      display: block; width: 100%; text-align: center;
+      padding: 14px; font-size: 15px; color: var(--text-muted);
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 12px; margin-top: 10px; cursor: pointer;
+      letter-spacing: 2px; transition: all 0.2s;
+    }
+    .comment-action-cancel:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+    /* 评论编辑弹窗 */
+    .comment-edit-modal {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px;
+      z-index: 10001; opacity: 0; pointer-events: none;
+      transition: all 0.3s; width: 90%; max-width: 400px;
+    }
+    .comment-edit-modal.active { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+    .comment-edit-modal h3 {
+      font-size: 15px; color: var(--text-primary); margin-bottom: 16px;
+      text-align: center; letter-spacing: 2px;
+    }
+    .comment-edit-modal textarea {
+      width: 100%; background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px; color: var(--text-primary);
+      font-size: 14px; font-family: var(--font-sans); resize: none;
+      outline: none; min-height: 80px; margin-bottom: 16px;
+    }
+    .comment-edit-modal textarea:focus { border-color: var(--accent-gold); }
+    .comment-edit-modal .edit-btns { display: flex; gap: 10px; }
+    .comment-edit-modal .edit-btns button {
+      flex: 1; padding: 10px; border-radius: 10px; font-size: 13px;
+      cursor: pointer; letter-spacing: 1px; border: none;
+    }
+    .comment-edit-modal .edit-btns .save-btn {
+      background: var(--accent-gold); color: var(--bg-primary);
+    }
+    .comment-edit-modal .edit-btns .cancel-btn {
+      background: transparent; color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* 评论 — 黑金圆角卡片 */
+    .blog-comments {
+      margin-top: 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 24px 20px;
+    }
+    .blog-comments-title {
+      font-size: 13px; color: var(--text-muted); letter-spacing: 3px;
+      margin-bottom: 16px; text-align: center;
+      display: flex; align-items: center; gap: 12px; justify-content: center;
+    }
+    .blog-comments-title::before,
+    .blog-comments-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      max-width: 80px;
+    }
+    .blog-comment-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 10px;
+      transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .blog-comment-item:hover {
+      border-color: rgba(201,169,110,0.25);
+      transform: scale(1.02);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .blog-comment-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .blog-comment-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--accent-gold); color: var(--bg-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 500; flex-shrink: 0;
+    }
+    .blog-comment-author { color: var(--accent-gold); font-weight: 500; font-size: 13px; }
+    .blog-comment-text { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+    .blog-comment-form { display: flex; gap: 10px; margin-top: 16px; }
+    .blog-comment-form input {
+      flex: 1; background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 16px; color: var(--text-primary);
+      font-size: 14px; font-family: var(--font-sans); outline: none;
+      transition: all 0.2s;
+    }
+    .blog-comment-form input:focus { border-color: var(--accent-gold); box-shadow: 0 0 0 2px rgba(201,169,110,0.1); }
+    .blog-comment-form button {
+      background: transparent; border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px 22px; color: var(--accent-gold); font-size: 13px;
+      cursor: pointer; letter-spacing: 1px; font-family: var(--font-sans);
+      transition: all 0.3s;
+    }
+    .blog-comment-form button:hover { border-color: var(--accent-gold); transform: scale(1.08); box-shadow: 0 0 12px rgba(201,169,110,0.15); }
+
+    @media (max-width: 640px) {
+      .blog-grid { column-count: 2; column-gap: 10px; }
+      .blog-skeleton { column-count: 2; column-gap: 10px; }
+      .blog-detail-title { font-size: 24px; }
+      .blog-detail-content { font-size: 14px; line-height: 2; }
+    }
+  </style>
+</head>
+<body style="background:var(--bg-primary);">
+  <a href="/" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</a>
+
+  <!-- 博客列表 -->
+  <div class="blog-page" id="blogListPage">
+    <div class="blog-header">
+      <h1>博客</h1>
+      <p>长文 · 思考 · 沉淀</p>
+      <div class="blog-header-line"></div>
+    </div>
+    <div class="blog-grid" id="blogGrid"></div>
+  </div>
+
+  <!-- 博客详情 -->
+  <div class="blog-detail" id="blogDetailPage">
+    <div class="blog-detail-inner" data-blog-id="${blog.id}">
+      <span class="blog-back-btn" onclick="showBlogList()">← 返回博客列表</span>
+      <div id="blogDetailContent"></div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    async function initBlog() {
+      await loadUser();
+      const grid = document.getElementById('blogGrid');
+      // 骨架屏
+      grid.innerHTML = `
+        <div class="blog-skeleton">
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        </div>`;
+      try {
+        const blogs = await get('/api/blogs');
+        if (!blogs.length) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-sep">— · —</div>
+              <div class="empty-title">暂无文章</div>
+              <div class="empty-desc">长文正在沉淀，敬请期待</div>
+            </div>`;
+          return;
+        }
+        grid.innerHTML = blogs.map(blog => renderBlogCard(blog)).join('');
+        document.querySelectorAll('.blog-card').forEach(card => {
+          card.onclick = () => loadBlogDetail(card.dataset.id);
+        });
+      } catch (err) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    function renderBlogCard(blog) {
+      const dateStr = formatDate(blog.display_date);
+      const hasCover = blog.cover_image;
+      const titleHtml = escapeHtml(blog.title);
+      const excerpt = blog.content ? blog.content.slice(0, 40).replace(/[#*`|\-\[\]\(\)]/g, '') + (blog.content.length > 40 ? '…' : '') : '';
+      const coverHtml = hasCover
+        ? `<img src="${blog.cover_image}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'blog-cover-placeholder\\'><span class=\\'cover-title\\'>'+titleHtml+'</span><div class=\\'cover-sep\\'></div></div>'">`
+        : `<div class="blog-cover-placeholder"><span class="cover-title">${titleHtml}</span><div class="cover-sep"></div>${excerpt ? `<span class="cover-desc">${escapeHtml(excerpt)}</span>` : ''}</div>`;
+      return `
+        <div class="blog-card" data-id="${blog.id}">
+          <div class="blog-cover-wrap">
+            ${coverHtml}
+          </div>
+          <div class="blog-card-body">
+            <div class="blog-card-title">${titleHtml}</div>
+            <div class="blog-card-footer">
+              <span class="left">📅 ${dateStr}</span>
+              <span class="right">❤️ ${blog.likes_count || 0}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+        let blogDetailAbort = null;
+
+async function loadBlogDetail(id) {
+
+      if (blogDetailAbort) blogDetailAbort.abort();
+      blogDetailAbort = { aborted: false, abort() { this.aborted = true; } };
+      const ac = blogDetailAbort;
+      try {
+        const [blog, comments, profile] = await Promise.all([
+          get('/api/blogs/' + id),
+          get('/api/blogs/' + id + '/comments'),
+          get('/api/profile').catch(() => null)
+        ]);
+        blog.comments_list = comments;
+      if (ac.aborted) return;
+
+        document.getElementById('blogListPage').style.display = 'none';
+        document.getElementById('blogDetailPage').style.display = 'block';
+        window.scrollTo(0, 0);
+        bcBlogId = blog.id;
+
+        const tags = blog.tags || [];
+        const authorAvatar = profile && profile.avatar
+          ? `<img src="${profile.avatar}" alt="">`
+          : `<div class="author-placeholder">我</div>`;
+
+        // 当前用户ID用于判断评论所有权
+        blog.currentUserId = currentUser ? currentUser.id : null;
+
+        // 点赞用户列表 — 头像+名字
+        const likersHtml = blog.likers && blog.likers.length
+          ? `<div class="blog-likers-bar"><span class="likers-label">❤️</span><div class="likers-names">${blog.likers.map(n => `<span>${escapeHtml(n)}</span>`).join('、')} 觉得很赞</div></div>`
+          : '';
+
+        document.getElementById('blogDetailContent').innerHTML = `
+          ${blog.cover_image ? `<img class="blog-detail-cover" src="${blog.cover_image}" alt="">` : ''}
+          <h1 class="blog-detail-title">${escapeHtml(blog.title)}</h1>
+          <div class="blog-detail-meta">
+            <div class="blog-detail-author">${authorAvatar}<span>霁光</span></div>
+            <span>📅 ${formatDate(blog.display_date)}</span>
+            <span>👁 ${blog.views || 0}</span>
+            <span>❤️ ${blog.likes_count || 0}</span>
+            ${blog.location ? `<span style="color:#4a9eff;">📍 ${escapeHtml(blog.location)}</span>` : ''}
+            ${tags.length ? `<span>${tags.map(t => `<span class="blog-tag">${escapeHtml(t)}</span>`).join('')}</span>` : ''}
+          </div>
+          <div class="blog-detail-content">${markdownToHtml(blog.content)}</div>
+          <div class="blog-detail-footer">
+            <div class="blog-detail-actions">
+              <button class="blog-detail-action ${blog.user_liked ? 'liked' : ''}" id="blogLikeBtn" onclick="toggleBlogLike(${blog.id})">
+                ${blog.user_liked ? '❤️ 已赞' : '🤍 赞'} ${blog.likes_count || 0}
+              </button>
+            </div>
+            ${likersHtml}
+            <div class="blog-comments">
+              <div class="blog-comments-title">评论 ${comments.length > 0 ? '· ' + comments.length : ''}</div>
+              ${renderBlogComments(comments, blog.currentUserId)}
+            </div>
+            <form class="blog-comment-form" id="blogCommentForm">
+              <input type="text" name="content" placeholder="写点什么..." required autocomplete="off">
+              <button type="submit">发送</button>
+            </form>
+          </div>
+        `;
+
+        document.getElementById('blogCommentForm').onsubmit = e => {
+          e.preventDefault();
+          submitBlogComment(e, blog.id);
+        };
+      } catch (err) {
+        document.getElementById('blogDetailContent').innerHTML = `
+          <div class="empty-state" style="padding-top:100px;">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    function formatTime(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      const now = new Date();
+      const diff = (now - d) / 1000;
+      if (diff < 60) return '刚刚';
+      if (diff < 3600) return Math.floor(diff / 60) + '分钟前';
+      if (diff < 86400) return Math.floor(diff / 3600) + '小时前';
+      if (diff < 604800) return Math.floor(diff / 86400) + '天前';
+      const pad = n => n.toString().padStart(2, '0');
+      return d.getFullYear() === now.getFullYear()
+        ? pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes())
+        : d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    }
+
+    function renderBlogComments(comments, currentUserId) {
+      if (!comments || !comments.length) {
+        return '<p style="color:var(--text-muted);font-size:13px;padding:12px 0;text-align:center;">暂无留言，虚位以待</p>';
+      }
+      // Build a map of all comments by id for quick lookup
+      const commentMap = {};
+      comments.forEach(c => {
+        commentMap[c.id] = { ...c, children: [] };
+      });
+      // Build tree structure
+      const roots = [];
+      comments.forEach(c => {
+        if (c.parent_id && commentMap[c.parent_id]) {
+          commentMap[c.parent_id].children.push(commentMap[c.id]);
+        } else if (!c.parent_id) {
+          roots.push(commentMap[c.id]);
+        }
+      });
+      // Recursive render — flatten visual depth to max 2 levels
+      function renderNode(node, depth, parentName) {
+        const isMine = currentUserId && node.user_id === currentUserId;
+        const timeStr = formatTime(node.created_at);
+        const visualDepth = Math.min(depth, 1); // flatten: depth 0 = no indent, depth >= 1 = 36px indent
+        const marginStyle = visualDepth > 0 ? 'margin-left:36px;' : '';
+        let nameHtml, textHtml;
+        if (depth > 0) {
+          nameHtml = escapeHtml(node.username) + ' 回复 ' + escapeHtml(parentName);
+          textHtml = '：' + escapeHtml(node.content);
+        } else {
+          nameHtml = escapeHtml(node.username);
+          textHtml = escapeHtml(node.content);
+        }
+        let html = `
+        <div class="blog-comment-item" data-comment-id="${node.id}" data-username="${escapeHtml(node.username)}" data-is-mine="${isMine ? 1 : 0}" style="cursor:pointer;${marginStyle}">
+          <div class="blog-comment-header">
+            <div class="blog-comment-avatar">${escapeHtml(node.username.charAt(0).toUpperCase())}</div>
+            <div class="blog-comment-author">${nameHtml}</div>
+            <div class="blog-comment-time">${timeStr}</div>
+          </div>
+          <div class="blog-comment-text">${textHtml}</div>
+        </div>
+      `;
+        // Render children recursively
+        if (node.children && node.children.length) {
+          node.children.forEach(child => {
+            html += renderNode(child, depth + 1, node.username);
+          });
+        }
+        return html;
+      }
+      return roots.map(root => renderNode(root, 0, null)).join('');
+    }
+
+    // HTTP 工具函数
+    async function del(url) {
+      const res = await fetch(url, { method: 'DELETE', credentials: 'include' });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return res.json().catch(() => ({}));
+    }
+
+    // HTTP 工具函数
+    async function del(url) {
+      const res = await fetch(url, { method: 'DELETE', credentials: 'include' });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+      return res.json().catch(() => ({}));
+    }
+
+    // ===== 博客评论系统（完全独立，bc 前缀）=====
+    let bcActiveId = null;
+    let bcBlogId = null;
+
+    // 事件委托：评论卡片点击
+    document.getElementById('blogDetailPage').addEventListener('click', (e) => {
+      const item = e.target.closest('.blog-comment-item');
+      if (!item) return;
+      const id = parseInt(item.dataset.commentId);
+      const username = item.dataset.username;
+      const isMine = item.dataset.isMine === '1';
+      if (id) openBcMenu(id, isMine ? 1 : 0, username);
+    });
+
+    function openBcMenu(commentId, isMine, username) {
+      bcActiveId = commentId;
+      const box = document.getElementById('bcMenuBox');
+      box.innerHTML = '';
+      if (isMine) {
+        const editBtn = document.createElement('button');
+        editBtn.className = 'bc-menu-btn';
+        editBtn.textContent = '✏️ 修改';
+        editBtn.onclick = () => openBcEdit(commentId);
+        box.appendChild(editBtn);
+        const delBtn = document.createElement('button');
+        delBtn.className = 'bc-menu-btn danger';
+        delBtn.textContent = '🗑️ 删除';
+        delBtn.onclick = () => deleteBc(commentId);
+        box.appendChild(delBtn);
+      } else {
+        const replyBtn = document.createElement('button');
+        replyBtn.className = 'bc-menu-btn';
+        replyBtn.textContent = '💬 追评 @' + username;
+        replyBtn.onclick = () => replyBc(commentId, username);
+        box.appendChild(replyBtn);
+      }
+      document.getElementById('bcMenuOverlay').classList.add('active');
+    }
+
+    function closeBcMenu() {
+      document.getElementById('bcMenuOverlay').classList.remove('active');
+      bcActiveId = null;
+    }
+
+    function openBcEdit(commentId) {
+      closeBcMenu();
+      const textarea = document.getElementById('bcEditTextarea');
+      const commentEl = document.querySelector(`.blog-comment-item[data-comment-id="${commentId}"]`);
+      const textEl = commentEl ? commentEl.querySelector('.blog-comment-text') : null;
+      textarea.value = textEl ? textEl.textContent : '';
+      document.getElementById('bcEditOverlay').classList.add('active');
+      textarea.focus();
+    }
+
+    function closeBcEdit() {
+      document.getElementById('bcEditOverlay').classList.remove('active');
+    }
+
+    async function saveBcEdit() {
+      const content = document.getElementById('bcEditTextarea').value.trim();
+      if (!content) return;
+      try {
+        await put('/api/blog-comments/' + bcActiveId, { content });
+        closeBcEdit();
+        if (bcBlogId) loadBlogDetail(bcBlogId);
+      } catch (err) { alert(err.message || '修改失败'); }
+    }
+
+    async function deleteBc(commentId) {
+      closeBcMenu();
+      if (!confirm('确定删除这条评论？')) return;
+      try {
+        await del('/api/blog-comments/' + commentId);
+        if (bcBlogId) loadBlogDetail(bcBlogId);
+      } catch (err) { alert(err.message || '删除失败'); }
+    }
+
+    async function replyBc(commentId, username) {
+      closeBcMenu();
+      const content = prompt('回复 @' + username + '：');
+      if (!content || !content.trim()) return;
+      try {
+        await post('/api/blog-comments/' + commentId + '/reply', { content: content.trim() });
+        if (bcBlogId) loadBlogDetail(bcBlogId);
+      } catch (err) { alert(err.message || '回复失败'); }
+    }
+
+    function showBlogList() {
+      document.getElementById('blogDetailPage').style.display = 'none';
+      document.getElementById('blogListPage').style.display = 'block';
+      window.scrollTo(0, 0);
+      initBlog();
+    }
+
+    async function toggleBlogLike(blogId) {
+      try {
+        await post('/api/blogs/' + blogId + '/like');
+        loadBlogDetail(blogId);
+      } catch (err) { alert(err.message || '请先登录'); }
+    }
+
+    async function submitBlogComment(e, blogId) {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      const content = input.value.trim();
+      if (!content) return;
+      try {
+        await post('/api/blogs/' + blogId + '/comment', { content });
+        input.value = '';
+        loadBlogDetail(blogId);
+      } catch (err) { alert(err.message || '请先登录'); }
+    }
+
+    function markdownToHtml(md) {
+      if (!md) return '';
+      let html = escapeHtml(md);
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = html.replace(/\n/g, '<br>');
+      html = '<p>' + html + '</p>';
+      html = html.replace(/#{3}\s+(.+)/g, '<h3>$1</h3>');
+      html = html.replace(/#{2}\s+(.+)/g, '<h2>$1</h2>');
+      html = html.replace(/#{1}\s+(.+)/g, '<h2>$1</h2>');
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      html = html.replace(/`{3}[\s\S]*?`{3}/g, '<pre><code>$&</code></pre>');
+      html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+      html = html.replace(/\>\s+(.+)/g, '<blockquote>$1</blockquote>');
+      return html;
+    }
+
+    initBlog();
+  </script>
+
+  <!-- 博客评论操作弹窗（独立样式） -->
+  <!-- 博客评论操作弹窗（bc 前缀，完全独立） -->
+  <div class="bc-overlay" id="bcMenuOverlay" onclick="closeBcMenu()">
+    <div class="bc-sheet" onclick="event.stopPropagation()">
+      <div id="bcMenuBox"></div>
+      <button class="bc-cancel" onclick="closeBcMenu()">取消</button>
+    </div>
+  </div>
+
+  <!-- 博客评论编辑弹窗（bc 前缀，完全独立） -->
+  <div class="bc-overlay" id="bcEditOverlay" onclick="closeBcEdit()">
+    <div class="bc-edit-box" onclick="event.stopPropagation()">
+      <h4>修改评论</h4>
+      <textarea id="bcEditTextarea" placeholder="修改评论内容..."></textarea>
+      <div class="bc-edit-btns">
+        <button class="bc-btn" onclick="closeBcEdit()">取消</button>
+        <button class="bc-btn primary" onclick="saveBcEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

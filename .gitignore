@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Database & sensitive data
+database.sqlite
+*.sqlite
+*.db
+
+# User uploads (too large, don't commit)
+uploads/
+
+# Logs
+*.log
+
+# Credentials
+cookies.txt
+.env
+.env.local
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Backup files
+*.zip
+*.tar.gz

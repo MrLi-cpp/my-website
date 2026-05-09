@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>管理员后台 — 霁光</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0c0c0e; --bg-card: #141417; --bg-hover: #1a1a1e;
+      --gold: #c9a96e; --gold-dim: rgba(201,169,110,0.2);
+      --red: #c0392b; --text: #f0ece6; --text-muted: #a09a90;
+      --text-dim: #6b6560; --border: rgba(255,255,255,0.06);
+      --font-serif: 'Songti SC', 'STSong', 'SimSun', 'Noto Serif SC', Georgia, serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* 顶部导航 */
+    .admin-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(12,12,14,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .admin-header-brand {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      letter-spacing: 6px;
+      color: var(--gold);
+    }
+    .admin-header-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1px;
+      margin-left: 24px;
+      transition: color 0.3s;
+    }
+    .admin-header-links a:hover { color: var(--gold); }
+
+    /* 主体 */
+    .admin-body {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    /* 统计 */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      color: var(--gold);
+      margin-bottom: 4px;
+    }
+    .stat-card .label {
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+
+    /* 标签切换 */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-btn {
+      padding: 12px 24px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 14px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: var(--font-sans);
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* 卡片 */
+    .panel-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+    .panel-card h3 {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      letter-spacing: 3px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    /* 列表 */
+    .list-empty {
+      text-align: center;
+      color: var(--text-dim);
+      padding: 60px 0;
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+    .list-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      background: var(--bg-card);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .list-item:hover {
+      border-color: rgba(201,169,110,0.4);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transform: scale(1.01);
+    }
+    .list-item:active { transform: scale(0.99); }
+    .chat-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(201,169,110,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+      border: 1px solid rgba(201,169,110,0.2);
+    }
+
+    /* 内容管理列表项（朋友圈 / 博客） */
+    .list-thumb {
+      width: 60px; height: 60px; border-radius: 8px;
+      object-fit: cover; flex-shrink: 0;
+      background: var(--bg-hover);
+    }
+    .list-body { flex: 1; min-width: 0; }
+    .list-type {
+      display: inline-block; font-size: 10px;
+      padding: 2px 8px; border-radius: 4px; letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .list-type.moment { background: rgba(201,169,110,0.1); color: var(--accent-gold); }
+    .list-type.diary { background: rgba(160,154,144,0.1); color: var(--text-muted); }
+    .list-type.blog { background: rgba(74,143,199,0.1); color: #4a8fc7; }
+    .list-content {
+      font-size: 14px; color: var(--text-primary);
+      line-height: 1.6; margin-bottom: 4px;
+      word-break: break-word;
+    }
+    .list-meta {
+      font-size: 12px; color: var(--text-dim); letter-spacing: 1px;
+    }
+    .list-actions {
+      display: flex; gap: 8px; flex-shrink: 0; margin-top: 4px;
+    }
+    .chat-info { flex: 1; min-width: 0; }
+    .chat-name {
+      font-size: 15px; font-weight: 500; color: var(--text-primary);
+      letter-spacing: 1px; margin-bottom: 4px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .chat-preview {
+      font-size: 13px; color: var(--text-muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-side {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      flex-shrink: 0;
+    }
+    .chat-time {
+      font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+    }
+    .chat-badge {
+      min-width: 18px; height: 18px; border-radius: 9px;
+      background: var(--accent-red); color: #fff;
+      font-size: 11px; display: flex; align-items: center; justify-content: center;
+      padding: 0 5px;
+    }
+
+    /* ========== 私信列表（DM） ========== */
+    .dm-wrap { max-width: 640px; margin: 0 auto; }
+    .dm-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: var(--bg-card);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .dm-card:hover {
+      border-color: rgba(201,169,110,0.4);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      transform: scale(1.02);
+    }
+    .dm-card:active { transform: scale(0.98); }
+    .dm-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(201,169,110,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+      border: 1px solid rgba(201,169,110,0.25);
+      transition: all 0.3s;
+    }
+    .dm-card:hover .dm-avatar {
+      background: rgba(201,169,110,0.2);
+      border-color: rgba(201,169,110,0.5);
+      transform: scale(1.08);
+    }
+    .dm-main { flex: 1; min-width: 0; }
+    .dm-name {
+      font-size: 16px; font-weight: 500; color: var(--text-primary);
+      letter-spacing: 1px; margin-bottom: 6px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dm-msg {
+      font-size: 13px; color: var(--text-muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      line-height: 1.5;
+    }
+    .dm-right {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+      flex-shrink: 0;
+    }
+    .dm-time {
+      font-size: 11px; color: var(--text-dim); letter-spacing: 1px;
+    }
+    .dm-dot {
+      min-width: 18px; height: 18px; border-radius: 50%;
+      background: var(--accent-red); color: #fff;
+      font-size: 11px; display: flex; align-items: center; justify-content: center;
+      font-weight: 500;
+    }
+    .dm-empty {
+      text-align: center; padding: 80px 20px;
+      color: var(--text-muted); font-size: 14px; letter-spacing: 2px;
+    }
+
+    /* 按钮 */
+    .btn {
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      font-family: var(--font-sans);
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    .btn-primary:hover {
+      background: #d4b87a;
+      box-shadow: 0 4px 16px rgba(201,169,110,0.3);
+    }
+    .btn-secondary {
+      background: var(--bg-hover);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .btn-danger {
+      background: transparent;
+      color: var(--red);
+      border: 1px solid rgba(192,57,43,0.3);
+    }
+    .btn-danger:hover {
+      background: rgba(192,57,43,0.1);
+      border-color: var(--red);
+    }
+    .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: 6px; }
+
+    /* 编辑弹窗 */
+    .edit-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(12,12,14,0.8);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .edit-modal-overlay.active { display: flex; }
+    .edit-modal {
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+    }
+    /* 编辑图片预览 */
+    .edit-images-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 8px 0;
+    }
+    .edit-images-grid img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .edit-img-del {
+      position: relative;
+    }
+    .edit-img-del .del-x {
+      position: absolute; top: 4px; right: 4px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); color: #fff;
+      font-size: 12px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 2; border: none; padding: 0;
+    }
+    .edit-img-del .del-x:hover { background: var(--red); }
+    .edit-upload-btn {
+      border: 2px dashed var(--border); border-radius: 8px;
+      padding: 20px; text-align: center; cursor: pointer;
+      color: var(--text-muted); font-size: 12px;
+      transition: all 0.3s; margin-top: 8px;
+    }
+    .edit-upload-btn:hover { border-color: rgba(201,169,110,0.3); }
+    .edit-upload-btn input { display: none; }
+    .edit-modal-close {
+      position: absolute;
+      top: 16px; right: 16px;
+      font-size: 24px;
+      color: var(--text-muted);
+      cursor: pointer;
+      line-height: 1;
+    }
+    .edit-modal-close:hover { color: var(--text); }
+    .edit-modal h3 {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+    }
+    .edit-field {
+      margin-bottom: 16px;
+    }
+    .edit-field label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .edit-field input,
+    .edit-field textarea,
+    .edit-field select {
+      width: 100%;
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+      font-family: var(--font-sans);
+    }
+    .edit-field input:focus,
+    .edit-field textarea:focus,
+    .edit-field select:focus {
+      border-color: var(--gold);
+    }
+    .edit-field textarea { min-height: 100px; resize: vertical; }
+
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.2); border-radius: 3px; }
+
+    @media (max-width: 640px) {
+      .admin-header { padding: 0 16px; }
+      .admin-body { padding: 24px 16px 40px; }
+      .list-item { padding: 12px 14px; }
+      .chat-avatar { width: 42px; height: 42px; font-size: 18px; }
+      .chat-name { font-size: 14px; }
+      .chat-preview { font-size: 12px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <div class="admin-header-brand">✦ 管理员后台</div>
+    <div class="admin-header-links">
+      <a href="/">← 返回首页</a>
+      <a href="/publish-moment.html">发布朋友圈</a>
+      <a href="/publish-blog.html">发布博客</a>
+      <a href="/publish-profile.html">修改信息</a>
+    </div>
+  </header>
+
+  <div class="admin-body">
+    <!-- 统计 -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card"><div class="num" id="statPosts">—</div><div class="label">朋友圈</div></div>
+      <div class="stat-card"><div class="num" id="statDiaries">—</div><div class="label">日记</div></div>
+      <div class="stat-card"><div class="num" id="statBlogs">—</div><div class="label">博客</div></div>
+      <div class="stat-card"><div class="num" id="statLikes">—</div><div class="label">总赞</div></div>
+    </div>
+
+    <!-- 标签 -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('posts')">内容管理</button>
+      <button class="tab-btn" onclick="switchTab('blogs')">博客管理</button>
+      <button class="tab-btn" onclick="switchTab('chats')">💬 私信</button>
+    </div>
+
+    <!-- 内容管理 -->
+    <div class="tab-panel active" id="tab-posts">
+      <div class="panel-card">
+        <h3>📸 朋友圈 & 日记</h3>
+        <div id="postList"><div class="list-empty">加载中...</div></div>
+      </div>
+    </div>
+
+    <!-- 博客管理 -->
+    <div class="tab-panel" id="tab-blogs">
+      <div class="panel-card">
+        <h3>✍️ 博客文章</h3>
+        <div id="blogList"><div class="list-empty">加载中...</div></div>
+      </div>
+    </div>
+
+    <!-- 私信管理 -->
+    <div class="tab-panel" id="tab-chats">
+      <div id="dmList"><div class="dm-empty">加载中...</div></div>
+    </div>
+  </div>
+
+  <!-- 编辑弹窗 -->
+  <div class="edit-modal-overlay" id="editModal" onclick="closeEditModal(event)">
+    <div class="edit-modal" onclick="event.stopPropagation()">
+      <span class="edit-modal-close" onclick="hideEditModal()">&times;</span>
+      <h3 id="editModalTitle">编辑内容</h3>
+      <div class="edit-field">
+        <label>内容</label>
+        <textarea id="editContent"></textarea>
+      </div>
+      <div class="edit-field" id="editImageField" style="display:none;">
+        <label>图片</label>
+        <div class="edit-images-grid" id="editImagesGrid"></div>
+        <div class="edit-upload-btn" onclick="document.getElementById('editImageInput').click()">
+          <input type="file" id="editImageInput" accept="image/*" multiple onchange="handleEditImages(this)">
+          <span>+ 添加图片</span>
+        </div>
+      </div>
+      <div class="edit-field" id="editCoverField" style="display:none;">
+        <label>封面图</label>
+        <div id="editCoverPreview"></div>
+        <div class="edit-upload-btn" onclick="document.getElementById('editCoverInput').click()" style="padding:12px;">
+          <input type="file" id="editCoverInput" accept="image/*" onchange="handleEditCover(this)">
+          <span>+ 替换封面</span>
+        </div>
+      </div>
+      <div class="edit-field">
+        <label>📍 位置</label>
+        <input type="text" id="editLocation" placeholder="输入位置">
+      </div>
+      <div class="edit-field">
+        <label>显示日期</label>
+        <input type="datetime-local" id="editDate">
+      </div>
+      <div class="edit-field" id="editTypeField" style="display:none;">
+        <label>类型</label>
+        <select id="editType">
+          <option value="moment">朋友圈</option>
+          <option value="diary">日记</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:20px;">
+        <button class="btn btn-primary" onclick="saveEdit()">保存</button>
+        <button class="btn btn-secondary" onclick="hideEditModal()">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    let editingId = null;
+    let editingKind = null;
+    let editingImages = [];      // 当前编辑的图片列表
+    let editingCover = null;     // 当前编辑的博客封面
+    let editingNewImages = [];   // 新上传的图片文件
+    let editingNewCover = null;  // 新上传的封面文件
+    let postDataCache = {};      // 朋友圈数据缓存 {id: post}
+    let blogDataCache = {};      // 博客数据缓存 {id: blog}
+
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`.tab-btn[onclick="switchTab('${name}')"]`).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+      if (name === 'posts') loadPostList();
+      if (name === 'blogs') loadBlogList();
+      if (name === 'chats') loadChatList();
+    }
+
+    async function initAdmin() {
+      loadPostList();
+      loadBlogList();
+      loadStats();
+      // 根据 URL hash 切换 tab
+      const hash = location.hash.replace('#', '');
+      if (hash === 'chats') {
+        switchTab('chats');
+      }
+    }
+
+    async function loadStats() {
+      try {
+        const posts = await get('/api/posts');
+        const blogs = await get('/api/blogs');
+        document.getElementById('statPosts').textContent = posts.filter(p => p.type === 'moment').length;
+        document.getElementById('statDiaries').textContent = posts.filter(p => p.type === 'diary').length;
+        document.getElementById('statBlogs').textContent = blogs.length;
+        const totalLikes = posts.reduce((sum, p) => sum + (p.likes_count || 0), 0) + blogs.reduce((sum, b) => sum + (b.likes_count || 0), 0);
+        document.getElementById('statLikes').textContent = totalLikes;
+      } catch (e) {}
+    }
+
+    async function loadPostList() {
+      const list = document.getElementById('postList');
+      try {
+        const posts = await get('/api/posts');
+        postDataCache = {};
+        posts.forEach(p => postDataCache[p.id] = p);
+        if (!posts.length) { list.innerHTML = '<div class="list-empty">还没有内容</div>'; return; }
+        list.innerHTML = posts.map(post => `
+          <div class="list-item">
+            ${post.images && post.images.length ? `<img class="list-thumb" src="${post.images[0]}" alt="">` : '<div class="list-thumb" style="display:flex;align-items:center;justify-content:center;font-size:24px;">📝</div>'}
+            <div class="list-body">
+              <span class="list-type ${post.type}">${post.type === 'diary' ? '日记' : '朋友圈'}</span>
+              <div class="list-content">${escapeHtml(post.content.slice(0, 80))}${post.content.length > 80 ? '...' : ''}</div>
+              <div class="list-meta">
+                显示: ${formatDate(post.display_date)} · 创建: ${formatDate(post.created_at)}
+                ${post.images && post.images.length ? ` · ${post.images.length}张图` : ''}
+                ${post.location ? ` · 📍 ${escapeHtml(post.location)}` : ''}
+                · ❤️ ${post.likes_count || 0}
+              </div>
+            </div>
+            <div class="list-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openEdit('post', ${post.id})">编辑</button>
+              <button class="btn btn-danger btn-sm" onclick="deletePost(${post.id})">删除</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        list.innerHTML = '<div class="list-empty">加载失败</div>';
+      }
+    }
+
+    async function loadBlogList() {
+      const list = document.getElementById('blogList');
+      try {
+        const blogs = await get('/api/blogs');
+        blogDataCache = {};
+        blogs.forEach(b => blogDataCache[b.id] = b);
+        if (!blogs.length) { list.innerHTML = '<div class="list-empty">还没有博客文章</div>'; return; }
+        list.innerHTML = blogs.map(blog => `
+          <div class="list-item">
+            ${blog.cover_image ? `<img class="list-thumb" src="${blog.cover_image}" alt="">` : '<div class="list-thumb" style="display:flex;align-items:center;justify-content:center;font-size:24px;">✍️</div>'}
+            <div class="list-body">
+              <span class="list-type blog">博客</span>
+              <div class="list-content">${escapeHtml(blog.title)}</div>
+              <div class="list-meta">
+                ${formatDate(blog.display_date)} · 👁 ${blog.views || 0} · ❤️ ${blog.likes_count || 0}
+                ${blog.location ? ` · 📍 ${escapeHtml(blog.location)}` : ''}
+              </div>
+            </div>
+            <div class="list-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openEdit('blog', ${blog.id})">编辑</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteBlog(${blog.id})">删除</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        list.innerHTML = '<div class="list-empty">加载失败</div>';
+      }
+    }
+
+    // ===== 编辑弹窗 =====
+    function openEdit(kind, id) {
+      editingId = id;
+      editingKind = kind;
+      editingNewImages = [];
+      editingNewCover = null;
+
+      if (kind === 'post') {
+        const post = postDataCache[id];
+        if (!post) { alert('数据未加载'); return; }
+        editingImages = post.images || [];
+        editingCover = null;
+
+        document.getElementById('editModalTitle').textContent = '编辑朋友圈/日记';
+        document.getElementById('editContent').value = post.content;
+        document.getElementById('editDate').value = post.display_date.slice(0, 16);
+        document.getElementById('editLocation').value = post.location || '';
+        document.getElementById('editTypeField').style.display = 'block';
+        document.getElementById('editType').value = post.type || 'moment';
+        document.getElementById('editImageField').style.display = 'block';
+        document.getElementById('editCoverField').style.display = 'none';
+        renderEditImages();
+      } else {
+        const blog = blogDataCache[id];
+        if (!blog) { alert('数据未加载'); return; }
+        editingImages = [];
+        editingCover = blog.cover_image || null;
+
+        document.getElementById('editModalTitle').textContent = '编辑博客';
+        document.getElementById('editContent').value = blog.title;
+        document.getElementById('editDate').value = blog.display_date.slice(0, 16);
+        document.getElementById('editLocation').value = blog.location || '';
+        document.getElementById('editTypeField').style.display = 'none';
+        document.getElementById('editImageField').style.display = 'none';
+        document.getElementById('editCoverField').style.display = 'block';
+        renderEditCover();
+      }
+
+      document.getElementById('editModal').classList.add('active');
+    }
+
+    function renderEditImages() {
+      const grid = document.getElementById('editImagesGrid');
+      if (!editingImages.length) { grid.innerHTML = ''; return; }
+      grid.innerHTML = editingImages.map((url, i) => `
+        <div class="edit-img-del">
+          <img src="${url}" alt="">
+          <button class="del-x" onclick="removeEditImage(${i})">×</button>
+        </div>
+      `).join('');
+    }
+
+    function renderEditCover() {
+      const wrap = document.getElementById('editCoverPreview');
+      if (!editingCover) { wrap.innerHTML = ''; return; }
+      wrap.innerHTML = `
+        <div class="edit-img-del" style="margin-bottom:8px;">
+          <img src="${editingCover}" alt="" style="aspect-ratio:21/9;object-fit:cover;width:100%;border-radius:8px;">
+          <button class="del-x" onclick="removeEditCover()">×</button>
+        </div>
+      `;
+    }
+
+    function handleEditImages(input) {
+      const files = Array.from(input.files).slice(0, 9 - editingImages.length);
+      files.forEach(f => editingNewImages.push(f));
+      input.value = '';
+      renderEditImagesNew();
+    }
+
+    function renderEditImagesNew() {
+      const grid = document.getElementById('editImagesGrid');
+      editingNewImages.forEach((file, i) => {
+        if (document.querySelector(`[data-new-img="${i}"]`)) return;
+        const div = document.createElement('div');
+        div.className = 'edit-img-del';
+        div.dataset.newImg = i;
+        div.innerHTML = `
+          <img src="${URL.createObjectURL(file)}" alt="">
+          <button class="del-x" onclick="removeEditNewImage(${i})">×</button>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    function removeEditImage(i) {
+      editingImages.splice(i, 1);
+      renderEditImages();
+    }
+    function removeEditNewImage(i) {
+      editingNewImages.splice(i, 1);
+      // 重新渲染全部
+      const grid = document.getElementById('editImagesGrid');
+      Array.from(grid.querySelectorAll('[data-new-img]')).forEach(el => el.remove());
+      renderEditImagesNew();
+    }
+    function handleEditCover(input) {
+      const file = input.files[0];
+      if (!file) return;
+      editingNewCover = file;
+      input.value = '';
+      // 预览新封面
+      const wrap = document.getElementById('editCoverPreview');
+      wrap.innerHTML = `
+        <div class="edit-img-del" style="margin-bottom:8px;" id="editNewCoverWrap">
+          <img src="${URL.createObjectURL(file)}" alt="" style="aspect-ratio:21/9;object-fit:cover;width:100%;border-radius:8px;">
+          <button class="del-x" onclick="removeEditNewCover()">×</button>
+        </div>
+      `;
+    }
+    function removeEditCover() {
+      editingCover = null;
+      document.getElementById('editCoverPreview').innerHTML = '';
+    }
+    function removeEditNewCover() {
+      editingNewCover = null;
+      document.getElementById('editNewCoverWrap')?.remove();
+    }
+
+    function hideEditModal() {
+      document.getElementById('editModal').classList.remove('active');
+      editingId = null;
+      editingKind = null;
+      editingImages = [];
+      editingCover = null;
+      editingNewImages = [];
+      editingNewCover = null;
+      document.getElementById('editImagesGrid').innerHTML = '';
+      document.getElementById('editCoverPreview').innerHTML = '';
+    }
+
+    function closeEditModal(e) {
+      if (e.target === document.getElementById('editModal')) hideEditModal();
+    }
+
+    async function saveEdit() {
+      if (!editingId || !editingKind) return;
+      const content = document.getElementById('editContent').value.trim();
+      const date = document.getElementById('editDate').value;
+      const location = document.getElementById('editLocation').value.trim();
+      if (!content || !date) { alert('内容和日期不能为空'); return; }
+      try {
+        if (editingKind === 'post') {
+          const data = new FormData();
+          data.append('content', content);
+          data.append('type', document.getElementById('editType').value);
+          data.append('display_date', date);
+          data.append('location', location);
+          // 现有图片作为 JSON 字符串提交（服务端解析为数组保留）
+          data.append('images', JSON.stringify(editingImages));
+          // 新上传的图片
+          editingNewImages.forEach(f => data.append('images', f));
+          const res = await fetch('/api/posts/' + editingId, { method: 'PUT', body: data, credentials: 'same-origin' });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error);
+          loadPostList();
+        } else {
+          const data = new FormData();
+          data.append('title', content);
+          data.append('content', '');
+          data.append('tags', '');
+          data.append('display_date', date);
+          data.append('location', location);
+          if (editingNewCover) data.append('cover', editingNewCover);
+          const res = await fetch('/api/blogs/' + editingId, { method: 'PUT', body: data, credentials: 'same-origin' });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error);
+          loadBlogList();
+        }
+        hideEditModal();
+        loadStats();
+      } catch (e) { alert(e.message || '保存失败'); }
+    }
+
+    // ===== 删除 =====
+    async function deletePost(id) {
+      if (!confirm('确定删除这条内容？不可恢复。')) return;
+      try { await del('/api/posts/' + id); loadPostList(); loadStats(); } catch (e) { alert(e.message); }
+    }
+    async function deleteBlog(id) {
+      if (!confirm('确定删除这篇博客？不可恢复。')) return;
+      try { await del('/api/blogs/' + id); loadBlogList(); loadStats(); } catch (e) { alert(e.message); }
+    }
+
+    // ===== 私信列表 =====
+    async function loadChatList() {
+      const box = document.getElementById('dmList');
+      try {
+        const sessions = await get('/api/chat-sessions');
+        if (!sessions || !sessions.length) {
+          box.innerHTML = '<div class="dm-empty">还没有私信</div>';
+          return;
+        }
+        box.innerHTML = '<div class="dm-wrap">' + sessions.map(s => {
+          const lastMsg = s.content || (s.type === 'image' ? '[图片]' : (s.type === 'video' ? '[视频]' : ''));
+          const timeStr = formatShortDate(s.created_at);
+          const hasUnread = s.sender_id !== s.other_id;
+          return `
+            <div class="dm-card" onclick="openChat(${s.other_id})">
+              <div class="dm-avatar">💬</div>
+              <div class="dm-main">
+                <div class="dm-name">${escapeHtml(s.username || '用户 #' + s.other_id)}</div>
+                <div class="dm-msg">${escapeHtml(lastMsg.slice(0, 50))}${lastMsg.length > 50 ? '...' : ''}</div>
+              </div>
+              <div class="dm-right">
+                <div class="dm-time">${timeStr}</div>
+                ${hasUnread ? '<div class="dm-dot">1</div>' : ''}
+              </div>
+            </div>
+          `;
+        }).join('') + '</div>';
+      } catch (e) {
+        box.innerHTML = '<div class="dm-empty">加载失败</div>';
+      }
+    }
+
+    function formatShortDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      const now = new Date();
+      const isToday = d.toDateString() === now.toDateString();
+      if (isToday) {
+        return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+      }
+      return (d.getMonth()+1) + '/' + d.getDate();
+    }
+    function openChat(userId) {
+      window.location.href = '/chat.html?with=' + userId;
+    }
+
+    // 辅助：转义JS字符串
+    function escapeJs(str) {
+      if (!str) return '';
+      return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+    }
+
+    initAdmin();
+  </script>
+</body>
+</html>

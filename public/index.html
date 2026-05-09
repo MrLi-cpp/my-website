@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+</head>
+<body class="index-page">
+
+  <!-- ===== 顶部固定导航 ===== -->
+  <nav class="top-nav">
+    <div class="top-nav-brand">霁光</div>
+    <div class="top-nav-login" id="topNavLogin">
+      <span class="top-nav-user" id="navUserName" style="display:none;"></span>
+      <a class="nav-login-btn" href="/login.html" id="navLoginBtn">登录</a>
+      <button class="nav-logout-btn" id="navLogoutBtn" style="display:none;" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <!-- ===== 登录弹窗 ===== -->
+  <div class="login-modal-overlay" id="loginModal" onclick="closeLoginModal(event)">
+    <div class="login-modal" onclick="event.stopPropagation()">
+      <span class="login-modal-close" onclick="hideLoginModal()">&times;</span>
+      <h2 id="loginModalTitle">登录</h2>
+      <p class="subtitle" id="loginModalSubtitle">欢迎回来</p>
+      <p class="login-error" id="loginError"></p>
+      <input type="text" class="login-modal-input" id="loginUsername" placeholder="用户名" autocomplete="username" inputmode="latin" autocapitalize="off" spellcheck="false">
+      <input type="password" class="login-modal-input" id="loginPassword" placeholder="密码" autocomplete="current-password" inputmode="latin" autocapitalize="off" spellcheck="false">
+      <button class="login-modal-btn" id="loginModalBtn" onclick="submitLogin()">登录</button>
+      <p class="login-modal-toggle" id="loginToggle" onclick="toggleLoginMode()">还没有账号？注册</p>
+    </div>
+  </div>
+
+  <!-- ===== 四屏滑动容器 ===== -->
+  <div class="universe to-home" id="universe">
+
+    <!-- ===== 中心：主页 ===== -->
+    <section class="screen home-visible" id="home-screen">
+      <div class="home-wrap">
+        <!-- 黑金背景装饰 -->
+        <div class="home-bg-layer">
+          <div class="home-moon"></div>
+          <div class="home-mountains"></div>
+          <div class="seal-circle" style="top:18%;left:12%;"></div>
+          <div class="seal-circle" style="bottom:25%;right:8%;width:80px;height:80px;"></div>
+        </div>
+
+        <div class="home-title-block">
+          <h1 class="home-title-main">
+            霁光
+            <span class="home-title-sub">JI GUANG</span>
+          </h1>
+          <div class="home-title-divider"></div>
+          <p class="home-desc">
+            记录生活 · 沉淀思考 · 分享成长
+          </p>
+        </div>
+
+        <div class="home-entries">
+          <div class="entry-card" onclick="goTo('moments')">
+            <span class="entry-icon">📸</span>
+            <div class="entry-label">朋友圈</div>
+            <div class="entry-hint">生活碎片与光影</div>
+            <span class="entry-arrow">←</span>
+          </div>
+          <div class="entry-card" onclick="goTo('about')">
+            <span class="entry-icon">⛩️</span>
+            <div class="entry-label">关于我</div>
+            <div class="entry-hint">个人信息与联系</div>
+            <span class="entry-arrow">↓</span>
+          </div>
+          <div class="entry-card" onclick="goTo('blog')">
+            <span class="entry-icon">✍️</span>
+            <div class="entry-label">博客</div>
+            <div class="entry-hint">长文与深度思考</div>
+            <span class="entry-arrow">→</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 左：朋友圈 ===== -->
+    <section class="screen" id="moments-screen">
+      <div class="moments-wrap">
+        <div class="moments-content">
+          <div onclick="goTo('home')" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</div>
+          <div class="moments-header">
+            <h1>朋友圈</h1>
+            <p>MOMENTS</p>
+          </div>
+          <div id="momentsFeed">
+            <p style="text-align:center;color:var(--warm-gray);padding:60px 0;">加载中...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 右：博客 ===== -->
+    <section class="screen" id="blog-screen">
+      <div class="blog-page" id="blogListPage">
+        <div onclick="goTo('home')" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</div>
+        <div class="blog-header">
+          <h1>博客</h1>
+          <p>长文 · 思考 · 沉淀</p>
+          <div class="blog-header-line"></div>
+        </div>
+        <div class="blog-grid" id="blogGrid"></div>
+      </div>
+      <div class="blog-detail" id="blogDetailPage">
+        <div class="blog-detail-inner" data-blog-id="${blog.id}">
+          <span class="blog-back-btn" onclick="showBlogList()">← 返回博客列表</span>
+          <div id="blogDetailContent"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 下：关于我 ===== -->
+    <section class="screen" id="about-screen">
+      <div class="about-wrap">
+        <div onclick="goTo('home')" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</div>
+        <div class="about-inner" id="aboutInner">
+          <div class="about-avatar-placeholder" id="aboutAvatar">霁</div>
+          <div class="about-name" id="aboutName">霁光</div>
+          <div class="about-location" id="aboutLocation">📍 广州</div>
+          <div class="about-bio" id="aboutBio">记录生活，沉淀思考，分享成长。
+
+华南理工大学 AI 先进技术拔尖班。
+喜欢写小说、学 SolidWorks、拍照片。
+
+这里是我在互联网世界的一席之地。
+欢迎常来坐坐。</div>
+          <div class="about-divider"></div>
+          <div class="about-links" id="aboutLinks">
+            <a class="about-link" href="#" id="linkEmail">✉️ 邮箱</a>
+            <a class="about-link" href="#" id="linkWechat">💬 微信</a>
+          </div>
+          <a href="/story.html" class="about-link" style="margin:0 auto 32px;display:block;max-width:200px;justify-content:center;"
+            onmouseover="this.style.transform='scale(1.06)';this.style.borderColor='var(--accent-gold)';this.style.boxShadow='0 0 20px rgba(201,169,110,0.08)'"
+            onmouseout="this.style.transform='scale(1)';this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+          >
+            📖 我的故事
+          </a>
+          <div class="about-stats">
+            <div class="about-stat"><div class="about-stat-num" id="statPosts">0</div><div class="about-stat-label">朋友圈</div></div>
+            <div class="about-stat"><div class="about-stat-num" id="statBlogs">0</div><div class="about-stat-label">博客</div></div>
+            <div class="about-stat"><div class="about-stat-num">∞</div><div class="about-stat-label">可能性</div></div>
+          </div>
+          <div class="about-quote">「山川异域，风月同天」</div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 导航点 -->
+  <div class="nav-dots" id="navDots">
+    <div class="nav-dot active" onclick="goTo('home')"></div>
+    <div class="nav-dot" onclick="goTo('moments')"></div>
+    <div class="nav-dot" onclick="goTo('blog')"></div>
+    <div class="nav-dot" onclick="goTo('about')"></div>
+  </div>
+
+  <!-- 管理员 -->
+  <!-- 留言按钮：所有人可见，点击检查登录 -->
+  <button class="chat-float-btn" id="chatFloatBtn" title="留言" onclick="goToChat()">💬</button>
+
+  <button class="admin-float-btn" id="adminFloatBtn" onclick="toggleAdminPanel()">+</button>
+  <div class="admin-panel" id="adminPanel">
+    <h4>发布中心</h4>
+    <a href="/publish-moment.html">📸 发朋友圈</a>
+    <a href="/publish-blog.html">✍️ 写博客</a>
+    <a href="/publish-profile.html">⚙️ 修改个人信息</a>
+    <a href="/story.html">📖 我的故事</a>
+    <a href="/admin.html#chats" style="margin-top:8px;border-top:1px solid var(--border-light);padding-top:10px;">💬 私信管理</a>
+    <a href="/admin.html">📋 内容管理</a>
+  </div>
+
+  <!-- 灯箱 -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img id="lightboxImg" src="">
+  </div>
+
+  <!-- 评论操作面板 -->
+  <div class="comment-sheet-overlay" id="commentSheetOverlay" onclick="closeCommentSheet()">
+    <div class="comment-sheet" onclick="event.stopPropagation()">
+      <div class="comment-sheet-title">评论</div>
+      <div class="comment-sheet-text" id="commentSheetText"></div>
+      <div class="comment-sheet-actions" id="commentSheetActions"></div>
+      <div class="comment-sheet-close" onclick="closeCommentSheet()">取消</div>
+    </div>
+  </div>
+
+  <!-- 回复输入弹窗 -->
+  <div class="reply-modal-overlay" id="replyModalOverlay" onclick="closeReplyModal()">
+    <div class="reply-modal" onclick="event.stopPropagation()">
+      <h4>回复</h4>
+      <div class="reply-target" id="replyTargetText"></div>
+      <textarea id="replyInput" placeholder="写点什么..."></textarea>
+      <div class="reply-modal-btns">
+        <button class="comment-sheet-btn" onclick="closeReplyModal()">取消</button>
+        <button class="comment-sheet-btn" style="background:var(--accent-gold);color:var(--bg-primary);border-color:var(--accent-gold);" onclick="submitReply()">发送</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script src="/moments-core.js?v=3"></script>
+  <script>
+    // ===== 页面切换 =====
+    const universe = document.getElementById('universe');
+    const screens = ['home','moments','blog','about'];
+    let currentScreen = 'home';
+
+    function goTo(screen) {
+      if (screen === currentScreen) return;
+      currentScreen = screen;
+      universe.className = 'universe to-' + screen;
+      document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', screens[i] === screen);
+      });
+      // 主页动画：离开主页时移除 home-visible（元素变为透明/下沉），回到主页时加上（平滑浮现）
+      const homeScreen = document.getElementById('home-screen');
+      if (screen === 'home') {
+        homeScreen.classList.add('home-visible');
+      } else {
+        homeScreen.classList.remove('home-visible');
+      }
+      setTimeout(() => {
+        document.querySelectorAll('.screen').forEach(s => { s.scrollTop = 0; });
+      }, 100);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        if (document.getElementById('loginModal').classList.contains('active')) {
+          hideLoginModal();
+        } else {
+          goTo('home');
+        }
+      }
+    });
+
+    // ===== 登录弹窗 =====
+    let loginMode = 'login';
+
+    function showLoginModal() {
+      document.getElementById('loginModal').classList.add('active');
+      document.getElementById('loginUsername').focus();
+    }
+    function hideLoginModal() {
+      document.getElementById('loginModal').classList.remove('active');
+      document.getElementById('loginError').style.display = 'none';
+    }
+    function closeLoginModal(e) {
+      if (e.target === document.getElementById('loginModal')) hideLoginModal();
+    }
+    function toggleLoginMode() {
+      loginMode = loginMode === 'login' ? 'register' : 'login';
+      document.getElementById('loginModalTitle').textContent = loginMode === 'login' ? '登录' : '注册';
+      document.getElementById('loginModalSubtitle').textContent = loginMode === 'login' ? '欢迎回来' : '创建新账号';
+      document.getElementById('loginModalBtn').textContent = loginMode === 'login' ? '登录' : '注册';
+      document.getElementById('loginToggle').textContent = loginMode === 'login' ? '还没有账号？注册' : '已有账号？登录';
+      document.getElementById('loginError').style.display = 'none';
+    }
+    async function submitLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const errorEl = document.getElementById('loginError');
+      if (!username || !password) { errorEl.textContent = '请填写用户名和密码'; errorEl.style.display = 'block'; return; }
+      try {
+        const endpoint = loginMode === 'login' ? '/api/login' : '/api/register';
+        const result = await post(endpoint, { username, password });
+        hideLoginModal();
+        updateNavUser(result);
+        initMoments();
+        initBlog();
+        checkAdmin();
+        // 显示留言按钮
+        const chatBtn = document.getElementById('chatFloatBtn');
+        if (chatBtn && !result.is_admin) {
+          chatBtn.classList.add('show');
+        }
+      } catch (err) {
+        errorEl.textContent = err.message || (loginMode === 'login' ? '登录失败' : '注册失败');
+        errorEl.style.display = 'block';
+      }
+    }
+    function updateNavUser(user) {
+      if (user && user.id) {
+        document.getElementById('navUserName').textContent = user.username;
+        document.getElementById('navUserName').style.display = 'inline';
+        document.getElementById('navLoginBtn').style.display = 'none';
+        document.getElementById('navLogoutBtn').style.display = 'inline-block';
+      } else {
+        document.getElementById('navUserName').style.display = 'none';
+        document.getElementById('navLoginBtn').style.display = 'inline-block';
+        document.getElementById('navLogoutBtn').style.display = 'none';
+      }
+    }
+    async function logout() {
+      try { await post('/api/logout'); updateNavUser(null); checkAdmin(); initMoments(); }
+      catch(e) {}
+    }
+
+    // 右上角登录按钮改为弹窗
+    document.getElementById('navLoginBtn').onclick = function(e) {
+      e.preventDefault();
+      showLoginModal();
+    };
+
+    // ===== 初始化用户状态 =====
+    async function initUser() {
+      try {
+        const me = await get('/api/me');
+        const chatBtn = document.getElementById('chatFloatBtn');
+        const adminBtn = document.getElementById('adminFloatBtn');
+        if (me && me.id) {
+          updateNavUser(me);
+          if (me.is_admin) {
+            // 管理员：显示后台按钮，隐藏留言按钮
+            adminBtn?.classList.add('show');
+            chatBtn?.classList.remove('show');
+          } else {
+            // 普通用户：显示留言按钮，隐藏后台按钮
+            chatBtn?.classList.add('show');
+            adminBtn?.classList.remove('show');
+          }
+        } else {
+          // 未登录：全部隐藏
+          chatBtn?.classList.remove('show');
+          adminBtn?.classList.remove('show');
+        }
+      } catch(e) {}
+    }
+
+    // ===== 留言按钮 =====
+    async function goToChat() {
+      try {
+        const me = await get('/api/me');
+        if (!me || !me.id) { showLoginModal(); return; }
+        if (me.is_admin) {
+          location.href = '/admin.html#chats';
+        } else {
+          location.href = '/chat.html';
+        }
+      } catch (e) { showLoginModal(); }
+    }
+
+    // ===== 管理员 =====
+    function toggleAdminPanel() {
+      document.getElementById('adminPanel').classList.toggle('show');
+    }
+    document.addEventListener('click', e => {
+      const panel = document.getElementById('adminPanel');
+      const btn = document.getElementById('adminFloatBtn');
+      if (!panel.contains(e.target) && e.target !== btn) panel.classList.remove('show');
+    });
+    async function checkAdmin() {
+      try {
+        const me = await get('/api/me');
+        const btn = document.getElementById('adminFloatBtn');
+        if (me && me.is_admin) btn.classList.add('show');
+        else btn.classList.remove('show');
+      } catch(e) {}
+    }
+
+    // ===== 博客 =====
+    async function initBlog() {
+      await loadUser();
+      const grid = document.getElementById('blogGrid');
+      grid.innerHTML = `
+        <div class="blog-skeleton">
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        </div>`;
+      try {
+        const blogs = await get('/api/blogs');
+        if (!blogs.length) {
+          grid.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-sep">— · —</div>
+              <div class="empty-title">暂无文章</div>
+              <div class="empty-desc">长文正在沉淀，敬请期待</div>
+            </div>`;
+          return;
+        }
+        grid.innerHTML = blogs.map(blog => renderBlogCard(blog)).join('');
+        document.querySelectorAll('.blog-card').forEach(card => {
+          card.onclick = () => loadBlogDetail(card.dataset.id);
+        });
+      } catch (err) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    function renderBlogCard(blog) {
+      const dateStr = formatDate(blog.display_date);
+      const hasCover = blog.cover_image;
+      const titleHtml = escapeHtml(blog.title);
+      const excerpt = blog.content ? blog.content.slice(0, 40).replace(/[#*\`|\\-\\[\\]\\(\\)]/g, '') + (blog.content.length > 40 ? '…' : '') : '';
+      const coverHtml = hasCover
+        ? '<img src="' + blog.cover_image + '" alt="" class="blog-card-cover" loading="lazy">'
+        : '<div class="blog-cover-placeholder"><span class="cover-title">' + titleHtml + '</span><div class="cover-sep"></div>' + (excerpt ? '<span class="cover-desc">' + escapeHtml(excerpt) + '</span>' : '') + '</div>';
+      return `
+        <div class="blog-card" data-id="${blog.id}">
+          ${coverHtml}
+          <div class="blog-card-body">
+            <div class="blog-card-title">${titleHtml}</div>
+            <div class="blog-card-meta">
+              <span>📅 ${dateStr}</span>
+              <span>❤️ ${blog.likes_count || 0}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+        let blogDetailAbort = null;
+
+async function loadBlogDetail(id) {
+
+      if (blogDetailAbort) blogDetailAbort.abort();
+      blogDetailAbort = { aborted: false, abort() { this.aborted = true; } };
+      const ac = blogDetailAbort;
+      try {
+        const [blog, comments, profile] = await Promise.all([
+          get('/api/blogs/' + id),
+          get('/api/blogs/' + id + '/comments'),
+          get('/api/profile').catch(() => null)
+        ]);
+        blog.comments_list = comments;
+      if (ac.aborted) return;
+        document.getElementById('blogListPage').style.display = 'none';
+        document.getElementById('blogDetailPage').classList.add('active');
+        document.getElementById('blog-screen').scrollTop = 0;
+        bcBlogId = blog.id;
+
+        const tags = blog.tags || [];
+        // 当前用户ID用于判断评论所有权
+        blog.currentUserId = currentUser ? currentUser.id : null;
+        const authorAvatar = profile && profile.avatar
+          ? `<img src="${profile.avatar}" alt="">`
+          : `<div class="author-placeholder">我</div>`;
+        const likersHtml = blog.likers && blog.likers.length
+          ? `<div class="blog-likers-bar"><span class="likers-label">❤️</span><div class="likers-names">${blog.likers.map(n => `<span>${escapeHtml(n)}</span>`).join('、')} 觉得很赞</div></div>`
+          : '';
+
+        document.getElementById('blogDetailContent').innerHTML = `
+          ${blog.cover_image ? `<img class="blog-detail-cover" src="${blog.cover_image}" alt="">` : ''}
+          <h1 class="blog-detail-title">${escapeHtml(blog.title)}</h1>
+          <div class="blog-detail-meta">
+            <div class="blog-detail-author">${authorAvatar}<span>霁光</span></div>
+            <span>📅 ${formatDate(blog.display_date)}</span><span>👁 ${blog.views || 0}</span><span>❤️ ${blog.likes_count || 0}</span>${blog.location ? `<span style="color:#4a9eff;">📍 ${escapeHtml(blog.location)}</span>` : ''}
+            ${tags.length ? `<span>${tags.map(t => `<span class="blog-tag">${escapeHtml(t)}</span>`).join('')}</span>` : ''}
+          </div>
+          <div class="blog-detail-content">${markdownToHtml(blog.content)}</div>
+          <div class="blog-detail-footer">
+            <div class="blog-detail-actions">
+              <button class="blog-detail-action ${blog.user_liked ? 'liked' : ''}" id="blogLikeBtn" onclick="toggleBlogLike(${blog.id})">
+                ${blog.user_liked ? '❤️ 已赞' : '🤍 赞'} ${blog.likes_count || 0}
+              </button>
+            </div>
+            ${likersHtml}
+            <div class="blog-comments">
+              <div class="blog-comments-title">评论 ${comments.length > 0 ? '· ' + comments.length : ''}</div>
+              ${renderBlogComments(comments, blog.currentUserId)}
+            </div>
+            <form class="blog-comment-form" id="blogCommentForm">
+              <input type="text" name="content" placeholder="写点什么..." required autocomplete="off">
+              <button type="submit">发送</button>
+            </form>
+          </div>
+        `;
+        document.getElementById('blogCommentForm').onsubmit = e => {
+          e.preventDefault();
+          submitBlogComment(e, blog.id);
+        };
+      } catch (err) {
+        document.getElementById('blogDetailContent').innerHTML = `
+          <div class="empty-state" style="padding-top:100px;">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    function formatTime(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr);
+      const now = new Date();
+      const diff = (now - d) / 1000;
+      if (diff < 60) return '刚刚';
+      if (diff < 3600) return Math.floor(diff / 60) + '分钟前';
+      if (diff < 86400) return Math.floor(diff / 3600) + '小时前';
+      if (diff < 604800) return Math.floor(diff / 86400) + '天前';
+      const pad = n => n.toString().padStart(2, '0');
+      return d.getFullYear() === now.getFullYear()
+        ? pad(d.getMonth()+1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes())
+        : d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate());
+    }
+
+    function renderBlogComments(comments, currentUserId) {
+      if (!comments || !comments.length) {
+        return '<p style="color:var(--text-muted);font-size:13px;padding:12px 0;text-align:center;">暂无留言，虚位以待</p>';
+      }
+      // Build a map of all comments by id for quick lookup
+      const commentMap = {};
+      comments.forEach(c => {
+        commentMap[c.id] = { ...c, children: [] };
+      });
+      // Build tree structure
+      const roots = [];
+      comments.forEach(c => {
+        if (c.parent_id && commentMap[c.parent_id]) {
+          commentMap[c.parent_id].children.push(commentMap[c.id]);
+        } else if (!c.parent_id) {
+          roots.push(commentMap[c.id]);
+        }
+      });
+      // Recursive render — flatten visual depth to max 2 levels
+      function renderNode(node, depth, parentName) {
+        const isMine = currentUserId && node.user_id === currentUserId;
+        const timeStr = formatTime(node.created_at);
+        const visualDepth = Math.min(depth, 1); // flatten: depth 0 = no indent, depth >= 1 = 36px indent
+        const marginStyle = visualDepth > 0 ? 'margin-left:36px;' : '';
+        let nameHtml, textHtml;
+        if (depth > 0) {
+          nameHtml = escapeHtml(node.username) + ' 回复 ' + escapeHtml(parentName);
+          textHtml = '：' + escapeHtml(node.content);
+        } else {
+          nameHtml = escapeHtml(node.username);
+          textHtml = escapeHtml(node.content);
+        }
+        let html = `
+        <div class="blog-comment-item" data-comment-id="${node.id}" data-username="${escapeHtml(node.username)}" data-is-mine="${isMine ? 1 : 0}" style="cursor:pointer;${marginStyle}">
+          <div class="blog-comment-header">
+            <div class="blog-comment-avatar">${escapeHtml(node.username.charAt(0).toUpperCase())}</div>
+            <div class="blog-comment-author">${nameHtml}</div>
+            <div class="blog-comment-time">${timeStr}</div>
+          </div>
+          <div class="blog-comment-text">${textHtml}</div>
+        </div>
+      `;
+        // Render children recursively
+        if (node.children && node.children.length) {
+          node.children.forEach(child => {
+            html += renderNode(child, depth + 1, node.username);
+          });
+        }
+        return html;
+      }
+      return roots.map(root => renderNode(root, 0, null)).join('');
+    }
+    // ===== 博客评论系统（完全独立，bc 前缀）=====
+    let bcActiveId = null;
+    let bcBlogId = null;
+
+    // 事件委托：评论卡片点击
+    document.getElementById('blogDetailPage').addEventListener('click', (e) => {
+      const item = e.target.closest('.blog-comment-item');
+      if (!item) return;
+      const id = parseInt(item.dataset.commentId);
+      const username = item.dataset.username;
+      const isMine = item.dataset.isMine === '1';
+      if (id) openBcMenu(id, isMine ? 1 : 0, username);
+    });
+
+    function openBcMenu(commentId, isMine, username) {
+      bcActiveId = commentId;
+      const box = document.getElementById('bcMenuBox');
+      box.innerHTML = '';
+      if (isMine) {
+        const editBtn = document.createElement('button');
+        editBtn.className = 'bc-menu-btn';
+        editBtn.textContent = '✏️ 修改';
+        editBtn.onclick = () => openBcEdit(commentId);
+        box.appendChild(editBtn);
+        const delBtn = document.createElement('button');
+        delBtn.className = 'bc-menu-btn danger';
+        delBtn.textContent = '🗑️ 删除';
+        delBtn.onclick = () => deleteBc(commentId);
+        box.appendChild(delBtn);
+      } else {
+        const replyBtn = document.createElement('button');
+        replyBtn.className = 'bc-menu-btn';
+        replyBtn.textContent = '💬 追评 @' + username;
+        replyBtn.onclick = () => replyBc(commentId, username);
+        box.appendChild(replyBtn);
+      }
+      document.getElementById('bcMenuOverlay').classList.add('active');
+    }
+
+    function closeBcMenu() {
+      document.getElementById('bcMenuOverlay').classList.remove('active');
+      bcActiveId = null;
+    }
+
+    function openBcEdit(commentId) {
+      closeBcMenu();
+      const textarea = document.getElementById('bcEditTextarea');
+      const commentEl = document.querySelector(`.blog-comment-item[data-comment-id="${commentId}"]`);
+      const textEl = commentEl ? commentEl.querySelector('.blog-comment-text') : null;
+      textarea.value = textEl ? textEl.textContent : '';
+      document.getElementById('bcEditOverlay').classList.add('active');
+      textarea.focus();
+    }
+
+    function closeBcEdit() {
+      document.getElementById('bcEditOverlay').classList.remove('active');
+    }
+
+    async function saveBcEdit() {
+      const content = document.getElementById('bcEditTextarea').value.trim();
+      if (!content) return;
+      try {
+        await put('/api/blog-comments/' + bcActiveId, { content });
+        closeBcEdit();
+        if (bcBlogId) loadBlogDetail(bcBlogId);
+      } catch (err) { alert(err.message || '修改失败'); }
+    }
+
+    async function deleteBc(commentId) {
+      closeBcMenu();
+      if (!confirm('确定删除这条评论？')) return;
+      try {
+        await del('/api/blog-comments/' + commentId);
+        if (bcBlogId) loadBlogDetail(bcBlogId);
+      } catch (err) { alert(err.message || '删除失败'); }
+    }
+
+    async function replyBc(commentId, username) {
+      closeBcMenu();
+      const content = prompt('回复 @' + username + '：');
+      if (!content || !content.trim()) return;
+      try {
+        await post('/api/blog-comments/' + commentId + '/reply', { content: content.trim() });
+        if (bcBlogId) loadBlogDetail(bcBlogId);
+      } catch (err) { alert(err.message || '回复失败'); }
+    }
+
+    function showBlogList() {
+      const detailPage = document.getElementById('blogDetailPage');
+      const listPage = document.getElementById('blogListPage');
+      if (detailPage) {
+        detailPage.classList.remove('active');
+        detailPage.style.display = 'none';
+      }
+      if (listPage) {
+        listPage.style.display = 'block';
+      }
+      const blogScreen = document.getElementById('blog-screen');
+      if (blogScreen) blogScreen.scrollTop = 0;
+      initBlog();
+    }
+
+    async function toggleBlogLike(blogId) {
+      try { await post('/api/blogs/' + blogId + '/like'); loadBlogDetail(blogId); }
+      catch (err) { alert(err.message || '请先登录'); }
+    }
+    async function submitBlogComment(e, blogId) {
+      e.preventDefault();
+      const input = e.target.querySelector('input');
+      const content = input.value.trim();
+      if (!content) return;
+      try {
+        await post('/api/blogs/' + blogId + '/comment', { content });
+        input.value = '';
+        loadBlogDetail(blogId);
+      } catch (err) { alert(err.message || '请先登录'); }
+    }
+
+    function markdownToHtml(md) {
+      if (!md) return '';
+      let html = escapeHtml(md);
+      html = html.replace(/\n\n/g, '</p><p>');
+      html = html.replace(/\n/g, '<br>');
+      html = '<p>' + html + '</p>';
+      html = html.replace(/#{3}\s+(.+)/g, '<h3>$1</h3>');
+      html = html.replace(/#{2}\s+(.+)/g, '<h2>$1</h2>');
+      html = html.replace(/#{1}\s+(.+)/g, '<h2>$1</h2>');
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      html = html.replace(/```[\s\S]*?```/g, '<pre><code>$&</code></pre>');
+      html = html.replace(/`(.+?)`/g, '<code>$1</code>');
+      html = html.replace(/&gt;\s+(.+)/g, '<blockquote>$1</blockquote>');
+      return html;
+    }
+
+    // ===== 关于我 =====
+    async function initAbout() {
+      try {
+        const [profile, posts, blogs] = await Promise.all([
+          get('/api/profile').catch(() => null),
+          get('/api/posts').catch(() => []),
+          get('/api/blogs').catch(() => [])
+        ]);
+        if (profile) {
+          document.getElementById('aboutName').textContent = profile.name || '霁光';
+          document.getElementById('aboutLocation').textContent = '📍 ' + (profile.location || '广州');
+          if (profile.bio) document.getElementById('aboutBio').textContent = profile.bio;
+          if (profile.avatar) {
+            document.getElementById('aboutAvatar').outerHTML = `<img class="about-avatar" src="${profile.avatar}" alt="">`;
+          }
+          if (profile.email) { document.getElementById('linkEmail').href = 'mailto:' + profile.email; document.getElementById('linkEmail').textContent = '✉️ 邮箱：' + profile.email; }
+          if (profile.wechat) { document.getElementById('linkWechat').textContent = '💬 微信号：' + profile.wechat; document.getElementById('linkWechat').removeAttribute('href'); }
+        }
+        document.getElementById('statPosts').textContent = posts.length;
+        document.getElementById('statBlogs').textContent = blogs.length;
+      } catch(e) {}
+    }
+
+    // ===== 灯箱 =====
+    function openLightbox(src) { document.getElementById('lightboxImg').src = src; document.getElementById('lightbox').classList.add('active'); }
+    function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); }
+
+    // ===== 初始化 =====
+    initUser();
+    initMoments();
+    initBlog();
+    initAbout();
+    checkAdmin();
+
+    // 从聊天页跳转回来要求登录，自动打开登录弹窗（通过 sessionStorage，不在 URL 暴露参数）
+    if (sessionStorage.getItem('openLoginModal') === '1') {
+      sessionStorage.removeItem('openLoginModal');
+      showLoginModal();
+    }
+  </script>
+  <!-- 博客评论操作弹窗（bc 前缀，完全独立） -->
+  <div class="bc-overlay" id="bcMenuOverlay" onclick="closeBcMenu()">
+    <div class="bc-sheet" onclick="event.stopPropagation()">
+      <div id="bcMenuBox"></div>
+      <button class="bc-cancel" onclick="closeBcMenu()">取消</button>
+    </div>
+  </div>
+
+  <!-- 博客评论编辑弹窗（bc 前缀，完全独立） -->
+  <div class="bc-overlay" id="bcEditOverlay" onclick="closeBcEdit()">
+    <div class="bc-edit-box" onclick="event.stopPropagation()">
+      <h4>修改评论</h4>
+      <textarea id="bcEditTextarea" placeholder="修改评论内容..."></textarea>
+      <div class="bc-edit-btns">
+        <button class="bc-btn" onclick="closeBcEdit()">取消</button>
+        <button class="bc-btn primary" onclick="saveBcEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 朋友圈评论编辑弹窗 -->
+  <div class="reply-modal-overlay" id="momentCommentEditOverlay" onclick="closeMomentCommentEdit()">
+    <div class="reply-modal" onclick="event.stopPropagation()">
+      <h4>修改评论</h4>
+      <textarea id="momentCommentEditTextarea" placeholder="修改评论内容..."></textarea>
+      <div class="reply-modal-btns">
+        <button class="comment-sheet-btn" onclick="closeMomentCommentEdit()">取消</button>
+        <button class="comment-sheet-btn" style="background:var(--accent-gold);color:var(--bg-primary);border-color:var(--accent-gold);" onclick="saveMomentCommentEdit()">保存</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

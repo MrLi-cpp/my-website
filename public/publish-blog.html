@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布博客 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .publish-page {
+      min-height: 100vh;
+      padding: 80px 20px 60px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .publish-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-top: 20px;
+    }
+    .publish-header h1 {
+      font-family: var(--font-serif);
+      font-size: 32px;
+      letter-spacing: 8px;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+
+    .back-home-bar {
+      position: fixed;
+      top: 56px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 14px 24px;
+      background: linear-gradient(to bottom, var(--bg-primary) 70%, transparent);
+    }
+    .back-home-bar a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.3s;
+    }
+    .back-home-bar a:hover { color: var(--accent-gold); }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0;
+      padding: 12px 4px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-bottom-color: var(--accent-gold);
+    }
+    .form-group textarea {
+      min-height: 120px;
+      line-height: 1.8;
+      resize: vertical;
+    }
+    .form-group input[type="file"] {
+      border-bottom: none;
+      padding: 10px 0;
+      cursor: pointer;
+    }
+    .form-group input[type="file"]::-webkit-file-upload-button {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 4px;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      cursor: pointer;
+      margin-right: 12px;
+      font-family: var(--font-sans);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      position: sticky;
+      bottom: 20px;
+      padding: 16px 0;
+      background: linear-gradient(to top, var(--bg-primary) 60%, transparent);
+    }
+    .btn-primary {
+      background: var(--accent-gold);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 32px;
+      color: var(--bg-primary);
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      transition: opacity 0.2s;
+      font-family: var(--font-sans);
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 24px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      font-family: var(--font-sans);
+      transition: all 0.3s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .success-msg {
+      background: rgba(7,193,96,0.1);
+      color: #07c160;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      display: none;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.2); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="unified-back">← 返回主页</a>
+
+  <div class="publish-page">
+    <div class="publish-header">
+      <h1>发布博客</h1>
+    </div>
+
+    <div class="success-msg" id="successMsg">发布成功！</div>
+
+    <form id="blogForm">
+      <div class="form-group">
+        <label>标题</label>
+        <input type="text" id="blogTitle" placeholder="文章标题" required>
+      </div>
+      <div class="form-group">
+        <label>日期</label>
+        <input type="datetime-local" id="blogDate" required>
+      </div>
+      <div class="form-group">
+        <label>封面图</label>
+        <input type="file" id="blogCover" accept="image/*">
+      </div>
+      <div class="form-group">
+        <label>标签（用逗号分隔）</label>
+        <input type="text" id="blogTags" placeholder="技术, 生活, 思考">
+      </div>
+      <div class="form-group">
+        <label>正文（支持 Markdown）</label>
+        <textarea id="blogContent" placeholder="## 标题
+
+正文内容..." style="min-height:300px;" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>📍 位置</label>
+        <input type="text" id="blogLocation" placeholder="输入位置，如：广州" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 4px;color:var(--text-primary);font-size:14px;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderBottomColor='var(--accent-gold)'" onblur="this.style.borderBottomColor='rgba(255,255,255,0.08)'">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">发布博客</button>
+        <button type="button" class="btn-secondary" onclick="resetForm()">重置</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    document.getElementById('blogDate').value = now.toISOString().slice(0, 16);
+
+    document.getElementById('blogForm').onsubmit = async e => {
+      e.preventDefault();
+      const data = new FormData();
+      data.append('title', document.getElementById('blogTitle').value);
+      data.append('content', document.getElementById('blogContent').value);
+      data.append('tags', document.getElementById('blogTags').value);
+      data.append('display_date', document.getElementById('blogDate').value);
+      data.append('location', document.getElementById('blogLocation').value);
+      const cover = document.getElementById('blogCover').files[0];
+      if (cover) data.append('cover', cover);
+      try {
+        const res = await fetch('/api/blogs', { method: 'POST', body: data, credentials: 'same-origin' });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error);
+        showSuccess(); resetForm();
+      } catch(err) { alert(err.message); }
+    };
+
+    function resetForm() {
+      document.getElementById('blogForm').reset();
+      const n = new Date();
+      n.setMinutes(n.getMinutes() - n.getTimezoneOffset());
+      document.getElementById('blogDate').value = n.toISOString().slice(0, 16);
+    }
+
+    function showSuccess() {
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+  </script>
+</body>
+</html>

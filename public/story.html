@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的故事 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .story-page { min-height: 100vh; padding: 80px 20px 60px; max-width: 800px; margin: 0 auto; }
+    .story-header { text-align: center; margin-bottom: 56px; padding-top: 20px; }
+    .story-header h1 { font-family: var(--font-serif); font-size: 32px; letter-spacing: 8px; font-weight: 400; }
+    .story-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 3px; margin-top: 8px; }
+
+    .story-grid { display: flex; gap: 24px; justify-content: center; flex-wrap: nowrap; }
+    .story-card {
+      width: 170px; padding: 44px 18px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .story-card:hover {
+      transform: scale(1.06);
+      border-color: rgba(201,169,110,0.35);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 30px rgba(201,169,110,0.1);
+    }
+    .story-card-icon { font-size: 32px; margin-bottom: 16px; display: block; transition: transform 0.4s; }
+    .story-card:hover .story-card-icon { transform: scale(1.15); }
+    .story-card-label { font-size: 16px; letter-spacing: 4px; color: var(--text-primary); margin-bottom: 8px; font-weight: 500; }
+    .story-card-hint { font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+    .story-sep { text-align: center; margin: 32px 0; font-size: 14px; color: var(--accent-gold); letter-spacing: 8px; opacity: 0.6; }
+
+    /* 详情页内联样式 */
+    .story-detail-view { display: none; }
+    .story-detail-view.active { display: block; }
+    .story-detail-header { text-align: center; margin-bottom: 40px; padding-top: 20px; }
+    .story-detail-header h1 { font-family: var(--font-serif); font-size: 32px; letter-spacing: 8px; font-weight: 400; }
+    .story-detail-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 3px; margin-top: 8px; }
+    .story-detail-sep { text-align: center; margin-bottom: 40px; font-size: 14px; color: var(--accent-gold); letter-spacing: 8px; opacity: 0.6; }
+    .story-layout { display: block; max-width: 720px; margin: 0 auto; }
+    .story-text { width: 100%; max-width: 100%; }
+    .story-paragraph {
+      font-size: 15px; line-height: 2.4; color: var(--text-secondary);
+      margin-bottom: 32px; text-indent: 2em;
+      font-family: "KaiTi", "STKaiti", "SimKai", var(--font-serif), serif;
+      word-wrap: break-word; overflow-wrap: break-word;
+      text-align: justify;
+    }
+    .story-empty { text-align: center; padding: 80px 20px; font-family: "KaiTi", "STKaiti", "SimKai", serif; }
+    .story-empty .empty-sep { font-size: 14px; color: var(--accent-gold); letter-spacing: 8px; margin-bottom: 20px; opacity: 0.6; }
+    .story-empty .empty-title { font-size: 20px; color: var(--accent-gold); letter-spacing: 6px; margin-bottom: 12px; }
+    .story-empty .empty-desc { font-size: 13px; color: var(--text-muted); letter-spacing: 2px; line-height: 2; }
+    .story-bottom-sep { text-align: center; margin-top: 48px; font-size: 14px; color: var(--accent-gold); letter-spacing: 8px; opacity: 0.4; }
+
+    /* 编辑按钮 */
+    .story-edit-btn {
+      display: none; position: fixed; bottom: 80px; right: 32px;
+      z-index: 1000; width: 52px; height: 52px;
+      border-radius: 50%; background: var(--accent-red);
+      border: none; color: #fff; font-size: 20px;
+      cursor: pointer; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(192,57,43,0.3);
+      transition: transform 0.3s; text-decoration: none;
+    }
+    .story-edit-btn:hover { transform: scale(1.1); }
+    .story-edit-btn.show { display: flex; }
+
+    @media (max-width: 640px) {
+      .story-grid { flex-wrap: wrap; }
+      .story-card { width: 45%; }
+      .story-layout { max-width: 100%; padding: 0 16px; }
+      .story-detail-header h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body style="background:var(--bg-primary);">
+
+  <a href="/about.html" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回上一级</a>
+
+  <!-- 列表页 -->
+  <div class="story-page" id="storyListView">
+    <div class="story-header">
+      <h1>我的故事</h1>
+      <p>MY STORY</p>
+    </div>
+    <div class="story-grid">
+      <div class="story-card" onclick="showStory('primary')">
+        <span class="story-card-icon">🎒</span>
+        <div class="story-card-label">小学</div>
+        <div class="story-card-hint">雅居乐小学 5班</div>
+      </div>
+      <div class="story-card" onclick="showStory('middle')">
+        <span class="story-card-icon">📚</span>
+        <div class="story-card-label">初中</div>
+        <div class="story-card-hint">番禺执信 2班</div>
+      </div>
+      <div class="story-card" onclick="showStory('high')">
+        <span class="story-card-icon">🏫</span>
+        <div class="story-card-label">高中</div>
+        <div class="story-card-hint">执信中学 2班</div>
+      </div>
+      <div class="story-card" onclick="showStory('university')">
+        <span class="story-card-icon">🎓</span>
+        <div class="story-card-label">大学</div>
+        <div class="story-card-hint">华工Ai3班</div>
+      </div>
+    </div>
+    <div class="story-sep">— · —</div>
+  </div>
+
+  <!-- 详情页（内联） -->
+  <div class="story-detail-view" id="storyDetailView">
+    <div class="story-page">
+      <span class="blog-back-btn" onclick="showStoryList()" style="position:static;display:inline-block;margin-bottom:20px;">← 返回故事列表</span>
+      <div id="storyDetailContent"></div>
+    </div>
+  </div>
+
+  <a href="#" class="story-edit-btn" id="storyEditBtn" title="编辑">✏️</a>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    const sectionMap = { primary: '小学', middle: '初中', high: '高中', university: '大学' };
+    const sectionHint = { primary: '雅居乐小学 5班', middle: '番禺执信 2班', high: '执信中学 2班', university: '华工Ai3班' };
+
+    function showStory(section) {
+      document.getElementById('storyListView').style.display = 'none';
+      document.getElementById('storyDetailView').classList.add('active');
+      window.scrollTo(0, 0);
+      loadStoryDetail(section);
+    }
+
+    function showStoryList() {
+      document.getElementById('storyListView').style.display = 'block';
+      document.getElementById('storyDetailView').classList.remove('active');
+      window.scrollTo(0, 0);
+    }
+
+    async function loadStoryDetail(section) {
+      const inner = document.getElementById('storyDetailContent');
+      if (!sectionMap[section]) {
+        inner.innerHTML = `
+          <div class="story-empty">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">页面不存在</div>
+            <div class="empty-desc"><a href="#" onclick="showStoryList();return false;" style="color:var(--accent-gold);">返回我的故事</a></div>
+          </div>`;
+        return;
+      }
+
+      try {
+        const story = await get('/api/story/' + section);
+        const paragraphs = story.paragraphs || [];
+
+        let textHtml = '';
+        if (paragraphs.length > 0) {
+          textHtml = paragraphs.map((p, i) =>
+            `<div class="story-paragraph" data-idx="${i}">${escapeHtml(p).replace(/\n/g, '<br>')}</div>`
+          ).join('');
+        } else {
+          textHtml = '<div style="min-height:120px;"></div>';
+        }
+
+        const bottomHtml = (section === 'university' && paragraphs.length === 0)
+          ? `<div class="story-bottom-sep">— · —</div>
+            <div class="story-empty" style="padding:20px 0 40px;">
+              <div class="empty-title">故事待续</div>
+              <div class="empty-desc">这里的内容正在书写中，敬请期待</div>
+            </div>`
+          : `<div class="story-bottom-sep">— · —</div>`;
+
+        inner.innerHTML = `
+          <div class="story-detail-header">
+            <h1>${sectionMap[section]}</h1>
+            <p>${sectionHint[section]}</p>
+          </div>
+          <div class="story-detail-sep">— · —</div>
+          <div class="story-layout">
+            <div class="story-text">${textHtml}</div>
+          </div>
+          ${bottomHtml}
+        `;
+
+        // 管理员显示编辑按钮
+        loadUser().then(u => {
+          if (u && u.is_admin) {
+            const btn = document.getElementById('storyEditBtn');
+            btn.classList.add('show');
+            btn.href = `/story-edit.html?section=${section}`;
+          }
+        });
+      } catch (err) {
+        inner.innerHTML = `
+          <div class="story-empty">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    // 支持 URL 直接访问详情（如 /story.html?section=primary）
+    const urlSection = new URLSearchParams(location.search).get('section');
+    if (urlSection && sectionMap[urlSection]) {
+      showStory(urlSection);
+    }
+  </script>
+</body>
+</html>

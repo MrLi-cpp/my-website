@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>编辑故事 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .edit-page { min-height: 100vh; padding: 80px 20px 60px; max-width: 1100px; margin: 0 auto; }
+    .edit-header { text-align: center; margin-bottom: 36px; padding-top: 20px; }
+    .edit-header h1 { font-family: var(--font-serif); font-size: 28px; letter-spacing: 6px; font-weight: 400; }
+    .edit-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 2px; margin-top: 8px; }
+
+    .edit-layout { display: block; max-width: 720px; margin: 0 auto; }
+    .edit-left { width: 100%; }
+
+    .form-block { margin-bottom: 20px; }
+    .form-block label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase; }
+
+    /* 段落编辑框 */
+    .paragraph-item textarea {
+      width: 100%; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 8px; padding: 14px; color: var(--text-primary); font-size: 14px;
+      font-family: "KaiTi", "STKaiti", "SimKai", var(--font-serif), serif;
+      outline: none; transition: all 0.3s; line-height: 2; min-height: 120px; resize: vertical;
+      word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap;
+      text-align: justify;
+    }
+    .paragraph-item textarea:hover { border-color: rgba(201,169,110,0.3); }
+    .paragraph-item textarea:focus { border-color: var(--accent-gold); box-shadow: 0 0 16px rgba(201,169,110,0.08); }
+    .paragraph-item textarea::placeholder { color: var(--text-muted); }
+
+    .paragraph-item { position: relative; margin-bottom: 16px; }
+    .paragraph-num {
+      position: absolute; left: -28px; top: 12px;
+      font-size: 11px; color: var(--text-muted); width: 20px; text-align: right;
+    }
+    .paragraph-actions {
+      display: flex; gap: 8px; margin-top: 6px; padding-left: 4px; justify-content: center;
+    }
+    .paragraph-actions button {
+      background: transparent; border: 1px solid var(--border); border-radius: 4px;
+      color: var(--text-muted); font-size: 11px; padding: 4px 10px; cursor: pointer;
+      transition: all 0.2s; letter-spacing: 1px;
+    }
+    .paragraph-actions button:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+    .edit-actions {
+      display: flex; gap: 12px; margin-top: 24px; justify-content: center;
+      position: sticky; bottom: 20px;
+      padding: 16px 0; background: linear-gradient(to top, var(--bg-primary) 60%, transparent);
+    }
+    .btn-primary {
+      background: var(--accent-gold); border: none; border-radius: 8px;
+      padding: 12px 32px; color: var(--bg-primary); font-size: 14px;
+      cursor: pointer; letter-spacing: 2px; transition: opacity 0.2s; font-family: var(--font-sans);
+    }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 24px; color: var(--text-secondary); font-size: 14px;
+      cursor: pointer; letter-spacing: 1px; font-family: var(--font-sans); transition: all 0.3s;
+    }
+    .btn-secondary:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+
+    .success-msg {
+      background: rgba(7,193,96,0.1); color: #07c160;
+      padding: 12px 16px; border-radius: 6px; margin-bottom: 16px;
+      font-size: 13px; display: none; text-align: center; letter-spacing: 1px;
+    }
+
+    @media (max-width: 640px) {
+      .edit-layout { max-width: 100%; }
+      .paragraph-num { display: none; }
+    }
+  </style>
+</head>
+<body style="background:var(--bg-primary);">
+
+  <a href="/story-detail.html" id="backLink" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回上一级</a>
+
+  <div class="edit-page">
+    <div class="edit-header">
+      <h1 id="editTitle">编辑故事</h1>
+      <p>段落编辑</p>
+    </div>
+
+    <div class="success-msg" id="successMsg">保存成功</div>
+
+    <div class="edit-layout">
+      <div class="edit-left">
+        <div id="paragraphsContainer"></div>
+        <div class="paragraph-actions" style="margin-top:12px;">
+          <button onclick="addParagraph()">+ 新增段落</button>
+        </div>
+
+        <div class="edit-actions">
+          <button class="btn-primary" onclick="saveStory()">保存</button>
+          <button class="btn-secondary" onclick="previewStory()">预览</button>
+          <a href="#" id="cancelLink" class="btn-secondary" style="text-decoration:none;display:inline-flex;align-items:center;">取消</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=2"></script>
+  <script>
+    const section = new URLSearchParams(location.search).get('section');
+    const sectionMap = { primary: '小学', middle: '初中', high: '高中', university: '大学' };
+    if (!sectionMap[section]) { alert('缺少 section 参数'); location.href = '/story.html'; }
+
+    document.getElementById('editTitle').textContent = '编辑 · ' + sectionMap[section];
+    document.getElementById('backLink').href = '/story.html?section=' + section;
+    document.getElementById('cancelLink').href = '/story.html?section=' + section;
+
+    let paragraphs = [''];
+
+    async function loadStory() {
+      try {
+        const story = await get('/api/story/' + section);
+        if (story.paragraphs && story.paragraphs.length > 0) paragraphs = story.paragraphs;
+      } catch(e) {}
+      renderParagraphs();
+    }
+
+    function renderParagraphs() {
+      const c = document.getElementById('paragraphsContainer');
+      c.innerHTML = paragraphs.map((text, i) => `
+        <div class="paragraph-item">
+          <span class="paragraph-num">${i + 1}</span>
+          <textarea placeholder="写下这段故事..." data-idx="${i}" oninput="updateParagraph(${i}, this.value)">${escapeHtml(text)}</textarea>
+          <div class="paragraph-actions">
+            <button onclick="moveParagraph(${i}, -1)">↑</button>
+            <button onclick="moveParagraph(${i}, 1)">↓</button>
+            <button onclick="deleteParagraph(${i})">删除</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateParagraph(i, val) { paragraphs[i] = val; }
+    function addParagraph() { paragraphs.push(''); renderParagraphs(); }
+    function deleteParagraph(i) { if (paragraphs.length > 1) { paragraphs.splice(i, 1); renderParagraphs(); } }
+    function moveParagraph(i, dir) {
+      const ni = i + dir;
+      if (ni < 0 || ni >= paragraphs.length) return;
+      [paragraphs[i], paragraphs[ni]] = [paragraphs[ni], paragraphs[i]];
+      renderParagraphs();
+    }
+
+    async function saveStory() {
+      const data = new FormData();
+      data.append('title', sectionMap[section]);
+      data.append('paragraphs', JSON.stringify(paragraphs.filter(p => p.trim())));
+      data.append('images', JSON.stringify([]));
+
+      try {
+        const res = await fetch('/api/story/' + section, { method: 'PUT', body: data, credentials: 'same-origin' });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error);
+        showSuccess();
+        setTimeout(() => location.reload(), 800);
+      } catch(err) { alert('保存失败: ' + err.message); }
+    }
+
+    function previewStory() {
+      window.location.href = '/story.html?section=' + section;
+    }
+
+    function showSuccess() {
+      const msg = document.getElementById('successMsg');
+      msg.style.display = 'block';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+
+    loadStory();
+  </script>
+</body>
+</html>

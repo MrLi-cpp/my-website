@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>留言 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=3">
+  <style>
+    html, body { background: var(--bg-primary); height: 100%; overflow: hidden; }
+    .chat-wrap { display: flex; flex-direction: column; height: 100vh; max-width: 600px; margin: 0 auto; position: relative; }
+
+    /* 头部 */
+    .chat-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .chat-head .back { color: var(--text-muted); text-decoration: none; font-size: 13px; letter-spacing: 2px; transition: all 0.3s; padding: 4px 10px; border-radius: 6px; }
+    .chat-head .back:hover { color: var(--accent-gold); background: rgba(201,169,110,0.08); transform: scale(1.05); }
+    .chat-head .title { font-family: var(--font-serif); font-size: 16px; letter-spacing: 3px; }
+
+    /* 消息区 */
+    .chat-body { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+    .chat-body::-webkit-scrollbar { width: 3px; }
+    .chat-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* 日期分隔线 */
+    .chat-date { text-align: center; margin: 12px 0; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; opacity: 0.6; }
+
+    /* 消息行 */
+    .msg-row { display: flex; margin-bottom: 16px; align-items: flex-end; }
+    .msg-row.self { flex-direction: row-reverse; }
+
+    /* 气泡 */
+    .msg-bubble {
+      max-width: 70%; padding: 10px 14px; border-radius: 14px;
+      font-size: 14px; line-height: 1.6; word-break: break-word;
+      position: relative; transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .msg-bubble:hover { transform: scale(1.02); }
+    .msg-row.self .msg-bubble {
+      background: rgba(201,169,110,0.15); color: var(--text-primary);
+      border: 1px solid rgba(201,169,110,0.25); border-bottom-right-radius: 4px;
+    }
+    .msg-row.other .msg-bubble {
+      background: var(--bg-card); color: var(--text-primary);
+      border: 1px solid var(--border); border-bottom-left-radius: 4px;
+    }
+    .msg-bubble.withdrawn { opacity: 0.5; font-style: italic; }
+
+    /* 消息时间 */
+    .msg-time { font-size: 10px; color: var(--text-muted); margin: 0 6px; opacity: 0.6; white-space: nowrap; }
+
+    /* 图片消息 */
+    .msg-img { max-width: 200px; max-height: 260px; border-radius: 10px; cursor: pointer; transition: transform 0.3s; border: 1px solid var(--border); }
+    .msg-img:hover { transform: scale(1.03); }
+
+    /* 视频消息 */
+    .msg-video { max-width: 200px; max-height: 260px; border-radius: 10px; border: 1px solid var(--border); }
+
+    /* 撤回按钮 */
+    .msg-withdraw-btn {
+      position: absolute; top: -24px; right: 0;
+      background: rgba(192,57,43,0.9); color: #fff;
+      border: none; border-radius: 4px; padding: 2px 8px;
+      font-size: 11px; cursor: pointer; opacity: 0; transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    .msg-bubble:hover .msg-withdraw-btn { opacity: 1; pointer-events: auto; }
+    .msg-row.self .msg-withdraw-btn { right: auto; left: 0; }
+
+    /* 空状态 */
+    .chat-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 13px; letter-spacing: 2px; }
+
+    /* 输入区 */
+    .chat-foot { border-top: 1px solid var(--border); padding: 10px 12px; flex-shrink: 0; background: var(--bg-primary); }
+    .chat-tool { display: flex; gap: 8px; margin-bottom: 8px; }
+    .chat-tool label {
+      width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; color: var(--text-muted); transition: all 0.3s;
+      background: var(--bg-card);
+    }
+    .chat-tool label:hover { border-color: var(--accent-gold); color: var(--accent-gold); transform: scale(1.1); }
+    .chat-tool input { display: none; }
+    .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
+    .chat-textarea {
+      flex: 1; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 18px; padding: 8px 14px; color: var(--text-primary);
+      font-size: 14px; resize: none; outline: none; font-family: var(--font-sans);
+      max-height: 100px; min-height: 36px; line-height: 1.5;
+    }
+    .chat-textarea:focus { border-color: rgba(201,169,110,0.4); }
+    .chat-send {
+      width: 36px; height: 36px; border-radius: 50%; border: none;
+      background: var(--accent-gold); color: var(--bg-primary);
+      font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; flex-shrink: 0;
+    }
+    .chat-send:hover { transform: scale(1.1); box-shadow: 0 4px 12px rgba(201,169,110,0.3); }
+    .chat-send:active { transform: scale(0.95); }
+
+    /* 大图预览 */
+    .img-overlay {
+      position: fixed; inset: 0; z-index: 3000; background: rgba(0,0,0,0.9);
+      display: none; align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    .img-overlay img { max-width: 90%; max-height: 90%; border-radius: 4px; }
+    .img-overlay.show { display: flex; }
+
+    /* 未登录覆盖层 */
+    .login-overlay {
+      position: fixed; inset: 0; z-index: 2000; background: var(--bg-primary);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .login-overlay.show { display: flex; }
+    .login-overlay p { font-size: 14px; color: var(--text-muted); letter-spacing: 3px; margin-bottom: 24px; }
+    .login-overlay .btn-back {
+      padding: 10px 28px; border: 1px solid var(--accent-gold); border-radius: 8px;
+      background: transparent; color: var(--accent-gold); font-size: 13px; letter-spacing: 2px;
+      cursor: pointer; font-family: var(--font-sans); transition: all 0.3s;
+    }
+    .login-overlay .btn-back:hover { background: rgba(201,169,110,0.1); transform: scale(1.05); }
+  </style>
+</head>
+<body>
+
+  <div class="chat-wrap">
+    <!-- 头部 -->
+    <div class="chat-head">
+      <a class="back" href="/">← 返回</a>
+      <div class="title" id="chatTitle">留言</div>
+      <div style="width:50px;"></div>
+    </div>
+
+    <!-- 消息区 -->
+    <div class="chat-body" id="chatBody"></div>
+
+    <!-- 输入区 -->
+    <div class="chat-foot" id="chatFoot">
+      <div class="chat-tool">
+        <label title="图片">📷<input type="file" id="imgInp" accept="image/*" onchange="sendFile(this, 'image')"></label>
+        <label title="视频">🎬<input type="file" id="vidInp" accept="video/*" onchange="sendFile(this, 'video')"></label>
+      </div>
+      <div class="chat-input-row">
+        <textarea class="chat-textarea" id="chatInp" rows="1" placeholder="说点什么…" onkeydown="onKey(event)"></textarea>
+        <button class="chat-send" onclick="sendText()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 未登录覆盖 -->
+  <div class="login-overlay" id="loginOverlay">
+    <p>请先登录后留言</p>
+    <button class="btn-back" onclick="goHome()">返回主页登录</button>
+  </div>
+
+  <!-- 大图 -->
+  <div class="img-overlay" id="imgOverlay" onclick="this.classList.remove('show')">
+    <img src="" id="imgOverlayImg" alt="">
+  </div>
+
+  <script>
+    // ========== 基础请求 ==========
+    const API = '';
+    async function req(method, url, body) {
+      const opts = { method, credentials: 'include' };
+      if (body) {
+        if (body instanceof FormData) { opts.body = body; }
+        else { opts.headers = { 'Content-Type': 'application/json' }; opts.body = JSON.stringify(body); }
+      }
+      const r = await fetch(API + url, opts);
+      if (!r.ok) { const e = await r.json().catch(()=>({})); throw new Error(e.error || '请求失败'); }
+      return r.json();
+    }
+    const get  = (url) => req('GET', url);
+    const post = (url, body) => req('POST', url, body);
+    const put  = (url, body) => req('PUT', url, body);
+
+    // ========== 状态 ==========
+    let myId = null, otherId = null, isAdmin = false, otherName = '霁光';
+    let msgs = [], pollTimer = null;
+
+    // ========== 启动 ==========
+    async function boot() {
+      try {
+        const me = await get('/api/me');
+        if (!me || !me.id) { showLogin(); return; }
+        myId = me.id; isAdmin = !!me.is_admin;
+        hideLogin();
+
+        // 确定聊天对象
+        const qs = new URLSearchParams(location.search);
+        const withId = parseInt(qs.get('with'));
+        if (isAdmin && withId) {
+          otherId = withId;
+          // 获取对方用户名
+          try {
+            const users = await get('/api/users');
+            const user = (users || []).find(u => u.id === withId);
+            otherName = user ? user.username : ('用户 #' + withId);
+          } catch(e) {
+            otherName = '用户 #' + withId;
+          }
+          // 管理员返回私信列表
+          document.querySelector('.chat-head .back').href = '/admin.html#chats';
+        } else {
+          // 普通用户找管理员
+          const users = await get('/api/users');
+          const admin = (users || []).find(u => u.is_admin);
+          if (admin) { otherId = admin.id; otherName = admin.username; }
+          // 普通用户返回主页
+          document.querySelector('.chat-head .back').href = '/';
+        }
+
+        document.getElementById('chatTitle').textContent = otherName || '留言';
+        loadMsgs();
+        pollTimer = setInterval(loadMsgs, 3000);
+      } catch (e) {
+        console.error('boot error:', e);
+        showLogin();
+      }
+    }
+
+    function showLogin() {
+      document.getElementById('loginOverlay').classList.add('show');
+      document.getElementById('chatFoot').style.display = 'none';
+    }
+    function hideLogin() {
+      document.getElementById('loginOverlay').classList.remove('show');
+      document.getElementById('chatFoot').style.display = 'block';
+    }
+    function goHome() {
+      sessionStorage.setItem('openLoginModal', '1');
+      location.href = '/';
+    }
+
+    // ========== 加载消息 ==========
+    async function loadMsgs() {
+      if (!otherId) return;
+      try {
+        msgs = await get('/api/messages?with=' + otherId);
+        render();
+      } catch(e) { console.error('loadMsgs', e); }
+    }
+
+    // ========== 渲染 ==========
+    function render() {
+      const box = document.getElementById('chatBody');
+      if (!msgs.length) { box.innerHTML = '<div class="chat-empty">暂无消息，发送第一条留言吧</div>'; return; }
+
+      let lastDate = '';
+      box.innerHTML = msgs.map((m, i) => {
+        const self = m.sender_id === myId;
+        const d = new Date(m.created_at);
+        const t = `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+        const ds = `${d.getMonth()+1}月${d.getDate()}日`;
+        let label = '';
+        if (ds !== lastDate) { lastDate = ds; label = `<div class="chat-date">${ds}</div>`; }
+
+        let inner = '';
+        if (m.is_withdrawn) {
+          inner = '<span style="opacity:0.5;font-style:italic;">消息已撤回</span>';
+        } else if (m.type === 'image' && m.file_url) {
+          inner = `<img src="${m.file_url}" class="msg-img" onclick="viewImg('${m.file_url}')">`;
+        } else if (m.type === 'video' && m.file_url) {
+          inner = `<video src="${m.file_url}" class="msg-video" controls playsinline></video>`;
+        } else {
+          inner = escape(m.content || '');
+        }
+
+        // 撤回按钮（仅自己的消息且2分钟内）
+        let withdrawBtn = '';
+        if (self && !m.is_withdrawn && canWithdraw(m.created_at)) {
+          withdrawBtn = `<button class="msg-withdraw-btn" onclick="withdraw(${m.id}, event)">撤回</button>`;
+        }
+
+        return label + `
+          <div class="msg-row ${self ? 'self' : 'other'}">
+            <div class="msg-time">${t}</div>
+            <div class="msg-bubble ${m.is_withdrawn ? 'withdrawn' : ''}">
+              ${inner}${withdrawBtn}
+            </div>
+          </div>`;
+      }).join('');
+
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function canWithdraw(iso) {
+      return (new Date() - new Date(iso)) < 2 * 60 * 1000;
+    }
+    function escape(s) {
+      const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+    }
+
+    // ========== 发送 ==========
+    async function sendText() {
+      const el = document.getElementById('chatInp');
+      const txt = el.value.trim();
+      if (!txt || !otherId) return;
+      el.value = '';
+      try {
+        await post('/api/messages', { receiver_id: otherId, content: txt, type: 'text' });
+        loadMsgs();
+      } catch(e) { alert(e.message || '发送失败'); }
+    }
+    function onKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendText(); }
+    }
+
+    async function sendFile(input, type) {
+      const file = input.files[0]; if (!file || !otherId) return;
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('receiver_id', otherId);
+      fd.append('type', type);
+      try {
+        await post('/api/messages/upload', fd);
+        input.value = '';
+        loadMsgs();
+      } catch(e) { alert(e.message || '发送失败'); }
+    }
+
+    // ========== 撤回 ==========
+    async function withdraw(id, ev) {
+      ev.stopPropagation();
+      if (!confirm('撤回这条消息？')) return;
+      try {
+        await put('/api/messages/' + id + '/withdraw', {});
+        loadMsgs();
+      } catch(e) { alert(e.message || '撤回失败'); }
+    }
+
+    // ========== 大图 ==========
+    function viewImg(url) {
+      document.getElementById('imgOverlayImg').src = url;
+      document.getElementById('imgOverlay').classList.add('show');
+    }
+
+    // 启动
+    boot();
+  </script>
+</body>
+</html>
