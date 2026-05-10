@@ -501,7 +501,7 @@
         }
         body.innerHTML = sessions.map(s => {
           // API 返回字段: content, type, created_at
-          const timeStr = s.created_at ? new Date(s.created_at).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
+          const timeStr = s.created_at ? new Date(s.created_at + 'Z').toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
           let preview = '暂无消息';
           if (s.type === 'image') preview = '[图片]';
           else if (s.type === 'video') preview = '[视频]';
@@ -631,7 +631,8 @@
       let lastDate = '';
       box.innerHTML = msgs.map((m, i) => {
         const self = m.sender_id === myId;
-        const d = new Date(m.created_at);
+        // SQLite 存储 UTC 时间，前端需要转换为本地时间显示
+        const d = new Date(m.created_at + 'Z');
         const t = `${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
         const ds = `${d.getMonth()+1}月${d.getDate()}日`;
         let label = '';
@@ -667,7 +668,7 @@
     }
 
     function canWithdraw(iso) {
-      return (new Date() - new Date(iso)) < 2 * 60 * 1000;
+      return (new Date() - new Date(iso + 'Z')) < 2 * 60 * 1000;
     }
     function escape(s) {
       const d = document.createElement('div'); d.textContent = s; return d.innerHTML;
