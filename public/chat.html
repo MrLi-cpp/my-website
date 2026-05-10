@@ -584,6 +584,9 @@
       if (!otherId) return;
       try {
         msgs = await get('/api/messages?with=' + otherId);
+        // 自动标记对方消息为已读
+        const hasUnreadFromOther = msgs.some(m => m.sender_id === otherId && !m.is_read);
+        if (hasUnreadFromOther) markRead(otherId);
         render();
       } catch(e) { console.error('loadMsgs', e); }
     }

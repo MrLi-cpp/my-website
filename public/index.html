@@ -829,7 +829,12 @@ async function loadBlogDetail(id) {
     }
     // 页面加载后开始轮询
     checkUnread();
-    unreadPollTimer = setInterval(checkUnread, 8000);
+    unreadPollTimer = setInterval(checkUnread, 3000);
+
+    // 页面重新可见时立即检查未读（从聊天页返回时）
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) checkUnread();
+    });
 
     initUser();
     initMoments();

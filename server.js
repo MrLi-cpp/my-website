@@ -149,6 +149,7 @@ db.serialize(() => {
   db.run('CREATE INDEX IF NOT EXISTS idx_posts_display_date ON posts(display_date)', [], (err) => { if (err) console.error('[INIT] idx_posts_display_date:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id)', [], (err) => { if (err) console.error('[INIT] idx_messages_sender:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id)', [], (err) => { if (err) console.error('[INIT] idx_messages_receiver:', err.message); });
+  db.run('CREATE INDEX IF NOT EXISTS idx_messages_receiver_read ON messages(receiver_id, is_read)', [], (err) => { if (err) console.error('[INIT] idx_messages_receiver_read:', err.message); });
   db.run('ALTER TABLE messages ADD COLUMN is_read INTEGER DEFAULT 0', [], (err) => { /* ignore duplicate column error */ });
 
   // 博客评论添加 parent_id（用于回复）— 先检查再添加，避免重复报错
@@ -1011,11 +1012,26 @@ app.get('/api/chat-sessions', requireLogin, (req, res) => {
 app.get('/api/unread-count', requireLogin, (req, res) => {
   const userId = req.session.userId;
   db.get(
-    'SELECT COUNT(*) as count FROM messages WHERE receiver_id = ? AND sender_id != ? AND is_read = 0',
-    [userId, userId],
+    'SELECT COUNT(*) as count FROM messages WHERE receiver_id = ? AND is_read = 0',
+    [userId],
     (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ count: row ? row.count : 0 });
+    }
+  );
+});
+
+// 标记消息为已读
+app.post('/api/messages/read', requireLogin, (req, res) => {
+  const userId = req.session.userId;
+  const otherId = req.body.other_id;
+  if (!otherId) return res.status(400).json({ error: '缺少参数' });
+  db.run(
+    'UPDATE messages SET is_read = 1 WHERE receiver_id = ? AND sender_id = ? AND is_read = 0',
+    [userId, otherId],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ marked: this.changes });
     }
   );
 });
