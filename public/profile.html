@@ -6,25 +6,15 @@
   <title>个人中心 - 霁光</title>
   <link rel="stylesheet" href="/style.css?v=4">
   <style>
-    html, body {
-      overflow-y: auto !important;
-      height: auto !important;
-      min-height: 100vh;
-    }
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
 
-    .profile-page {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 60px 20px 40px;
-    }
-
+    .profile-page { max-width: 480px; margin: 0 auto; padding: 60px 20px 40px; }
     .profile-card {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 32px;
     }
-
     .profile-title {
       font-family: var(--font-serif);
       color: var(--accent-gold);
@@ -35,6 +25,7 @@
       margin-bottom: 28px;
     }
 
+    /* ===== 头像区域 ===== */
     .profile-avatar-section {
       display: flex;
       flex-direction: column;
@@ -42,7 +33,6 @@
       gap: 12px;
       margin-bottom: 24px;
     }
-
     .profile-avatar {
       width: 80px;
       height: 80px;
@@ -56,34 +46,31 @@
       color: var(--accent-gold);
       overflow: hidden;
       border: 2px solid var(--accent-gold);
-      cursor: default;
-      user-select: none;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .profile-avatar:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 20px rgba(201,169,110,0.2);
     }
     .profile-avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-
-    .profile-avatar-upload {
-      color: var(--accent-gold);
-      font-size: 13px;
+    .profile-avatar-hint {
+      font-size: 11px;
+      color: var(--text-muted);
       letter-spacing: 1px;
-      cursor: pointer;
-      transition: opacity 0.3s;
-    }
-    .profile-avatar-upload:hover {
-      opacity: 0.8;
-      text-decoration: underline;
     }
 
+    /* ===== 表单字段 ===== */
     .profile-form {
       display: flex;
       flex-direction: column;
       gap: 16px;
       margin-bottom: 24px;
     }
-
     .profile-field {
       display: flex;
       flex-direction: column;
@@ -116,10 +103,16 @@
     .profile-field textarea:focus {
       border-color: var(--accent-gold);
     }
-    .profile-field input::placeholder,
-    .profile-field textarea::placeholder {
-      color: var(--text-muted);
+    .profile-field input:disabled,
+    .profile-field select:disabled,
+    .profile-field textarea:disabled {
+      background: rgba(255,255,255,0.01);
+      border-color: rgba(255,255,255,0.04);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      opacity: 0.8;
     }
+    .profile-field textarea { resize: vertical; line-height: 1.6; min-height: 80px; }
     .profile-field select {
       cursor: pointer;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a09a90' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
@@ -127,23 +120,29 @@
       background-position: right 12px center;
       padding-right: 32px;
     }
-    .profile-field select option {
-      background: var(--bg-secondary);
+    .profile-field select option { background: var(--bg-secondary); color: var(--text-primary); }
+
+    /* 只读模式下显示纯文本 */
+    .profile-readonly-value {
+      font-size: 15px;
       color: var(--text-primary);
-    }
-    .profile-field textarea {
-      resize: vertical;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 8px;
       line-height: 1.6;
-      min-height: 80px;
+    }
+    .profile-readonly-value.empty {
+      color: var(--text-muted);
+      font-style: italic;
     }
 
+    /* ===== 操作按钮 ===== */
     .profile-actions {
       display: flex;
       gap: 12px;
       justify-content: center;
       margin-bottom: 24px;
     }
-
     .profile-btn {
       padding: 10px 28px;
       border-radius: 8px;
@@ -169,6 +168,95 @@
       filter: brightness(1.1);
     }
 
+    /* ===== 成功/错误提示 ===== */
+    .profile-error {
+      color: var(--accent-red);
+      font-size: 12px;
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+      letter-spacing: 1px;
+    }
+    .profile-success {
+      color: #07c160;
+      font-size: 12px;
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+      letter-spacing: 1px;
+    }
+
+    /* ===== Toast 通知 ===== */
+    .profile-toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-60px);
+      z-index: 6000;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 14px;
+      letter-spacing: 1px;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      white-space: nowrap;
+    }
+    .profile-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .profile-toast.success {
+      background: rgba(7, 193, 96, 0.12);
+      border: 1px solid rgba(7, 193, 96, 0.25);
+      color: #07c160;
+    }
+    .profile-toast.error {
+      background: rgba(192, 57, 43, 0.12);
+      border: 1px solid rgba(192, 57, 43, 0.25);
+      color: var(--accent-red);
+    }
+
+    /* ===== 头像放大弹窗 ===== */
+    .avatar-lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .avatar-lightbox-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .avatar-lightbox-overlay img {
+      max-width: 80vw;
+      max-height: 80vh;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .avatar-lightbox-overlay.active img {
+      transform: scale(1);
+    }
+    .avatar-lightbox-close {
+      position: absolute;
+      top: 24px;
+      right: 32px;
+      font-size: 32px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .avatar-lightbox-close:hover { color: var(--accent-gold); }
+
+    /* ===== 私信入口 ===== */
     .profile-dm-section {
       text-align: center;
       padding-top: 20px;
@@ -193,42 +281,20 @@
       color: var(--accent-gold);
     }
 
-    .profile-error {
-      color: var(--accent-red);
-      font-size: 12px;
-      text-align: center;
-      margin-bottom: 12px;
-      display: none;
-      letter-spacing: 1px;
-    }
-    .profile-success {
-      color: #07c160;
-      font-size: 12px;
-      text-align: center;
-      margin-bottom: 12px;
-      display: none;
-      letter-spacing: 1px;
-    }
-
     @media (max-width: 480px) {
-      .profile-page {
-        padding: 56px 12px 32px;
-      }
-      .profile-card {
-        padding: 24px 20px;
-      }
-      .profile-title {
-        font-size: 20px;
-      }
-      .profile-btn {
-        padding: 10px 20px;
-        font-size: 12px;
-      }
+      .profile-page { padding: 56px 12px 32px; }
+      .profile-card { padding: 24px 20px; }
+      .profile-title { font-size: 20px; }
+      .profile-btn { padding: 10px 20px; font-size: 12px; }
+      .profile-toast { font-size: 13px; padding: 10px 20px; }
     }
   </style>
 </head>
 <body>
   <a href="/" class="unified-back">← 返回主页</a>
+
+  <!-- Toast 通知 -->
+  <div class="profile-toast" id="profileToast"></div>
 
   <div class="profile-page">
     <div class="profile-card">
@@ -236,10 +302,11 @@
 
       <!-- 头像区域 -->
       <div class="profile-avatar-section">
-        <div class="profile-avatar" id="profileAvatar">?</div>
-        <label class="profile-avatar-upload">
+        <div class="profile-avatar" id="profileAvatar" onclick="openAvatarLightbox()">?</div>
+        <div class="profile-avatar-hint" id="avatarHint" style="display:none;">点击头像预览，悬停放大</div>
+        <label class="profile-avatar-upload" id="avatarUploadLabel" style="display:none;">
           <input type="file" id="avatarInput" accept="image/*" style="display:none;">
-          <span>更换头像</span>
+          <span style="color:var(--accent-gold);cursor:pointer;font-size:13px;letter-spacing:1px;transition:opacity 0.3s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">更换头像</span>
         </label>
       </div>
 
@@ -247,13 +314,13 @@
       <div class="profile-error" id="profileError"></div>
       <div class="profile-success" id="profileSuccess"></div>
 
-      <!-- 表单 -->
-      <div class="profile-form">
-        <div class="profile-field">
+      <!-- 表单（模式切换：只读 / 编辑） -->
+      <div class="profile-form" id="profileForm">
+        <div class="profile-field" id="fieldUsername">
           <label>用户名</label>
           <input type="text" id="profileUsername" placeholder="用户名">
         </div>
-        <div class="profile-field">
+        <div class="profile-field" id="fieldGender">
           <label>性别</label>
           <select id="profileGender">
             <option value="">未设置</option>
@@ -262,16 +329,19 @@
             <option value="other">其他 ⚧</option>
           </select>
         </div>
-        <div class="profile-field">
+        <div class="profile-field" id="fieldBio">
           <label>个人简介</label>
           <textarea id="profileBio" placeholder="写一段个人简介..." rows="4"></textarea>
         </div>
       </div>
 
       <!-- 操作按钮 -->
-      <div class="profile-actions">
-        <button class="profile-btn primary" onclick="saveProfile()">保存</button>
-        <button class="profile-btn" onclick="location.href='/'">取消</button>
+      <div class="profile-actions" id="profileActions">
+        <!-- 只读模式：显示"修改资料" -->
+        <button class="profile-btn primary" id="btnEdit" onclick="enterEditMode()">✏️ 修改资料</button>
+        <!-- 编辑模式：显示"保存"和"取消" -->
+        <button class="profile-btn primary" id="btnSave" onclick="saveProfile()" style="display:none;">💾 保存</button>
+        <button class="profile-btn" id="btnCancel" onclick="cancelEdit()" style="display:none;">↩ 取消</button>
       </div>
 
       <!-- 私信管理入口 -->
@@ -281,32 +351,32 @@
     </div>
   </div>
 
-  <script src="/script.js?v=3"></script>
+  <!-- 头像放大弹窗 -->
+  <div class="avatar-lightbox-overlay" id="avatarLightbox" onclick="closeAvatarLightbox()">
+    <span class="avatar-lightbox-close" onclick="closeAvatarLightbox()">&times;</span>
+    <img src="" id="avatarLightboxImg" alt="头像预览">
+  </div>
+
+  <script src="/script.js?v=4"></script>
   <script>
     let currentUser = null;
+    let originalData = {}; // 保存原始数据，取消时恢复
+    let isEditMode = false;
+    let pendingAvatar = null; // 已选中的头像（未保存）
 
     const genderSymbols = {
-      male: '♂',
-      female: '♀',
-      other: '⚧',
+      male: '♂ 男',
+      female: '♀ 女',
+      other: '⚧ 其他',
       '': '未设置'
     };
 
-    // 性别中文显示（select 中已带符号，这里用于 avatar 上的显示）
-    function getGenderDisplay(value) {
-      return genderSymbols[value] || '未设置';
-    }
-
+    // ===== 页面加载 =====
     async function loadProfile() {
       try {
-        const res = await fetch('/api/me', {
-          credentials: 'include'
-        });
+        const res = await fetch('/api/me', { credentials: 'include' });
         if (!res.ok) {
-          if (res.status === 401) {
-            location.href = '/';
-            return;
-          }
+          if (res.status === 401) { location.href = '/'; return; }
           throw new Error('加载失败');
         }
         const user = await res.json();
@@ -317,13 +387,80 @@
         document.getElementById('profileGender').value = user.gender || '';
         document.getElementById('profileBio').value = user.bio || '';
 
+        // 保存原始数据
+        originalData = {
+          username: user.username || '',
+          gender: user.gender || '',
+          bio: user.bio || '',
+          avatar: user.avatar || ''
+        };
+
         // 头像
         updateAvatarDisplay(user.avatar, user.username);
+
+        // 默认进入只读模式
+        enterReadMode();
       } catch (err) {
-        showError('加载用户信息失败，请刷新重试');
+        showToast('加载用户信息失败，请刷新重试', 'error');
       }
     }
 
+    // ===== 模式切换 =====
+    function enterReadMode() {
+      isEditMode = false;
+
+      // 禁用所有输入
+      document.getElementById('profileUsername').disabled = true;
+      document.getElementById('profileGender').disabled = true;
+      document.getElementById('profileBio').disabled = true;
+
+      // 隐藏上传相关
+      document.getElementById('avatarUploadLabel').style.display = 'none';
+      document.getElementById('avatarHint').style.display = 'none';
+
+      // 按钮
+      document.getElementById('btnEdit').style.display = 'inline-block';
+      document.getElementById('btnSave').style.display = 'none';
+      document.getElementById('btnCancel').style.display = 'none';
+
+      // 隐藏提示
+      hideMessages();
+    }
+
+    function enterEditMode() {
+      isEditMode = true;
+
+      // 启用所有输入
+      document.getElementById('profileUsername').disabled = false;
+      document.getElementById('profileGender').disabled = false;
+      document.getElementById('profileBio').disabled = false;
+
+      // 显示上传
+      document.getElementById('avatarUploadLabel').style.display = 'block';
+      document.getElementById('avatarHint').style.display = 'block';
+
+      // 按钮
+      document.getElementById('btnEdit').style.display = 'none';
+      document.getElementById('btnSave').style.display = 'inline-block';
+      document.getElementById('btnCancel').style.display = 'inline-block';
+
+      // 聚焦用户名
+      document.getElementById('profileUsername').focus();
+    }
+
+    function cancelEdit() {
+      // 恢复原始数据
+      document.getElementById('profileUsername').value = originalData.username;
+      document.getElementById('profileGender').value = originalData.gender;
+      document.getElementById('profileBio').value = originalData.bio;
+      pendingAvatar = null;
+      updateAvatarDisplay(originalData.avatar, originalData.username);
+
+      enterReadMode();
+      showToast('已取消修改', 'error');
+    }
+
+    // ===== 头像显示 =====
     function updateAvatarDisplay(avatar, username) {
       const el = document.getElementById('profileAvatar');
       if (avatar) {
@@ -333,6 +470,74 @@
       }
     }
 
+    // ===== 头像放大弹窗 =====
+    function openAvatarLightbox() {
+      const avatar = pendingAvatar || (currentUser && currentUser.avatar);
+      if (!avatar) return;
+      document.getElementById('avatarLightboxImg').src = avatar;
+      document.getElementById('avatarLightbox').classList.add('active');
+    }
+    function closeAvatarLightbox() {
+      document.getElementById('avatarLightbox').classList.remove('active');
+    }
+
+    // ===== 头像上传 =====
+    document.getElementById('avatarInput').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      hideMessages();
+
+      if (!file.type.startsWith('image/')) {
+        showToast('请选择图片文件', 'error');
+        this.value = '';
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('图片大小不能超过 5MB', 'error');
+        this.value = '';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      try {
+        // 先尝试上传 API
+        let uploaded = false;
+        try {
+          const res = await fetch('/api/upload-avatar', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+          });
+          if (res.ok) {
+            const result = await res.json();
+            if (result.avatar) {
+              pendingAvatar = result.avatar;
+              updateAvatarDisplay(result.avatar, currentUser.username);
+              uploaded = true;
+              showToast('头像已更新，请保存', 'success');
+            }
+          }
+        } catch (_) { /* API 不存在 */ }
+
+        if (!uploaded) {
+          // 本地 base64 预览
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            pendingAvatar = ev.target.result;
+            updateAvatarDisplay(pendingAvatar, currentUser.username);
+            showToast('头像已更新（本地预览），请保存', 'success');
+          };
+          reader.readAsDataURL(file);
+        }
+      } catch (err) {
+        showToast('头像上传失败', 'error');
+      }
+      this.value = '';
+    });
+
+    // ===== 保存资料 =====
     async function saveProfile() {
       hideMessages();
 
@@ -340,19 +545,16 @@
       const gender = document.getElementById('profileGender').value;
       const bio = document.getElementById('profileBio').value.trim();
 
-      // 验证
       if (!username) {
-        showError('用户名不能为空');
+        showToast('用户名不能为空', 'error');
+        document.getElementById('profileUsername').focus();
         return;
       }
 
-      const data = {
-        username,
-        gender,
-        bio
-      };
-      // 如果有头像字段（通过上传获得），一并提交
-      if (currentUser && currentUser.avatar) {
+      const data = { username, gender, bio };
+      if (pendingAvatar) {
+        data.avatar = pendingAvatar;
+      } else if (currentUser && currentUser.avatar) {
         data.avatar = currentUser.avatar;
       }
 
@@ -365,81 +567,37 @@
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err.message || '保存失败');
+          throw new Error(err.error || '保存失败');
         }
-        showSuccess('保存成功');
-        // 更新本地用户信息
+
+        // 更新本地数据
         currentUser = { ...currentUser, ...data };
+        originalData = { username, gender, bio, avatar: data.avatar || '' };
+        pendingAvatar = null;
+
+        // 切换回只读模式
+        enterReadMode();
+
+        // 🎉 绿色成功提示
+        showToast('✅ 修改成功！', 'success');
       } catch (err) {
-        showError(err.message || '保存失败，请重试');
+        showToast(err.message || '保存失败，请重试', 'error');
       }
     }
 
-    // 头像上传
-    document.getElementById('avatarInput').addEventListener('change', async function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
+    // ===== Toast 通知 =====
+    let toastTimer = null;
+    function showToast(msg, type) {
+      const toast = document.getElementById('profileToast');
+      toast.textContent = msg;
+      toast.className = 'profile-toast ' + type;
+      toast.classList.add('show');
 
-      hideMessages();
-
-      // 检查文件类型
-      if (!file.type.startsWith('image/')) {
-        showError('请选择图片文件');
-        this.value = '';
-        return;
-      }
-
-      // 检查文件大小（最大 5MB）
-      if (file.size > 5 * 1024 * 1024) {
-        showError('图片大小不能超过 5MB');
-        this.value = '';
-        return;
-      }
-
-      const formData = new FormData();
-      formData.append('avatar', file);
-
-      try {
-        // 先尝试调用 /api/upload-avatar
-        let uploaded = false;
-        try {
-          const res = await fetch('/api/upload-avatar', {
-            method: 'POST',
-            credentials: 'include',
-            body: formData
-          });
-          if (res.ok) {
-            const result = await res.json();
-            if (result.avatar) {
-              currentUser = currentUser || {};
-              currentUser.avatar = result.avatar;
-              updateAvatarDisplay(result.avatar, currentUser.username);
-              uploaded = true;
-              showSuccess('头像上传成功，请点击保存以更新');
-            }
-          }
-        } catch (_) {
-          // API 不存在，降级到本地模拟
-        }
-
-        if (!uploaded) {
-          // 模拟上传：用 FileReader 读取为 base64 预览
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            const base64 = ev.target.result;
-            currentUser = currentUser || {};
-            currentUser.avatar = base64;
-            updateAvatarDisplay(base64, currentUser.username);
-            showSuccess('头像已更新（本地预览），请点击保存');
-          };
-          reader.readAsDataURL(file);
-        }
-      } catch (err) {
-        showError('头像上传失败：' + (err.message || '未知错误'));
-      }
-
-      this.value = '';
-    });
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2500);
+    }
 
     function showError(msg) {
       const el = document.getElementById('profileError');
@@ -447,20 +605,18 @@
       el.style.display = 'block';
       document.getElementById('profileSuccess').style.display = 'none';
     }
-
-    function showSuccess(msg) {
+    function showSuccessInline(msg) {
       const el = document.getElementById('profileSuccess');
       el.textContent = msg;
       el.style.display = 'block';
       document.getElementById('profileError').style.display = 'none';
     }
-
     function hideMessages() {
       document.getElementById('profileError').style.display = 'none';
       document.getElementById('profileSuccess').style.display = 'none';
     }
 
-    // 页面加载
+    // ===== 启动 =====
     loadProfile();
   </script>
 </body>
