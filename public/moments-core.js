@@ -112,7 +112,7 @@ function renderCommentTree(comment, allComments, postId) {
   }
 
   let html = `<div class="comment-line" onclick="openCommentSheet(${postId}, ${comment.id}, '${escapeJs(comment.content)}', '${escapeJs(comment.username)}', ${comment.user_id}, ${isSelf})">
-    <span class="comment-author">${escapeHtml(comment.username)}</span>: ${escapeHtml(comment.content)}${replyTag}
+    <span class="comment-author-link" onclick="event.stopPropagation(); openUserProfile(${comment.user_id})">${escapeHtml(comment.username)}</span>: ${escapeHtml(comment.content)}${replyTag}
   </div>${likersLine}`;
 
   // 追评

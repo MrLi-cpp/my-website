@@ -367,7 +367,7 @@
     </div>
   </div>
 
-  <script src="/script.js?v=2"></script>
+  <script src="/script.js?v=4"></script>
   <script>
     async function initBlog() {
       await loadUser();
@@ -546,10 +546,10 @@ async function loadBlogDetail(id) {
         const marginStyle = visualDepth > 0 ? 'margin-left:36px;' : '';
         let nameHtml, textHtml;
         if (depth > 0) {
-          nameHtml = escapeHtml(node.username) + ' 回复 ' + escapeHtml(parentName);
+          nameHtml = `<span class="blog-comment-author-link" onclick="event.stopPropagation(); openUserProfile(${node.user_id})">${escapeHtml(node.username)}</span> 回复 ` + escapeHtml(parentName);
           textHtml = '：' + escapeHtml(node.content);
         } else {
-          nameHtml = escapeHtml(node.username);
+          nameHtml = `<span class="blog-comment-author-link" onclick="event.stopPropagation(); openUserProfile(${node.user_id})">${escapeHtml(node.username)}</span>`;
           textHtml = escapeHtml(node.content);
         }
         let html = `
@@ -723,6 +723,56 @@ async function loadBlogDetail(id) {
       return html;
     }
 
+    // ===== 用户资料弹窗 =====
+    let currentProfileUserId = null;
+    function openUserProfile(userId) {
+      currentProfileUserId = userId;
+      const overlay = document.getElementById('userProfileOverlay');
+      const avatar = document.getElementById('upAvatar');
+      const name = document.getElementById('upName');
+      const gender = document.getElementById('upGender');
+      const bio = document.getElementById('upBio');
+      const dmBtn = document.getElementById('upDmBtn');
+      avatar.textContent = '?';
+      name.textContent = '加载中...';
+      gender.textContent = '';
+      bio.textContent = '';
+      overlay.classList.add('active');
+      fetch('/api/users/' + userId, { credentials: 'include' })
+        .then(r => r.json())
+        .then(user => {
+          if (user.avatar) {
+            avatar.innerHTML = `<img src="${escapeHtml(user.avatar)}" alt="">`;
+          } else {
+            avatar.innerHTML = escapeHtml(user.username ? user.username[0] : '?');
+          }
+          name.textContent = escapeHtml(user.username || '未知用户');
+          const genderMap = { 'male': '♂ 男', 'female': '♀ 女', 'other': '⚧ 其他' };
+          gender.textContent = genderMap[user.gender] || '性别未设置';
+          bio.textContent = escapeHtml(user.bio || '这个人很懒，什么都没写。');
+          // 获取当前用户判断是否是自己
+          fetch('/api/me', { credentials: 'include' })
+            .then(r => r.json())
+            .then(me => {
+              if (me && me.id == userId) {
+                dmBtn.style.display = 'none';
+              } else {
+                dmBtn.style.display = 'inline-block';
+              }
+            })
+            .catch(() => { dmBtn.style.display = 'inline-block'; });
+        })
+        .catch(() => { name.textContent = '加载失败'; });
+    }
+    function closeUserProfile() {
+      document.getElementById('userProfileOverlay').classList.remove('active');
+      currentProfileUserId = null;
+    }
+    function startDmFromProfile() {
+      if (!currentProfileUserId) return;
+      location.href = '/chat.html?with=' + currentProfileUserId;
+    }
+
     initBlog();
   </script>
 
@@ -744,6 +794,18 @@ async function loadBlogDetail(id) {
         <button class="bc-btn" onclick="closeBcEdit()">取消</button>
         <button class="bc-btn primary" onclick="saveBcEdit()">保存</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 用户资料弹窗 -->
+  <div class="user-profile-overlay" id="userProfileOverlay" onclick="closeUserProfile()">
+    <div class="user-profile-card" onclick="event.stopPropagation()">
+      <span class="user-profile-close" onclick="closeUserProfile()">&times;</span>
+      <div class="user-profile-avatar" id="upAvatar">?</div>
+      <div class="user-profile-name" id="upName"></div>
+      <div class="user-profile-gender" id="upGender"></div>
+      <div class="user-profile-bio" id="upBio"></div>
+      <button class="user-profile-dm-btn" id="upDmBtn" onclick="startDmFromProfile()">💬 发私信</button>
     </div>
   </div>
 

@@ -13,6 +13,7 @@
     <div class="top-nav-brand">霁光</div>
     <div class="top-nav-login" id="topNavLogin">
       <span class="top-nav-user" id="navUserName" style="display:none;"></span>
+      <a class="nav-profile-btn" href="/profile.html" id="navProfileBtn" style="display:none;">个人中心</a>
       <a class="nav-login-btn" href="/login.html" id="navLoginBtn">登录</a>
       <button class="nav-logout-btn" id="navLogoutBtn" style="display:none;" onclick="logout()">退出</button>
     </div>
@@ -205,8 +206,8 @@
     </div>
   </div>
 
-  <script src="/script.js?v=2"></script>
-  <script src="/moments-core.js?v=3"></script>
+  <script src="/script.js?v=4"></script>
+  <script src="/moments-core.js?v=4"></script>
   <script>
     // ===== 页面切换 =====
     const universe = document.getElementById('universe');
@@ -288,15 +289,21 @@
       }
     }
     function updateNavUser(user) {
+      const profileBtn = document.getElementById('navProfileBtn');
       if (user && user.id) {
         document.getElementById('navUserName').textContent = user.username;
         document.getElementById('navUserName').style.display = 'inline';
         document.getElementById('navLoginBtn').style.display = 'none';
         document.getElementById('navLogoutBtn').style.display = 'inline-block';
+        // 非管理员显示个人中心入口
+        if (profileBtn) {
+          profileBtn.style.display = (!user.is_admin) ? 'inline-block' : 'none';
+        }
       } else {
         document.getElementById('navUserName').style.display = 'none';
         document.getElementById('navLoginBtn').style.display = 'inline-block';
         document.getElementById('navLogoutBtn').style.display = 'none';
+        if (profileBtn) profileBtn.style.display = 'none';
       }
     }
     async function logout() {
@@ -733,6 +740,56 @@ async function loadBlogDetail(id) {
       sessionStorage.removeItem('openLoginModal');
       showLoginModal();
     }
+
+    // ===== 用户资料弹窗 =====
+    let currentProfileUserId = null;
+    function openUserProfile(userId) {
+      currentProfileUserId = userId;
+      const overlay = document.getElementById('userProfileOverlay');
+      const avatar = document.getElementById('upAvatar');
+      const name = document.getElementById('upName');
+      const gender = document.getElementById('upGender');
+      const bio = document.getElementById('upBio');
+      const dmBtn = document.getElementById('upDmBtn');
+      // 先显示加载状态
+      avatar.textContent = '?';
+      avatar.innerHTML = '?';
+      name.textContent = '加载中...';
+      gender.textContent = '';
+      bio.textContent = '';
+      overlay.classList.add('active');
+      // 获取用户资料
+      fetch('/api/users/' + userId, { credentials: 'include' })
+        .then(r => r.json())
+        .then(user => {
+          if (user.avatar) {
+            avatar.innerHTML = `<img src="${escapeHtml(user.avatar)}" alt="">`;
+          } else {
+            avatar.innerHTML = escapeHtml(user.username ? user.username[0] : '?');
+          }
+          name.textContent = escapeHtml(user.username || '未知用户');
+          const genderMap = { 'male': '♂ 男', 'female': '♀ 女', 'other': '⚧ 其他' };
+          gender.textContent = genderMap[user.gender] || '性别未设置';
+          bio.textContent = escapeHtml(user.bio || '这个人很懒，什么都没写。');
+          // 如果是自己，不显示私信按钮
+          if (currentUser && currentUser.id == userId) {
+            dmBtn.style.display = 'none';
+          } else {
+            dmBtn.style.display = 'inline-block';
+          }
+        })
+        .catch(() => {
+          name.textContent = '加载失败';
+        });
+    }
+    function closeUserProfile() {
+      document.getElementById('userProfileOverlay').classList.remove('active');
+      currentProfileUserId = null;
+    }
+    function startDmFromProfile() {
+      if (!currentProfileUserId) return;
+      location.href = '/chat.html?with=' + currentProfileUserId;
+    }
   </script>
   <!-- 博客评论操作弹窗（bc 前缀，完全独立） -->
   <div class="bc-overlay" id="bcMenuOverlay" onclick="closeBcMenu()">
@@ -766,5 +823,15 @@ async function loadBlogDetail(id) {
     </div>
   </div>
 
-</body>
+  <!-- 用户资料弹窗 -->
+  <div class="user-profile-overlay" id="userProfileOverlay" onclick="closeUserProfile()">
+    <div class="user-profile-card" onclick="event.stopPropagation()">
+      <span class="user-profile-close" onclick="closeUserProfile()">&times;</span>
+      <div class="user-profile-avatar" id="upAvatar">?</div>
+      <div class="user-profile-name" id="upName"></div>
+      <div class="user-profile-gender" id="upGender"></div>
+      <div class="user-profile-bio" id="upBio"></div>
+      <button class="user-profile-dm-btn" id="upDmBtn" onclick="startDmFromProfile()">💬 发私信</button>
+    </div>
+  </div>
 </html>

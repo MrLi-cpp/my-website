@@ -21,6 +21,9 @@ db.serialize(() => {
     is_admin INTEGER DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
+  db.run(`ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT ''`, (err) => {});
+  db.run(`ALTER TABLE users ADD COLUMN gender TEXT DEFAULT ''`, (err) => {});
+  db.run(`ALTER TABLE users ADD COLUMN bio TEXT DEFAULT ''`, (err) => {});
 
   db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -413,8 +416,36 @@ app.post('/api/logout', (req, res) => {
 // 当前用户
 app.get('/api/me', (req, res) => {
   if (!req.session.userId) return res.json(null);
-  db.get('SELECT id, username, is_admin FROM users WHERE id = ?', [req.session.userId], (err, user) => {
+  db.get('SELECT id, username, is_admin, avatar, gender, bio FROM users WHERE id = ?', [req.session.userId], (err, user) => {
     if (err || !user) return res.json(null);
+    res.json(user);
+  });
+});
+
+// 更新个人资料
+app.put('/api/me', requireLogin, (req, res) => {
+  const { username, avatar, gender, bio } = req.body;
+  const userId = req.session.userId;
+  const updates = [];
+  const values = [];
+  if (username !== undefined) { updates.push('username = ?'); values.push(username); }
+  if (avatar !== undefined) { updates.push('avatar = ?'); values.push(avatar); }
+  if (gender !== undefined) { updates.push('gender = ?'); values.push(gender); }
+  if (bio !== undefined) { updates.push('bio = ?'); values.push(bio); }
+  if (updates.length === 0) return res.status(400).json({ error: '没有要更新的字段' });
+  values.push(userId);
+  db.run(`UPDATE users SET ${updates.join(', ')} WHERE id = ?`, values, function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: '资料已更新' });
+  });
+});
+
+// 获取用户公开资料
+app.get('/api/users/:id', (req, res) => {
+  const userId = req.params.id;
+  db.get('SELECT id, username, avatar, gender, bio FROM users WHERE id = ?', [userId], (err, user) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!user) return res.status(404).json({ error: '用户不存在' });
     res.json(user);
   });
 });
@@ -851,6 +882,15 @@ function getAdminId(callback) {
   });
 }
 
+function getAdminIdAsync() {
+  return new Promise((resolve) => {
+    db.get("SELECT id FROM users WHERE username = 'lijiguang' LIMIT 1", [], (err, row) => {
+      if (err || !row) return resolve(null);
+      resolve(row.id);
+    });
+  });
+}
+
 // 获取与某人的对话
 app.get('/api/messages', requireLogin, (req, res) => {
   const userId = req.session.userId;
@@ -873,49 +913,39 @@ app.get('/api/messages', requireLogin, (req, res) => {
 });
 
 // 发送消息
-app.post('/api/messages', requireLogin, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'video', maxCount: 1 }]), (req, res) => {
+app.post('/api/messages', requireLogin, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'video', maxCount: 1 }]), async (req, res) => {
   const senderId = req.session.userId;
-  let { receiver_id, content, type } = req.body;
+  const { content, receiver_id: bodyReceiverId, type } = req.body;
+  let receiver_id = bodyReceiverId;
 
-  db.get('SELECT is_admin FROM users WHERE id = ?', [senderId], (err, sender) => {
-    if (err || !sender) return res.status(500).json({ error: '用户不存在' });
+  if (!receiver_id) {
+    // 兼容旧逻辑：如果没传 receiver_id，默认发给管理员
+    receiver_id = await getAdminIdAsync();
+  }
+  if (!receiver_id) return res.status(400).json({ error: '缺少接收人' });
 
-    // 如果不是管理员，默认发给管理员
-    if (!sender.is_admin) {
-      getAdminId((adminId) => {
-        if (!adminId) return res.status(500).json({ error: '管理员不存在' });
-        receiver_id = adminId;
-        doSend();
+  const receiverId = parseInt(receiver_id);
+  if (!receiverId) return res.status(400).json({ error: '缺少 receiver_id' });
+
+  let fileUrl = null;
+  const msgType = type || 'text';
+  if (req.files && req.files['image'] && req.files['image'][0]) {
+    fileUrl = '/uploads/' + req.files['image'][0].filename;
+  } else if (req.files && req.files['video'] && req.files['video'][0]) {
+    fileUrl = '/uploads/' + req.files['video'][0].filename;
+  }
+
+  db.run(
+    'INSERT INTO messages (sender_id, receiver_id, content, type, file_url) VALUES (?, ?, ?, ?, ?)',
+    [senderId, receiverId, content || '', msgType, fileUrl],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      db.get('SELECT m.*, u.username as sender_name FROM messages m JOIN users u ON m.sender_id = u.id WHERE m.id = ?', [this.lastID], (err, row) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(row);
       });
-    } else {
-      doSend();
     }
-
-    function doSend() {
-      const receiverId = parseInt(receiver_id);
-      if (!receiverId) return res.status(400).json({ error: '缺少 receiver_id' });
-
-      let fileUrl = null;
-      const msgType = type || 'text';
-      if (req.files && req.files['image'] && req.files['image'][0]) {
-        fileUrl = '/uploads/' + req.files['image'][0].filename;
-      } else if (req.files && req.files['video'] && req.files['video'][0]) {
-        fileUrl = '/uploads/' + req.files['video'][0].filename;
-      }
-
-      db.run(
-        'INSERT INTO messages (sender_id, receiver_id, content, type, file_url) VALUES (?, ?, ?, ?, ?)',
-        [senderId, receiverId, content || '', msgType, fileUrl],
-        function(err) {
-          if (err) return res.status(500).json({ error: err.message });
-          db.get('SELECT m.*, u.username as sender_name FROM messages m JOIN users u ON m.sender_id = u.id WHERE m.id = ?', [this.lastID], (err, row) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.json(row);
-          });
-        }
-      );
-    }
-  });
+  );
 });
 
 // 撤回消息
@@ -937,13 +967,21 @@ app.put('/api/messages/:id/withdraw', requireLogin, (req, res) => {
   });
 });
 
-// 管理员获取所有会话列表
+// 获取会话列表（返回当前用户所有相关私信会话）
 app.get('/api/chat-sessions', requireLogin, (req, res) => {
-  db.get('SELECT is_admin FROM users WHERE id = ?', [req.session.userId], (err, user) => {
-    if (err || !user || !user.is_admin) return res.status(403).json({ error: '权限不足' });
+  const userId = req.session.userId;
 
-    getAdminId((adminId) => {
-      if (!adminId) return res.status(500).json({ error: '管理员不存在' });
+  db.all(
+    `SELECT DISTINCT
+      CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END as user_id
+    FROM messages
+    WHERE sender_id = ? OR receiver_id = ?`,
+    [userId, userId, userId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      const userIds = rows.map(r => r.user_id);
+      if (!userIds.length) return res.json([]);
 
       db.all(
         `SELECT m.*, u.username, u.id as other_id
@@ -955,14 +993,14 @@ app.get('/api/chat-sessions', requireLogin, (req, res) => {
            GROUP BY CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END
          )
          ORDER BY m.created_at DESC`,
-        [adminId, adminId, adminId, adminId],
-        (err, rows) => {
-          if (err) return res.status(500).json({ error: err.message });
-          res.json(rows);
+        [userId, userId, userId, userId],
+        (err2, sessions) => {
+          if (err2) return res.status(500).json({ error: err2.message });
+          res.json(sessions);
         }
       );
-    });
-  });
+    }
+  );
 });
 
 // 发送消息（含文件上传）

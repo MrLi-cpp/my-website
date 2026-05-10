@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>个人中心 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=4">
+  <style>
+    html, body {
+      overflow-y: auto !important;
+      height: auto !important;
+      min-height: 100vh;
+    }
+
+    .profile-page {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 60px 20px 40px;
+    }
+
+    .profile-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+    }
+
+    .profile-title {
+      font-family: var(--font-serif);
+      color: var(--accent-gold);
+      text-align: center;
+      letter-spacing: 4px;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+
+    .profile-avatar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-serif);
+      font-size: 32px;
+      color: var(--accent-gold);
+      overflow: hidden;
+      border: 2px solid var(--accent-gold);
+      cursor: default;
+      user-select: none;
+    }
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-avatar-upload {
+      color: var(--accent-gold);
+      font-size: 13px;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .profile-avatar-upload:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    .profile-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .profile-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .profile-field label {
+      font-size: 12px;
+      color: var(--accent-gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .profile-field input,
+    .profile-field select,
+    .profile-field textarea {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .profile-field input:focus,
+    .profile-field select:focus,
+    .profile-field textarea:focus {
+      border-color: var(--accent-gold);
+    }
+    .profile-field input::placeholder,
+    .profile-field textarea::placeholder {
+      color: var(--text-muted);
+    }
+    .profile-field select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23a09a90' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+    }
+    .profile-field select option {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+    .profile-field textarea {
+      resize: vertical;
+      line-height: 1.6;
+      min-height: 80px;
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .profile-btn {
+      padding: 10px 28px;
+      border-radius: 8px;
+      font-size: 13px;
+      cursor: pointer;
+      letter-spacing: 2px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-sans);
+      transition: all 0.3s;
+    }
+    .profile-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--text-primary);
+    }
+    .profile-btn.primary {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: var(--bg-primary);
+    }
+    .profile-btn.primary:hover {
+      filter: brightness(1.1);
+    }
+
+    .profile-dm-section {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .profile-dm-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .profile-dm-link:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    .profile-error {
+      color: var(--accent-red);
+      font-size: 12px;
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+      letter-spacing: 1px;
+    }
+    .profile-success {
+      color: #07c160;
+      font-size: 12px;
+      text-align: center;
+      margin-bottom: 12px;
+      display: none;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 480px) {
+      .profile-page {
+        padding: 56px 12px 32px;
+      }
+      .profile-card {
+        padding: 24px 20px;
+      }
+      .profile-title {
+        font-size: 20px;
+      }
+      .profile-btn {
+        padding: 10px 20px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="/" class="unified-back">← 返回主页</a>
+
+  <div class="profile-page">
+    <div class="profile-card">
+      <h2 class="profile-title">个人中心</h2>
+
+      <!-- 头像区域 -->
+      <div class="profile-avatar-section">
+        <div class="profile-avatar" id="profileAvatar">?</div>
+        <label class="profile-avatar-upload">
+          <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+          <span>更换头像</span>
+        </label>
+      </div>
+
+      <!-- 提示信息 -->
+      <div class="profile-error" id="profileError"></div>
+      <div class="profile-success" id="profileSuccess"></div>
+
+      <!-- 表单 -->
+      <div class="profile-form">
+        <div class="profile-field">
+          <label>用户名</label>
+          <input type="text" id="profileUsername" placeholder="用户名">
+        </div>
+        <div class="profile-field">
+          <label>性别</label>
+          <select id="profileGender">
+            <option value="">未设置</option>
+            <option value="male">男 ♂</option>
+            <option value="female">女 ♀</option>
+            <option value="other">其他 ⚧</option>
+          </select>
+        </div>
+        <div class="profile-field">
+          <label>个人简介</label>
+          <textarea id="profileBio" placeholder="写一段个人简介..." rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="profile-actions">
+        <button class="profile-btn primary" onclick="saveProfile()">保存</button>
+        <button class="profile-btn" onclick="location.href='/'">取消</button>
+      </div>
+
+      <!-- 私信管理入口 -->
+      <div class="profile-dm-section">
+        <a href="/chat.html" class="profile-dm-link">💬 私信管理</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=3"></script>
+  <script>
+    let currentUser = null;
+
+    const genderSymbols = {
+      male: '♂',
+      female: '♀',
+      other: '⚧',
+      '': '未设置'
+    };
+
+    // 性别中文显示（select 中已带符号，这里用于 avatar 上的显示）
+    function getGenderDisplay(value) {
+      return genderSymbols[value] || '未设置';
+    }
+
+    async function loadProfile() {
+      try {
+        const res = await fetch('/api/me', {
+          credentials: 'include'
+        });
+        if (!res.ok) {
+          if (res.status === 401) {
+            location.href = '/';
+            return;
+          }
+          throw new Error('加载失败');
+        }
+        const user = await res.json();
+        currentUser = user;
+
+        // 填充表单
+        document.getElementById('profileUsername').value = user.username || '';
+        document.getElementById('profileGender').value = user.gender || '';
+        document.getElementById('profileBio').value = user.bio || '';
+
+        // 头像
+        updateAvatarDisplay(user.avatar, user.username);
+      } catch (err) {
+        showError('加载用户信息失败，请刷新重试');
+      }
+    }
+
+    function updateAvatarDisplay(avatar, username) {
+      const el = document.getElementById('profileAvatar');
+      if (avatar) {
+        el.innerHTML = `<img src="${avatar}" alt="头像" onerror="this.style.display='none';this.parentElement.textContent='${(username || '?').charAt(0).toUpperCase()}'">`;
+      } else {
+        el.textContent = (username || '?').charAt(0).toUpperCase();
+      }
+    }
+
+    async function saveProfile() {
+      hideMessages();
+
+      const username = document.getElementById('profileUsername').value.trim();
+      const gender = document.getElementById('profileGender').value;
+      const bio = document.getElementById('profileBio').value.trim();
+
+      // 验证
+      if (!username) {
+        showError('用户名不能为空');
+        return;
+      }
+
+      const data = {
+        username,
+        gender,
+        bio
+      };
+      // 如果有头像字段（通过上传获得），一并提交
+      if (currentUser && currentUser.avatar) {
+        data.avatar = currentUser.avatar;
+      }
+
+      try {
+        const res = await fetch('/api/me', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || '保存失败');
+        }
+        showSuccess('保存成功');
+        // 更新本地用户信息
+        currentUser = { ...currentUser, ...data };
+      } catch (err) {
+        showError(err.message || '保存失败，请重试');
+      }
+    }
+
+    // 头像上传
+    document.getElementById('avatarInput').addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      hideMessages();
+
+      // 检查文件类型
+      if (!file.type.startsWith('image/')) {
+        showError('请选择图片文件');
+        this.value = '';
+        return;
+      }
+
+      // 检查文件大小（最大 5MB）
+      if (file.size > 5 * 1024 * 1024) {
+        showError('图片大小不能超过 5MB');
+        this.value = '';
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      try {
+        // 先尝试调用 /api/upload-avatar
+        let uploaded = false;
+        try {
+          const res = await fetch('/api/upload-avatar', {
+            method: 'POST',
+            credentials: 'include',
+            body: formData
+          });
+          if (res.ok) {
+            const result = await res.json();
+            if (result.avatar) {
+              currentUser = currentUser || {};
+              currentUser.avatar = result.avatar;
+              updateAvatarDisplay(result.avatar, currentUser.username);
+              uploaded = true;
+              showSuccess('头像上传成功，请点击保存以更新');
+            }
+          }
+        } catch (_) {
+          // API 不存在，降级到本地模拟
+        }
+
+        if (!uploaded) {
+          // 模拟上传：用 FileReader 读取为 base64 预览
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            const base64 = ev.target.result;
+            currentUser = currentUser || {};
+            currentUser.avatar = base64;
+            updateAvatarDisplay(base64, currentUser.username);
+            showSuccess('头像已更新（本地预览），请点击保存');
+          };
+          reader.readAsDataURL(file);
+        }
+      } catch (err) {
+        showError('头像上传失败：' + (err.message || '未知错误'));
+      }
+
+      this.value = '';
+    });
+
+    function showError(msg) {
+      const el = document.getElementById('profileError');
+      el.textContent = msg;
+      el.style.display = 'block';
+      document.getElementById('profileSuccess').style.display = 'none';
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('profileSuccess');
+      el.textContent = msg;
+      el.style.display = 'block';
+      document.getElementById('profileError').style.display = 'none';
+    }
+
+    function hideMessages() {
+      document.getElementById('profileError').style.display = 'none';
+      document.getElementById('profileSuccess').style.display = 'none';
+    }
+
+    // 页面加载
+    loadProfile();
+  </script>
+</body>
+</html>
