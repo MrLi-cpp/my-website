@@ -418,9 +418,11 @@
           otherId = parseInt(withId);
           await loadOtherInfo(otherId);
           showChatMode();
+          // 立即加载历史消息（不能等轮询）
+          loadMsgs();
           // 标记对方消息为已读
           markRead(otherId);
-          pollTimer = setInterval(loadMsgs, 3000);
+          pollTimer = setInterval(loadMsgs, 2000);
           // 显示"列表"按钮
           document.getElementById('listBtn').style.display = 'inline-block';
           // 设置返回地址
@@ -431,7 +433,7 @@
           loadSessions();
           document.getElementById('listBtn').style.display = 'none';
           // 列表模式轮询更新会话列表（红点 + 预览）
-          pollTimer = setInterval(loadSessions, 5000);
+          pollTimer = setInterval(loadSessions, 3000);
           // 列表模式下返回也指向 backUrl
           document.querySelector('.chat-head .back').href = backUrl;
         }
@@ -474,7 +476,7 @@
       showSessionListMode();
       loadSessions();
       // 启动列表轮询（红点 + 预览实时更新）
-      pollTimer = setInterval(loadSessions, 5000);
+      pollTimer = setInterval(loadSessions, 3000);
     }
 
     async function loadSessions() {
@@ -526,7 +528,23 @@
     }
 
     function openChatWith(userId) {
-      location.href = '/chat.html?with=' + userId;
+      // 停止列表轮询
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+      // 切换 URL
+      const savedBack = sessionStorage.getItem('chatBackUrl');
+      const backQs = savedBack === '/profile.html' ? '?back=profile' : '';
+      history.replaceState(null, '', '/chat.html?with=' + userId + backQs);
+      // 立即切换模式并加载
+      otherId = parseInt(userId);
+      loadOtherInfo(otherId).then(() => {
+        showChatMode();
+        loadMsgs();
+        markRead(otherId);
+        pollTimer = setInterval(loadMsgs, 2000);
+        document.getElementById('listBtn').style.display = 'inline-block';
+        const backEl = document.querySelector('.chat-head .back');
+        if (backEl) backEl.href = savedBack || '/';
+      });
     }
 
     async function startNewChat() {
