@@ -190,6 +190,73 @@
     .chat-head-btn:hover {
       border-color: var(--accent-gold); color: var(--accent-gold);
     }
+    /* 新私信弹窗 */
+    .new-chat-overlay {
+      position: fixed; inset: 0; z-index: 4000;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .new-chat-overlay.active { opacity: 1; pointer-events: auto; }
+    .new-chat-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+      max-width: 340px; width: 90%;
+      text-align: center;
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .new-chat-overlay.active .new-chat-box { transform: scale(1); }
+    .new-chat-box h4 {
+      font-family: var(--font-serif);
+      font-size: 16px; color: var(--accent-gold);
+      letter-spacing: 3px; margin-bottom: 16px;
+    }
+    .new-chat-box input {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-primary);
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .new-chat-box input:focus { border-color: var(--accent-gold); }
+    .new-chat-box .new-chat-btns {
+      display: flex; gap: 10px; justify-content: center;
+    }
+    .new-chat-box .new-chat-btn {
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-size: 13px; letter-spacing: 1px;
+      cursor: pointer; transition: all 0.3s;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+    }
+    .new-chat-box .new-chat-btn:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    .new-chat-box .new-chat-btn.primary {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+      color: var(--bg-primary);
+    }
+    .new-chat-box .new-chat-btn.primary:hover {
+      filter: brightness(1.1);
+    }
+    .new-chat-error {
+      color: var(--accent-red);
+      font-size: 12px; margin-bottom: 10px;
+      min-height: 18px;
+    }
   </style>
 </head>
 <body>
@@ -236,6 +303,19 @@
     <img src="" id="imgOverlayImg" alt="">
   </div>
 
+  <!-- 新私信弹窗 -->
+  <div class="new-chat-overlay" id="newChatOverlay" onclick="closeNewChat()">
+    <div class="new-chat-box" onclick="event.stopPropagation()">
+      <h4>新私信</h4>
+      <input type="text" id="newChatInput" placeholder="输入对方用户名" onkeydown="if(event.key==='Enter'){event.preventDefault();confirmNewChat();}">
+      <div class="new-chat-error" id="newChatError"></div>
+      <div class="new-chat-btns">
+        <button class="new-chat-btn" onclick="closeNewChat()">取消</button>
+        <button class="new-chat-btn primary" onclick="confirmNewChat()">确定</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ========== 基础请求 ==========
     const API = '';
@@ -269,10 +349,11 @@
         const withId = qs.get('with');
         const backParam = qs.get('back');
 
-        // 返回地址：优先使用 back 参数
+        // 返回地址：优先使用 back 参数，持久化到 sessionStorage
         let backUrl = '/';
         if (backParam === 'profile') backUrl = '/profile.html';
         else if (isAdmin) backUrl = '/admin.html#chats';
+        sessionStorage.setItem('chatBackUrl', backUrl);
 
         if (withId) {
           // 聊天模式
@@ -325,8 +406,10 @@
     function showSessionList() {
       // 停止轮询
       if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
-      // 清除 URL 参数
-      history.replaceState(null, '', '/chat.html');
+      // 重写 URL，保留 back 参数
+      const savedBack = sessionStorage.getItem('chatBackUrl');
+      const backQs = savedBack === '/profile.html' ? '?back=profile' : '';
+      history.replaceState(null, '', '/chat.html' + backQs);
       showSessionListMode();
       loadSessions();
     }
@@ -343,7 +426,7 @@
           const timeStr = s.last_time ? new Date(s.last_time).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
           const preview = s.last_message ? escape(s.last_message.substring(0, 30)) : '暂无消息';
           return `
-            <div class="session-card" onclick="openChatWith(${s.user_id})">
+            <div class="session-card" onclick="openChatWith(${s.other_id})">
               <div class="session-avatar">${escape(s.username ? s.username[0] : '?')}</div>
               <div class="session-info">
                 <div class="session-name">${escape(s.username || '未知用户')}</div>
@@ -363,22 +446,39 @@
     }
 
     async function startNewChat() {
-      const username = prompt('输入要私信的用户的用户名：');
-      if (!username || !username.trim()) return;
+      document.getElementById('newChatInput').value = '';
+      document.getElementById('newChatError').textContent = '';
+      document.getElementById('newChatOverlay').classList.add('active');
+      setTimeout(() => document.getElementById('newChatInput').focus(), 100);
+    }
+
+    function closeNewChat() {
+      document.getElementById('newChatOverlay').classList.remove('active');
+      document.getElementById('newChatError').textContent = '';
+    }
+
+    async function confirmNewChat() {
+      const username = document.getElementById('newChatInput').value.trim();
+      const errEl = document.getElementById('newChatError');
+      if (!username) {
+        errEl.textContent = '请输入用户名';
+        return;
+      }
       try {
         const users = await get('/api/users');
-        const user = (users || []).find(u => u.username === username.trim());
+        const user = (users || []).find(u => u.username === username);
         if (!user) {
-          alert('未找到用户：' + username);
+          errEl.textContent = '未找到用户：' + username;
           return;
         }
         if (user.id === myId) {
-          alert('不能给自己发私信');
+          errEl.textContent = '不能给自己发私信';
           return;
         }
+        closeNewChat();
         openChatWith(user.id);
       } catch(e) {
-        alert('查找用户失败');
+        errEl.textContent = '查找用户失败';
       }
     }
 
