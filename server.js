@@ -1001,7 +1001,20 @@ app.get('/api/chat-sessions', requireLogin, (req, res) => {
         [userId, userId, userId, userId],
         (err2, sessions) => {
           if (err2) return res.status(500).json({ error: err2.message });
-          res.json(sessions);
+          if (!sessions.length) return res.json([]);
+          // 为每个会话计算未读数
+          let pending = sessions.length;
+          sessions.forEach(s => {
+            db.get(
+              'SELECT COUNT(*) as cnt FROM messages WHERE receiver_id = ? AND sender_id = ? AND is_read = 0',
+              [userId, s.other_id],
+              (err3, row) => {
+                if (!err3) s.unread_count = row ? row.cnt : 0;
+                pending--;
+                if (pending === 0) res.json(sessions);
+              }
+            );
+          });
         }
       );
     }

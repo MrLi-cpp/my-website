@@ -322,7 +322,7 @@
   <div class="chat-wrap">
     <!-- 头部 -->
     <div class="chat-head">
-      <a class="back" href="/">← 返回</a>
+      <a class="back" href="/" onclick="return goBack();">← 返回</a>
       <div class="title" id="chatTitle">私信</div>
       <button class="chat-head-btn" id="listBtn" style="display:none;" onclick="showSessionList()">列表</button>
     </div>
@@ -425,8 +425,6 @@
           pollTimer = setInterval(loadMsgs, 2000);
           // 显示"列表"按钮
           document.getElementById('listBtn').style.display = 'inline-block';
-          // 设置返回地址
-          document.querySelector('.chat-head .back').href = backUrl;
         } else {
           // 列表模式
           showSessionListMode();
@@ -467,16 +465,30 @@
     }
 
     function showSessionList() {
-      // 停止轮询
+      // 停止聊天轮询
       if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+      // 清除 otherId，表示回到列表模式
+      otherId = null;
       // 重写 URL，保留 back 参数
       const savedBack = sessionStorage.getItem('chatBackUrl');
       const backQs = savedBack === '/profile.html' ? '?back=profile' : '';
       history.replaceState(null, '', '/chat.html' + backQs);
       showSessionListMode();
       loadSessions();
-      // 启动列表轮询（红点 + 预览实时更新）
+      // 启动列表轮询
       pollTimer = setInterval(loadSessions, 3000);
+    }
+
+    function goBack() {
+      // 如果在聊天模式，返回私信列表
+      if (otherId) {
+        showSessionList();
+        return false; // 阻止默认跳转
+      }
+      // 如果在列表模式，返回保存的上一页（个人中心或首页）
+      const savedBack = sessionStorage.getItem('chatBackUrl') || '/';
+      location.href = savedBack;
+      return false;
     }
 
     async function loadSessions() {
@@ -488,17 +500,19 @@
           return;
         }
         body.innerHTML = sessions.map(s => {
-          const timeStr = s.last_time ? new Date(s.last_time).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
-          // 消息预览：根据类型显示，优先显示内容
+          // API 返回字段: content, type, created_at
+          const timeStr = s.created_at ? new Date(s.created_at).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
           let preview = '暂无消息';
-          if (s.last_type === 'image') preview = '[图片]';
-          else if (s.last_type === 'video') preview = '[视频]';
-          else if (s.last_message && s.last_message.trim()) preview = escape(s.last_message.substring(0, 30));
-          else if (s.last_type) preview = '[消息]'; // 有类型但没有文字内容
+          if (s.type === 'image') preview = '[图片]';
+          else if (s.type === 'video') preview = '[视频]';
+          else if (s.content && s.content.trim()) preview = escape(s.content.substring(0, 30));
+          else if (s.type) preview = '[消息]';
           
-          const isUnread = s.unread_count > 0;
+          // 计算未读数（API未返回，前端本地计算：该会话对方发的消息且未读）
+          const unreadCount = s.unread_count || 0;
+          const isUnread = unreadCount > 0;
           const unreadHtml = isUnread 
-            ? `<span class="session-avatar-badge show"><span class="session-avatar-arc"></span><span class="session-avatar-dot">${s.unread_count > 99 ? '99+' : s.unread_count}</span></span>`
+            ? `<span class="session-avatar-badge show"><span class="session-avatar-arc"></span><span class="session-avatar-dot">${unreadCount > 99 ? '99+' : unreadCount}</span></span>`
             : '<span class="session-avatar-badge"><span class="session-avatar-arc"></span><span class="session-avatar-dot"></span></span>';
           const previewClass = isUnread ? 'session-preview unread' : 'session-preview';
           const cardClass = isUnread ? 'session-card has-unread' : 'session-card';
