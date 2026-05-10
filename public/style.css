@@ -1184,7 +1184,7 @@ body.index-page {
 .user-profile-overlay.active { opacity: 1; pointer-events: auto; }
 
 .user-profile-card {
-  background: var(--bg-card);
+  background: #1a1a1d;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 32px;

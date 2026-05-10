@@ -83,7 +83,8 @@ db.serialize(() => {
     type TEXT DEFAULT 'text',
     file_url TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    is_withdrawn INTEGER DEFAULT 0
+    is_withdrawn INTEGER DEFAULT 0,
+    is_read INTEGER DEFAULT 0
   )`);
 
   db.run(`CREATE TABLE IF NOT EXISTS comment_likes (
@@ -147,6 +148,7 @@ db.serialize(() => {
   db.run('CREATE INDEX IF NOT EXISTS idx_posts_display_date ON posts(display_date)', [], (err) => { if (err) console.error('[INIT] idx_posts_display_date:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id)', [], (err) => { if (err) console.error('[INIT] idx_messages_sender:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id)', [], (err) => { if (err) console.error('[INIT] idx_messages_receiver:', err.message); });
+  db.run('ALTER TABLE messages ADD COLUMN is_read INTEGER DEFAULT 0', [], (err) => { /* ignore duplicate column error */ });
 
   // 博客评论添加 parent_id（用于回复）— 先检查再添加，避免重复报错
   db.all("PRAGMA table_info(blog_comments)", [], (err, columns) => {
@@ -1003,6 +1005,19 @@ app.get('/api/chat-sessions', requireLogin, (req, res) => {
   );
 });
 
+// 获取当前用户总未读消息数
+app.get('/api/unread-count', requireLogin, (req, res) => {
+  const userId = req.session.userId;
+  db.get(
+    'SELECT COUNT(*) as count FROM messages WHERE receiver_id = ? AND sender_id != ? AND is_read = 0',
+    [userId, userId],
+    (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ count: row ? row.count : 0 });
+    }
+  );
+});
+
 // 发送消息（含文件上传）
 app.post('/api/messages/upload', requireLogin, upload.single('file'), (req, res) => {
   const senderId = req.session.userId;
@@ -1050,21 +1065,11 @@ app.get('/api/me/admin', requireLogin, (req, res) => {
   });
 });
 
-// 获取用户列表（管理员看全部，普通用户只看管理员）
+// 获取用户列表（所有已登录用户可见）
 app.get('/api/users', requireLogin, (req, res) => {
-  db.get('SELECT is_admin FROM users WHERE id = ?', [req.session.userId], (err, user) => {
-    if (err || !user) return res.status(500).json({ error: '用户不存在' });
-    if (user.is_admin) {
-      db.all('SELECT id, username, is_admin, created_at FROM users ORDER BY id', [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-      });
-    } else {
-      db.all("SELECT id, username, is_admin FROM users WHERE is_admin = 1", [], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
-      });
-    }
+  db.all('SELECT id, username, is_admin, avatar, gender, bio FROM users ORDER BY id', [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows);
   });
 });
 

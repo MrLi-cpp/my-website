@@ -134,6 +134,7 @@
       background: var(--bg-card);
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
     }
     .session-card:hover {
       border-color: rgba(201,169,110,0.3);
@@ -156,9 +157,25 @@
       font-size: 12px; color: var(--text-muted);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    .session-preview.unread {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
     .session-time {
       font-size: 11px; color: var(--text-muted);
       flex-shrink: 0;
+    }
+    .session-badge {
+      position: absolute;
+      top: 8px; right: 10px;
+      min-width: 18px; height: 18px;
+      background: var(--accent-red);
+      color: #fff;
+      font-size: 11px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0 5px;
+      font-weight: 500;
     }
     .session-empty {
       text-align: center; padding: 60px 20px;
@@ -360,7 +377,8 @@
           otherId = parseInt(withId);
           await loadOtherInfo(otherId);
           showChatMode();
-          loadMsgs();
+          // 标记对方消息为已读
+          markRead(otherId);
           pollTimer = setInterval(loadMsgs, 3000);
           // 显示"列表"按钮
           document.getElementById('listBtn').style.display = 'inline-block';
@@ -371,6 +389,8 @@
           showSessionListMode();
           loadSessions();
           document.getElementById('listBtn').style.display = 'none';
+          // 列表模式轮询更新会话列表（红点 + 预览）
+          pollTimer = setInterval(loadSessions, 5000);
           // 列表模式下返回也指向 backUrl
           document.querySelector('.chat-head .back').href = backUrl;
         }
@@ -412,6 +432,8 @@
       history.replaceState(null, '', '/chat.html' + backQs);
       showSessionListMode();
       loadSessions();
+      // 启动列表轮询（红点 + 预览实时更新）
+      pollTimer = setInterval(loadSessions, 5000);
     }
 
     async function loadSessions() {
@@ -424,21 +446,37 @@
         }
         body.innerHTML = sessions.map(s => {
           const timeStr = s.last_time ? new Date(s.last_time).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
-          const preview = s.last_message ? escape(s.last_message.substring(0, 30)) : '暂无消息';
+          // 消息预览：根据类型显示
+          let preview = '暂无消息';
+          if (s.last_message || s.last_type) {
+            if (s.last_type === 'image') preview = '[图片]';
+            else if (s.last_type === 'video') preview = '[视频]';
+            else preview = escape(s.last_message.substring(0, 30));
+          }
+          const isUnread = s.unread_count > 0;
+          const unreadHtml = isUnread ? `<div class="session-badge">${s.unread_count}</div>` : '';
+          const previewClass = isUnread ? 'session-preview unread' : 'session-preview';
           return `
             <div class="session-card" onclick="openChatWith(${s.other_id})">
               <div class="session-avatar">${escape(s.username ? s.username[0] : '?')}</div>
               <div class="session-info">
                 <div class="session-name">${escape(s.username || '未知用户')}</div>
-                <div class="session-preview">${preview}</div>
+                <div class="${previewClass}">${preview}</div>
               </div>
               <div class="session-time">${timeStr}</div>
+              ${unreadHtml}
             </div>
           `;
         }).join('');
       } catch(e) {
         body.innerHTML = '<div class="session-empty">加载失败</div>';
       }
+    }
+
+    async function markRead(otherId) {
+      try {
+        await post('/api/messages/read', { other_id: otherId });
+      } catch(e) { /* ignore */ }
     }
 
     function openChatWith(userId) {

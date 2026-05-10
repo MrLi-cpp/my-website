@@ -164,7 +164,7 @@
 
   <!-- 管理员 -->
   <!-- 留言按钮：所有人可见，点击检查登录 -->
-  <button class="chat-float-btn" id="chatFloatBtn" title="留言" onclick="goToChat()">💬</button>
+  <button class="chat-float-btn" id="chatFloatBtn" title="留言" onclick="goToChat()">💬<span class="chat-badge" id="chatBadge"></span></button>
 
   <button class="admin-float-btn" id="adminFloatBtn" onclick="toggleAdminPanel()">+</button>
   <div class="admin-panel" id="adminPanel">
@@ -732,6 +732,34 @@ async function loadBlogDetail(id) {
     function closeLightbox() { document.getElementById('lightbox').classList.remove('active'); }
 
     // ===== 初始化 =====
+    // ===== 未读消息红点轮询 =====
+    let unreadPollTimer = null;
+    async function checkUnread() {
+      try {
+        const me = await get('/api/me');
+        if (!me || !me.id || me.is_admin) {
+          hideChatBadge();
+          return;
+        }
+        const res = await get('/api/unread-count');
+        const count = res.count || 0;
+        const badge = document.getElementById('chatBadge');
+        if (count > 0 && badge) {
+          badge.textContent = count > 99 ? '99+' : count;
+          badge.classList.add('show');
+        } else {
+          hideChatBadge();
+        }
+      } catch(e) { hideChatBadge(); }
+    }
+    function hideChatBadge() {
+      const badge = document.getElementById('chatBadge');
+      if (badge) { badge.classList.remove('show'); badge.textContent = ''; }
+    }
+    // 页面加载后开始轮询
+    checkUnread();
+    unreadPollTimer = setInterval(checkUnread, 8000);
+
     initUser();
     initMoments();
     initBlog();
