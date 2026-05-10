@@ -304,6 +304,9 @@
         document.getElementById('navLoginBtn').style.display = 'inline-block';
         document.getElementById('navLogoutBtn').style.display = 'none';
         if (profileBtn) profileBtn.style.display = 'none';
+        // 退出后隐藏私信按钮
+        const chatBtn = document.getElementById('chatFloatBtn');
+        if (chatBtn) chatBtn.classList.remove('show');
       }
     }
     async function logout() {
