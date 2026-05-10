@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 const multer = require('multer');
 const path = require('path');
 
@@ -186,6 +187,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
+  store: new FileStore({ path: './sessions', logFn: () => {} }),
   secret: 'mywebsite-secret-key-2026',
   resave: false,
   saveUninitialized: false,

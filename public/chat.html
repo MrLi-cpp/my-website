@@ -140,6 +140,10 @@
       border-color: rgba(201,169,110,0.3);
       transform: scale(1.02);
     }
+    .session-card.has-unread {
+      border-color: rgba(192, 57, 43, 0.35);
+      box-shadow: 0 0 10px rgba(192, 57, 43, 0.08);
+    }
     .session-avatar {
       width: 44px; height: 44px; border-radius: 50%;
       background: var(--bg-secondary);
@@ -147,6 +151,43 @@
       font-size: 16px; color: var(--accent-gold);
       border: 1px solid var(--border);
       flex-shrink: 0;
+      position: relative;
+    }
+    .session-avatar-badge {
+      position: absolute;
+      top: -2px; right: -2px;
+      width: 18px; height: 18px;
+      z-index: 10;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .session-avatar-badge.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .session-avatar-arc {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(192, 57, 43, 0.6);
+      box-shadow: 0 0 6px rgba(192, 57, 43, 0.3);
+    }
+    .session-avatar-dot {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 14px; height: 14px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 0 2px;
+      box-shadow: 0 0 4px rgba(192, 57, 43, 0.5);
     }
     .session-info { flex: 1; min-width: 0; }
     .session-name {
@@ -446,25 +487,30 @@
         }
         body.innerHTML = sessions.map(s => {
           const timeStr = s.last_time ? new Date(s.last_time).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
-          // 消息预览：根据类型显示
+          // 消息预览：根据类型显示，优先显示内容
           let preview = '暂无消息';
-          if (s.last_message || s.last_type) {
-            if (s.last_type === 'image') preview = '[图片]';
-            else if (s.last_type === 'video') preview = '[视频]';
-            else preview = escape(s.last_message.substring(0, 30));
-          }
+          if (s.last_type === 'image') preview = '[图片]';
+          else if (s.last_type === 'video') preview = '[视频]';
+          else if (s.last_message && s.last_message.trim()) preview = escape(s.last_message.substring(0, 30));
+          else if (s.last_type) preview = '[消息]'; // 有类型但没有文字内容
+          
           const isUnread = s.unread_count > 0;
-          const unreadHtml = isUnread ? `<div class="session-badge">${s.unread_count}</div>` : '';
+          const unreadHtml = isUnread 
+            ? `<span class="session-avatar-badge show"><span class="session-avatar-arc"></span><span class="session-avatar-dot">${s.unread_count > 99 ? '99+' : s.unread_count}</span></span>`
+            : '<span class="session-avatar-badge"><span class="session-avatar-arc"></span><span class="session-avatar-dot"></span></span>';
           const previewClass = isUnread ? 'session-preview unread' : 'session-preview';
+          const cardClass = isUnread ? 'session-card has-unread' : 'session-card';
           return `
-            <div class="session-card" onclick="openChatWith(${s.other_id})">
-              <div class="session-avatar">${escape(s.username ? s.username[0] : '?')}</div>
+            <div class="${cardClass}" onclick="openChatWith(${s.other_id})">
+              <div class="session-avatar">
+                ${escape(s.username ? s.username[0] : '?')}
+                ${unreadHtml}
+              </div>
               <div class="session-info">
                 <div class="session-name">${escape(s.username || '未知用户')}</div>
                 <div class="${previewClass}">${preview}</div>
               </div>
               <div class="session-time">${timeStr}</div>
-              ${unreadHtml}
             </div>
           `;
         }).join('');

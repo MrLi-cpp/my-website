@@ -27,3 +27,4 @@ cookies.txt
 # Backup files
 *.zip
 *.tar.gz
+sessions/

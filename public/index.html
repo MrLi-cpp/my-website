@@ -5,7 +5,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>霁光</title>
   <link rel="stylesheet" href="/style.css?v=2">
-</head>
+  <style>
+    /* 主按钮微泛红光 */
+    .chat-float-btn.has-unread {
+      box-shadow: 0 0 16px rgba(192, 57, 43, 0.4), 0 0 32px rgba(192, 57, 43, 0.15);
+      animation: chatGlow 2s ease-in-out infinite;
+    }
+    @keyframes chatGlow {
+      0%, 100% { box-shadow: 0 0 16px rgba(192, 57, 43, 0.35), 0 0 32px rgba(192, 57, 43, 0.1); }
+      50% { box-shadow: 0 0 20px rgba(192, 57, 43, 0.55), 0 0 40px rgba(192, 57, 43, 0.2); }
+    }
+    .chat-float-btn.has-unread:hover {
+      animation: none;
+      box-shadow: 0 0 24px rgba(192, 57, 43, 0.5), 0 0 48px rgba(192, 57, 43, 0.2);
+    }
+    /* 大圆弧线上的小红点 */
+    .chat-badge-wrap {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 22px;
+      height: 22px;
+      z-index: 10;
+      opacity: 0;
+      transform: scale(0);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      pointer-events: none;
+    }
+    .chat-badge-wrap.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .chat-badge-arc {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid rgba(192, 57, 43, 0.6);
+      box-shadow: 0 0 8px rgba(192, 57, 43, 0.3);
+    }
+    .chat-badge-dot {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      min-width: 16px;
+      height: 16px;
+      background: var(--accent-red);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 0 3px;
+      box-shadow: 0 0 6px rgba(192, 57, 43, 0.5);
+    }
+  </style>
 <body class="index-page">
 
   <!-- ===== 顶部固定导航 ===== -->
@@ -164,7 +220,12 @@
 
   <!-- 管理员 -->
   <!-- 留言按钮：所有人可见，点击检查登录 -->
-  <button class="chat-float-btn" id="chatFloatBtn" title="留言" onclick="goToChat()">💬<span class="chat-badge" id="chatBadge"></span></button>
+  <button class="chat-float-btn" id="chatFloatBtn" title="留言" onclick="goToChat()">💬
+    <span class="chat-badge-wrap" id="chatBadgeWrap">
+      <span class="chat-badge-arc"></span>
+      <span class="chat-badge-dot" id="chatBadgeDot"></span>
+    </span>
+  </button>
 
   <button class="admin-float-btn" id="adminFloatBtn" onclick="toggleAdminPanel()">+</button>
   <div class="admin-panel" id="adminPanel">
@@ -310,8 +371,13 @@
       }
     }
     async function logout() {
-      try { await post('/api/logout'); updateNavUser(null); checkAdmin(); initMoments(); }
-      catch(e) {}
+      try { await post('/api/logout'); } catch(e) {}
+      updateNavUser(null);
+      checkAdmin();
+      initMoments();
+      // 停止红点轮询并隐藏
+      if (unreadPollTimer) { clearInterval(unreadPollTimer); unreadPollTimer = null; }
+      hideChatBadge();
     }
 
     // 右上角登录按钮改为弹窗
@@ -743,18 +809,23 @@ async function loadBlogDetail(id) {
         }
         const res = await get('/api/unread-count');
         const count = res.count || 0;
-        const badge = document.getElementById('chatBadge');
-        if (count > 0 && badge) {
-          badge.textContent = count > 99 ? '99+' : count;
-          badge.classList.add('show');
+        const btn = document.getElementById('chatFloatBtn');
+        const wrap = document.getElementById('chatBadgeWrap');
+        const dot = document.getElementById('chatBadgeDot');
+        if (count > 0 && wrap && dot) {
+          dot.textContent = count > 99 ? '99+' : count;
+          wrap.classList.add('show');
+          btn?.classList.add('has-unread');
         } else {
           hideChatBadge();
         }
       } catch(e) { hideChatBadge(); }
     }
     function hideChatBadge() {
-      const badge = document.getElementById('chatBadge');
-      if (badge) { badge.classList.remove('show'); badge.textContent = ''; }
+      const wrap = document.getElementById('chatBadgeWrap');
+      const btn = document.getElementById('chatFloatBtn');
+      if (wrap) { wrap.classList.remove('show'); }
+      if (btn) { btn.classList.remove('has-unread'); }
     }
     // 页面加载后开始轮询
     checkUnread();
