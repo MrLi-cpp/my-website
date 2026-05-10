@@ -122,20 +122,6 @@
     }
     .profile-field select option { background: var(--bg-secondary); color: var(--text-primary); }
 
-    /* 只读模式下显示纯文本 */
-    .profile-readonly-value {
-      font-size: 15px;
-      color: var(--text-primary);
-      padding: 10px 12px;
-      border: 1px solid transparent;
-      border-radius: 8px;
-      line-height: 1.6;
-    }
-    .profile-readonly-value.empty {
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
     /* ===== 操作按钮 ===== */
     .profile-actions {
       display: flex;
@@ -314,7 +300,7 @@
       <div class="profile-error" id="profileError"></div>
       <div class="profile-success" id="profileSuccess"></div>
 
-      <!-- 表单（模式切换：只读 / 编辑） -->
+      <!-- 表单 -->
       <div class="profile-form" id="profileForm">
         <div class="profile-field" id="fieldUsername">
           <label>用户名</label>
@@ -337,16 +323,14 @@
 
       <!-- 操作按钮 -->
       <div class="profile-actions" id="profileActions">
-        <!-- 只读模式：显示"修改资料" -->
         <button class="profile-btn primary" id="btnEdit" onclick="enterEditMode()">✏️ 修改资料</button>
-        <!-- 编辑模式：显示"保存"和"取消" -->
         <button class="profile-btn primary" id="btnSave" onclick="saveProfile()" style="display:none;">💾 保存</button>
         <button class="profile-btn" id="btnCancel" onclick="cancelEdit()" style="display:none;">↩ 取消</button>
       </div>
 
       <!-- 私信管理入口 -->
       <div class="profile-dm-section">
-        <a href="/chat.html" class="profile-dm-link">💬 私信管理</a>
+        <a href="/chat.html?back=profile" class="profile-dm-link">💬 私信管理</a>
       </div>
     </div>
   </div>
@@ -357,30 +341,51 @@
     <img src="" id="avatarLightboxImg" alt="头像预览">
   </div>
 
-  <script src="/script.js?v=4"></script>
   <script>
-    let currentUser = null;
-    let originalData = {}; // 保存原始数据，取消时恢复
-    let isEditMode = false;
-    let pendingAvatar = null; // 已选中的头像（未保存）
+    // ===== 独立工具函数（不依赖 script.js，避免冲突） =====
+    async function apiGet(url) {
+      const res = await fetch(url, { credentials: 'include' });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || '请求失败');
+      }
+      return res.json();
+    }
+    async function apiPut(url, body) {
+      const res = await fetch(url, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || '请求失败');
+      }
+      return res.json();
+    }
+    function escHtml(str) {
+      if (!str) return '';
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
 
-    const genderSymbols = {
-      male: '♂ 男',
-      female: '♀ 女',
-      other: '⚧ 其他',
-      '': '未设置'
-    };
+    // ===== 状态 =====
+    let myUser = null;
+    let originalData = {};
+    let isEditMode = false;
+    let pendingAvatar = null;
 
     // ===== 页面加载 =====
     async function loadProfile() {
       try {
-        const res = await fetch('/api/me', { credentials: 'include' });
-        if (!res.ok) {
-          if (res.status === 401) { location.href = '/'; return; }
-          throw new Error('加载失败');
+        const user = await apiGet('/api/me');
+        if (!user || !user.id) {
+          location.href = '/';
+          return;
         }
-        const user = await res.json();
-        currentUser = user;
+        myUser = user;
 
         // 填充表单
         document.getElementById('profileUsername').value = user.username || '';
@@ -401,61 +406,43 @@
         // 默认进入只读模式
         enterReadMode();
       } catch (err) {
-        showToast('加载用户信息失败，请刷新重试', 'error');
+        showToast('加载用户信息失败：' + err.message, 'error');
       }
     }
 
     // ===== 模式切换 =====
     function enterReadMode() {
       isEditMode = false;
-
-      // 禁用所有输入
       document.getElementById('profileUsername').disabled = true;
       document.getElementById('profileGender').disabled = true;
       document.getElementById('profileBio').disabled = true;
-
-      // 隐藏上传相关
       document.getElementById('avatarUploadLabel').style.display = 'none';
       document.getElementById('avatarHint').style.display = 'none';
-
-      // 按钮
       document.getElementById('btnEdit').style.display = 'inline-block';
       document.getElementById('btnSave').style.display = 'none';
       document.getElementById('btnCancel').style.display = 'none';
-
-      // 隐藏提示
       hideMessages();
     }
 
     function enterEditMode() {
       isEditMode = true;
-
-      // 启用所有输入
       document.getElementById('profileUsername').disabled = false;
       document.getElementById('profileGender').disabled = false;
       document.getElementById('profileBio').disabled = false;
-
-      // 显示上传
       document.getElementById('avatarUploadLabel').style.display = 'block';
       document.getElementById('avatarHint').style.display = 'block';
-
-      // 按钮
       document.getElementById('btnEdit').style.display = 'none';
       document.getElementById('btnSave').style.display = 'inline-block';
       document.getElementById('btnCancel').style.display = 'inline-block';
-
-      // 聚焦用户名
       document.getElementById('profileUsername').focus();
     }
 
     function cancelEdit() {
-      // 恢复原始数据
       document.getElementById('profileUsername').value = originalData.username;
       document.getElementById('profileGender').value = originalData.gender;
       document.getElementById('profileBio').value = originalData.bio;
       pendingAvatar = null;
       updateAvatarDisplay(originalData.avatar, originalData.username);
-
       enterReadMode();
       showToast('已取消修改', 'error');
     }
@@ -464,7 +451,7 @@
     function updateAvatarDisplay(avatar, username) {
       const el = document.getElementById('profileAvatar');
       if (avatar) {
-        el.innerHTML = `<img src="${avatar}" alt="头像" onerror="this.style.display='none';this.parentElement.textContent='${(username || '?').charAt(0).toUpperCase()}'">`;
+        el.innerHTML = '<img src="' + escHtml(avatar) + '" alt="头像" onerror="this.style.display=\'none\';this.parentElement.textContent=\'' + (username || '?').charAt(0).toUpperCase() + '\'">';
       } else {
         el.textContent = (username || '?').charAt(0).toUpperCase();
       }
@@ -472,7 +459,7 @@
 
     // ===== 头像放大弹窗 =====
     function openAvatarLightbox() {
-      const avatar = pendingAvatar || (currentUser && currentUser.avatar);
+      const avatar = pendingAvatar || (myUser && myUser.avatar);
       if (!avatar) return;
       document.getElementById('avatarLightboxImg').src = avatar;
       document.getElementById('avatarLightbox').classList.add('active');
@@ -498,42 +485,14 @@
         return;
       }
 
-      const formData = new FormData();
-      formData.append('avatar', file);
-
-      try {
-        // 先尝试上传 API
-        let uploaded = false;
-        try {
-          const res = await fetch('/api/upload-avatar', {
-            method: 'POST',
-            credentials: 'include',
-            body: formData
-          });
-          if (res.ok) {
-            const result = await res.json();
-            if (result.avatar) {
-              pendingAvatar = result.avatar;
-              updateAvatarDisplay(result.avatar, currentUser.username);
-              uploaded = true;
-              showToast('头像已更新，请保存', 'success');
-            }
-          }
-        } catch (_) { /* API 不存在 */ }
-
-        if (!uploaded) {
-          // 本地 base64 预览
-          const reader = new FileReader();
-          reader.onload = function(ev) {
-            pendingAvatar = ev.target.result;
-            updateAvatarDisplay(pendingAvatar, currentUser.username);
-            showToast('头像已更新（本地预览），请保存', 'success');
-          };
-          reader.readAsDataURL(file);
-        }
-      } catch (err) {
-        showToast('头像上传失败', 'error');
-      }
+      // 本地 base64 预览
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        pendingAvatar = ev.target.result;
+        updateAvatarDisplay(pendingAvatar, myUser.username);
+        showToast('头像已更新，请点击保存', 'success');
+      };
+      reader.readAsDataURL(file);
       this.value = '';
     });
 
@@ -554,32 +513,25 @@
       const data = { username, gender, bio };
       if (pendingAvatar) {
         data.avatar = pendingAvatar;
-      } else if (currentUser && currentUser.avatar) {
-        data.avatar = currentUser.avatar;
+      } else if (myUser && myUser.avatar) {
+        data.avatar = myUser.avatar;
       }
 
       try {
-        const res = await fetch('/api/me', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify(data)
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || '保存失败');
-        }
+        await apiPut('/api/me', data);
 
         // 更新本地数据
-        currentUser = { ...currentUser, ...data };
+        myUser = { ...myUser, ...data };
         originalData = { username, gender, bio, avatar: data.avatar || '' };
         pendingAvatar = null;
 
-        // 切换回只读模式
         enterReadMode();
-
-        // 🎉 绿色成功提示
         showToast('✅ 修改成功！', 'success');
+
+        // 3秒后刷新页面，让全站同步新用户名
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       } catch (err) {
         showToast(err.message || '保存失败，请重试', 'error');
       }
@@ -592,7 +544,6 @@
       toast.textContent = msg;
       toast.className = 'profile-toast ' + type;
       toast.classList.add('show');
-
       if (toastTimer) clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
         toast.classList.remove('show');

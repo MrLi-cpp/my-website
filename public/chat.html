@@ -267,6 +267,12 @@
 
         const qs = new URLSearchParams(location.search);
         const withId = qs.get('with');
+        const backParam = qs.get('back');
+
+        // 返回地址：优先使用 back 参数
+        let backUrl = '/';
+        if (backParam === 'profile') backUrl = '/profile.html';
+        else if (isAdmin) backUrl = '/admin.html#chats';
 
         if (withId) {
           // 聊天模式
@@ -277,17 +283,15 @@
           pollTimer = setInterval(loadMsgs, 3000);
           // 显示"列表"按钮
           document.getElementById('listBtn').style.display = 'inline-block';
-          // 返回按钮根据是否管理员决定
-          if (isAdmin) {
-            document.querySelector('.chat-head .back').href = '/admin.html#chats';
-          } else {
-            document.querySelector('.chat-head .back').href = '/';
-          }
+          // 设置返回地址
+          document.querySelector('.chat-head .back').href = backUrl;
         } else {
           // 列表模式
           showSessionListMode();
           loadSessions();
           document.getElementById('listBtn').style.display = 'none';
+          // 列表模式下返回也指向 backUrl
+          document.querySelector('.chat-head .back').href = backUrl;
         }
       } catch (e) {
         console.error('boot error:', e);
