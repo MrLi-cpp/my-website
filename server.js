@@ -25,6 +25,7 @@ db.serialize(() => {
   db.run(`ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT ''`, (err) => {});
   db.run(`ALTER TABLE users ADD COLUMN gender TEXT DEFAULT ''`, (err) => {});
   db.run(`ALTER TABLE users ADD COLUMN bio TEXT DEFAULT ''`, (err) => {});
+  db.run(`ALTER TABLE users ADD COLUMN deleted_at DATETIME`, [], (err) => { /* ignore duplicate column error */ });
 
   db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -147,6 +148,7 @@ db.serialize(() => {
   db.run('CREATE INDEX IF NOT EXISTS idx_blog_likes_blog_id ON blog_likes(blog_id)', [], (err) => { if (err) console.error('[INIT] idx_blog_likes_blog_id:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_blog_likes_user_id ON blog_likes(user_id)', [], (err) => { if (err) console.error('[INIT] idx_blog_likes_user_id:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_posts_display_date ON posts(display_date)', [], (err) => { if (err) console.error('[INIT] idx_posts_display_date:', err.message); });
+  db.run('CREATE INDEX IF NOT EXISTS idx_users_deleted_at ON users(deleted_at)', [], (err) => { if (err) console.error('[INIT] idx_users_deleted_at:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_sender ON messages(sender_id)', [], (err) => { if (err) console.error('[INIT] idx_messages_sender:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_receiver ON messages(receiver_id)', [], (err) => { if (err) console.error('[INIT] idx_messages_receiver:', err.message); });
   db.run('CREATE INDEX IF NOT EXISTS idx_messages_receiver_read ON messages(receiver_id, is_read)', [], (err) => { if (err) console.error('[INIT] idx_messages_receiver_read:', err.message); });
@@ -176,7 +178,10 @@ db.serialize(() => {
 
   // 初始化管理员（lijiguang）
   const adminHash = bcrypt.hashSync('ljgljg2006', 10);
-  db.run('DELETE FROM users WHERE username = ? AND is_admin = 0', ['lijiguang']);
+  db.run('UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id NOT IN (3, 4) AND deleted_at IS NULL', [], function(err) {
+    if (err) console.error('[INIT] soft-delete old accounts:', err.message);
+    else console.log('[INIT] soft-deleted old accounts:', this.changes);
+  });
   db.run('INSERT OR IGNORE INTO users (username, password_hash, is_admin) VALUES (?, ?, 1)', ['lijiguang', adminHash], function() {
     if (this.changes) console.log('[INIT] 管理员账号已创建: lijiguang / ljgljg2006');
     else console.log('[INIT] 管理员账号已存在');
@@ -421,8 +426,12 @@ app.post('/api/logout', (req, res) => {
 // 当前用户
 app.get('/api/me', (req, res) => {
   if (!req.session.userId) return res.json(null);
-  db.get('SELECT id, username, is_admin, avatar, gender, bio FROM users WHERE id = ?', [req.session.userId], (err, user) => {
+  db.get('SELECT id, username, is_admin, avatar, gender, bio, deleted_at FROM users WHERE id = ?', [req.session.userId], (err, user) => {
     if (err || !user) return res.json(null);
+    if (user.deleted_at) {
+      req.session.destroy();
+      return res.status(403).json({ error: '账号已注销' });
+    }
     res.json(user);
   });
 });
@@ -448,7 +457,7 @@ app.put('/api/me', requireLogin, (req, res) => {
 // 获取用户公开资料
 app.get('/api/users/:id', (req, res) => {
   const userId = req.params.id;
-  db.get('SELECT id, username, avatar, gender, bio FROM users WHERE id = ?', [userId], (err, user) => {
+  db.get('SELECT id, username, avatar, gender, bio, deleted_at FROM users WHERE id = ?', [userId], (err, user) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!user) return res.status(404).json({ error: '用户不存在' });
     res.json(user);
@@ -902,19 +911,30 @@ app.get('/api/messages', requireLogin, (req, res) => {
   const withId = parseInt(req.query.with) || 0;
   if (!withId) return res.status(400).json({ error: '缺少 with 参数' });
 
-  db.all(
-    `SELECT m.*, u1.username as sender_name, u1.id as sender_id
-     FROM messages m
-     JOIN users u1 ON m.sender_id = u1.id
-     WHERE ((m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?))
-       AND m.is_withdrawn = 0
-     ORDER BY m.created_at ASC`,
-    [userId, withId, withId, userId],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json(rows);
-    }
-  );
+  // 先检查对方是否已注销
+  db.get('SELECT deleted_at FROM users WHERE id = ?', [withId], (err, other) => {
+    const otherDeleted = !!(other && other.deleted_at);
+
+    db.all(
+      `SELECT m.*, u1.username as sender_name, u1.id as sender_id
+       FROM messages m
+       JOIN users u1 ON m.sender_id = u1.id
+       WHERE ((m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?))
+         AND m.is_withdrawn = 0
+       ORDER BY m.created_at ASC`,
+      [userId, withId, withId, userId],
+      (err, rows) => {
+        if (err) return res.status(500).json({ error: err.message });
+        // 给发给已注销用户的消息添加标记
+        if (otherDeleted) {
+          rows.forEach(m => {
+            if (m.receiver_id === withId) m.receiver_deleted = true;
+          });
+        }
+        res.json(rows);
+      }
+    );
+  });
 });
 
 // 发送消息
@@ -940,17 +960,23 @@ app.post('/api/messages', requireLogin, upload.fields([{ name: 'image', maxCount
     fileUrl = '/uploads/' + req.files['video'][0].filename;
   }
 
-  db.run(
-    'INSERT INTO messages (sender_id, receiver_id, content, type, file_url) VALUES (?, ?, ?, ?, ?)',
-    [senderId, receiverId, content || '', msgType, fileUrl],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      db.get('SELECT m.*, u.username as sender_name FROM messages m JOIN users u ON m.sender_id = u.id WHERE m.id = ?', [this.lastID], (err, row) => {
+  db.get('SELECT deleted_at FROM users WHERE id = ?', [receiverId], (err, receiver) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const isDeleted = !!(receiver && receiver.deleted_at);
+
+    db.run(
+      'INSERT INTO messages (sender_id, receiver_id, content, type, file_url) VALUES (?, ?, ?, ?, ?)',
+      [senderId, receiverId, content || '', msgType, fileUrl],
+      function(err) {
         if (err) return res.status(500).json({ error: err.message });
-        res.json(row);
-      });
-    }
-  );
+        db.get('SELECT m.*, u.username as sender_name FROM messages m JOIN users u ON m.sender_id = u.id WHERE m.id = ?', [this.lastID], (err, row) => {
+          if (err) return res.status(500).json({ error: err.message });
+          if (isDeleted) row.receiver_deleted = true;
+          res.json(row);
+        });
+      }
+    );
+  });
 });
 
 // 撤回消息
@@ -989,7 +1015,7 @@ app.get('/api/chat-sessions', requireLogin, (req, res) => {
       if (!userIds.length) return res.json([]);
 
       db.all(
-        `SELECT m.*, u.username, u.id as other_id
+        `SELECT m.*, u.username, u.id as other_id, u.deleted_at
          FROM messages m
          JOIN users u ON (CASE WHEN m.sender_id = ? THEN m.receiver_id ELSE m.sender_id END) = u.id
          WHERE m.id IN (
@@ -1074,33 +1100,50 @@ app.post('/api/messages/upload', requireLogin, upload.single('file'), (req, res)
 });
 
 function insertMessage(senderId, receiverId, content, msgType, fileUrl, res) {
-  db.run(
-    'INSERT INTO messages (sender_id, receiver_id, content, type, file_url) VALUES (?, ?, ?, ?, ?)',
-    [senderId, receiverId, content || '', msgType, fileUrl || ''],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      db.get('SELECT m.*, u.username as sender_name FROM messages m JOIN users u ON m.sender_id = u.id WHERE m.id = ?', [this.lastID], (err, row) => {
+  // 检查对方是否已注销
+  db.get('SELECT deleted_at FROM users WHERE id = ?', [receiverId], (err, receiver) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const isDeleted = !!(receiver && receiver.deleted_at);
+    db.run(
+      'INSERT INTO messages (sender_id, receiver_id, content, type, file_url) VALUES (?, ?, ?, ?, ?)',
+      [senderId, receiverId, content || '', msgType, fileUrl || ''],
+      function(err) {
         if (err) return res.status(500).json({ error: err.message });
-        res.json(row);
-      });
-    }
-  );
+        db.get('SELECT m.*, u.username as sender_name FROM messages m JOIN users u ON m.sender_id = u.id WHERE m.id = ?', [this.lastID], (err, row) => {
+          if (err) return res.status(500).json({ error: err.message });
+          if (isDeleted) row.receiver_deleted = true;
+          res.json(row);
+        });
+      }
+    );
+  });
 }
 
 // 标记管理员在线状态（用于前端判断）
 app.get('/api/me/admin', requireLogin, (req, res) => {
-  db.get('SELECT is_admin FROM users WHERE id = ?', [req.session.userId], (err, user) => {
+  db.get('SELECT id, username, is_admin, avatar, gender, bio, deleted_at FROM users WHERE id = ?', [req.session.userId], (err, user) => {
     if (err || !user) return res.status(404).json({ error: '用户不存在' });
     req.session.isAdmin = !!user.is_admin;
-    res.json({ is_admin: !!user.is_admin, user_id: req.session.userId });
+    res.json({ is_admin: !!user.is_admin, user_id: req.session.userId, deleted_at: user.deleted_at });
   });
 });
 
-// 获取用户列表（所有已登录用户可见）
+// 获取用户列表（所有已登录用户可见，过滤已注销）
 app.get('/api/users', requireLogin, (req, res) => {
-  db.all('SELECT id, username, is_admin, avatar, gender, bio FROM users ORDER BY id', [], (err, rows) => {
+  db.all('SELECT id, username, is_admin, avatar, gender, bio FROM users WHERE deleted_at IS NULL ORDER BY id', [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(rows);
+  });
+});
+
+// 注销账号（软删除）
+app.delete('/api/me', requireLogin, (req, res) => {
+  const userId = req.session.userId;
+  db.run('UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?', [userId], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) return res.status(404).json({ error: '用户不存在' });
+    req.session.destroy();
+    res.json({ message: '账号已注销' });
   });
 });
 

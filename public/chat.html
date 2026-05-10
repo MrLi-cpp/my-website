@@ -69,6 +69,17 @@
     .msg-bubble:hover .msg-withdraw-btn { opacity: 1; pointer-events: auto; }
     .msg-row.self .msg-withdraw-btn { right: auto; left: 0; }
 
+    /* 已注销账号红色感叹号 */
+    .msg-deleted-badge {
+      color: var(--accent-red);
+      font-size: 11px;
+      margin-top: 4px;
+      text-align: right;
+    }
+    .msg-row.other .msg-deleted-badge {
+      text-align: left;
+    }
+
     /* 空状态 */
     .chat-empty { text-align: center; padding: 60px 20px; color: var(--text-muted); font-size: 13px; letter-spacing: 2px; }
 
@@ -649,6 +660,12 @@
           inner = escape(m.content || '');
         }
 
+        // 红色感叹号：发给已注销用户的消息
+        let deletedBadge = '';
+        if (m.receiver_deleted) {
+          deletedBadge = `<div class="msg-deleted-badge">❗ 该账号已注销</div>`;
+        }
+
         // 撤回按钮（仅自己的消息且2分钟内）
         let withdrawBtn = '';
         if (self && !m.is_withdrawn && canWithdraw(m.created_at)) {
@@ -661,6 +678,7 @@
             <div class="msg-bubble ${m.is_withdrawn ? 'withdrawn' : ''}">
               ${inner}${withdrawBtn}
             </div>
+            ${deletedBadge}
           </div>`;
       }).join('');
 

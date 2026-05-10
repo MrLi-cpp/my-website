@@ -853,11 +853,14 @@ async function loadBlogDetail(id) {
     function openUserProfile(userId) {
       currentProfileUserId = userId;
       const overlay = document.getElementById('userProfileOverlay');
+      const card = document.querySelector('.user-profile-card');
       const avatar = document.getElementById('upAvatar');
       const name = document.getElementById('upName');
       const gender = document.getElementById('upGender');
       const bio = document.getElementById('upBio');
       const dmBtn = document.getElementById('upDmBtn');
+      // 清除已注销状态
+      card.classList.remove('is-deleted');
       // 先显示加载状态
       avatar.textContent = '?';
       avatar.innerHTML = '?';
@@ -878,11 +881,18 @@ async function loadBlogDetail(id) {
           const genderMap = { 'male': '♂ 男', 'female': '♀ 女', 'other': '⚧ 其他' };
           gender.textContent = genderMap[user.gender] || '性别未设置';
           bio.textContent = escapeHtml(user.bio || '这个人很懒，什么都没写。');
-          // 如果是自己，不显示私信按钮
-          if (currentUser && currentUser.id == userId) {
+          // 已注销用户处理
+          if (user.deleted_at) {
+            card.classList.add('is-deleted');
+            gender.innerHTML = '<span class="up-deleted-badge">账号已注销</span>';
             dmBtn.style.display = 'none';
           } else {
-            dmBtn.style.display = 'inline-block';
+            // 如果是自己，不显示私信按钮
+            if (currentUser && currentUser.id == userId) {
+              dmBtn.style.display = 'none';
+            } else {
+              dmBtn.style.display = 'inline-block';
+            }
           }
         })
         .catch(() => {
