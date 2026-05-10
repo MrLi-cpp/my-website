@@ -911,9 +911,9 @@ app.get('/api/messages', requireLogin, (req, res) => {
   const withId = parseInt(req.query.with) || 0;
   if (!withId) return res.status(400).json({ error: '缺少 with 参数' });
 
-  // 先检查对方是否已注销
+  // 先检查对方是否已注销及注销时间
   db.get('SELECT deleted_at FROM users WHERE id = ?', [withId], (err, other) => {
-    const otherDeleted = !!(other && other.deleted_at);
+    const otherDeletedAt = other && other.deleted_at ? other.deleted_at : null;
 
     db.all(
       `SELECT m.*, u1.username as sender_name, u1.id as sender_id
@@ -925,10 +925,12 @@ app.get('/api/messages', requireLogin, (req, res) => {
       [userId, withId, withId, userId],
       (err, rows) => {
         if (err) return res.status(500).json({ error: err.message });
-        // 给发给已注销用户的消息添加标记
-        if (otherDeleted) {
+        // 只有发给已注销用户、且发送时间在注销之后的消息才标记
+        if (otherDeletedAt) {
           rows.forEach(m => {
-            if (m.receiver_id === withId) m.receiver_deleted = true;
+            if (m.receiver_id === withId && m.created_at > otherDeletedAt) {
+              m.receiver_deleted = true;
+            }
           });
         }
         res.json(rows);
