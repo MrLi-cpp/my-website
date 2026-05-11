@@ -335,6 +335,7 @@
         const endpoint = loginMode === 'login' ? '/api/login' : '/api/register';
         const result = await post(endpoint, { username, password });
         hideLoginModal();
+        await loadUser();
         updateNavUser(result);
         initMoments();
         initBlog();
@@ -372,6 +373,7 @@
     }
     async function logout() {
       try { await post('/api/logout'); } catch(e) {}
+      currentUser = null;
       updateNavUser(null);
       checkAdmin();
       initMoments();
@@ -388,27 +390,22 @@
 
     // ===== 初始化用户状态 =====
     async function initUser() {
-      try {
-        const me = await get('/api/me');
-        const chatBtn = document.getElementById('chatFloatBtn');
-        const adminBtn = document.getElementById('adminFloatBtn');
-        if (me && me.id) {
-          updateNavUser(me);
-          if (me.is_admin) {
-            // 管理员：显示后台按钮，隐藏留言按钮
-            adminBtn?.classList.add('show');
-            chatBtn?.classList.remove('show');
-          } else {
-            // 普通用户：显示留言按钮，隐藏后台按钮
-            chatBtn?.classList.add('show');
-            adminBtn?.classList.remove('show');
-          }
-        } else {
-          // 未登录：全部隐藏
+      const me = await loadUser();
+      const chatBtn = document.getElementById('chatFloatBtn');
+      const adminBtn = document.getElementById('adminFloatBtn');
+      if (me && me.id) {
+        updateNavUser(me);
+        if (me.is_admin) {
+          adminBtn?.classList.add('show');
           chatBtn?.classList.remove('show');
+        } else {
+          chatBtn?.classList.add('show');
           adminBtn?.classList.remove('show');
         }
-      } catch(e) {}
+      } else {
+        chatBtn?.classList.remove('show');
+        adminBtn?.classList.remove('show');
+      }
     }
 
     // ===== 留言按钮 =====
@@ -609,20 +606,20 @@ async function loadBlogDetail(id) {
         const marginStyle = visualDepth > 0 ? 'margin-left:36px;' : '';
         let nameHtml, textHtml;
         if (depth > 0) {
-          nameHtml = escapeHtml(node.username) + ' 回复 ' + escapeHtml(parentName);
+          nameHtml = `<span class="blog-comment-author-link" onclick="event.stopPropagation(); openUserProfile(${node.user_id})" style="cursor:pointer;">${escapeHtml(node.username)}</span> 回复 ` + escapeHtml(parentName);
           textHtml = '：' + escapeHtml(node.content);
         } else {
-          nameHtml = escapeHtml(node.username);
+          nameHtml = `<span class="blog-comment-author-link" onclick="event.stopPropagation(); openUserProfile(${node.user_id})" style="cursor:pointer;">${escapeHtml(node.username)}</span>`;
           textHtml = escapeHtml(node.content);
         }
         let html = `
-        <div class="blog-comment-item" data-comment-id="${node.id}" data-username="${escapeHtml(node.username)}" data-is-mine="${isMine ? 1 : 0}" style="cursor:pointer;${marginStyle}">
+        <div class="blog-comment-item" data-comment-id="${node.id}" data-username="${escapeHtml(node.username)}" data-is-mine="${isMine ? 1 : 0}" style="${marginStyle}">
           <div class="blog-comment-header">
-            <div class="blog-comment-avatar">${escapeHtml(node.username.charAt(0).toUpperCase())}</div>
+            <div class="blog-comment-avatar" onclick="event.stopPropagation(); openUserProfile(${node.user_id})" style="cursor:pointer;">${escapeHtml(node.username.charAt(0).toUpperCase())}</div>
             <div class="blog-comment-author">${nameHtml}</div>
             <div class="blog-comment-time">${timeStr}</div>
           </div>
-          <div class="blog-comment-text">${textHtml}</div>
+          <div class="blog-comment-text" style="cursor:pointer;">${textHtml}</div>
         </div>
       `;
         // Render children recursively

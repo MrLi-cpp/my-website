@@ -413,13 +413,17 @@ app.post('/api/login', (req, res) => {
     req.session.userId = user.id;
     req.session.username = user.username;
     req.session.isAdmin = !!user.is_admin;
-    res.json({ id: user.id, username: user.username, is_admin: !!user.is_admin, message: '登录成功' });
+    req.session.save((err) => {
+      if (err) return res.status(500).json({ error: '登录失败' });
+      res.json({ id: user.id, username: user.username, is_admin: !!user.is_admin, message: '登录成功' });
+    });
   });
 });
 
 // 退出
 app.post('/api/logout', (req, res) => {
   req.session.destroy();
+  res.clearCookie('connect.sid');
   res.json({ message: '已退出' });
 });
 

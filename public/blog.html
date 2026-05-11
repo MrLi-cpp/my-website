@@ -430,7 +430,7 @@
         let blogDetailAbort = null;
 
 async function loadBlogDetail(id) {
-
+      await loadUser();
       if (blogDetailAbort) blogDetailAbort.abort();
       blogDetailAbort = { aborted: false, abort() { this.aborted = true; } };
       const ac = blogDetailAbort;
@@ -553,13 +553,13 @@ async function loadBlogDetail(id) {
           textHtml = escapeHtml(node.content);
         }
         let html = `
-        <div class="blog-comment-item" data-comment-id="${node.id}" data-username="${escapeHtml(node.username)}" data-is-mine="${isMine ? 1 : 0}" style="cursor:pointer;${marginStyle}">
+        <div class="blog-comment-item" data-comment-id="${node.id}" data-username="${escapeHtml(node.username)}" data-is-mine="${isMine ? 1 : 0}" style="${marginStyle}">
           <div class="blog-comment-header">
-            <div class="blog-comment-avatar">${escapeHtml(node.username.charAt(0).toUpperCase())}</div>
+            <div class="blog-comment-avatar" onclick="event.stopPropagation(); openUserProfile(${node.user_id})" style="cursor:pointer;">${escapeHtml(node.username.charAt(0).toUpperCase())}</div>
             <div class="blog-comment-author">${nameHtml}</div>
             <div class="blog-comment-time">${timeStr}</div>
           </div>
-          <div class="blog-comment-text">${textHtml}</div>
+          <div class="blog-comment-text" style="cursor:pointer;">${textHtml}</div>
         </div>
       `;
         // Render children recursively
@@ -571,16 +571,6 @@ async function loadBlogDetail(id) {
         return html;
       }
       return roots.map(root => renderNode(root, 0, null)).join('');
-    }
-
-    // HTTP 工具函数
-    async function del(url) {
-      const res = await fetch(url, { method: 'DELETE', credentials: 'include' });
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || `HTTP ${res.status}`);
-      }
-      return res.json().catch(() => ({}));
     }
 
     // HTTP 工具函数
