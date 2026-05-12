@@ -56,7 +56,7 @@ node server.js
 
 ## 管理员账号
 
-首次启动自动创建：`lijiguang / ljgljg2006`
+首次启动自动创建管理员账号，详见 `server.js` 初始化逻辑。
 
 ## 数据库
 
