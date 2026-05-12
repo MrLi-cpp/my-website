@@ -95,10 +95,12 @@ body.index-page {
   background: var(--accent-gold);
   color: var(--bg-primary);
   border-color: var(--accent-gold);
+  transform: scale(1.05); 
 }
 .nav-logout-btn:hover {
   border-color: var(--accent-red);
   color: var(--accent-red);
+  transform: scale(1.05); 
 }
 
 /* ===== 登录弹窗 ===== */
@@ -1384,6 +1386,7 @@ body.index-page {
   background: var(--accent-gold);
   color: var(--bg-primary);
   border-color: var(--accent-gold);
+  transform: scale(1.05);
 }
 
 /* 评论用户名可点击 */

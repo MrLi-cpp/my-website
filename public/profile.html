@@ -130,6 +130,7 @@
       margin-bottom: 24px;
     }
     .profile-btn {
+      display: inline-block;
       padding: 10px 28px;
       border-radius: 8px;
       font-size: 13px;
@@ -140,10 +141,13 @@
       color: var(--text-secondary);
       font-family: var(--font-sans);
       transition: all 0.3s;
+      text-decoration: none;
     }
     .profile-btn:hover {
       border-color: var(--accent-gold);
       color: var(--text-primary);
+      background: rgba(201, 169, 110, 0.1);
+      transform: scale(1.05);   
     }
     .profile-btn.primary {
       background: var(--accent-gold);
@@ -153,7 +157,7 @@
     .profile-btn.primary:hover {
       filter: brightness(1.1);
     }
-
+   
     /* ===== 成功/错误提示 ===== */
     .profile-error {
       color: var(--accent-red);
@@ -246,12 +250,10 @@
     .profile-dm-section {
       text-align: center;
       padding-top: 20px;
-      border-top: 1px solid var(--border);
     }
     .profile-delete-section {
       text-align: center;
       padding-top: 20px;
-      border-top: 1px solid rgba(192, 57, 43, 0.3);
     }
     .profile-btn.danger {
       border-color: rgba(192, 57, 43, 0.5);
@@ -265,7 +267,8 @@
     .delete-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(12,12,14,0.8);
+      backdrop-filter:blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -279,13 +282,14 @@
       pointer-events: auto;
     }
     .delete-card {
-      background: var(--bg-card);
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 32px 28px;
+      padding: 40px 36px;
       max-width: 360px;
       width: 90%;
       text-align: center;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5);
     }
     .delete-card h3 {
       color: var(--accent-red);
@@ -396,7 +400,7 @@
 
       <!-- 私信管理入口 -->
       <div class="profile-dm-section">
-        <a href="/chat.html?back=profile" class="profile-dm-link">💬 私信管理</a>
+        <a href="/chat.html?back=profile" class="profile-btn">💬 私信管理</a>
       </div>
 
       <!-- 注销账号 -->
