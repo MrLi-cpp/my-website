@@ -458,6 +458,34 @@ app.put('/api/me', requireLogin, (req, res) => {
   });
 });
 
+// 修改密码
+app.post('/api/change-password', requireLogin, (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const userId = req.session.userId;
+
+  if (!oldPassword || !newPassword) {
+    return res.status(400).json({ error: '请填写原密码和新密码' });
+  }
+  if (newPassword.length < 4) {
+    return res.status(400).json({ error: '新密码至少4位' });
+  }
+
+  db.get('SELECT password_hash FROM users WHERE id = ?', [userId], (err, user) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!user) return res.status(404).json({ error: '用户不存在' });
+
+    if (!bcrypt.compareSync(oldPassword, user.password_hash)) {
+      return res.status(400).json({ error: '原密码不正确' });
+    }
+
+    const newHash = bcrypt.hashSync(newPassword, 10);
+    db.run('UPDATE users SET password_hash = ? WHERE id = ?', [newHash, userId], function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: '密码修改成功' });
+    });
+  });
+});
+
 // 获取用户公开资料
 app.get('/api/users/:id', (req, res) => {
   const userId = req.params.id;
