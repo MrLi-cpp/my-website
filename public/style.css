@@ -95,12 +95,35 @@ body.index-page {
   background: var(--accent-gold);
   color: var(--bg-primary);
   border-color: var(--accent-gold);
-  transform: scale(1.05); 
+  transform: scale(1.05);
+}
+
+/* ===== 标准按钮样式 ===== */
+.btn-standard {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent-gold);
+  font-size: 12px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  font-family: var(--font-sans);
+  line-height: inherit;
+}
+.btn-standard:hover {
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+  border-color: var(--accent-gold);
+  transform: scale(1.05);
 }
 .nav-logout-btn:hover {
   border-color: var(--accent-red);
   color: var(--accent-red);
-  transform: scale(1.05); 
+  transform: scale(1.05);
 }
 
 /* ===== 登录弹窗 ===== */
@@ -466,8 +489,6 @@ body.index-page {
 .moment-images.grid-9 { grid-template-columns: repeat(3, 1fr); }
 .moment-images.grid-4 { grid-template-columns: repeat(2, 1fr); }
 .moment-images img { width: 100%; aspect-ratio: 1; object-fit: cover; cursor: pointer; }
-.moment-video-wrap { margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
-
 .moment-location { font-size: 12px; color: #4a9eff; letter-spacing: 1px; margin-top: 4px; margin-bottom: 8px; }
 
 /* ===== 统一空状态（黑金·楷体·居中） ===== */
@@ -498,7 +519,6 @@ body.index-page {
   letter-spacing: 2px;
   line-height: 2;
 }
-.moment-video-wrap { margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
 .moment-actions { display: flex; gap: 16px; padding-top: 10px; border-top: 1px solid var(--border); }
 .moment-action-btn { background: none; border: 1px solid transparent; border-radius: 6px; padding: 4px 10px; color: var(--text-muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 4px; transition: all 0.3s; letter-spacing: 1px; }
 .moment-action-btn:hover { color: var(--text-primary); border-color: rgba(201,169,110,0.3); transform: scale(1.08); }

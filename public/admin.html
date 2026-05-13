@@ -831,7 +831,7 @@
           return;
         }
         box.innerHTML = '<div class="dm-wrap">' + sessions.map(s => {
-          const lastMsg = s.content || (s.type === 'image' ? '[图片]' : (s.type === 'video' ? '[视频]' : ''));
+          const lastMsg = s.content || (s.type === 'image' ? '[图片]' : '');
           const timeStr = formatShortDate(s.created_at);
           const hasUnread = s.sender_id !== s.other_id;
           return `

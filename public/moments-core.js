@@ -44,11 +44,7 @@ function renderMoment(post) {
   const diaryTag = isDiary ? '<span class="diary-tag">日记</span>' : '';
 
   let imagesHtml = '';
-  if (post.video) {
-    imagesHtml = `<div class="moment-video-wrap">
-      <video src="${post.video}" controls preload="metadata" style="width:100%;border-radius:8px;display:block;max-height:480px;object-fit:cover;background:var(--bg-secondary);"></video>
-    </div>`;
-  } else if (post.images && post.images.length > 0) {
+  if (post.images && post.images.length > 0) {
     const count = Math.min(post.images.length, 9);
     imagesHtml = `<div class="moment-images grid-${count}">
       ${post.images.slice(0, 9).map(src => `<img src="${src}" loading="lazy">`).join('')}

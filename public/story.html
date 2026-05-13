@@ -127,16 +127,102 @@
 
   <a href="#" class="story-edit-btn" id="storyEditBtn" title="编辑">✏️</a>
 
+  <!-- 密钥弹窗 -->
+  <div class="login-modal-overlay" id="storyKeyModal" onclick="closeStoryKeyModal(event)">
+    <div class="login-modal" onclick="event.stopPropagation()">
+      <span class="login-modal-close" onclick="hideStoryKeyModal()">&times;</span>
+      <h2>🔐 访问密钥</h2>
+      <p class="subtitle">此内容需要密钥才能查看</p>
+      <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:16px;letter-spacing:1px;">请私聊管理员获取密钥</p>
+      <p class="login-error" id="storyKeyError"></p>
+      <input type="password" class="login-modal-input" id="storyKeyInput" placeholder="请输入访问密钥" onkeydown="if(event.key==='Enter')submitStoryKey()">
+      <button class="login-modal-btn" onclick="submitStoryKey()">确认</button>
+      <p class="login-modal-toggle" onclick="hideStoryKeyModal()">取消</p>
+    </div>
+  </div>
+
   <script src="/script.js?v=2"></script>
   <script>
     const sectionMap = { primary: '小学', middle: '初中', high: '高中', university: '大学' };
     const sectionHint = { primary: '雅居乐小学 5班', middle: '番禺执信 2班', high: '执信中学 2班', university: '华工Ai3班' };
+    let pendingStorySection = null;
 
-    function showStory(section) {
+    async function checkStoryAccess() {
+      try {
+        const user = await loadUser();
+        if (user && user.is_admin) return true;
+        // 如果 localStorage 标记了已通过验证，视为通过
+        if (localStorage.getItem('storyAccess') === 'true') return true;
+        return false;
+      } catch (e) {
+        if (localStorage.getItem('storyAccess') === 'true') return true;
+        return false;
+      }
+    }
+
+    function showStoryKeyModal(section) {
+      pendingStorySection = section;
+      document.getElementById('storyKeyError').style.display = 'none';
+      document.getElementById('storyKeyInput').value = '';
+      document.getElementById('storyKeyModal').classList.add('active');
+      setTimeout(() => document.getElementById('storyKeyInput').focus(), 100);
+    }
+
+    function hideStoryKeyModal() {
+      document.getElementById('storyKeyModal').classList.remove('active');
+      pendingStorySection = null;
+    }
+
+    function closeStoryKeyModal(e) {
+      if (e.target === document.getElementById('storyKeyModal')) {
+        hideStoryKeyModal();
+      }
+    }
+
+    async function submitStoryKey() {
+      const key = document.getElementById('storyKeyInput').value.trim().toUpperCase();
+      const errorEl = document.getElementById('storyKeyError');
+      if (!key) {
+        errorEl.textContent = '请输入密钥';
+        errorEl.style.display = 'block';
+        return;
+      }
+      try {
+        await post('/api/story-verify', { key });
+        localStorage.setItem('storyAccess', 'true');
+        hideStoryKeyModal();
+        if (pendingStorySection) {
+          doShowStory(pendingStorySection);
+        }
+      } catch (err) {
+        errorEl.textContent = err.message || '密钥错误';
+        errorEl.style.display = 'block';
+      }
+    }
+
+    function doShowStory(section) {
       document.getElementById('storyListView').style.display = 'none';
       document.getElementById('storyDetailView').classList.add('active');
       window.scrollTo(0, 0);
       loadStoryDetail(section);
+    }
+
+    async function showStory(section) {
+      const user = await loadUser();
+      if (user && user.is_admin) {
+        doShowStory(section);
+        return;
+      }
+      if (!user) {
+        alert('请先登录');
+        return;
+      }
+      const hasAccess = localStorage.getItem('storyAccess') === 'true';
+      if (hasAccess) {
+        doShowStory(section);
+      } else {
+        showStoryKeyModal(section);
+      }
     }
 
     function showStoryList() {

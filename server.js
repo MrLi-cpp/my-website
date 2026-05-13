@@ -9,6 +9,11 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
+// 安全相关常量（生产环境请通过环境变量配置）
+const SESSION_SECRET = process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex');
+const ADMIN_USER = process.env.ADMIN_USER || 'lijiguang';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'ljgljg2006';
+
 // ========== 数据库 ==========
 const dbPath = path.join(__dirname, 'database.sqlite');
 const db = new sqlite3.Database(dbPath);
@@ -27,19 +32,26 @@ db.serialize(() => {
   db.run(`ALTER TABLE users ADD COLUMN bio TEXT DEFAULT ''`, (err) => {});
   db.run(`ALTER TABLE users ADD COLUMN deleted_at DATETIME`, [], (err) => { /* ignore duplicate column error */ });
 
+  db.run(`ALTER TABLE users ADD COLUMN story_key TEXT DEFAULT ''`, (err) => {});
+
+  // 为已有用户补充分配 story_key
+  db.all("SELECT id, story_key FROM users WHERE story_key IS NULL OR story_key = ''", [], (err, rows) => {
+    if (err || !rows) return;
+    rows.forEach(u => {
+      const key = generateStoryKey();
+      db.run("UPDATE users SET story_key = ? WHERE id = ?", [key, u.id]);
+    });
+  });
+
   db.run(`CREATE TABLE IF NOT EXISTS posts (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     content TEXT NOT NULL,
     images TEXT DEFAULT '[]',
-    video TEXT,
     type TEXT DEFAULT 'moment',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     display_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     likes_count INTEGER DEFAULT 0
   )`);
-  // 兼容旧表：添加 video 字段
-  db.run(`ALTER TABLE posts ADD COLUMN video TEXT`, (err) => {});
-
   // 我的故事表
   db.run(`CREATE TABLE IF NOT EXISTS stories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -176,25 +188,34 @@ db.serialize(() => {
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
-  // 初始化管理员（lijiguang）
-  const adminHash = bcrypt.hashSync('ljgljg2006', 10);
+  // 初始化管理员
+  const adminHash = bcrypt.hashSync(ADMIN_PASS, 10);
   db.run('UPDATE users SET deleted_at = CURRENT_TIMESTAMP WHERE id NOT IN (3, 4) AND deleted_at IS NULL', [], function(err) {
     if (err) console.error('[INIT] soft-delete old accounts:', err.message);
     else console.log('[INIT] soft-deleted old accounts:', this.changes);
   });
-  db.run('INSERT OR IGNORE INTO users (username, password_hash, is_admin) VALUES (?, ?, 1)', ['lijiguang', adminHash], function() {
-    if (this.changes) console.log('[INIT] 管理员账号已创建: lijiguang / ljgljg2006');
+  db.run('INSERT OR IGNORE INTO users (username, password_hash, is_admin) VALUES (?, ?, 1)', [ADMIN_USER, adminHash], function() {
+    if (this.changes) console.log('[INIT] 管理员账号已创建');
     else console.log('[INIT] 管理员账号已存在');
+  });
+
+  // 清理残留视频数据
+  db.run("UPDATE posts SET video = NULL", (err) => {
+    if (err) console.error('[INIT] 清理 posts 视频失败:', err.message);
+    else console.log('[INIT] 已清空 posts 表 video 字段');
+  });
+  db.run("DELETE FROM messages WHERE type = 'video'", (err) => {
+    if (err) console.error('[INIT] 清理视频消息失败:', err.message);
+    else console.log('[INIT] 已删除视频类型消息');
   });
 });
 
 // ========== 中间件 ==========
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
-app.use(express.urlencoded({ extended: true }));
 app.use(session({
   store: new FileStore({ path: './sessions', logFn: () => {} }),
-  secret: 'mywebsite-secret-key-2026',
+  secret: SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -240,10 +261,10 @@ const upload = multer({
   storage,
   limits: { fileSize: 100 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
+    if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
-      cb(new Error('只允许上传图片或视频'), false);
+      cb(new Error('只允许上传图片'), false);
     }
   }
 });
@@ -329,15 +350,13 @@ app.get('/api/posts/:id', (req, res) => {
 });
 
 // 管理员发帖
-app.post('/api/posts', requireAdmin, upload.fields([{ name: 'images', maxCount: 9 }, { name: 'video', maxCount: 1 }]), (req, res) => {
+app.post('/api/posts', requireAdmin, upload.array('images', 9), (req, res) => {
   const { content, type, display_date, location } = req.body;
-  const images = req.files && req.files['images'] ? req.files['images'].map(f => '/uploads/' + f.filename) : [];
-  const videoFile = req.files && req.files['video'] ? req.files['video'][0] : null;
-  const video = videoFile ? '/uploads/' + videoFile.filename : null;
+  const images = req.files ? req.files.map(f => '/uploads/' + f.filename) : [];
   const now = new Date().toISOString();
   db.run(
-    'INSERT INTO posts (content, images, video, type, display_date, location) VALUES (?, ?, ?, ?, ?, ?)',
-    [content, JSON.stringify(images), video, type || 'moment', display_date || now, location || null],
+    'INSERT INTO posts (content, images, type, display_date, location) VALUES (?, ?, ?, ?, ?)',
+    [content, JSON.stringify(images), type || 'moment', display_date || now, location || null],
     function(err) {
       if (err) return res.status(500).json({ error: err.message });
       res.json({ id: this.lastID, message: '发布成功' });
@@ -364,18 +383,15 @@ app.delete('/api/posts/:id', requireAdmin, (req, res) => {
 });
 
 // 管理员编辑帖子内容
-app.put('/api/posts/:id', requireAdmin, upload.fields([{ name: 'images', maxCount: 9 }, { name: 'video', maxCount: 1 }]), (req, res) => {
+app.put('/api/posts/:id', requireAdmin, upload.array('images', 9), (req, res) => {
   const { content, type, location } = req.body;
-  const images = req.files && req.files['images'] ? JSON.stringify(req.files['images'].map(f => '/uploads/' + f.filename)) : null;
-  const videoFile = req.files && req.files['video'] ? req.files['video'][0] : null;
-  const video = videoFile ? '/uploads/' + videoFile.filename : null;
+  const images = req.files ? JSON.stringify(req.files.map(f => '/uploads/' + f.filename)) : null;
 
   // 动态构建 UPDATE 语句
   const fields = ['content = ?', 'type = ?', 'location = ?'];
   const values = [content, type, location || null];
 
   if (images) { fields.push('images = ?'); values.push(images); }
-  if (video) { fields.push('video = ?'); values.push(video); }
 
   values.push(req.params.id);
   const sql = 'UPDATE posts SET ' + fields.join(', ') + ' WHERE id = ?';
@@ -388,6 +404,16 @@ app.put('/api/posts/:id', requireAdmin, upload.fields([{ name: 'images', maxCoun
 
 // ========== 用户系统 ==========
 
+// 生成16位故事访问密钥
+function generateStoryKey() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let key = '';
+  for (let i = 0; i < 16; i++) {
+    key += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return key;
+}
+
 // 注册
 app.post('/api/register', (req, res) => {
   const { username, password } = req.body;
@@ -395,7 +421,8 @@ app.post('/api/register', (req, res) => {
   if (username.length < 2 || password.length < 4) return res.status(400).json({ error: '用户名至少2位，密码至少4位' });
 
   const hash = bcrypt.hashSync(password, 10);
-  db.run('INSERT INTO users (username, password_hash) VALUES (?, ?)', [username, hash], function(err) {
+  const storyKey = generateStoryKey();
+  db.run('INSERT INTO users (username, password_hash, story_key) VALUES (?, ?, ?)', [username, hash, storyKey], function(err) {
     if (err) return res.status(400).json({ error: '用户名已存在' });
     req.session.userId = this.lastID;
     req.session.username = username;
@@ -621,10 +648,10 @@ app.delete('/api/comments/:id', requireLogin, (req, res) => {
 // 获取博客列表
 app.get('/api/blogs', (req, res) => {
   db.all(`
-    SELECT b.*, 'lijiguang' as author_name
+    SELECT b.*, ? as author_name
     FROM blogs b
     ORDER BY b.display_date DESC
-  `, [], (err, blogs) => {
+  `, [ADMIN_USER], (err, blogs) => {
     if (err) return res.status(500).json({ error: err.message });
     for (const blog of blogs) {
       blog.tags = JSON.parse(blog.tags || '[]');
@@ -838,6 +865,31 @@ app.get('/api/profile', (req, res) => {
 });
 
 // ========== 我的故事 API ==========
+const STORY_ACCESS_KEY = 'jiguang2026'; // 故事访问密钥
+
+// 验证故事访问密钥（验证当前登录用户的个人密钥）
+app.post('/api/story-verify', (req, res) => {
+  const { key } = req.body;
+  if (!req.session.userId) return res.status(401).json({ error: '请先登录' });
+  db.get('SELECT story_key FROM users WHERE id = ?', [req.session.userId], (err, user) => {
+    if (err || !user) return res.status(500).json({ error: '用户不存在' });
+    if (user.story_key === key) {
+      req.session.storyAccess = true;
+      req.session.save(() => res.json({ success: true }));
+    } else {
+      res.status(403).json({ error: '密钥错误' });
+    }
+  });
+});
+
+// 管理员查看所有用户密钥
+app.get('/api/admin/keys', requireAdmin, (req, res) => {
+  db.all('SELECT id, username, story_key FROM users WHERE deleted_at IS NULL AND is_admin = 0 ORDER BY id', [], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows || []);
+  });
+});
+
 // 获取故事
 app.get('/api/story/:section', (req, res) => {
   const section = req.params.section;
@@ -922,7 +974,7 @@ app.put('/api/profile', requireAdmin, upload.single('avatar'), (req, res) => {
 
 // 获取管理员用户ID
 function getAdminId(callback) {
-  db.get("SELECT id FROM users WHERE username = 'lijiguang' LIMIT 1", [], (err, row) => {
+  db.get("SELECT id FROM users WHERE username = ? LIMIT 1", [ADMIN_USER], (err, row) => {
     if (err || !row) return callback(null);
     callback(row.id);
   });
@@ -930,7 +982,7 @@ function getAdminId(callback) {
 
 function getAdminIdAsync() {
   return new Promise((resolve) => {
-    db.get("SELECT id FROM users WHERE username = 'lijiguang' LIMIT 1", [], (err, row) => {
+    db.get("SELECT id FROM users WHERE username = ? LIMIT 1", [ADMIN_USER], (err, row) => {
       if (err || !row) return resolve(null);
       resolve(row.id);
     });
@@ -972,7 +1024,7 @@ app.get('/api/messages', requireLogin, (req, res) => {
 });
 
 // 发送消息
-app.post('/api/messages', requireLogin, upload.fields([{ name: 'image', maxCount: 1 }, { name: 'video', maxCount: 1 }]), async (req, res) => {
+app.post('/api/messages', requireLogin, upload.single('image'), async (req, res) => {
   const senderId = req.session.userId;
   const { content, receiver_id: bodyReceiverId, type } = req.body;
   let receiver_id = bodyReceiverId;
@@ -988,10 +1040,8 @@ app.post('/api/messages', requireLogin, upload.fields([{ name: 'image', maxCount
 
   let fileUrl = null;
   const msgType = type || 'text';
-  if (req.files && req.files['image'] && req.files['image'][0]) {
-    fileUrl = '/uploads/' + req.files['image'][0].filename;
-  } else if (req.files && req.files['video'] && req.files['video'][0]) {
-    fileUrl = '/uploads/' + req.files['video'][0].filename;
+  if (req.file) {
+    fileUrl = '/uploads/' + req.file.filename;
   }
 
   db.get('SELECT deleted_at FROM users WHERE id = ?', [receiverId], (err, receiver) => {
@@ -1204,6 +1254,9 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`====================================`);
   console.log(`🌐 网站已启动: http://0.0.0.0:${PORT}`);
   console.log(`📁 项目目录: ${__dirname}`);
-  console.log(`🔑 管理员账号: lijiguang / ljgljg2006`);
+  console.log(`🌐 网站已启动: http://0.0.0.0:${PORT}`);
+  console.log(`📁 项目目录: ${__dirname}`);
+  console.log(`🔑 管理员账号: ${ADMIN_USER}`);
+  console.log(`====================================`);
   console.log(`====================================`);
 });

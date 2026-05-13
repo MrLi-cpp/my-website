@@ -55,9 +55,6 @@
     .msg-img { max-width: 200px; max-height: 260px; border-radius: 10px; cursor: pointer; transition: transform 0.3s; border: 1px solid var(--border); }
     .msg-img:hover { transform: scale(1.03); }
 
-    /* 视频消息 */
-    .msg-video { max-width: 200px; max-height: 260px; border-radius: 10px; border: 1px solid var(--border); }
-
     /* 撤回按钮 */
     .msg-withdraw-btn {
       position: absolute; top: -24px; right: 0;
@@ -352,7 +349,6 @@
     <div class="chat-foot" id="chatFoot">
       <div class="chat-tool">
         <label title="图片">📷<input type="file" id="imgInp" accept="image/*" onchange="sendFile(this, 'image')"></label>
-        <label title="视频">🎬<input type="file" id="vidInp" accept="video/*" onchange="sendFile(this, 'video')"></label>
       </div>
       <div class="chat-input-row">
         <textarea class="chat-textarea" id="chatInp" rows="1" placeholder="说点什么…" onkeydown="onKey(event)"></textarea>
@@ -515,7 +511,7 @@
           const timeStr = s.created_at ? new Date(s.created_at + 'Z').toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) : '';
           let preview = '暂无消息';
           if (s.type === 'image') preview = '[图片]';
-          else if (s.type === 'video') preview = '[视频]';
+
           else if (s.content && s.content.trim()) preview = escape(s.content.substring(0, 30));
           else if (s.type) preview = '[消息]';
           
@@ -654,8 +650,6 @@
           inner = '<span style="opacity:0.5;font-style:italic;">消息已撤回</span>';
         } else if (m.type === 'image' && m.file_url) {
           inner = `<img src="${m.file_url}" class="msg-img" onclick="viewImg('${m.file_url}')">`;
-        } else if (m.type === 'video' && m.file_url) {
-          inner = `<video src="${m.file_url}" class="msg-video" controls playsinline></video>`;
         } else {
           inner = escape(m.content || '');
         }

@@ -263,14 +263,6 @@
         <div class="sortable-grid" id="momentPreview"></div>
         <div class="sortable-hint" id="momentHint" style="display:none;">💡 拖动调整顺序，双击删除</div>
       </div>
-      <div class="form-group" id="momentVideoGroup">
-        <label>视频（最多1个）</label>
-        <input type="file" id="momentVideo" accept="video/*">
-        <div class="video-preview-wrap" id="videoPreview" style="display:none;">
-          <video id="videoPreviewEl" controls style="max-width:100%;border-radius:8px;margin-top:8px;"></video>
-          <button type="button" class="btn-secondary" style="margin-top:8px;font-size:12px;padding:6px 14px;" onclick="clearVideo()">删除视频</button>
-        </div>
-      </div>
       <div class="form-group" id="momentLocationGroup">
         <label>📍 位置</label>
         <input type="text" id="momentLocation" placeholder="输入位置，如：广州" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 4px;color:var(--text-primary);font-size:14px;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderBottomColor='var(--accent-gold)'" onblur="this.style.borderBottomColor='rgba(255,255,255,0.08)'">
@@ -290,31 +282,11 @@
 
     let momentFiles = [];
     let dragSrcIdx = null;
-    let videoFile = null;
 
     document.getElementById('momentType').onchange = function() {
       const isMoment = this.value === 'moment';
       document.getElementById('momentImageGroup').style.display = isMoment ? 'block' : 'none';
-      document.getElementById('momentVideoGroup').style.display = isMoment ? 'block' : 'none';
     };
-
-    // ===== 视频 =====
-    document.getElementById('momentVideo').onchange = function() {
-      const file = this.files[0];
-      if (!file) return;
-      videoFile = file;
-      const url = URL.createObjectURL(file);
-      document.getElementById('videoPreviewEl').src = url;
-      document.getElementById('videoPreview').style.display = 'block';
-      document.getElementById('momentImageGroup').style.display = 'none';
-    };
-    function clearVideo() {
-      videoFile = null;
-      document.getElementById('momentVideo').value = '';
-      document.getElementById('videoPreview').style.display = 'none';
-      document.getElementById('videoPreviewEl').src = '';
-      document.getElementById('momentImageGroup').style.display = 'block';
-    }
 
     // ===== 图片上传（追加模式） =====
     document.getElementById('momentImages').onchange = function() {
@@ -392,7 +364,6 @@
       data.append('display_date', document.getElementById('momentDate').value);
       data.append('location', document.getElementById('momentLocation').value);
       momentFiles.forEach(item => data.append('images', item.file));
-      if (videoFile) data.append('video', videoFile);
       try {
         const res = await fetch('/api/posts', { method: 'POST', body: data, credentials: 'same-origin' });
         const json = await res.json();
@@ -408,7 +379,6 @@
       momentFiles.forEach(item => URL.revokeObjectURL(item.preview));
       momentFiles = [];
       renderMomentPreview();
-      clearVideo();
       document.getElementById('momentLocation').value = '';
       const n = new Date();
       n.setMinutes(n.getMinutes() - n.getTimezoneOffset());
