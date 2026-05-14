@@ -1427,3 +1427,34 @@ body.index-page {
   .profile-page { padding-top: 70px; }
   .profile-card { padding: 24px; }
 }
+
+/* ===== 统一返回按钮 ===== */
+.btn-back {
+  position: absolute;
+  top: 20px;
+  left: 24px;
+  z-index: 50;
+  padding: 6px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: var(--font-sans);
+}
+.btn-back::before {
+  content: '←';
+}
+.btn-back:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(201,169,110,0.15);
+}

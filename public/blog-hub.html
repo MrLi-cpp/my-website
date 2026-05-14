@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>内容空间 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .hub-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 80px 20px 60px;
+      overflow: hidden;
+    }
+    /* 背景装饰（复用主页风格） */
+    .hub-bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,169,110,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 70% 60%, rgba(192,57,43,0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #0c0c0e 0%, #141417 40%, #0c0c0e 100%);
+    }
+    .hub-bg-layer::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: 0.3;
+    }
+    .hub-moon {
+      position: absolute;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fdfcf5 0%, #e8dcc8 25%, transparent 65%);
+      top: 12%; right: 18%;
+      opacity: 0.08;
+      filter: blur(1px);
+    }
+    .hub-mountains {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 28%;
+      background: linear-gradient(180deg, transparent 0%, rgba(20,20,23,0.8) 100%);
+    }
+    .hub-mountains::before {
+      content: ''; position: absolute; bottom: 0; left: -8%;
+      width: 55%; height: 100%;
+      background: linear-gradient(135deg, transparent 50%, rgba(30,30,35,0.9) 50%);
+      transform: skewX(-12deg);
+    }
+    .hub-mountains::after {
+      content: ''; position: absolute; bottom: 0; right: -8%;
+      width: 50%; height: 75%;
+      background: linear-gradient(225deg, transparent 50%, rgba(25,25,30,0.8) 50%);
+      transform: skewX(10deg);
+    }
+    .hub-seal-circle {
+      position: absolute;
+      width: 100px; height: 100px;
+      border: 2px solid var(--accent-red);
+      border-radius: 50%;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+    .hub-seal-circle::after {
+      content: ''; position: absolute; inset: 6px;
+      border: 1px solid var(--accent-red);
+      border-radius: 50%;
+    }
+
+    .hub-title-block {
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 60px;
+    }
+    .hub-title-main {
+      font-family: var(--font-serif);
+      font-size: clamp(36px, 8vw, 56px);
+      font-weight: 400;
+      letter-spacing: 12px;
+      color: var(--text-primary);
+    }
+    .hub-title-sub {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.28em;
+      letter-spacing: 6px;
+      color: var(--accent-gold);
+      margin-top: 12px;
+      font-weight: 300;
+    }
+    .hub-title-divider {
+      width: 50px;
+      height: 1px;
+      background: var(--accent-gold);
+      margin: 20px auto;
+      opacity: 0.4;
+    }
+    .hub-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      letter-spacing: 4px;
+    }
+
+    .hub-entries {
+      display: flex;
+      gap: 36px;
+      position: relative;
+      z-index: 2;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .hub-entry-card {
+      width: 260px;
+      padding: 56px 28px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+    }
+    .hub-entry-card:hover {
+      transform: scale(1.06);
+      border-color: rgba(201,169,110,0.4);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 30px rgba(201,169,110,0.1);
+    }
+    .hub-entry-card:active {
+      transform: scale(1.05);
+    }
+    .hub-entry-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+      transition: transform 0.4s;
+    }
+    .hub-entry-card:hover .hub-entry-icon {
+      transform: scale(1.15);
+    }
+    .hub-entry-label {
+      font-size: 18px;
+      letter-spacing: 6px;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .hub-entry-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      line-height: 1.5;
+    }
+    .hub-entry-arrow {
+      margin-top: 20px;
+      font-size: 22px;
+      color: var(--accent-gold);
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: all 0.4s;
+      display: block;
+    }
+    .hub-entry-card:hover .hub-entry-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    @media (max-width: 640px) {
+      .hub-entry-card { width: 140px; padding: 32px 14px; }
+      .hub-entry-icon { font-size: 28px; }
+      .hub-entry-label { font-size: 15px; }
+      .hub-title-main { letter-spacing: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/" class="btn-back">返回</a>
+
+  <div class="hub-page">
+    <!-- 黑金背景装饰 -->
+    <div class="hub-bg-layer">
+      <div class="hub-moon"></div>
+      <div class="hub-mountains"></div>
+      <div class="hub-seal-circle" style="top:18%;left:12%;"></div>
+      <div class="hub-seal-circle" style="bottom:25%;right:8%;width:80px;height:80px;"></div>
+    </div>
+
+    <div class="hub-title-block">
+      <h1 class="hub-title-main">
+        内容空间
+        <span class="hub-title-sub">CONTENT HUB</span>
+      </h1>
+      <div class="hub-title-divider"></div>
+      <p class="hub-desc">长文 · 笔记 · 沉淀</p>
+    </div>
+
+    <div class="hub-entries">
+      <a href="/blog.html" class="hub-entry-card">
+        <span class="hub-entry-icon">📖</span>
+        <div class="hub-entry-label">博客</div>
+        <div class="hub-entry-hint">思考与文字</div>
+        <span class="hub-entry-arrow">→</span>
+      </a>
+      <a href="/learning.html" class="hub-entry-card">
+        <span class="hub-entry-icon">🎓</span>
+        <div class="hub-entry-label">学习站</div>
+        <div class="hub-entry-hint">资料与笔记</div>
+        <span class="hub-entry-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -84,7 +84,7 @@
 </head>
 <body style="background:var(--bg-primary);">
 
-  <a href="/about.html" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回上一级</a>
+  <a href="/about.html" class="btn-back">返回</a>
 
   <!-- 列表页 -->
   <div class="story-page" id="storyListView">
@@ -120,7 +120,7 @@
   <!-- 详情页（内联） -->
   <div class="story-detail-view" id="storyDetailView">
     <div class="story-page">
-      <span class="blog-back-btn" onclick="showStoryList()" style="position:static;display:inline-block;margin-bottom:20px;">← 返回故事列表</span>
+      <span class="btn-back" onclick="showStoryList()" style="position:static;display:inline-block;margin-bottom:20px;">返回</span>
       <div id="storyDetailContent"></div>
     </div>
   </div>

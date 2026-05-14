@@ -127,7 +127,7 @@
             <div class="entry-hint">个人信息与联系</div>
             <span class="entry-arrow">↓</span>
           </div>
-          <div class="entry-card" onclick="goTo('blog')">
+          <div class="entry-card" onclick="location.href='/blog-hub.html'">
             <span class="entry-icon">✍️</span>
             <div class="entry-label">博客</div>
             <div class="entry-hint">长文与深度思考</div>
@@ -141,7 +141,7 @@
     <section class="screen" id="moments-screen">
       <div class="moments-wrap">
         <div class="moments-content">
-          <div onclick="goTo('home')" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</div>
+          <div onclick="goTo('home')" class="btn-back" style="cursor:pointer;">返回</div>
           <div class="moments-header">
             <h1>朋友圈</h1>
             <p>MOMENTS</p>
@@ -156,7 +156,7 @@
     <!-- ===== 右：博客 ===== -->
     <section class="screen" id="blog-screen">
       <div class="blog-page" id="blogListPage">
-        <div onclick="goTo('home')" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</div>
+        <div onclick="goTo('home')" class="btn-back" style="cursor:pointer;">返回</div>
         <div class="blog-header">
           <h1>博客</h1>
           <p>长文 · 思考 · 沉淀</p>
@@ -166,7 +166,7 @@
       </div>
       <div class="blog-detail" id="blogDetailPage">
         <div class="blog-detail-inner" data-blog-id="${blog.id}">
-          <span class="blog-back-btn" onclick="showBlogList()">← 返回博客列表</span>
+          <span class="blog-back-btn btn-back" onclick="showBlogList()">返回</span>
           <div id="blogDetailContent"></div>
         </div>
       </div>
@@ -175,7 +175,7 @@
     <!-- ===== 下：关于我 ===== -->
     <section class="screen" id="about-screen">
       <div class="about-wrap">
-        <div onclick="goTo('home')" style="position:absolute;top:20px;left:24px;color:var(--text-muted);text-decoration:none;font-size:13px;letter-spacing:2px;z-index:50;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:6px 14px;transition:all 0.3s;cursor:pointer;" onmouseover="this.style.color='var(--accent-gold)';this.style.borderColor='rgba(201,169,110,0.4)';this.style.transform='scale(1.05)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)';this.style.transform='scale(1)'">← 返回主页</div>
+        <div onclick="goTo('home')" class="btn-back" style="cursor:pointer;">返回</div>
         <div class="about-inner" id="aboutInner">
           <div class="about-avatar-placeholder" id="aboutAvatar">霁</div>
           <div class="about-name" id="aboutName">霁光</div>
@@ -231,7 +231,7 @@
   <div class="admin-panel" id="adminPanel">
     <h4>发布中心</h4>
     <a href="/publish-moment.html">📸 发朋友圈</a>
-    <a href="/publish-blog.html">✍️ 写博客</a>
+    <a href="/publish-choice.html">✍️ 写博客 / 学习站</a>
     <a href="/publish-profile.html">⚙️ 修改个人信息</a>
     <a href="/story.html">📖 我的故事</a>
     <a href="/keys.html">🔑 密钥查看</a>
@@ -950,4 +950,5 @@ async function loadBlogDetail(id) {
     </div>
   </div>
 </body>
+</html>y>
 </html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>查看资料 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .view-page {
+      min-height: 100vh;
+      padding: 80px 20px 60px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .view-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-top: 20px;
+    }
+    .view-header h1 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      letter-spacing: 6px;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    .view-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      margin-top: 8px;
+    }
+    .view-frame-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      min-height: 60vh;
+    }
+    .view-frame-wrap iframe {
+      width: 100%;
+      min-height: 60vh;
+      border: none;
+      display: block;
+      background: #fff;
+    }
+    .view-html-content {
+      background: #fff;
+      color: #333;
+      padding: 40px;
+      min-height: 60vh;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .view-html-content img { max-width: 100%; }
+    .view-loading {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+    .view-error {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+    .view-error .empty-title { font-size: 20px; color: var(--accent-gold); margin-bottom: 12px; }
+  </style>
+</head>
+<body style="background:var(--bg-primary);">
+
+  <a href="/learning.html" class="btn-back">返回</a>
+
+  <div class="view-page" id="viewPage">
+    <div class="view-header">
+      <h1 id="viewTitle">加载中...</h1>
+      <div class="view-meta" id="viewMeta"></div>
+    </div>
+    <div class="view-frame-wrap" id="viewContent">
+      <div class="view-loading">加载中...</div>
+    </div>
+  </div>
+
+  <script src="/script.js?v=4"></script>
+  <script>
+    async function initView() {
+      const params = new URLSearchParams(location.search);
+      const id = params.get('id');
+      if (!id) {
+        showError('缺少资料 ID');
+        return;
+      }
+      try {
+        const item = await get('/api/learning/' + id);
+        document.getElementById('viewTitle').textContent = escapeHtml(item.title);
+        document.getElementById('viewMeta').textContent = '📅 ' + formatDate(item.display_date || item.created_at);
+        const contentWrap = document.getElementById('viewContent');
+        if (item.html_file) {
+          contentWrap.innerHTML = `<iframe src="${item.html_file}" sandbox="allow-scripts allow-same-origin"></iframe>`;
+        } else {
+          contentWrap.innerHTML = '<div class="view-error"><div class="empty-title">暂无内容</div><p>该资料暂无可预览内容</p></div>';
+        }
+      } catch (err) {
+        showError(err.message || '加载失败');
+      }
+    }
+
+    function showError(msg) {
+      document.getElementById('viewTitle').textContent = '出错了';
+      document.getElementById('viewContent').innerHTML = `
+        <div class="view-error">
+          <div class="empty-title">${escapeHtml(msg)}</div>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:12px;">请返回重试</p>
+        </div>`;
+    }
+
+    initView();
+  </script>
+</body>
+</html>

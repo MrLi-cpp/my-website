@@ -208,6 +208,16 @@ db.serialize(() => {
     if (err) console.error('[INIT] 清理视频消息失败:', err.message);
     else console.log('[INIT] 已删除视频类型消息');
   });
+
+  // ===== 学习站资料表 =====
+  db.run(`CREATE TABLE IF NOT EXISTS learning_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    cover_image TEXT,
+    html_file TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    display_date DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
 });
 
 // ========== 中间件 ==========
@@ -595,22 +605,6 @@ app.post('/api/comments/:id/like', requireLogin, (req, res) => {
 });
 
 // 修改评论（朋友圈）
-app.put('/api/comments/:id', requireLogin, (req, res) => {
-  const { content } = req.body;
-  if (!content || content.trim().length === 0) return res.status(400).json({ error: '评论内容不能为空' });
-  db.get('SELECT user_id FROM comments WHERE id = ?', [req.params.id], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: '评论不存在' });
-    if (row.user_id !== req.session.userId) return res.status(403).json({ error: '无权修改' });
-    db.run('UPDATE comments SET content = ? WHERE id = ?', [content.trim(), req.params.id], function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: '修改成功' });
-    });
-  });
-});
-
-// 删除评论（仅自己或管理员）
-// 修改评论（仅自己）
 app.put('/api/comments/:id', requireLogin, (req, res) => {
   const { content } = req.body;
   if (!content || content.trim().length === 0) return res.status(400).json({ error: '评论内容不能为空' });
@@ -1228,6 +1222,122 @@ app.delete('/api/me', requireLogin, (req, res) => {
     if (this.changes === 0) return res.status(404).json({ error: '用户不存在' });
     req.session.destroy();
     res.json({ message: '账号已注销' });
+  });
+});
+
+// ===== 学习站 API =====
+
+// 上传学习资料（管理员）
+const learningUpload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      const dir = path.join(__dirname, 'public', 'uploads', 'learning');
+      if (!require('fs').existsSync(dir)) {
+        require('fs').mkdirSync(dir, { recursive: true });
+      }
+      cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+      const ts = Date.now();
+      const ext = path.extname(file.originalname);
+      const base = file.fieldname === 'html' ? 'doc' : 'cover';
+      cb(null, `${base}_${ts}${ext}`);
+    }
+  }),
+  fileFilter: (req, file, cb) => {
+    if (file.fieldname === 'html') {
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (ext !== '.html' && ext !== '.htm') {
+        return cb(new Error('仅支持 HTML 文件'));
+      }
+    }
+    cb(null, true);
+  }
+});
+
+app.post('/api/learning', learningUpload.fields([
+  { name: 'cover', maxCount: 1 },
+  { name: 'html', maxCount: 1 }
+]), requireAdmin, (req, res) => {
+  const title = req.body.title?.trim();
+  const displayDate = req.body.display_date;
+  if (!title || !displayDate) {
+    return res.status(400).json({ error: '标题和日期不能为空' });
+  }
+  if (!req.files || !req.files.html || !req.files.html[0]) {
+    return res.status(400).json({ error: '必须上传 HTML 文件' });
+  }
+
+  const htmlPath = '/uploads/learning/' + req.files.html[0].filename;
+  const coverPath = req.files.cover && req.files.cover[0]
+    ? '/uploads/learning/' + req.files.cover[0].filename
+    : null;
+
+  db.run(
+    `INSERT INTO learning_items (title, cover_image, html_file, display_date) VALUES (?, ?, ?, ?)`,
+    [title, coverPath, htmlPath, displayDate],
+    function(err) {
+      if (err) {
+        console.error('[LEARNING] 创建失败:', err.message);
+        return res.status(500).json({ error: '创建失败' });
+      }
+      res.json({ id: this.lastID, title, cover_image: coverPath, html_file: htmlPath });
+    }
+  );
+});
+
+// 获取学习资料列表
+app.get('/api/learning', (req, res) => {
+  db.all(
+    `SELECT id, title, cover_image, html_file, created_at, display_date
+     FROM learning_items ORDER BY display_date DESC`,
+    [],
+    (err, rows) => {
+      if (err) {
+        console.error('[LEARNING] 查询失败:', err.message);
+        return res.status(500).json({ error: '查询失败' });
+      }
+      res.json(rows || []);
+    }
+  );
+});
+
+// 获取单个学习资料
+app.get('/api/learning/:id', (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ error: '无效 ID' });
+  db.get(
+    `SELECT id, title, cover_image, html_file, created_at, display_date
+     FROM learning_items WHERE id = ?`,
+    [id],
+    (err, row) => {
+      if (err) {
+        console.error('[LEARNING] 查询失败:', err.message);
+        return res.status(500).json({ error: '查询失败' });
+      }
+      if (!row) return res.status(404).json({ error: '资料不存在' });
+      res.json(row);
+    }
+  );
+});
+
+// 删除学习资料（管理员）
+app.delete('/api/learning/:id', requireAdmin, (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ error: '无效 ID' });
+  db.get(`SELECT html_file, cover_image FROM learning_items WHERE id = ?`, [id], (err, row) => {
+    if (err || !row) return res.status(404).json({ error: '资料不存在' });
+    const fs = require('fs');
+    [row.html_file, row.cover_image].forEach(f => {
+      if (f) {
+        const fp = path.join(__dirname, 'public', f);
+        try { fs.unlinkSync(fp); } catch {}
+      }
+    });
+    db.run(`DELETE FROM learning_items WHERE id = ?`, [id], function(err2) {
+      if (err2) return res.status(500).json({ error: '删除失败' });
+      res.json({ success: true });
+    });
   });
 });
 

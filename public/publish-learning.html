@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>发布博客 - 霁光</title>
+  <title>上传学习资料 - 霁光</title>
   <link rel="stylesheet" href="/style.css?v=2">
   <style>
     html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
@@ -25,28 +25,6 @@
       font-weight: 400;
       color: var(--text-primary);
     }
-
-    .back-home-bar {
-      position: fixed;
-      top: 56px;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 14px 24px;
-      background: linear-gradient(to bottom, var(--bg-primary) 70%, transparent);
-    }
-    .back-home-bar a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 13px;
-      letter-spacing: 2px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: color 0.3s;
-    }
-    .back-home-bar a:hover { color: var(--accent-gold); }
-
     .form-group { margin-bottom: 20px; }
     .form-group label {
       display: block;
@@ -57,8 +35,7 @@
       text-transform: uppercase;
     }
     .form-group input,
-    .form-group textarea,
-    .form-group select {
+    .form-group textarea {
       width: 100%;
       background: transparent;
       border: none;
@@ -72,14 +49,8 @@
       transition: border-color 0.3s;
     }
     .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
+    .form-group textarea:focus {
       border-bottom-color: var(--accent-gold);
-    }
-    .form-group textarea {
-      min-height: 120px;
-      line-height: 1.8;
-      resize: vertical;
     }
     .form-group input[type="file"] {
       border-bottom: none;
@@ -96,7 +67,6 @@
       margin-right: 12px;
       font-family: var(--font-sans);
     }
-
     .form-actions {
       display: flex;
       gap: 12px;
@@ -135,7 +105,6 @@
       border-color: var(--accent-gold);
       color: var(--accent-gold);
     }
-
     .success-msg {
       background: rgba(7,193,96,0.1);
       color: #07c160;
@@ -147,7 +116,15 @@
       text-align: center;
       letter-spacing: 1px;
     }
-
+    .cover-preview {
+      max-width: 200px;
+      border-radius: 8px;
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      display: none;
+    }
+    .cover-preview.show { display: block; }
+    .required-note { color: var(--accent-red); font-size: 11px; margin-left: 4px; }
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: rgba(201,169,110,0.2); border-radius: 3px; }
@@ -159,40 +136,31 @@
 
   <div class="publish-page">
     <div class="publish-header">
-      <h1>发布博客</h1>
+      <h1>上传学习资料</h1>
     </div>
 
-    <div class="success-msg" id="successMsg">发布成功！</div>
+    <div class="success-msg" id="successMsg">上传成功！</div>
 
-    <form id="blogForm">
+    <form id="learningForm">
       <div class="form-group">
-        <label>标题</label>
-        <input type="text" id="blogTitle" placeholder="文章标题" required>
+        <label>标题 <span class="required-note">*</span></label>
+        <input type="text" id="learnTitle" placeholder="资料标题" required>
       </div>
       <div class="form-group">
-        <label>日期</label>
-        <input type="datetime-local" id="blogDate" required>
+        <label>日期 <span class="required-note">*</span></label>
+        <input type="datetime-local" id="learnDate" required>
       </div>
       <div class="form-group">
-        <label>封面图</label>
-        <input type="file" id="blogCover" accept="image/*">
+        <label>封面图（可选）</label>
+        <input type="file" id="learnCover" accept="image/*">
+        <img id="coverPreview" class="cover-preview" alt="封面预览">
       </div>
       <div class="form-group">
-        <label>标签（用逗号分隔）</label>
-        <input type="text" id="blogTags" placeholder="技术, 生活, 思考">
-      </div>
-      <div class="form-group">
-        <label>正文（支持 Markdown）</label>
-        <textarea id="blogContent" placeholder="## 标题
-
-正文内容..." style="min-height:300px;" required></textarea>
-      </div>
-      <div class="form-group">
-        <label>📍 位置</label>
-        <input type="text" id="blogLocation" placeholder="输入位置，如：广州" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.08);padding:12px 4px;color:var(--text-primary);font-size:14px;outline:none;transition:border-color 0.3s;" onfocus="this.style.borderBottomColor='var(--accent-gold)'" onblur="this.style.borderBottomColor='rgba(255,255,255,0.08)'">
+        <label>HTML 文件 <span class="required-note">* 必需</span></label>
+        <input type="file" id="learnHtml" accept=".html,.htm" required>
       </div>
       <div class="form-actions">
-        <button type="submit" class="btn-primary">发布博客</button>
+        <button type="submit" class="btn-primary">上传资料</button>
         <button type="button" class="btn-secondary" onclick="resetForm()">重置</button>
       </div>
     </form>
@@ -202,31 +170,52 @@
   <script>
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-    document.getElementById('blogDate').value = now.toISOString().slice(0, 16);
+    document.getElementById('learnDate').value = now.toISOString().slice(0, 16);
 
-    document.getElementById('blogForm').onsubmit = async e => {
+    // 封面预览
+    document.getElementById('learnCover').onchange = function() {
+      const file = this.files[0];
+      const preview = document.getElementById('coverPreview');
+      if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.classList.add('show');
+      } else {
+        preview.classList.remove('show');
+      }
+    };
+
+    document.getElementById('learningForm').onsubmit = async e => {
       e.preventDefault();
+      const title = document.getElementById('learnTitle').value.trim();
+      const date = document.getElementById('learnDate').value;
+      const cover = document.getElementById('learnCover').files[0];
+      const htmlFile = document.getElementById('learnHtml').files[0];
+      if (!title || !date || !htmlFile) {
+        alert('请填写标题、日期并上传 HTML 文件');
+        return;
+      }
       const data = new FormData();
-      data.append('title', document.getElementById('blogTitle').value);
-      data.append('content', document.getElementById('blogContent').value);
-      data.append('tags', document.getElementById('blogTags').value);
-      data.append('display_date', document.getElementById('blogDate').value);
-      data.append('location', document.getElementById('blogLocation').value);
-      const cover = document.getElementById('blogCover').files[0];
+      data.append('title', title);
+      data.append('display_date', date);
       if (cover) data.append('cover', cover);
+      data.append('html', htmlFile);
       try {
-        const res = await fetch('/api/blogs', { method: 'POST', body: data, credentials: 'same-origin' });
+        const res = await fetch('/api/learning', { method: 'POST', body: data, credentials: 'same-origin' });
         const json = await res.json();
-        if (!res.ok) throw new Error(json.error);
-        showSuccess(); resetForm();
-      } catch(err) { alert(err.message); }
+        if (!res.ok) throw new Error(json.error || '上传失败');
+        showSuccess();
+        resetForm();
+      } catch(err) {
+        alert(err.message);
+      }
     };
 
     function resetForm() {
-      document.getElementById('blogForm').reset();
+      document.getElementById('learningForm').reset();
       const n = new Date();
       n.setMinutes(n.getMinutes() - n.getTimezoneOffset());
-      document.getElementById('blogDate').value = n.toISOString().slice(0, 16);
+      document.getElementById('learnDate').value = n.toISOString().slice(0, 16);
+      document.getElementById('coverPreview').classList.remove('show');
     }
 
     function showSuccess() {

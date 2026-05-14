@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习站 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    .learning-page { min-height: 100vh; padding: 80px 20px 60px; }
+    .learning-header { text-align: center; margin-bottom: 56px; padding-top: 20px; }
+    .learning-header h1 { font-family: var(--font-serif); font-size: 36px; letter-spacing: 10px; font-weight: 400; }
+    .learning-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 4px; margin-top: 10px; }
+    .learning-header-line { width: 40px; height: 1px; background: var(--accent-gold); margin: 16px auto 0; opacity: 0.4; }
+
+    .learning-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .learning-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+      border: none;
+    }
+    .learning-card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    }
+    .learning-cover-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--bg-secondary);
+    }
+    .learning-cover-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .learning-card:hover .learning-cover-wrap img { transform: scale(1.06); }
+    .learning-cover-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 20px;
+      background: linear-gradient(160deg, rgba(40,36,30,0.9), rgba(26,23,20,0.95));
+      text-align: center;
+      gap: 12px;
+    }
+    .learning-cover-placeholder .cover-icon {
+      font-size: 48px;
+      opacity: 0.6;
+    }
+    .learning-cover-placeholder .cover-title {
+      font-family: var(--font-serif);
+      font-size: 20px; font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.6;
+      letter-spacing: 2px;
+      word-break: break-all;
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .learning-cover-placeholder .cover-sep {
+      width: 24px; height: 1px;
+      background: var(--accent-gold);
+      opacity: 0.4;
+    }
+    .learning-card-body { padding: 12px 14px 14px; }
+    .learning-card-title {
+      font-size: 15px; font-weight: 500; color: var(--text-primary);
+      line-height: 1.5; margin-bottom: 8px;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .learning-card-meta {
+      font-size: 11px; color: var(--text-muted); letter-spacing: 1px;
+      display: flex; justify-content: space-between;
+    }
+
+    /* 骨架屏 */
+    .learning-skeleton {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .skeleton-card {
+      background: var(--bg-card); border-radius: 16px; overflow: hidden;
+    }
+    .skeleton-cover { width: 100%; aspect-ratio: 3/4; background: var(--bg-secondary); animation: pulse 1.5s infinite; }
+    .skeleton-body { padding: 12px 14px 14px; }
+    .skeleton-line { height: 14px; background: var(--bg-secondary); border-radius: 4px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
+    .skeleton-line.short { width: 60%; }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
+    @media (max-width: 640px) {
+      .learning-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .learning-skeleton { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    }
+  </style>
+</head>
+<body style="background:var(--bg-primary);">
+
+  <a href="/blog-hub.html" class="btn-back">返回</a>
+
+  <div class="learning-page" id="learningListPage">
+    <div class="learning-header">
+      <h1>学习站</h1>
+      <p>资料 · 笔记 · 沉淀</p>
+      <div class="learning-header-line"></div>
+    </div>
+    <div class="learning-grid" id="learningGrid"></div>
+  </div>
+
+  <script src="/script.js?v=4"></script>
+  <script>
+    async function initLearning() {
+      await loadUser();
+      const grid = document.getElementById('learningGrid');
+      grid.innerHTML = `
+        <div class="learning-skeleton">
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+          <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
+        </div>`;
+      try {
+        const items = await get('/api/learning');
+        if (!items.length) {
+          grid.innerHTML = `
+            <div class="empty-state" style="grid-column:1/-1;">
+              <div class="empty-sep">— · —</div>
+              <div class="empty-title">暂无资料</div>
+              <div class="empty-desc">学习资料正在整理，敬请期待</div>
+            </div>`;
+          return;
+        }
+        grid.innerHTML = items.map(item => renderLearningCard(item)).join('');
+        document.querySelectorAll('.learning-card').forEach(card => {
+          card.onclick = () => location.href = '/learning-view.html?id=' + card.dataset.id;
+        });
+      } catch (err) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column:1/-1;">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    function renderLearningCard(item) {
+      const dateStr = formatDate(item.display_date || item.created_at);
+      const hasCover = item.cover_image;
+      const titleHtml = escapeHtml(item.title);
+      const coverHtml = hasCover
+        ? `<div class="learning-cover-wrap"><img src="${item.cover_image}" alt="" loading="lazy"></div>`
+        : `<div class="learning-cover-wrap"><div class="learning-cover-placeholder"><span class="cover-icon">📄</span><span class="cover-title">${titleHtml}</span><div class="cover-sep"></div></div></div>`;
+      return `
+        <div class="learning-card" data-id="${item.id}">
+          ${coverHtml}
+          <div class="learning-card-body">
+            <div class="learning-card-title">${titleHtml}</div>
+            <div class="learning-card-meta">
+              <span>📅 ${dateStr}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    initLearning();
+  </script>
+</body>
+</html>

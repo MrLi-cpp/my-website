@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发布中心 - 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+    .choice-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px 60px;
+      position: relative;
+    }
+    .choice-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(201,169,110,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 70% 60%, rgba(192,57,43,0.04) 0%, transparent 50%),
+        linear-gradient(180deg, #0c0c0e 0%, #141417 40%, #0c0c0e 100%);
+    }
+    .choice-title {
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 6vw, 42px);
+      letter-spacing: 8px;
+      font-weight: 400;
+      color: var(--text-primary);
+      position: relative; z-index: 1;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+    .choice-title-sub {
+      display: block;
+      font-family: var(--font-sans);
+      font-size: 0.3em;
+      letter-spacing: 4px;
+      color: var(--accent-gold);
+      margin-top: 8px;
+    }
+    .choice-grid {
+      display: flex;
+      gap: 36px;
+      position: relative; z-index: 1;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .choice-card {
+      width: 240px;
+      padding: 48px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      text-decoration: none;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+    }
+    .choice-card:hover {
+      transform: scale(1.06);
+      border-color: rgba(201,169,110,0.4);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 30px rgba(201,169,110,0.1);
+    }
+    .choice-icon {
+      font-size: 36px;
+      margin-bottom: 16px;
+      display: block;
+      transition: transform 0.4s;
+    }
+    .choice-card:hover .choice-icon {
+      transform: scale(1.15);
+    }
+    .choice-label {
+      font-size: 18px;
+      letter-spacing: 4px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    .choice-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 640px) {
+      .choice-card { width: 140px; padding: 32px 14px; }
+      .choice-icon { font-size: 28px; }
+      .choice-label { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="/admin.html" class="btn-back">返回</a>
+
+  <div class="choice-page">
+    <div class="choice-bg"></div>
+    <div class="choice-title">
+      发布中心
+      <span class="choice-title-sub">PUBLISH</span>
+    </div>
+    <div class="choice-grid">
+      <a href="/publish-blog.html" class="choice-card">
+        <span class="choice-icon">✍️</span>
+        <div class="choice-label">写博客</div>
+        <div class="choice-hint">Markdown 长文</div>
+      </a>
+      <a href="/publish-learning.html" class="choice-card">
+        <span class="choice-icon">📤</span>
+        <div class="choice-label">上传学习资料</div>
+        <div class="choice-hint">HTML 文件</div>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>
