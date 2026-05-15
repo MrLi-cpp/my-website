@@ -1,0 +1,105 @@
+{
+  "philosopher": {
+    "name": "庄子",
+    "name_en": "Zhuangzi / Chuang Tzu",
+    "name_zh_pinyin": "Zhuāng Zǐ",
+    "lived": "约公元前369年—公元前286年",
+    "birthplace": "宋国蒙（今河南商丘）",
+    "era": "先秦 / 战国时期",
+    "school": "道家",
+    "occupation": "思想家、哲学家",
+    "summary": "庄子是道家哲学的巅峰代表，与老子并称'老庄'。他是中国哲学中最自由、最诗意、最反体系的灵魂。以寓言和悖论瓦解一切执着，核心概念包括：逍遥（绝对自由）、齐物（万物平等）、蝴蝶梦（物我两忘）、无用之用（无用之物的价值）。其文笔汪洋恣肆，被后世誉为'天下第一才子书'。",
+    "summary_en": "Zhuangzi is the summit of Daoist philosophy, celebrated for his literary genius and radical freedom of thought. His core concepts include xiaoyao (absolute freedom), qiwu (equality of things), the butterfly dream, and the usefulness of the useless."
+  },
+  "lifeEvents": [
+    {"year": "约公元前369年", "event": "出生于宋国蒙", "details": "名周，曾为蒙地漆园吏（管理漆树园的小官）。家境贫寒，但博学多才。"},
+    {"year": "约公元前350—前320年", "event": "活跃于战国中期", "details": "与惠施（名家代表人物）为挚友兼论敌，两人经常辩论。曾拒绝楚威王聘任为相，以'牺牛'寓言表明不愿被政治束缚。"},
+    {"year": "约公元前286年", "event": "逝世", "details": "生平事迹不详，《史记·老子韩非列传》有简短记载。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "xiaoyao",
+      "title": "逍遥",
+      "title_en": "Xiaoyao / Absolute Freedom",
+      "category": "伦理学 / 存在论",
+      "description": "逍遥是庄子哲学的最高境界，意为'绝对自由'、'无拘无束'、'无待'（不依赖任何外在条件）。庄子在《逍遥游》开篇描绘了鲲鹏展翅九万里——但这还不是真正的逍遥，因为鲲鹏仍需'风斯在下'，有待于风。真正的逍遥是'乘天地之正，而御六气之辩，以游无穷者，彼且恶乎待哉'——顺应天地之道，驾驭六气变化，游于无穷之境，无所依赖。逍遥的核心是'无待'：不依赖权力、财富、名声，甚至不依赖身体。'至人无己，神人无功，圣人无名'——最高的人超越了自我、功名和名声。",
+      "keyWorks": ["《庄子·逍遥游》"],
+      "primaryQuotes": [
+        {"chinese": "若夫乘天地之正，而御六气之辩，以游无穷者，彼且恶乎待哉！", "english": "If one rides upon the correctness of heaven and earth, and drives the changes of the six qi to wander in the infinite — what does one depend upon?", "source": "Zhuangzi, Chapter 1 (Xiaoyao You)"},
+        {"chinese": "至人无己，神人无功，圣人无名。", "english": "The ultimate person has no self; the spiritual person has no merit; the sage has no name.", "source": "Zhuangzi, Chapter 1"},
+        {"chinese": "今子有大树，患其无用，何不树之于无何有之乡，广莫之野，彷徨乎无为其侧，逍遥乎寝卧其下。", "english": "Now you have this great tree, and you worry that it is useless. Why not plant it in the village of Nothing-Whatsoever, in the wilds of Vast-Nowhere, and wander idly beside it, or lie down in blissful sleep beneath it?", "source": "Zhuangzi, Chapter 1"}
+      ],
+      "secondarySources": [
+        {"scholar": "A.C. Graham", "work": "Chuang-tzu: The Inner Chapters (1981)", "insight": "Graham 将逍遥解读为'精神的自由'——不是政治自由或身体自由，而是心灵从一切执着中解脱的自由。"},
+        {"scholar": "Victor H. Mair", "work": "Wandering on the Way: Early Taoist Tales and Parables of Chuang Tzu (1994)", "insight": "Mair 强调逍遥游作为文学文本的开放性：它不是一套哲学论证，而是一系列邀请读者' loosen up '的寓言。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "逍遥就是'逃避现实'或'不问世事'。", "clarification": "逍遥不是消极避世，而是'不被世俗价值所束缚'。庄子拒绝做官不是因为害怕责任，而是拒绝让政治权力定义自己的人生价值。'逍遥'可以在任何地方实现——不在山林，而在心境。"}
+      ]
+    },
+    {
+      "id": "qiwu",
+      "title": "齐物",
+      "title_en": "Qiwu / Equality of Things",
+      "category": "认识论 / 形而上学",
+      "description": "齐物是庄子在《齐物论》中提出的核心思想。庄子认为，人类的所有判断——美丑、善恶、是非——都依赖于特定的视角，而'道'本身超越了所有视角。'彼亦一是非，此亦一是非'——从彼的视角看是对的，从此的视角看也是对的。庄子不是简单的相对主义者（认为所有观点都同样正确），而是'超越主义者'——认为在'道'的层面上，所有对立都消解了。'天地一指也，万物一马也'——天地可以用'一指'来指称，万物可以用'一马'来比喻，语言和概念都是人为的区分，而非实在的界限。齐物的最终目标是'莫若以明'——不如用'道'的光明来观照万物。",
+      "keyWorks": ["《庄子·齐物论》"],
+      "primaryQuotes": [
+        {"chinese": "彼亦一是非，此亦一是非。果且有彼是乎哉？果且无彼是乎哉？", "english": "There is right from the perspective of 'that,' and right from the perspective of 'this.' But is there really a 'that' and a 'this'? Or is there really no 'that' and a 'this'?", "source": "Zhuangzi, Chapter 2 (Qi Wu Lun)"},
+        {"chinese": "天地一指也，万物一马也。", "english": "Heaven and earth are one finger; the ten thousand things are one horse.", "source": "Zhuangzi, Chapter 2"},
+        {"chinese": "故曰：莫若以明。", "english": "Thus it is said: Rather than use 'this' to illuminate 'that,' use the light of Dao to illuminate both.", "source": "Zhuangzi, Chapter 2"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "齐物就是'所有观点都正确'的相对主义。", "clarification": "庄子不是相对主义者。他不是说'所有观点都正确'，而是说'所有观点都有限'——它们在各自的视角内有效，但在'道'的层面上都同样片面。齐物的目标是超越所有视角，而非停留在任何一个视角内。"}
+      ]
+    },
+    {
+      "id": "butterfly-dream",
+      "title": "蝴蝶梦",
+      "title_en": "Butterfly Dream",
+      "category": "认识论 / 自我理论",
+      "description": "蝴蝶梦是庄子最著名的寓言：'昔者庄周梦为胡蝶，栩栩然胡蝶也……俄然觉，则蘧蘧然周也。不知周之梦为胡蝶与，胡蝶之梦为周与？'庄周梦见自己变成蝴蝶，翩翩飞舞，感到非常快乐。突然醒来，发现自己还是庄周。问题是：到底是庄周梦见变成了蝴蝶，还是蝴蝶梦见变成了庄周？这个寓言的哲学含义是：'自我'（self）不是固定不变的实体，而是'视角'或'梦境'。庄周和蝴蝶的区分依赖于'觉醒'这一事件，但谁能保证'觉醒'本身不是另一种'梦境'？这个寓言对西方哲学中的'自我同一性'问题提出了根本性质疑。",
+      "keyWorks": ["《庄子·齐物论》"],
+      "primaryQuotes": [
+        {"chinese": "昔者庄周梦为胡蝶，栩栩然胡蝶也，自喻适志与！不知周也。俄然觉，则蘧蘧然周也。不知周之梦为胡蝶与，胡蝶之梦为周与？", "english": "Once Zhuang Zhou dreamt he was a butterfly, a butterfly flitting and fluttering around, happy with himself and doing as he pleased. He didn't know he was Zhuang Zhou. Suddenly he woke up and there he was, solid and unmistakable Zhuang Zhou. But he didn't know if he was Zhuang Zhou who had dreamt he was a butterfly, or a butterfly dreaming he was Zhuang Zhou.", "source": "Zhuangzi, Chapter 2"}
+      ],
+      "secondarySources": [
+        {"scholar": "Victor H. Mair", "work": "Experimental Essays on Chuang-tzu (1983)", "insight": "Mair 将蝴蝶梦与笛卡尔的'恶魔怀疑'比较：两者都质疑自我的确定性，但庄子的解决方案不是笛卡尔式的'我思故我在'，而是'物化'——接受自我的流动性。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "蝴蝶梦是在质疑'现实与梦境'的区分。", "clarification": "庄子的重点不是'哪个是真实的'，而是'自我的流动性'。庄周和蝴蝶都是'视角'——没有一个'真正的'自我在梦境背后。"}
+      ]
+    },
+    {
+      "id": "uselessness",
+      "title": "无用之用",
+      "title_en": "Usefulness of the Useless",
+      "category": "伦理学 / 政治哲学",
+      "description": "无用之用是庄子最著名的悖论之一。庄子通过多个寓言阐明这一思想：一棵因为'无用'（木材弯曲、多瘤）而免于被砍伐的大树；一只因为'不会叫'而被主人放走的鹅。庄子的问题在于：有用和无用是相对的——从木匠的角度看，弯曲的树是无用的；但从树的角度看，无用恰恰是它存活的原因。'人皆知有用之用，而莫知无用之用也'。在政治和伦理层面，无用之用意味着：拒绝被权力系统'使用'，恰恰是保全自己自由和生命的最高智慧。",
+      "keyWorks": ["《庄子·人间世》", "《庄子·逍遥游》"],
+      "primaryQuotes": [
+        {"chinese": "山木自寇也，膏火自煎也。桂可食，故伐之；漆可用，故割之。人皆知有用之用，而莫知无用之用也。", "english": "Mountain trees are cut by their own kind; lamp oil is burned by its own flame. Cinnamon is edible, so it is cut down; lacquer is useful, so the tree is gashed. Everyone knows the usefulness of the useful, but no one knows the usefulness of the useless.", "source": "Zhuangzi, Chapter 4 (Ren Jian Shi)"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "无用之用就是'什么都不做'。", "clarification": "无用之用不是消极无为，而是'不被系统利用'。在一个只看重'有用'的社会中，拒绝被利用需要极大的智慧和勇气。无用之用是一种'战略性'的抵抗——通过显得'无用'来保全自己的独立性和完整性。"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《庄子》", "title_en": "Zhuangzi", "summary": "道家核心经典，传统分33篇（内篇7、外篇15、杂篇11）。内篇7篇一般被认为是庄子本人所作，外篇和杂篇可能为弟子或后学所作。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "逍遥游", "english": "Wandering freely (in the realm of non-dependence)", "source": "Zhuangzi, Chapter 1"},
+    {"chinese": "天地与我并生，而万物与我为一。", "english": "Heaven and earth were born together with me, and the ten thousand things are one with me.", "source": "Zhuangzi, Chapter 2"},
+    {"chinese": "吾生也有涯，而知也无涯。以有涯随无涯，殆已！", "english": "Our life has a limit, but knowledge is without limit. To pursue the limitless with the limited — that is dangerous!", "source": "Zhuangzi, Chapter 3"},
+    {"chinese": "泉涸，鱼相与处于陆，相呴以湿，相濡以沫，不如相忘于江湖。", "english": "When the springs dry up, fish are stranded on land. They moisten each other with spit and keep each other wet with slime — but it would be better for them to forget each other in the rivers and lakes.", "source": "Zhuangzi, Chapter 6"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较庄子'逍遥'与西方存在主义'自由'概念的异同。",
+      "output": "庄子的逍遥与西方存在主义的自由既有相通之处，也有根本差异。\n\n相似之处：\n1）都强调'超越社会规范'：逍遥拒绝被权力、名声、财富定义；萨特说'存在先于本质'，拒绝被社会角色定义。\n2）都强调'选择'：逍遥是一种主动的选择——'择木而栖'；存在主义的自由也是一种选择——'你选择，所以你存在'。\n\n根本差异：\n1）逍遥是'无待'（不依赖任何条件），而存在主义的自由恰恰是'有条件'的——人被'抛入'世界，在具体的处境中自由选择。\n2）逍遥追求'与道合一'的和谐，存在主义强调'孤独的个体'对抗'他人'。庄子说'天地与我并生'；萨特说'他人即地狱'。\n3）逍遥通过'减少'（减少欲望、减少知识、减少执着）来实现自由；存在主义通过'承担'（承担选择的责任、承担自由的重量）来实现自由。\n4）逍遥是'诗意的'、'审美的'；存在主义是'焦虑的'、'严肃的'。\n\n互补性：两种自由概念可以互补——逍遥提醒我们：自由不是拥有更多选择，而是需要更少依赖；存在主义提醒我们：自由不是逃避责任，而是承担选择。",
+      "source": "Zhuangzi; Sartre, Being and Nothingness; Graham, Chuang-tzu (1981)",
+      "tier": 1
+    }
+  ]
+}

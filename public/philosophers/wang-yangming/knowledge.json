@@ -1,0 +1,105 @@
+{
+  "philosopher": {
+    "name": "王阳明",
+    "name_en": "Wang Yangming",
+    "name_zh_pinyin": "Wáng Yángmíng",
+    "lived": "1472年—1529年",
+    "birthplace": "浙江余姚",
+    "deathplace": "江西南安",
+    "era": "明代",
+    "school": "心学",
+    "occupation": "哲学家、政治家、军事家",
+    "summary": "王阳明是明代最富创造力的思想家，心学集大成者。核心思想包括：心即理、知行合一、致良知。龙场悟道后提出'良知'学说，认为良知是本心固有的道德判断力，不需外求。其思想影响波及日本明治维新。",
+    "summary_en": "Wang Yangming was the most creative thinker of the Ming Dynasty and the synthesizer of the School of Mind (xinxue). His core doctrines include 'mind is principle' (xin ji li), 'unity of knowledge and action' (zhi xing he yi), and 'extending innate knowing' (zhi liang zhi)."
+  },
+  "lifeEvents": [
+    {"year": "1472", "event": "出生于浙江余姚", "details": "名守仁，字伯安，号阳明子。父亲王华是成化十七年状元。"},
+    {"year": "1499", "event": "进士及第", "details": "28岁中进士，入仕。"},
+    {"year": "1506", "event": "因谏言被廷杖贬谪", "details": "因上疏反对刘瑾专权，被廷杖四十，贬谪贵州龙场驿丞。"},
+    {"year": "1508", "event": "龙场悟道", "details": "在贵州龙场恶劣环境中，日夜反思圣人之道，忽一夜大悟：'圣人之道，吾性自足，向之求理于事物者误也。'这标志着心学的成熟。"},
+    {"year": "1516—1519", "event": "平定南赣匪患与宁王之乱", "details": "以文官身份统兵作战，平定江西南部匪患。后迅速平定宁王朱宸濠叛乱，展现了非凡的军事才能。"},
+    {"year": "1521", "event": "提出'致良知'", "details": "在平定叛乱后，正式提出'致良知'为心学的核心宗旨。"},
+    {"year": "1527—1528", "event": "平定广西思田之乱", "details": "奉命出征广西，平定土司叛乱。"},
+    {"year": "1529", "event": "逝世", "details": "回师途中病逝于南安（今江西大余），享年57岁。临终遗言：'此心光明，亦复何言！'"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "xin-ji-li",
+      "title": "心即理",
+      "title_en": "Mind is Principle",
+      "category": "形而上学 / 伦理学",
+      "description": "心即理是王阳明对朱熹理学的根本修正。朱熹主张'性即理'——理在天，人通过'格物穷理'来认识天理。王阳明反驳：理不在心外，'心外无理，心外无物'。孝之理不在父母身上，而在自己的孝亲之心；忠之理不在君主身上，而在自己的忠君之心。'心即理'意味着：道德法则不是外部强加的规范，而是本心固有的判断力。",
+      "keyWorks": ["《传习录》上卷"],
+      "primaryQuotes": [
+        {"chinese": "心即理也。天下又有心外之事，心外之理乎？", "english": "The mind is principle. Are there affairs outside the mind, or principles outside the mind?", "source": "Chuanxilu (Instructions for Practical Living)"},
+        {"chinese": "心外无理，心外无物。", "english": "There is no principle outside the mind; there is nothing outside the mind.", "source": "Chuanxilu"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "心即理是否认外部世界的存在。", "clarification": "王阳明不是主观唯心论者。他承认物理世界的存在，但认为道德意义（理）不在外部事物中，而在心对事物的判断中。"}
+      ]
+    },
+    {
+      "id": "zhi-xing-he-yi",
+      "title": "知行合一",
+      "title_en": "Unity of Knowledge and Action",
+      "category": "伦理学",
+      "description": "知行合一是王阳明心学的核心命题。朱熹主张'先知后行'——先通过读书穷理获得知识，再付诸实践。王阳明反驳：知与行本是一体，不可分离。'真知必能行，不行不足谓之知'——真正的'知道'必然包含'行动'；如果知道了却不行动，那说明没有真正'知道'。知是行的主意，行是知的功夫。'知行合一'强调道德知识的实践性——道德知识不是书斋里的理论，而是必须在行动中实现的。",
+      "keyWorks": ["《传习录》上卷"],
+      "primaryQuotes": [
+        {"chinese": "知是行之始，行是知之成。", "english": "Knowledge is the beginning of action; action is the completion of knowledge.", "source": "Chuanxilu"},
+        {"chinese": "真知即所以为行，不行不足谓之知。", "english": "True knowledge is precisely what makes action possible; if one does not act, one cannot be said to have knowledge.", "source": "Chuanxilu"},
+        {"chinese": "未有知而不行者。知而不行，只是未知。", "english": "There has never been knowledge without action. If one knows but does not act, it is merely because one does not truly know.", "source": "Chuanxilu"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "知行合一是'理论与实践相结合'。", "clarification": "这是现代误读。王阳明的知行合一不是'先理论后实践'，而是'知行本一'——知与行在根源上是同一的。'知道孝顺'和'实际孝顺父母'不是两个步骤，而是同一个道德意识的两个面向。"}
+      ]
+    },
+    {
+      "id": "zhi-liang-zhi",
+      "title": "致良知",
+      "title_en": "Extending Innate Knowing",
+      "category": "伦理学 / 修养论",
+      "description": "致良知是王阳明心学的最终归宿。'良知'是本心固有的道德判断力——每个人天生知道善恶是非，就像眼睛天生能看、耳朵天生能听。但良知常被私欲遮蔽，需要通过'致'（推致、扩充、实现）来恢复其本来面目。'致良知'包含两个层面：1）'致'（动词）——将良知推广到一切事物和情境中；2）'良知'（名词）——本心固有的道德知识。致良知的修养方法是'事上磨练'——在具体事务中检验和锻炼良知，而非静坐冥想。",
+      "keyWorks": ["《传习录》中卷、下卷"],
+      "primaryQuotes": [
+        {"chinese": "良知者，心之本体。", "english": "Innate knowing is the original substance of the mind.", "source": "Chuanxilu"},
+        {"chinese": "致吾心良知之天理于事事物物，则事事物物皆得其理矣。", "english": "If one extends the heavenly principle of innate knowing in one's mind to each and every thing, then each and every thing will attain its principle.", "source": "Chuanxilu"},
+        {"chinese": "此心光明，亦复何言！", "english": "This mind is bright — what more is there to say!", "source": "Wang Yangming's last words"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "致良知是'随心所欲'或'跟着感觉走'。", "clarification": "良知不是情绪或欲望，而是本心固有的道德判断力。致良知需要通过'事上磨练'来检验——在具体情境中反思：我的判断是出于私欲还是出于良知？"}
+      ]
+    },
+    {
+      "id": "longchang",
+      "title": "龙场悟道",
+      "title_en": "Longchang Enlightenment",
+      "category": "认识论 / 修养论",
+      "description": "龙场悟道是王阳明思想成熟的转折点。1508年，王阳明被贬谪到贵州龙场驿（今修文县），环境恶劣，随从皆病。他日夜端坐，反思圣人之道，忽一夜大悟：'圣人之道，吾性自足，向之求理于事物者误也。'这一悟道否定了朱熹'格物穷理'的路径——理不在外部事物中，而在内心。龙场悟道标志着从心学的萌芽到成熟，从此王阳明确立了'心即理'的根本立场。",
+      "keyWorks": ["《年谱》", "《传习录》"],
+      "primaryQuotes": [
+        {"chinese": "圣人之道，吾性自足，向之求理于事物者误也。", "english": "The Way of the sages is complete in my own nature. My previous efforts to seek principle in external things were mistaken.", "source": "Nianpu (Chronological Biography)"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《传习录》", "title_en": "Instructions for Practical Living", "summary": "王阳明的语录和书信集，由弟子徐爱、钱德洪等整理，分上、中、下三卷。是研究阳明心学最重要的文本。"},
+    {"title": "《大学问》", "summary": "王阳明对《大学》的重新诠释，将'致良知'与《大学》的'三纲领八条目'结合。"},
+    {"title": "《阳明先生全集》", "summary": "王阳明著作的总集，包含书信、序跋、诗歌等。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "心外无理，心外无物。", "english": "There is no principle outside the mind; there is nothing outside the mind.", "source": "Chuanxilu"},
+    {"chinese": "知行合一。", "english": "Knowledge and action are one.", "source": "Chuanxilu"},
+    {"chinese": "致良知。", "english": "Extend innate knowing.", "source": "Chuanxilu"},
+    {"chinese": "此心光明，亦复何言！", "english": "This mind is bright — what more is there to say!", "source": "Last words"},
+    {"chinese": "你未看此花时，此花与汝心同归于寂。你来看此花时，则此花颜色一时明白起来。", "english": "When you have not yet looked at this flower, this flower and your mind alike return to silence. When you come to look at it, then the colors of the flower all at once become clear.", "source": "Chuanxilu"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较王阳明'心即理'与朱熹'性即理'的根本分歧。",
+      "output": "王阳明与朱熹的根本分歧在于'理'的位置：\n\n朱熹：理在天，性即理。人通过'格物穷理'（研究外部事物）来认识天理。理是超越的、客观的宇宙法则。\n\n王阳明：心即理。理不在心外，而在心中。孝之理不在父母身上，而在自己的孝亲之心；忠之理不在君主身上，而在自己的忠君之心。\n\n分歧的根源：\n1）本体论：朱熹的理是'超越的'（transcendent），王阳明的理是'内在的'（immanent）。\n2）方法论：朱熹主张'格物'（研究外部事物），王阳明主张'反求诸己'（反省内心）。\n3）伦理学：朱熹的伦理学是'规范导向'的（遵循天理），王阳明的伦理学是'主体导向'的（遵循良知）。\n\n影响：朱熹理学成为明清官方意识形态（科举考试内容），王阳明心学则在民间和士大夫中广泛传播，影响波及日本（阳明学）和朝鲜半岛。",
+      "source": "Chuanxilu; Zhu Xi, Zhuzi Yulei; Tu Weiming, Neo-Confucian Thought in Action: Wang Yang-ming's Youth (1976)",
+      "tier": 1
+    }
+  ]
+}

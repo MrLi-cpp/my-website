@@ -1,0 +1,469 @@
+{
+  "philosopher": {
+    "name": "René Descartes",
+    "name_zh": "勒内·笛卡尔",
+    "lifespan": "1596–1650",
+    "nationality": "French",
+    "era": "Early Modern Philosophy",
+    "schools": ["Rationalism", "Cartesianism", "Modern Philosophy"]
+  },
+  "overview": {
+    "chinese": "笛卡尔（1596–1650）是近代哲学的奠基人，被誉为'近代哲学之父'。他主张以理性为知识的基础，通过普遍怀疑寻求不可动摇的第一原理。其核心贡献包括：方法怀疑、'我思故我在'的第一原理、心身二元论、以及以'清楚分明'为标准认识论。他在数学上发明了解析几何，在自然科学上提出了机械论世界观。",
+    "english": "René Descartes (1596–1650) is widely regarded as the father of modern philosophy. He sought to ground all knowledge in reason through methodical doubt, establishing the cogito as the first indubitable principle. His contributions span metaphysics (mind-body dualism), epistemology (clear and distinct perceptions), mathematics (analytic geometry), and natural philosophy (mechanistic physics)."
+  },
+  "core_concepts": [
+    {
+      "id": "cogito",
+      "title_zh": "我思故我在",
+      "title_en": "Cogito, ergo sum",
+      "aliases": ["cogito", "sum res cogitans", "我思", "思维实体"],
+      "definition": {
+        "chinese": "笛卡尔在《第一哲学沉思集》第二沉思中发现的第一原理：只要我在思考，我就必然存在。这不是三段论推理，而是对怀疑活动本身存在的直观把握——怀疑本身就是一种思维活动，而思维活动必然预设一个思维着的实体。",
+        "english": "The first principle discovered in Meditation II: whenever I think, I must exist. It is not a syllogistic inference but an immediate intuition that the activity of doubting itself presupposes a thinking substance."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "如果我试图怀疑一切，那怀疑本身活动的人必须存在……我思，故我在（Cogito, ergo sum）。",
+          "quote_en": "If I tried to doubt everything, then the very act of doubting proves that the doubter must exist... I am thinking, therefore I exist.",
+          "source": "Meditations on First Philosophy, Meditation II (AT 7:25, CSM 2:17)",
+          "work_zh": "《第一哲学沉思集》第二沉思"
+        },
+        {
+          "quote_zh": "我看到，只要我认为自己是不完善的，我就能理解一个更完善的存在的观念。",
+          "quote_en": "I see that insofar as I conceive of myself as an imperfect being, I can understand the idea of a more perfect being.",
+          "source": "Discourse on the Method, Part IV (AT 6:33, CSM 1:127)",
+          "work_zh": "《谈谈方法》第四部分"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "John Cottingham",
+          "work": "Descartes (Blackwell, 1986)",
+          "comment_zh": "Cottingham强调'cogito'不是一个三段论推理（大前提'凡思维者皆存在'，小前提'我思维'，结论'我存在'），而是一种直接的自我直观。笛卡尔在《第二组答辩》中明确否认它是三段论。"
+        },
+        {
+          "scholar": "Gary Hatfield",
+          "work": "Routledge Philosophy Guidebook to Descartes and the Meditations (2003)",
+          "comment_zh": "Hatfield指出，cogito的关键在于：任何试图否定它的尝试都会陷入自我反驳（self-refutation）。怀疑'我在思维'这一行为本身即是一种思维活动。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：'我思故我在'是一个三段论推理。** 澄清：笛卡尔明确否认这是三段论。它不是从'凡思维者皆存在'这一大前提推导出来的，而是对思维活动直接存在的直观把握。正如Cottingham指出，'cogito'是一种'自我验证的直观'（self-verifying intuition）。",
+          "**误解2：'我思'证明了灵魂不朽。** 澄清：cogito只证明了思维实体的存在，并未证明其不朽。笛卡尔在《沉思集》 Synopsis 中承认，灵魂不朽需要更多论证，且他并未在六篇沉思中完成此证明。",
+          "**误解3：'我'是一个连续的自我。** 澄清：笛卡尔在《沉思集》中发现的'我'并非经验意义上的个人，而是一个'思维着的东西'（res cogitans）。正如Margaret Wilson所指出，这个'我'的同一性是建立在思维活动的连续性上，而非实体在时间中的持存。"
+        ]
+      }
+    },
+    {
+      "id": "methodical_doubt",
+      "title_zh": "方法怀疑 / 普遍怀疑",
+      "title_en": "Methodical Doubt / Universal Doubt",
+      "aliases": ["怀疑方法", "方法论的怀疑", "de omnibus dubitandum", "恶魔假设"],
+      "definition": {
+        "chinese": "笛卡尔在《第一哲学沉思集》第一沉思中提出的系统性怀疑程序。其目的不是为怀疑而怀疑，而是通过排除一切可怀疑之物，寻找不可动摇的知识根基。三层怀疑：感官欺骗、梦境假设、恶魔假设。",
+        "english": "A systematic procedure of doubt in Meditation I, designed to purge all dubitable beliefs in order to discover an absolutely certain foundation for knowledge. Three levels: sensory deception, dream hypothesis, evil demon hypothesis."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "由于感官有时欺骗我们，我宁愿认为一切感官所呈现之物都是虚假的。",
+          "quote_en": "Since the senses sometimes deceive us, I will suppose that everything presented to me by the senses is false.",
+          "source": "Meditations, Meditation I (AT 7:18, CSM 2:12)",
+          "work_zh": "《第一哲学沉思集》第一沉思"
+        },
+        {
+          "quote_zh": "我要假设，有一个恶魔，其力量与诡诈都无比强大，他尽其所能地欺骗我。",
+          "quote_en": "I will suppose that there is a demon, supremely powerful and clever, who has directed his entire effort at deceiving me.",
+          "source": "Meditations, Meditation I (AT 7:22, CSM 2:15)",
+          "work_zh": "《第一哲学沉思集》第一沉思"
+        },
+        {
+          "quote_zh": "为了拒绝一切意见，只要我在每一个意见中找到至少一些怀疑的理由就足够了。",
+          "quote_en": "For the purpose of rejecting all my opinions, it will be enough if I find in each of them at least some reason for doubt.",
+          "source": "Meditations, Meditation I (AT 7:18, CSM 2:12)",
+          "work_zh": "《第一哲学沉思集》第一沉思"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Janet Broughton",
+          "work": "Descartes's Method of Doubt (Princeton, 2002)",
+          "comment_zh": "Broughton强调，笛卡尔的怀疑是一种'有目的的怀疑'（deliberate doubt），其功能在于清除偏见、使心灵准备好接受清楚分明的真理。它不是皮浪式怀疑论的复兴，而是为重建知识大厦所做的地基清理工作。"
+        },
+        {
+          "scholar": "Margaret Wilson",
+          "work": "Descartes (Routledge, 1978)",
+          "comment_zh": "Wilson指出，笛卡尔的方法怀疑与皮浪主义怀疑论有本质区别：笛卡尔的怀疑是方法性的、临时性的，其目标是找到一个绝对可靠的起点；而皮浪主义者则要求永久悬置判断。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：笛卡尔是一个彻底的怀疑论者。** 澄清：恰恰相反。方法怀疑是通往确定性知识的手段，而非目的。正如Broughton所论证，笛卡尔的怀疑是'治疗性的'（therapeutic）——它清除偏见，使心灵能够感知清楚分明的真理。",
+          "**误解2：恶魔假设证明笛卡尔认为我们生活在虚拟现实中。** 澄清：恶魔假设是一个思想实验，其功能是检验知识的确定性，而非一个关于世界本质的断言。笛卡尔最终通过上帝存在证明排除了这一假设的可能性。",
+          "**误解3：梦境假设意味着我们无法区分梦境与现实。** 澄清：笛卡尔在《沉思集》第六沉思中提供了区分梦境与现实的标准：梦的图像不与记忆连贯的日常生活相连，而清醒经验则构成一个连贯的整体。"
+        ]
+      }
+    },
+    {
+      "id": "dualism",
+      "title_zh": "心身二元论",
+      "title_en": "Mind-Body Dualism",
+      "aliases": ["笛卡尔二元论", "实体二元论", "substance dualism", "身心二元论"],
+      "definition": {
+        "chinese": "笛卡尔主张心灵（思维实体，res cogitans）与身体（广延实体，res extensa）是两种根本不同的实体。心灵的本质是思维，不占据空间；身体的本质是广延，不能思维。两者在性质上完全分离，但在人类中通过松果腺（pineal gland）相互作用。",
+        "english": "The doctrine that mind (res cogitans) and body (res extensa) are two fundamentally distinct substances. The essence of mind is thought, which is non-spatial; the essence of body is extension, which cannot think. They interact through the pineal gland in humans."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "我确知，就其被清楚分明地理解而言，我是一个思维着的东西，不含有任何广延性质。",
+          "quote_en": "I know that I am a thinking thing, and that as clearly and distinctly understood, I contain no extension.",
+          "source": "Meditations, Meditation VI (AT 7:78, CSM 2:54)",
+          "work_zh": "《第一哲学沉思集》第六沉思"
+        },
+        {
+          "quote_zh": "我完全确知，就我所具有的身体的观念而言，它仅仅是一个广延的东西，不具有思维的能力。",
+          "quote_en": "I know distinctly that insofar as I have the idea of body, it is merely an extended thing, devoid of the power of thought.",
+          "source": "Meditations, Meditation VI (AT 7:78, CSM 2:54)",
+          "work_zh": "《第一哲学沉思集》第六沉思"
+        },
+        {
+          "quote_zh": "灵魂与身体如此不同，以至于身体就其本性而言是可分的，而灵魂是不可分的。",
+          "quote_en": "The soul is of a nature wholly distinct from that of the body, inasmuch as the soul is by its nature indivisible, whereas the body is divisible.",
+          "source": "Meditations, Meditation VI (AT 7:86, CSM 2:59)",
+          "work_zh": "《第一哲学沉思集》第六沉思"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Margaret Wilson",
+          "work": "Descartes (Routledge, 1978)",
+          "comment_zh": "Wilson指出，笛卡尔的二元论不是简单的'两个东西'的并列，而是基于两种根本不同的属性（思维 vs 广延）的实体划分。她强调，笛卡尔通过'清楚分明'的标准证明了两种实体的真正区分（real distinction）。"
+        },
+        {
+          "scholar": "John Cottingham",
+          "work": "'Cartesian Dualism: Theology, Metaphysics, and Science' in The Cambridge Companion to Descartes (1992)",
+          "comment_zh": "Cottingham认为，笛卡尔的二元论不仅是形而上学构造，也深受当时神学关切（灵魂不朽）的影响。但在科学层面，二元论使笛卡尔能够将身体完全还原为机械装置，从而为近代物理学开辟了道路。"
+        },
+        {
+          "scholar": "Gary Hatfield",
+          "work": "Routledge Philosophy Guidebook to Descartes and the Meditations (2003)",
+          "comment_zh": "Hatfield注意到，笛卡尔在第六沉思中从'我与我身体的区分'过渡到'我与我身体的结合'，这种结合通过松果腺解释。Hatfield认为，笛卡尔从未真正解决心身交互问题，这是后世'偶因论'（occasionalism）产生的动机之一。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：笛卡尔认为心灵和身体完全不相互作用。** 澄清：笛卡尔明确主张两者相互作用，他甚至在《论灵魂的情感》（Passions of the Soul）中详细讨论了心身交互机制，将松果腺指定为交互点。正如Hatfield指出，笛卡尔面临的是'如何'解释交互的问题，而非'是否'交互的问题。",
+          "**误解2：二元论是笛卡尔形而上学的核心。** 澄清：二元论实际上是建立在更根本的第一原理之上的推导结果。Cottingham指出，笛卡尔形而上学的真正核心是思维实体（res cogitans）的不可怀疑性，二元论只是将其与身体分离开来的结论。",
+          "**误解3：'我思'中的'我'是一个脱离身体的灵魂。** 澄清：在第二沉思中，笛卡尔实际上尚未证明心灵的非物质性。'我'最初只是'一个思维着的东西'（a thing that thinks），至于这个东西是否等同于身体，要到第六沉思才通过清楚分明的区分加以证明。Wilson强调，第二沉思的'我'是一个'方法论上的抽象'。"
+        ]
+      }
+    },
+    {
+      "id": "clear_distinct",
+      "title_zh": "清楚分明",
+      "title_en": "Clear and Distinct Perceptions",
+      "aliases": ["清楚分明知觉", "clara et distincta perceptio", "真理标准", "认识论标准"],
+      "definition": {
+        "chinese": "笛卡尔的真理标准：当一个观念被心灵如此清楚分明地感知，以至于无法对其内容产生怀疑时，该观念即为真。'清楚'（clara）指观念对心灵完全呈现；'分明'（distincta）指观念各部分之间的边界清晰可辨。这一标准在第三沉思中被提出，并在第五沉思中应用于数学真理。",
+        "english": "Descartes' criterion of truth: an idea is true when it is perceived so clearly and distinctly by the mind that its content cannot be doubted. 'Clear' means fully present to the mind; 'distinct' means the boundaries between its parts are sharply delineated. Proposed in Meditation III and applied to mathematical truths in Meditation V."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "我确知，凡是我清楚分明知觉的东西都是真的。",
+          "quote_en": "I know that whatever I perceive very clearly and distinctly is true.",
+          "source": "Meditations, Meditation III (AT 7:35, CSM 2:24)",
+          "work_zh": "《第一哲学沉思集》第三沉思"
+        },
+        {
+          "quote_zh": "我称一个知觉为'清楚'的，当它如此呈现并触及心灵，以至于我们完全意识到它。我称一个知觉为'分明'的，当它如此精确地区别于一切其他对象，以至于它只包含清楚的东西。",
+          "quote_en": "I call a perception 'clear' when it is present and accessible to the attentive mind... I call a perception 'distinct' when it is so precisely differentiated from all other objects that it contains within itself only what is clear.",
+          "source": "Principles of Philosophy, Part I, §45 (AT 8A:22, CSM 1:207)",
+          "work_zh": "《哲学原理》第一部分，第45条"
+        },
+        {
+          "quote_zh": "我清楚地知觉到，我存在着，并同时是一个思维着的东西；这是我的心灵所能获得的最简单、最分明的知识。",
+          "quote_en": "I clearly perceive that I exist, and that at the same time I am a thinking thing; this is the simplest and most distinct knowledge the mind can acquire.",
+          "source": "Meditations, Meditation III (AT 7:36, CSM 2:25)",
+          "work_zh": "《第一哲学沉思集》第三沉思"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Margaret Wilson",
+          "work": "Descartes (Routledge, 1978)",
+          "comment_zh": "Wilson指出，'清楚分明'标准面临'笛卡尔循环'（Cartesian Circle）的批评：笛卡尔用清楚分明来证明上帝存在，又用上帝存在来保证清楚分明知觉的可靠性。Wilson认为这是笛卡尔体系中最深刻的张力之一。"
+        },
+        {
+          "scholar": "John Cottingham",
+          "work": "Descartes (Blackwell, 1986)",
+          "comment_zh": "Cottingham区分了'心理的清楚分明'（psychological clarity）与'逻辑的清楚分明'（logical clarity）。他认为笛卡尔的标准不仅是主观的心理感受，而是一种指向客观真理的认知能力。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：清楚分明只是一个主观的心理感受。** 澄清：Cottingham强调，笛卡尔的清楚分明不是纯粹主观的'感觉确信'，而是一种指向客观真理的认知标准。它要求观念的结构本身（而非仅仅我们对它的信念）是明确的。",
+          "**误解2：笛卡尔循环意味着笛卡尔的体系完全失败。** 澄清：虽然笛卡尔循环（用清楚分明证明上帝，又用上帝保证清楚分明）确实是一个严重问题，但当代学者如James Van Cleve等提出了解释方案：笛卡尔可能将'上帝保证'视为一种'认知增益'（cognitive enhancement），而非逻辑上的循环论证。Wilson则认为这反映了笛卡尔在心理确定性与逻辑有效性之间的张力。",
+          "**误解3：清楚分明标准适用于所有知识领域。** 澄清：笛卡尔主要在数学和形而上学中应用此标准。对于经验科学，他承认需要实验和假设（见《谈谈方法》第六部分）。清楚分明是关于理性真理的标准，而非经验真理的标准。"
+        ]
+      }
+    },
+    {
+      "id": "god_argument",
+      "title_zh": "上帝存在证明",
+      "title_en": "Arguments for the Existence of God",
+      "aliases": ["本体论论证", "因果论证", "存有论证明", "因果证明", "第三沉思"],
+      "definition": {
+        "chinese": "笛卡尔在《第一哲学沉思集》第三沉思中提出两个证明上帝存在的论证：（1）因果论证（因果性证明）：作为有限思维实体，我无法产生一个无限完善存在的观念，因此必须存在一个真正的无限原因（上帝）将此观念印入我心中；（2）存有论论证（本体论证明）：第五沉思中提出，上帝作为最完善的存在者，其本质必然包含存在，正如三角形的本质必然包含三内角和等于两直角。",
+        "english": "In Meditation III, Descartes offers two proofs of God's existence: (1) The causal argument: as a finite thinking substance, I could not produce the idea of an infinitely perfect being, so there must be a truly infinite cause (God); (2) The ontological argument in Meditation V: God's essence necessarily includes existence, just as a triangle's essence necessarily includes having three angles equal to two right angles."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "我应当追问，我是否具有足够的能力来自己产生这个观念。答案是：我显然不具有，因为这个观念不仅比我身体的一切形象更加清晰分明，而且就其内容而言，它包含着更多实在性。",
+          "quote_en": "I must inquire whether I possess sufficient power to produce this idea myself. The answer is clearly that I do not; for this idea is not only more clear and distinct than any image of my body, but in its content it contains more reality.",
+          "source": "Meditations, Meditation III (AT 7:45, CSM 2:31)",
+          "work_zh": "《第一哲学沉思集》第三沉思（因果论证）"
+        },
+        {
+          "quote_zh": "上帝的观念本身——作为最完善的存在者——必然包含存在。因为存在比不存在更完善，所以最完善的存在者必然存在。",
+          "quote_en": "The very idea of God—as a supremely perfect being—necessarily includes existence. For existence is a greater perfection than non-existence, and therefore the supremely perfect being must exist.",
+          "source": "Meditations, Meditation V (AT 7:66, CSM 2:46)",
+          "work_zh": "《第一哲学沉思集》第五沉思（本体论论证）"
+        },
+        {
+          "quote_zh": "正如三内角之和等于两直角这一性质属于三角形的本质，同样，存在也属于上帝的本质。",
+          "quote_en": "Just as the property of having its three angles equal to two right angles belongs to the essence of a triangle, so existence belongs to the essence of God.",
+          "source": "Meditations, Meditation V (AT 7:68, CSM 2:47)",
+          "work_zh": "《第一哲学沉思集》第五沉思"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "John Cottingham",
+          "work": "Descartes (Blackwell, 1986)",
+          "comment_zh": "Cottingham指出，笛卡尔的因果论证依赖于一个关键前提：'原因的实在性至少不能小于结果'（causal adequacy principle）。这一原则源自中世纪经院哲学（尤其是阿奎那和司各脱），笛卡尔将其改造用于证明上帝存在。"
+        },
+        {
+          "scholar": "Margaret Wilson",
+          "work": "Descartes (Routledge, 1978)",
+          "comment_zh": "Wilson对笛卡尔的本体论论证提出了有力批评：从'上帝是最完善的存在'这一概念，无法逻辑地推出'上帝存在'。她指出，'存在'不是一个可以添加到本质上的谓词（这一批评呼应了康德的著名反驳）。"
+        },
+        {
+          "scholar": "Gary Hatfield",
+          "work": "Routledge Philosophy Guidebook to Descartes and the Meditations (2003)",
+          "comment_zh": "Hatfield认为，笛卡尔的本体论论证最好被理解为一种'本质蕴含存在'（existence as essential）的论证，而非从概念到存在的跳跃。笛卡尔将上帝视为唯一一个其本质必然包含存在的实体。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：笛卡尔的本体论论证是一个简单的逻辑谬误。** 澄清：虽然Wilson和康德都指出了从概念推导存在的困难，但笛卡尔的论证有其内在结构：他不是简单地说'我想到了上帝，所以上帝存在'，而是主张'存在'是'最完善存在者'这一概念的必要组成部分。Hatfield认为，这更接近于一种'本质分析'而非'存在证明'。",
+          "**误解2：上帝存在证明只是为了取悦教会。** 澄清：Cottingham指出，上帝在笛卡尔体系中具有核心认识论功能：上帝的全善保证了清楚分明知觉的可靠性，上帝的不变性保证了自然规律的稳定性。没有上帝，笛卡尔的整个知识大厦都会崩塌。",
+          "**误解3：因果论证混淆了'观念的客观实在性'与'事物的形式实在性'。** 澄清：Wilson指出，笛卡尔确实使用了一套复杂的'实在性层级'（formal vs objective reality）理论。'客观实在性'指观念所表象的对象的实在性程度，'形式实在性'指事物本身的实在性。笛卡尔认为，一个具有无限客观实在性的观念不可能来自一个形式实在性有限的来源。"
+        ]
+      }
+    },
+    {
+      "id": "innate_ideas",
+      "title_zh": "天赋观念",
+      "title_en": "Innate Ideas",
+      "aliases": ["先天观念", "innatae ideae", "天赋观念论", "理性主义认识论"],
+      "definition": {
+        "chinese": "笛卡尔反对经验主义的白板说（tabula rasa），主张心灵天生就具有某些基本观念。这些天赋观念包括：上帝的观念、自我的观念、数学真理（如三角形性质）、以及逻辑原则（如矛盾律）。天赋观念不是后天从感官经验中获得的，而是心灵固有的认知结构，在适当条件下被'唤起'（elicited）而非'植入'（implanted）。",
+        "english": "Descartes opposes the empiricist tabula rasa, holding that the mind is born with certain fundamental ideas. These include the ideas of God, the self, mathematical truths (e.g., properties of triangles), and logical principles (e.g., non-contradiction). Innate ideas are not acquired from sensory experience but are cognitive structures inherent to the mind, elicited rather than implanted."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "当我检查这些观念中哪一个是我可以视为从我自身获得的时，我发现我没有任何能力来自己产生上帝的观念，因为无限者的观念不可能来自有限者。",
+          "quote_en": "When I examine which of these ideas I could regard as acquired from myself, I find that I have no power to produce the idea of God myself, for the idea of the infinite cannot come from the finite.",
+          "source": "Meditations, Meditation III (AT 7:42, CSM 2:29)",
+          "work_zh": "《第一哲学沉思集》第三沉思"
+        },
+        {
+          "quote_zh": "这些真理被'唤起'（elicited）而非'植入'（implanted）在我心中；因为正如我将要证明的，它们从我的本性的各种能力中自然地涌现出来。",
+          "quote_en": "These truths are 'elicited' rather than 'implanted' in me; for as I shall prove, they naturally emerge from the various powers of my nature.",
+          "source": "Comments on a Certain Broadsheet (AT 8B:358, CSM 1:303)",
+          "work_zh": "《对某张海报的评论》"
+        },
+        {
+          "quote_zh": "天赋观念存在于我之中，就像一个病的倾向存在于一个易患该病的人之中，虽然它不是在任何时刻都被实际地感知到。",
+          "quote_en": "Innate ideas are in me like a disposition to a disease, not always actually perceived, but present as a latent capacity.",
+          "source": "Comments on a Certain Broadsheet (AT 8B:358, CSM 1:304)",
+          "work_zh": "《对某张海报的评论》"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "John Cottingham",
+          "work": "'The Legacy of Descartes' in The Cambridge Companion to Descartes (1992)",
+          "comment_zh": "Cottingham指出，笛卡尔的天赋观念理论是中世纪奥古斯丁主义（'illumination theory'）与近代理性主义的结合。天赋观念不是经验的'复写'，而是心灵理解经验的先验条件。"
+        },
+        {
+          "scholar": "Margaret Wilson",
+          "work": "Descartes (Routledge, 1978)",
+          "comment_zh": "Wilson强调，笛卡尔的天赋观念理论必须与他关于'感觉观念'（sensory ideas）的理论区分开来。感觉观念虽然也需要心灵的'思维'活动，但其内容来自外部物体；而天赋观念的内容完全来自心灵自身。"
+        },
+        {
+          "scholar": "Gary Hatfield",
+          "work": "Routledge Philosophy Guidebook to Descartes and the Meditations (2003)",
+          "comment_zh": "Hatfield注意到，笛卡尔在《对某张海报的评论》中修正了早期过于强调观念'先天植入'的语言，转而使用'唤起'（elicited）一词。这表明笛卡尔意识到，天赋观念不是像印章一样印在心灵上的，而是作为心灵的内在倾向，在反思中被激活。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：天赋观念意味着婴儿出生时就知道一切。** 澄清：笛卡尔明确否认这一点。正如Hatfield所指出的，笛卡尔在《对某张海报的评论》中将天赋观念比作'疾病的倾向'——它是潜在的能力，而非实际的知识。天赋观念需要经验的'触发'才能被意识到。",
+          "**误解2：笛卡尔的天赋观念否定了经验的作用。** 澄清：经验在笛卡尔体系中仍然具有'唤起'天赋观念的功能。Cottingham指出，笛卡尔的经验论批评对象是经院哲学的'抽象理论'（从感官印象中提取普遍观念），而非经验本身作为认知的触发条件。",
+          "**误解3：天赋观念是笛卡尔独有的理论。** 澄清：实际上，柏拉图的理念论、奥古斯丁的光照说、以及莱布尼茨的'单子论'都包含类似的天赋观念思想。笛卡尔的独特之处在于他将天赋观念与'清楚分明'标准结合，并用它来证明上帝存在和数学真理的确定性。"
+        ]
+      }
+    },
+    {
+      "id": "res_extensa_cogitans",
+      "title_zh": "广延实体 vs 思维实体",
+      "title_en": "Res Extensa vs Res Cogitans",
+      "aliases": ["思维实体", "广延实体", "res cogitans", "res extensa", "两种实体", "二元论基础"],
+      "definition": {
+        "chinese": "笛卡尔形而上学的核心范畴划分：思维实体（res cogitans）以思维（cogitatio）为唯一本质属性，包括怀疑、理解、肯定、否定、意愿、想象、感觉等一切意识活动；广延实体（res extensa）以广延（extensio）为唯一本质属性，包括长、宽、高三维空间属性及其变式（形状、运动）。前者构成心灵世界，后者构成物质世界。",
+        "english": "The central categorial division of Cartesian metaphysics: res cogitans has thought (cogitatio) as its sole essential attribute, encompassing all conscious activities (doubting, understanding, affirming, willing, imagining, sensing); res extensa has extension (extensio) as its sole essential attribute, comprising three-dimensional spatial properties and their modes (shape, motion). The former constitutes the mental world; the latter, the material world."
+      },
+      "primary_sources": [
+        {
+          "quote_zh": "思维（cogitatio）这一术语，我用来指一切在我们之中发生、我们直接意识到的东西。因此，不仅理解、意愿、想象，而且感觉，都是思维的不同方式。",
+          "quote_en": "By the term 'thought' (cogitatio) I understand all that which occurs in us in such a way that we are immediately conscious of it. Thus not only understanding, willing, and imagining, but also sensing, are different modes of thought.",
+          "source": "Principles of Philosophy, Part I, §9 (AT 8A:7, CSM 1:195)",
+          "work_zh": "《哲学原理》第一部分，第9条"
+        },
+        {
+          "quote_zh": "所谓实体，我们只能将其理解为这样一种东西：它以某种方式存在，不需要任何其他事物。确实，我们只能发现唯一一个这样的实体，它不需要任何其他事物，它就是上帝。",
+          "quote_en": "By substance we can understand nothing else than a thing which exists in such a way that it needs no other thing in order to exist. Indeed, we can understand only one such substance, which needs nothing else, namely God.",
+          "source": "Principles of Philosophy, Part I, §51 (AT 8A:24, CSM 1:210)",
+          "work_zh": "《哲学原理》第一部分，第51条"
+        },
+        {
+          "quote_zh": "广延构成物体的本性，思维构成心灵的本性。",
+          "quote_en": "Extension constitutes the nature of body, and thought constitutes the nature of mind.",
+          "source": "Principles of Philosophy, Part I, §53 (AT 8A:25, CSM 1:210)",
+          "work_zh": "《哲学原理》第一部分，第53条"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Margaret Wilson",
+          "work": "Descartes (Routledge, 1978)",
+          "comment_zh": "Wilson指出，笛卡尔的实体概念具有某种'模糊性'：严格意义上，只有上帝是真正的实体（不需要其他事物）；心灵和身体只是在'减弱的意义'（attenuated sense）上被称为实体，因为它们需要上帝来维持存在。"
+        },
+        {
+          "scholar": "John Cottingham",
+          "work": "Descartes (Blackwell, 1986)",
+          "comment_zh": "Cottingham强调，'思维'（cogitatio）在笛卡尔那里是一个极其广泛的范畴，不仅包括理性思考，还包括感觉、想象、情感。这使得笛卡尔的'思维实体'远比当代'心灵'概念丰富，也更接近奥古斯丁主义的传统。"
+        },
+        {
+          "scholar": "Gary Hatfield",
+          "work": "Routledge Philosophy Guidebook to Descartes and the Meditations (2003)",
+          "comment_zh": "Hatfield分析了笛卡尔从'我思'到'思维实体'的过渡：在第二沉思中，'我'只是'一个思维着的东西'；到《哲学原理》，这一描述被系统化为'思维实体'的范畴。Hatfield认为这一过渡依赖于'清楚分明'标准的应用。"
+        }
+      ],
+      "misconceptions": {
+        "chinese": [
+          "**误解1：笛卡尔认为只有两种实体（心灵和身体）。** 澄清：严格来说，笛卡尔承认三种实体：上帝（唯一真正独立的实体）、心灵、身体。Wilson指出，心灵和身体只是在'相对意义上'（relative sense）被称为实体，因为它们最终依赖于上帝。",
+          "**误解2：思维实体等同于'意识'或'自我意识'。** 澄清：Cottingham指出，笛卡尔的cogitatio远比当代'意识'概念广泛。它不仅包括自我意识，还包括一切'我们直接意识到'的心灵活动，如感觉、想象、欲望。甚至身体的'感觉'在笛卡尔那里也是思维的一种模式（mode of thought），尽管它由身体过程引起。",
+          "**误解3：广延实体完全等同于'物质'。** 澄清：笛卡尔的res extensa不仅是'物质'，而是'几何化的空间'（geometrized space）。物体的所有性质（颜色、声音、味道）在笛卡尔看来都不是物体的真正属性，而只是思维对广延实体运动的主观感知。这正是后来洛克所谓'第一性质'与'第二性质'区分的先驱。"
+        ]
+      }
+    }
+  ],
+  "key_works": [
+    {
+      "title_zh": "《谈谈方法》",
+      "title_en": "Discourse on the Method",
+      "year": 1637,
+      "importance": "笛卡尔第一部出版的哲学著作，包含方法论四条规则、cogito的首次公开发表，以及解析几何的附录。",
+      "key_content": ["方法四条规则", "cogito论证", "上帝存在证明的雏形", "心身二元论的早期表述"]
+    },
+    {
+      "title_zh": "《第一哲学沉思集》",
+      "title_en": "Meditations on First Philosophy",
+      "year": 1641,
+      "importance": "笛卡尔最系统的形而上学著作，以第一人称的'沉思'形式展开，包含六篇沉思及七组反驳与答辩。",
+      "key_content": ["方法怀疑", "cogito", "上帝存在证明（因果论证与本体论论证）", "清楚分明标准", "心身二元论", "外部世界存在证明"]
+    },
+    {
+      "title_zh": "《哲学原理》",
+      "title_en": "Principles of Philosophy",
+      "year": 1644,
+      "importance": "笛卡尔哲学体系的系统化教科书式呈现，分为四部分：形而上学、物理学、宇宙论、地球科学。",
+      "key_content": ["实体定义", "思维与广延的范畴划分", "自然规律（守恒定律、惯性定律）", "宇宙漩涡说"]
+    },
+    {
+      "title_zh": "《论灵魂的情感》",
+      "title_en": "Passions of the Soul",
+      "year": 1649,
+      "importance": "笛卡尔最后的主要哲学著作，系统讨论心身交互机制，特别是情感（passions）的生理-心理双重性质。",
+      "key_content": ["松果腺作为心身交互点", "情感的定义与分类", "意志与情感的冲突与调和"]
+    },
+    {
+      "title_zh": "《指导心灵的规则》",
+      "title_en": "Rules for the Direction of the Mind",
+      "year": "1628年左右（生前未出版）",
+      "importance": "笛卡尔早期方法论著作，详细阐述直觉、演绎、枚举三种认知操作，以及'简单本性'理论。",
+      "key_content": ["直觉定义", "演绎的链式结构", "枚举作为记忆辅助", "简单本性的分类（理智的、物质的、共同的）"]
+    }
+  ],
+  "scholarly_landscape": {
+    "chinese": "笛卡尔研究是西方哲学史上最为丰富的领域之一。当代研究主要围绕以下问题展开：（1）'笛卡尔循环'的认识论张力；（2）心身交互问题的解释方案；（3）笛卡尔与经院哲学/奥古斯丁主义的关系；（4）笛卡尔科学哲学中的'假设-演绎'方法。",
+    "english": "Cartesian scholarship is one of the richest fields in the history of Western philosophy. Contemporary research focuses on: (1) the epistemological tension of the 'Cartesian Circle'; (2) explanatory approaches to mind-body interaction; (3) Descartes' relationship to scholasticism and Augustinianism; (4) the hypothetico-deductive method in Descartes' philosophy of science.",
+    "major_scholars": [
+      {
+        "name": "John Cottingham",
+        "works": ["Descartes (Blackwell, 1986)", "The Cambridge Companion to Descartes (ed., 1992)", "The Rationalists (Oxford, 1988)"],
+        "focus_zh": "笛卡尔思想的系统性阐释，特别关注其理性主义传统与神学背景的关系。",
+        "focus_en": "Systematic interpretation of Descartes' thought, with particular attention to its relationship to the rationalist tradition and theological background."
+      },
+      {
+        "name": "Margaret Wilson",
+        "works": ["Descartes (Routledge, 1978)", "Ideas and Mechanism (Princeton, 1999)"],
+        "focus_zh": "笛卡尔认识论的批判性分析，尤其是'清楚分明'标准、观念理论，以及笛卡尔与经验主义的关系。",
+        "focus_en": "Critical analysis of Cartesian epistemology, especially the criterion of clear and distinct perception, the theory of ideas, and Descartes' relationship to empiricism."
+      },
+      {
+        "name": "Gary Hatfield",
+        "works": ["Routledge Philosophy Guidebook to Descartes and the Meditations (2003)", "The Routledge Companion to Seventeenth Century Philosophy (ed., 2013)"],
+        "focus_zh": "笛卡尔认识论与心理学史的交汇研究，特别关注《沉思集》的论证结构与笛卡尔时代的心理学背景。",
+        "focus_en": "The intersection of Cartesian epistemology and history of psychology, with special attention to the argumentative structure of the Meditations and its psychological context."
+      },
+      {
+        "name": "Stephen Gaukroger",
+        "works": ["Descartes: An Intellectual Biography (Oxford, 1995)", "Cartesian Logic (Oxford, 1989)"],
+        "focus_zh": "笛卡尔思想的历史语境研究，尤其是其'数学化自然'项目的历史起源。",
+        "focus_en": "Historical contextualization of Descartes' thought, especially the historical origins of his 'mathematization of nature' project."
+      },
+      {
+        "name": "Daniel Garber",
+        "works": ["Descartes' Metaphysical Physics (Chicago, 1992)", "Descartes Embodied (Cambridge, 2001)"],
+        "focus_zh": "笛卡尔形而上学与物理学的统一研究，强调笛卡尔体系中身体与心灵并非完全分离。",
+        "focus_en": "Unified study of Cartesian metaphysics and physics, emphasizing that body and mind are not completely separate in Descartes' system."
+      }
+    ]
+  },
+  "metadata": {
+    "created_at": "2026-05-16",
+    "version": "1.0",
+    "language": "zh-CN",
+    "source_type": "philosopher_distillation",
+    "primary_sources_referenced": [
+      "Meditations on First Philosophy (1641)",
+      "Discourse on the Method (1637)",
+      "Principles of Philosophy (1644)",
+      "Passions of the Soul (1649)",
+      "Rules for the Direction of the Mind (c. 1628)"
+    ],
+    "secondary_sources_referenced": [
+      "Cottingham, J. Descartes (Blackwell, 1986)",
+      "Cottingham, J. (ed.) The Cambridge Companion to Descartes (Cambridge, 1992)",
+      "Wilson, M. Descartes (Routledge, 1978)",
+      "Hatfield, G. Routledge Philosophy Guidebook to Descartes and the Meditations (Routledge, 2003)",
+      "Broughton, J. Descartes's Method of Doubt (Princeton, 2002)",
+      "Gaukroger, S. Descartes: An Intellectual Biography (Oxford, 1995)",
+      "Garber, D. Descartes' Metaphysical Physics (Chicago, 1992)"
+    ],
+    "disclaimer": "本知识库基于一手文献（CSM英译本、AT拉丁文标准版）与权威二手研究构建。所有一手语录均附英文原文以便核对。二手来源标注学者姓名与著作，便于读者进一步查证。"
+  }
+}

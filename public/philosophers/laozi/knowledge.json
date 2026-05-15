@@ -1,0 +1,121 @@
+{
+  "philosopher": {
+    "name": "老子",
+    "name_en": "Laozi / Lao Tzu",
+    "name_zh_pinyin": "Lǎo Zǐ",
+    "lived": "约公元前6世纪（传统说法为公元前571—前471年）",
+    "birthplace": "楚国苦县（今河南鹿邑）",
+    "era": "先秦 / 春秋时期",
+    "school": "道家",
+    "occupation": "周朝守藏室之史（国家图书馆馆长）",
+    "summary": "老子是道家哲学的创始人，《道德经》的作者。中国哲学中最深邃、最神秘的思想家，以五千言浓缩了宇宙与人生的根本法则。核心概念包括：道（万物本源）、无为（顺应自然）、自然（自然而然）、反者道之动（辩证反转）。其思想对中国、东亚乃至世界哲学产生了深远影响。",
+    "summary_en": "Laozi is traditionally regarded as the founder of Daoism and the author of the Daodejing. His philosophy centers on the concept of Dao (the Way), wu-wei (non-action / effortless action), and the spontaneous harmony of nature."
+  },
+  "lifeEvents": [
+    {"year": "约公元前6世纪", "event": "生卒年份不详", "details": "传统说法为春秋时期陈国苦县人，曾任周朝守藏室之史。司马迁《史记·老子韩非列传》中记载老子'姓李名耳，字聃'，但学者对老子是否为历史人物仍有争议。"},
+    {"year": "约公元前5世纪", "event": "出关与《道德经》", "details": "传说老子见周室衰微，骑青牛西出函谷关。关令尹喜请其著书，老子乃著《道德经》五千言而去，不知所终。此故事见于《史记》，但真实性存疑。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "dao",
+      "title": "道",
+      "title_en": "Dao / The Way",
+      "category": "本体论 / 宇宙论",
+      "description": "道是道家哲学的最高范畴，意为'道路'、'途径'、'方法'，但在老子哲学中被提升为宇宙的本源和万物的法则。《道德经》开篇即言：'道可道，非常道；名可名，非常名。'道超越了语言和概念的把握：可以被言说的道，就不是恒常的道；可以被命名的名，就不是恒常的名。道是'无'（无形、无名、无为）与'有'（万物之母）的统一。作为宇宙本源，道'生一，一生二，二生三，三生万物'（42章）；作为运行法则，道'反者道之动，弱者道之用'（40章）。",
+      "keyWorks": ["《道德经》第1、4、6、14、21、25、34、40、42章"],
+      "primaryQuotes": [
+        {"chinese": "道可道，非常道；名可名，非常名。无名天地之始，有名万物之母。", "english": "The Dao that can be told is not the eternal Dao. The name that can be named is not the eternal name. Nameless, it is the origin of heaven and earth; Named, it is the mother of ten thousand things.", "source": "Daodejing, Chapter 1"},
+        {"chinese": "有物混成，先天地生。寂兮寥兮，独立而不改，周行而不殆，可以为天地母。吾不知其名，字之曰道。", "english": "There was something undefined and complete, coming into existence before heaven and earth. How still it was and formless, standing alone and unchanging, ever-flowing and inexhaustible, it may be regarded as the mother of the universe. I do not know its name; I call it Dao.", "source": "Daodejing, Chapter 25"},
+        {"chinese": "人法地，地法天，天法道，道法自然。", "english": "Man follows the earth; earth follows heaven; heaven follows Dao; Dao follows what is natural (ziran).", "source": "Daodejing, Chapter 25"}
+      ],
+      "secondarySources": [
+        {"scholar": "Hans-Georg Moeller", "work": "Daoism Explained: From the Dream of the Butterfly to the Fishnet Allegory (2004)", "insight": "Moeller 将'道'解读为一种'模式'或'结构'，而非西方形而上学意义上的'实体'或'本体'。道不是某种'东西'，而是万物运行所遵循的'方式'。"},
+        {"scholar": "Roger T. Ames & David L. Hall", "work": "Dao De Jing: A Philosophical Translation (2003)", "insight": "Ames 和 Hall 强调'道'不是一个'超越的'创造者，而是'内在的'过程——道不在世界之外，而是世界自身的'道路'。'道法自然'意味着道遵循'自然而然'，而非遵循某个更高的法则。"},
+        {"scholar": "A.C. Graham", "work": "Disputers of the Tao (1989)", "insight": "Graham 比较了老子与庄子的'道'概念，认为老子的道更接近'宇宙法则'，而庄子的道更接近'生存之道'。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "'道'是某种神秘的超自然力量。", "clarification": "道不是超自然的'神'或'造物主'。'道法自然'意味着道遵循'自然而然'——它不是一个有意图的存在，而是万物自发运行的方式。将道比作'上帝'是严重的文化误读。"},
+        {"misconception": "'道可道，非常道'意味着道完全不可言说。", "clarification": "老子不是说'道完全不可说'，而是说'可以被完全定义的道就不是恒常的道'。道可以被'指示'（通过悖论、隐喻、否定法），但不能被'定义'（通过概念和范畴）。这正是道家使用'反讽'和'悖论'的原因。"}
+      ]
+    },
+    {
+      "id": "wu-wei",
+      "title": "无为",
+      "title_en": "Wu-wei / Non-action / Effortless Action",
+      "category": "伦理学 / 政治学",
+      "description": "无为是老子政治哲学和人生哲学的核心概念。字面意思是'不行动'，但实际含义是'不强行干预'、'顺应自然'、'不人为造作'。老子的无为不是什么都不做，而是'不做违背自然的事情'。在政治层面，无为意味着统治者不颁布繁琐的法令、不发动战争、不横征暴敛，让百姓'自化'、'自正'、'自富'、'自朴'。在个人层面，无为意味着放下执着、减少欲望、顺应生命的自然节律。'为无为，则无不治'（3章）——通过无为的方式，反而能达到无所不治的效果。",
+      "keyWorks": ["《道德经》第2、3、10、29、37、48、57、63章"],
+      "primaryQuotes": [
+        {"chinese": "为无为，则无不治。", "english": "By doing nothing (wu-wei), nothing is left undone.", "source": "Daodejing, Chapter 3"},
+        {"chinese": "我无为而民自化，我好静而民自正，我无事而民自富，我无欲而民自朴。", "english": "I do nothing and the people transform themselves. I love stillness and the people correct themselves. I do not interfere and the people prosper. I have no desires and the people return to simplicity.", "source": "Daodejing, Chapter 57"},
+        {"chinese": "为学日益，为道日损。损之又损，以至于无为。无为而无不为。", "english": "In the pursuit of learning, one increases daily. In the pursuit of Dao, one decreases daily. Decreasing and decreasing again, until one reaches wu-wei. By wu-wei, nothing is left undone.", "source": "Daodejing, Chapter 48"},
+        {"chinese": "天下之至柔，驰骋天下之至坚。", "english": "The softest things in the world overcome the hardest.", "source": "Daodejing, Chapter 43"}
+      ],
+      "secondarySources": [
+        {"scholar": "Edward Slingerland", "work": "Effortless Action: Wu-wei as Conceptual Metaphor and Spiritual Ideal in Early China (2003)", "insight": "Slingerland 将无为置于先秦哲学的整体语境中，认为无为是儒、道、法三家共同追求的理想状态，但各自的实现路径不同：儒家通过'礼'的训练达到'从心所欲不逾矩'，道家通过'减少人为'达到与自然合一，法家通过'术'和'势'让统治者'无形而制'。"},
+        {"scholar": "Roger T. Ames", "work": "The Art of Rulership (1994)", "insight": "Ames 强调老子的无为是一种'政治艺术'而非'政治缺席'。无为的统治者不是懒惰的，而是创造了一种环境，让社会自发地趋向和谐。这是一种'领导即服务'（servant leadership）的原型。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "无为就是'什么都不做'。", "clarification": "这是最常见的误解。老子的无为不是消极的怠惰，而是'不强行干预'、'不人为造作'。水'无为'地流向低处，但水不是什么都不做——它在流动。统治者'无为'地治理，但治理仍在进行，只是通过顺应民心而非强制命令。"},
+        {"misconception": "无为是逃避社会责任。", "clarification": "恰恰相反。老子的无为是一种更高级的社会参与方式——通过'不争夺'来化解冲突，通过'不干涉'来激发自发秩序。'太上，不知有之'（17章）——最高级的统治者是百姓几乎感觉不到其存在的统治者。"}
+      ]
+    },
+    {
+      "id": "ziran",
+      "title": "自然",
+      "title_en": "Ziran / Naturalness / Spontaneity",
+      "category": "本体论 / 伦理学",
+      "description": "自然（ziran / 自然而然）是老子哲学中仅次于道的核心概念。'道法自然'（25章）——道遵循自然。这里的'自然'不是指'自然界'（nature as opposed to culture），而是指'自然而然'、'自发'、'自己如此'。万物的最佳状态不是被外力强制塑造的，而是其自然本性的自发呈现。人的自然状态是'朴'（uncarved block / 未经雕琢的木头）——没有被社会规范、道德教条和欲望污染的本真状态。儒家强调'修身'以成为君子，老子则强调'复归于朴'（28章）——回归自然本性。",
+      "keyWorks": ["《道德经》第17、23、25、32、37、51、64章"],
+      "primaryQuotes": [
+        {"chinese": "人法地，地法天，天法道，道法自然。", "english": "Man follows earth, earth follows heaven, heaven follows Dao, Dao follows ziran (what is natural).", "source": "Daodejing, Chapter 25"},
+        {"chinese": "道之尊，德之贵，夫莫之命而常自然。", "english": "The nobility of Dao and the honor of De come from the fact that they are always natural, not commanded.", "source": "Daodejing, Chapter 51"},
+        {"chinese": "复归于朴。", "english": "Return to the uncarved block (pu).", "source": "Daodejing, Chapter 28"}
+      ],
+      "secondarySources": [
+        {"scholar": "Livia Kohn", "work": "Daoism and Chinese Culture (2001)", "insight": "Kohn 强调'自然'在道教（宗教化的道家）中被发展为'顺应天命'和'与宇宙节律同步'的修炼原则，但老子的原始概念更关注政治和伦理层面的'不干预'。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "'自然'就是'自然界'或'荒野'。", "clarification": "老子的'自然'不是西方哲学中'nature vs. culture'的'自然'。'自然'是'自己如此'（self-so / spontaneously），强调的是'非人为'的状态，而非'非文明'的状态。一个遵循礼仪但内心真诚的人也可以是'自然'的。"}
+      ]
+    },
+    {
+      "id": "reversal",
+      "title": "反者道之动",
+      "title_en": "Reversal is the Movement of Dao",
+      "category": "辩证法 / 伦理学",
+      "description": "'反者道之动，弱者道之用'（40章）是老子辩证法的经典表述。道的作用方式不是直线式的、强制的，而是循环式的、反转的。万物发展到极端就会转向其反面：'物壮则老'（30章）、'祸兮福之所倚，福兮祸之所伏'（58章）。这种辩证思维不是黑格尔式的'正题-反题-合题'的线性发展，而是'物极必反'的循环运动。在政治和伦理层面，这意味着：最强大的往往是最脆弱的（'坚强者死之徒，柔弱者生之徒'，76章），最富有的往往是最贫穷的。因此，老子主张'守柔'、'处下'、'不争'——不是因为柔弱本身有价值，而是因为柔弱在道的运动中终将战胜刚强。",
+      "keyWorks": ["《道德经》第22、36、40、58、76章"],
+      "primaryQuotes": [
+        {"chinese": "反者道之动，弱者道之用。", "english": "Reversal is the movement of Dao; weakness is the use of Dao.", "source": "Daodejing, Chapter 40"},
+        {"chinese": "祸兮福之所倚，福兮祸之所伏。", "english": "Good fortune leans on bad fortune; bad fortune hides within good fortune.", "source": "Daodejing, Chapter 58"},
+        {"chinese": "柔弱胜刚强。", "english": "The soft overcomes the hard; the weak overcomes the strong.", "source": "Daodejing, Chapter 36"}
+      ],
+      "secondarySources": [
+        {"scholar": "Roger T. Ames", "work": "Daodejing (2003)", "insight": "Ames 强调老子的辩证法不是'矛盾统一'，而是'互补性'（complementarity）。强与弱、有与无、福与祸不是相互排斥的，而是相互依存、相互转化的。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "'柔弱胜刚强'是一种策略性的'以退为进'。", "clarification": "虽然柔弱确实在实践中常常战胜刚强，但老子的核心论点不是'柔弱作为策略'，而是'柔弱作为道的本性'。水不是'假装'柔弱以战胜石头——水就是柔弱的，而柔弱本身就是道的运行方式。"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《道德经》", "title_en": "Daodejing / Tao Te Ching", "summary": "道家核心经典，约五千言，81章。分'道经'（1-37章，论宇宙本源）和'德经'（38-81章，论人生与政治）两部分。"},
+    {"title": "《老子》", "summary": "即《道德经》，传统分为上下两篇。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "道可道，非常道；名可名，非常名。", "english": "The Dao that can be told is not the eternal Dao.", "source": "Daodejing 1"},
+    {"chinese": "上善若水。水善利万物而不争，处众人之所恶，故几于道。", "english": "The highest good is like water. Water benefits all things and does not contend.", "source": "Daodejing 8"},
+    {"chinese": "知人者智，自知者明。胜人者有力，自胜者强。", "english": "Knowing others is wisdom; knowing yourself is enlightenment. Overcoming others is strength; overcoming yourself is power.", "source": "Daodejing 33"},
+    {"chinese": "治大国若烹小鲜。", "english": "Governing a large state is like cooking a small fish.", "source": "Daodejing 60"},
+    {"chinese": "天之道，损有余而补不足。人之道则不然，损不足以奉有余。", "english": "The way of heaven is to diminish the excessive and supplement the deficient. The way of man is otherwise: it diminishes the deficient to supply the excessive.", "source": "Daodejing 77"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释老子的'无为'概念及其与西方'不作为'观念的区别。",
+      "output": "老子的'无为'（wu-wei）字面意思是'不行动'，但实际含义是'不强行干预'、'顺应自然'、'不人为造作'。\n\n与西方'不作为'（non-action）的区别：\n1）无为不是懒惰或逃避——它是一种积极的'顺应'，就像水顺应地形而流动。\n2）无为的目标不是'什么都不发生'，而是'让正确的事情自然发生'——'为无为，则无不治'。\n3）无为是一种'领导力'——最高级的统治者通过创造环境让社会自发和谐，而非通过命令强制秩序。\n\n在政治层面，无为意味着：不颁布繁琐法令、不发动战争、不横征暴敛，让百姓'自化'、'自正'、'自富'、'自朴'（57章）。在个人层面，无为意味着放下执着、减少欲望、顺应生命的自然节律。\n\n当代意义：无为与哈耶克的'自发秩序'、复杂性科学中的'涌现'有深层共鸣。老子的智慧提示我们：过度控制往往导致反效果，最好的治理是让系统自我调节。",
+      "source": "Daodejing 3, 48, 57; Slingerland, Effortless Action (2003)",
+      "tier": 1
+    }
+  ]
+}

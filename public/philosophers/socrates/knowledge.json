@@ -1,0 +1,336 @@
+{
+  "philosopher": {
+    "name": "苏格拉底",
+    "name_en": "Socrates",
+    "name_grc": "Σωκράτης",
+    "lived": "约公元前470年—公元前399年",
+    "birthplace": "雅典",
+    "deathplace": "雅典",
+    "era": "古典希腊哲学",
+    "occupation": "哲学家",
+    "summary": "苏格拉底是西方哲学传统的奠基者，被誉为'哲学之父'。他无著作传世，思想主要通过其学生柏拉图和喜剧作家阿里斯托芬的作品流传。他开创了以诘问法（Elenchus）为核心的哲学探究方式，将哲学从对自然的追问转向对伦理、政治和人类自身的反思。其核心信条'认识你自己'和'德性即知识'深刻影响了西方伦理学的发展。公元前399年，他以'不敬神'和'腐蚀青年'的罪名被雅典民主法庭判处死刑，在狱中饮毒芹汁而死。",
+    "summary_en": "Socrates is widely regarded as the founder of Western philosophy. He wrote nothing; our knowledge of him comes primarily from the dialogues of Plato, the comedies of Aristophanes, and the historian Xenophon. He pioneered the Socratic method (elenchus), shifting philosophy from cosmological speculation to ethical and political inquiry. His trial and execution by the Athenian democracy in 399 BCE became a defining moment in the history of philosophy."
+  },
+  "lifeEvents": [
+    {"year": "约公元前470年", "event": "出生于雅典", "details": "父亲索弗罗尼斯科斯（Sophroniscus）是石匠，母亲菲娜瑞特（Phaenarete）是助产士。家境普通，但享有雅典公民权。"},
+    {"year": "约公元前440年代", "event": "师从自然哲学家", "details": "早年曾向阿那克萨戈拉的学生阿凯劳斯（Archelaus）学习自然哲学，后转向伦理问题。"},
+    {"year": "约公元前440年代—前420年代", "event": "作为重装步兵参加伯罗奔尼撒战争", "details": "三度出征，表现出非凡的勇气和坚韧。据阿尔基比亚德斯回忆，苏格拉底在战场上表现出超乎常人的冷静和勇敢。"},
+    {"year": "约公元前440年代起", "event": "开始在雅典街头与人对话", "details": "不穿鞋、穿破旧长袍，在雅典的市场、体育馆、法庭等公共场所与各界人士对话，检验他人的信念。自称受德尔斐神谕的驱使。"},
+    {"year": "约公元前440年代", "event": "德尔斐神谕", "details": "凯瑞丰（Chaerephon）去德尔斐问神谕：'有没有人比苏格拉底更智慧？'皮提亚回答：'没有。'苏格拉底将此解释为一种命令：去检验那些自认为有智慧的人，以发现神谕的含义。"},
+    {"year": "公元前423年", "event": "阿里斯托芬的喜剧《云》上演", "details": "喜剧作家阿里斯托芬在《云》中将苏格拉底描绘成一个研究天上事物、把正当变成不正当的怪人。此剧虽为讽刺，但塑造了后世对苏格拉底形象的某种刻板印象。"},
+    {"year": "公元前406年", "event": "反对集体审判将军", "details": "雅典海军在阿吉努萨伊战役中获胜，但因风暴未能打捞阵亡者尸体，民众要求集体审判八名将军。苏格拉底作为议事会主席（prytany），独自反对违反程序的集体审判。"},
+    {"year": "公元前404年", "event": "拒绝参与逮捕萨拉米斯的莱昂", "details": "三十僭主统治期间，命令苏格拉底与其他四人去逮捕萨拉米斯的莱昂（Leon of Salamis）并处死。苏格拉底拒绝执行，冒生命危险回到家中。"},
+    {"year": "公元前399年", "event": "受审与死刑", "details": "被墨勒图斯（Meletus）、阿尼图斯（Anytus）和吕孔（Lycon）指控'不敬神'和'腐蚀青年'。法庭以280票对220票定罪，以360票对140票判处死刑。在狱中拒绝越狱（见《克里托篇》），饮毒芹汁而死。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "elenchus",
+      "title": "诘问法（Elenchus）",
+      "title_en": "Socratic Elenchus / Socratic Method",
+      "category": "方法论 / 伦理学",
+      "description": "诘问法是苏格拉底的核心哲学方法，意为'审问'或'检验'。苏格拉底不提出自己的正面理论，而是通过一系列精心设计的提问，揭示对话者信念中的矛盾和不一致，从而迫使对方重新思考自己的立场。其典型结构：1）对方提出一个定义或信念（如'正义就是强者之利'）；2）苏格拉底通过举例和推论揭示该定义的反例或内在矛盾；3）对方被迫承认无知或修正立场。诘问法的目的不是摧毁信念，而是通过'思想的助产术'（maieutics）帮助对方'分娩'出真正的知识。",
+      "keyWorks": ["柏拉图《申辩篇》", "柏拉图《克里托篇》", "柏拉图《高尔吉亚篇》", "柏拉图《普罗泰戈拉篇》", "柏拉图《美诺篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "未经审视的生活是不值得过的。",
+          "english": "The unexamined life is not worth living.",
+          "source": "Plato, Apology 38a",
+          "greek": "ὁ δὲ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ"
+        },
+        {
+          "chinese": "我只知道一件事，就是我一无所知。",
+          "english": "I know that I know nothing.",
+          "source": "Plato, Apology 21d (paraphrase)",
+          "greek": "ἓν οἶδα ὅτι οὐδὲν οἶδα"
+        },
+        {
+          "chinese": "我是什么？一只牛虻，由神赐予城邦的牛虻；城邦像一匹庞大而高贵的马，因体量巨大而行动迟缓，需要被刺激。",
+          "english": "I am a gadfly, given to the state by God; the state is a great and noble steed who is tardy in his motions owing to his very size, and needs to be stirred into life.",
+          "source": "Plato, Apology 30e",
+          "greek": "ἐγὼ δὲ ὑμῖν ὑπάρχω οἷον οἱ τὰς νύμφας ἢ τὰς ἵππους..."
+        }
+      ],
+      "secondarySources": [
+        {
+          "scholar": "Gregory Vlastos",
+          "work": "'The Socratic Elenchus' (1983)",
+          "insight": "Vlastos 论证诘问法具有'双重功能'：消极地揭示矛盾，积极地建构知识。他质疑早期对话的'aporatic'结局（无结论）是否真的意味着苏格拉底没有正面立场，认为苏格拉底隐含地持有某些伦理信念（如'无人自愿作恶'）。"
+        },
+        {
+          "scholar": "Hugh Benson",
+          "work": "Socratic Wisdom (2000)",
+          "insight": "Benson 提出'优先原则'（priority of definitional knowledge）：苏格拉底坚持在对某事物下定义之前，不能对其属性做出判断。这解释了为什么苏格拉底总是从'什么是X？'开始，而非直接讨论X的属性。"
+        },
+        {
+          "scholar": "Terence Irwin",
+          "work": "Plato's Moral Theory: The Early and Middle Dialogues (1977)",
+          "insight": "Irwin 分析了苏格拉底伦理学的核心悖论——'美德即知识'与'无人自愿作恶'。他认为苏格拉底的'知识'不是命题性知识，而是一种'实践智慧'（practical wisdom），即对善的正确判断必然导致善的行为。"
+        }
+      ],
+      "commonMisconceptions": [
+        {
+          "misconception": "诘问法就是'故意让人难堪'或'抬杠'。",
+          "clarification": "这是常见误解。诘问法的目的是寻求真理，而非赢得辩论。苏格拉底在《申辩篇》中明确表示，他不是为了羞辱对话者，而是受神谕驱使去帮助雅典人'审视自己的生活'。诘问法要求对话者真诚地检视自己的信念，而非维护面子。"
+        },
+        {
+          "misconception": "苏格拉底真的'一无所知'。",
+          "clarification": "'无知之知'是一种修辞策略，而非字面上的知识论立场。苏格拉底承认自己没有'智慧'（sophia），即没有关于宇宙本质的系统性知识；但他坚信自己拥有某种'人的智慧'——即认识到自己的无知。这种自我认知本身就是德性的起点。"
+        },
+        {
+          "misconception": "苏格拉底只关心伦理问题，不关心政治。",
+          "clarification": "恰恰相反。苏格拉底将伦理与政治视为一体：个人德性与城邦正义不可分割。他拒绝参与三十僭主的暴行（《申辩篇》32c-d），在民主法庭上为程序正义辩护，这些都表明他深度参与政治，只是拒绝以不正义的方式参与。"
+        }
+      ]
+    },
+    {
+      "id": "know-thyself",
+      "title": "认识你自己（Γνῶθι σεαυτόν）",
+      "title_en": "Know Thyself",
+      "category": "伦理学 / 自我认知",
+      "description": "'认识你自己'刻于德尔斐阿波罗神庙的门楣之上，苏格拉底将其作为自己哲学探究的核心原则。对苏格拉底而言，'认识自己'不是认识自己的外貌、财产或社会地位，而是认识自己的灵魂、德性和无知。德尔斐神谕告诉凯瑞丰'没有人比苏格拉底更智慧'，苏格拉底将此解释为：神谕所说的'智慧'不是知识的多寡，而是对无知的认识——而苏格拉底恰恰拥有这种'无知之知'。'认识你自己'因此意味着：1）承认自己的无知是智慧的开端；2）德性的培养始于对自己灵魂状态的了解；3）哲学的任务是帮助人'照管灵魂'（epimeleia tēs psychēs），而非追求外在的成功。",
+      "keyWorks": ["柏拉图《申辩篇》", "柏拉图《阿尔基比亚德斯篇》", "柏拉图《斐德罗篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "未经审视的生活是不值得过的。",
+          "english": "The unexamined life is not worth living.",
+          "source": "Plato, Apology 38a",
+          "greek": "ὁ δὲ ἀνεξέταστος βίος οὐ βιωτὸς ἀνθρώπῳ"
+        },
+        {
+          "chinese": "我还不如说：雅典人啊，我确实比这个人更智慧，因为我认为自己既不懂也不了解的东西，他也不懂——他却以为自己懂。",
+          "english": "I am wiser than this man; it is likely that neither of us knows anything worthwhile, but he thinks he knows something when he does not, whereas when I do not know, neither do I think I know.",
+          "source": "Plato, Apology 21d",
+          "greek": "ἔοικα τούτῳ σοφώτερος εἶναι..."
+        }
+      ],
+      "secondarySources": [
+        {
+          "scholar": "Pierre Hadot",
+          "work": "What Is Ancient Philosophy? (1995)",
+          "insight": "Hadot 将'认识你自己'置于古代哲学作为'生活方式'的整体框架中。他认为苏格拉底式哲学不是一套抽象理论，而是一种'精神操练'（spiritual exercise）：通过持续的自我审视，将哲学转化为日常生活中的实践。"
+        },
+        {
+          "scholar": "Michel Foucault",
+          "work": "The Hermeneutics of the Subject (1981/2005)",
+          "insight": "福柯在晚年课程中将苏格拉底式的'自我关注'（epimeleia heautou / care of the self）视为西方'主体化'传统的起点。他认为苏格拉底开启了'真理-主体'关系的第一种模式：通过认识自己，主体获得通向真理的通道。"
+        }
+      ],
+      "commonMisconceptions": [
+        {
+          "misconception": "'认识你自己'是心理学意义上的自我分析。",
+          "clarification": "苏格拉底式的自我认知不是现代心理学的'自我探索'或'情感分析'。它关注的是灵魂的健康与德性——'我的信念是否一致？''我是否真正知道我所声称知道的？''我的行为是否符合我对善的理解？'这是一种伦理性的自我审视，而非心理性的自我暴露。"
+        }
+      ]
+    },
+    {
+      "id": "virtue-is-knowledge",
+      "title": "德性即知识",
+      "title_en": "Virtue is Knowledge",
+      "category": "伦理学",
+      "description": "'德性即知识'（aretē estin epistēmē）是苏格拉底伦理学的核心命题。其含义是：如果一个人真正知道什么是善，他必然会行善；反之，作恶必然源于无知——不是对事实的无知，而是对'什么是真正善'的无知。这一命题隐含地否定了'意志薄弱'（akrasia / moral weakness）的可能性：苏格拉底认为，没有人会在明知某事是恶的情况下仍然去做——如果做了，说明他并没有真正'知道'那是恶的。这一命题在柏拉图的中期对话中被修正：通过灵魂三分说，柏拉图承认欲望部分可以在理性'知道'某事是恶的情况下仍然驱动恶行（akrasia）。",
+      "keyWorks": ["柏拉图《普罗泰戈拉篇》", "柏拉图《美诺篇》", "柏拉图《高尔吉亚篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "没有人自愿作恶，也没有人自愿追求他认为恶的东西；因为追求恶就是使自己变恶，而没有人愿意自己变恶。",
+          "english": "No one errs willingly / No one willingly goes toward the bad or what he believes to be bad.",
+          "source": "Plato, Protagoras 358c (paraphrase)",
+          "greek": "οὐδεὶς ἑκὼν ἁμαρτάνει"
+        },
+        {
+          "chinese": "美德整体来说乃是智慧。",
+          "english": "Virtue as a whole is wisdom.",
+          "source": "Plato, Protagoras 361c",
+          "greek": "ἡ ἀρετὴ ὅλη σοφία ἐστίν"
+        }
+      ],
+      "secondarySources": [
+        {
+          "scholar": "Terence Irwin",
+          "work": "Plato's Moral Theory (1977), 第3章",
+          "insight": "Irwin 区分了两种'知识'：命题性知识（知道某事为真）与实践性知识（知道如何做善事）。他认为苏格拉底所指的'知识'更接近后者——一种将善的判断转化为善的行动的'实践智慧'。"
+        },
+        {
+          "scholar": "David Sedley",
+          "work": "'The Ideal of Godlikeness' (1997)",
+          "insight": "Sedley 将'德性即知识'置于古希腊'神性'（the divine）概念的背景下：苏格拉底认为人可以通过认识善（即神的属性）而接近神性，德性的培养因此是一种'成为神'（homoiosis theōi）的过程。"
+        }
+      ],
+      "commonMisconceptions": [
+        {
+          "misconception": "'德性即知识'意味着道德教育就是灌输道德规则。",
+          "clarification": "恰恰相反。苏格拉底认为道德知识不能从外部灌输，而必须通过诘问法自我发现。'德性即知识'强调的是：德性是一种内在的智慧，而非外在的规则遵守。道德教育的目标是帮助灵魂'回忆起'对善的先在知识（柏拉图在《美诺篇》中发展了回忆说）。"
+        },
+        {
+          "misconception": "苏格拉底否认意志薄弱的可能性。",
+          "clarification": "这是学术界公认的事实——苏格拉底确实否认akrasia。但需要注意的是，他否认的是'明知故犯'（knowing it's bad but doing it anyway），而非'无力抵抗诱惑'。在他看来，'无力抵抗'本身就是'不知道'善的真正价值的表现。柏拉图后来通过灵魂三分修正了这一立场。"
+        }
+      ]
+    },
+    {
+      "id": "socratic-irony",
+      "title": "苏格拉底式反讽（Eirōneia）",
+      "title_en": "Socratic Irony",
+      "category": "修辞学 / 伦理学",
+      "description": "苏格拉底式反讽（eirōneia）是一种特殊的修辞策略：苏格拉底表面上承认自己无知、谦虚地请教对方，实际上是在通过提问揭示对方的无知。古希腊语中的 eirōneia 原意为'掩饰'或'假装'，带有一定的贬义（阿里斯托芬在《云》中用此词讽刺苏格拉底）。但在柏拉图笔下，这种反讽成为一种哲学的伦理姿态：苏格拉底不宣称拥有智慧，而是将自己置于'学习者'的位置，通过持续的追问来检验和净化对话者的灵魂。这种反讽不是欺骗，而是一种'辩证的谦逊'：它既保护了对话者的尊严（不直接攻击），又迫使对话者面对自己的无知。",
+      "keyWorks": ["柏拉图《申辩篇》", "柏拉图《会饮篇》", "阿里斯托芬《云》"],
+      "primaryQuotes": [
+        {
+          "chinese": "阿尔基比亚德斯：苏格拉底的外貌像西勒诺斯雕像，丑陋、讽刺、总是装着无知；但一旦打开他，你会发现里面充满了神圣的小神像。",
+          "english": "Socrates is like the statues of Silenus: on the outside he is ugly and ironical, always pretending to know nothing; but once you open him, you find he is full of little images of the gods.",
+          "source": "Plato, Symposium 215b",
+          "greek": "ὅμοιός ἐστι τοῖς σιληνοῖς τοῖς ἐν τοῖς ἐργαστηρίοις..."
+        }
+      ],
+      "secondarySources": [
+        {
+          "scholar": "Alexander Nehamas",
+          "work": "The Art of Living: Socratic Reflections from Plato to Foucault (1998)",
+          "insight": "Nehamas 将苏格拉底式反讽视为一种'生活方式'（art of living）。他认为苏格拉底的反讽不是简单的修辞技巧，而是一种存在论姿态：通过拒绝给出正面答案，苏格拉底迫使每个人成为自己的哲学家——反讽因此是一种'将哲学责任交还给个体'的方式。"
+        },
+        {
+          "scholar": "Gregory Vlastos",
+          "work": "'Socratic Irony' (1987)",
+          "insight": "Vlastos 区分了两种反讽：'简单的反讽'（说反话，听者知道你在说反话）和'复杂的反讽'（说反话，但你的真实意图既不同于表面意思，也不同于听者可能猜到的任何简单反转）。苏格拉底式反讽属于后者：他假装无知，但实际上他的'无知'是一种更深层的智慧——即认识到知识的局限。"
+        }
+      ],
+      "commonMisconceptions": [
+        {
+          "misconception": "苏格拉底式反讽就是'讽刺'或'挖苦'。",
+          "clarification": "现代英语中的'irony'常带有讽刺意味，但苏格拉底式反讽不是恶意的。它不追求羞辱对方，而是追求共同的真理。苏格拉底在《申辩篇》中明确表示，如果有人因为他揭示对方的无知而怨恨他，那说明这个人更关心自己的声誉而非真理。"
+        }
+      ]
+    },
+    {
+      "id": "maieutics",
+      "title": "助产术（Maieutics）",
+      "title_en": "Maieutics / Art of Midwifery",
+      "category": "教育学 / 认识论",
+      "description": "助产术（maieutikē technē）是苏格拉底在《泰阿泰德篇》中明确提出的教育学隐喻。苏格拉底将自己的哲学方法比作他母亲菲娜瑞特（助产士）的技艺：助产士不自己生育孩子，而是帮助他人'分娩'出已经怀在腹中的孩子；同样，苏格拉底不直接传授知识，而是通过诘问法帮助他人'分娩'出自己灵魂中已经存在的真理。助产术的核心信念是：真理不在外部权威手中，而在每个人自己的灵魂深处。哲学教育的任务不是灌输，而是唤醒。这一概念与柏拉图的'回忆说'（anamnesis）紧密相连，共同构成了西方教育哲学中'启发式教学'（heuristic teaching）的源头。",
+      "keyWorks": ["柏拉图《泰阿泰德篇》148e-151d", "柏拉图《美诺篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "我的技艺与助产士的技艺相似，唯一的区别是我的患者是男人而非女人，我的关怀对象是他们分娩时的灵魂而非身体。最大的特点是：按照神的律令，我不允许自己生育；相反，我激励他人，然后检验他们生育的东西是真是假。",
+          "english": "My art of midwifery is in general like theirs; the only difference is that my patients are men, not women, and my concern is not with the body but with the soul when it is in travail. The greatest thing about my art is that, by the dispensation of God, I am not allowed to bring forth; but I can stimulate others and then test whether what they have brought forth is genuine or false.",
+          "source": "Plato, Theaetetus 150b-c",
+          "greek": "ἡ ἐμὴ τέχνη ὁμοία ἐστὶ ταῖς μαιευούσαις..."
+        }
+      ],
+      "secondarySources": [
+        {
+          "scholar": "Jacques Rancière",
+          "work": "The Ignorant Schoolmaster (1987)",
+          "insight": "Rancière 将苏格拉底助产术置于更激进的教育哲学框架中：如果知识平等地分布于所有灵魂中，那么教师不需要'知道'——只需要激发学生'翻译'自己的能力。Rancière 认为这是比柏拉图回忆说更彻底的平等主义教育观。"
+        }
+      ],
+      "commonMisconceptions": [
+        {
+          "misconception": "助产术意味着教师没有自己的观点或立场。",
+          "clarification": "苏格拉底承认自己'不允许生育'，但这并不意味着他没有信念。Vlastos 等学者论证苏格拉底隐含地持有某些伦理立场（如'无人自愿作恶'）。助产术的限制是方法论上的——不直接传授结论，而非认识论上的——没有自己的知识。"
+        }
+      ]
+    }
+  ],
+  "keyWorks": [
+    {
+      "title": "《申辩篇》",
+      "title_en": "Apology",
+      "author": "柏拉图（记述）",
+      "period": "早期",
+      "summary": "苏格拉底在雅典法庭上的辩护词。西方哲学史上最重要的文本之一。苏格拉底阐述了自己的哲学使命，回应了'不敬神'和'腐蚀青年'的指控，最终以'未经审视的生活不值得过'结语。",
+      "keyThemes": ["诘问法", "德尔斐神谕", "无知之知", "死亡与不朽"]
+    },
+    {
+      "title": "《克里托篇》",
+      "title_en": "Crito",
+      "author": "柏拉图（记述）",
+      "period": "早期",
+      "summary": "苏格拉底在狱中与老友克里托的对话。克里托劝苏格拉底越狱逃亡，苏格拉底通过'雅典法律的人格化独白'论证公民有服从法律的义务，即使法律判决不正义。",
+      "keyThemes": ["公民义务", "法律与正义", "苏格拉底之死"]
+    },
+    {
+      "title": "《斐多篇》",
+      "title_en": "Phaedo",
+      "author": "柏拉图（记述）",
+      "period": "中期",
+      "summary": "苏格拉底临刑前与友人的最后对话。主题：灵魂的不朽。对话以苏格拉底平静饮下毒芹汁、嘱咐朋友'不要忘记向医神献祭一只公鸡'而结束。",
+      "keyThemes": ["灵魂不朽", "回忆说", "理念论", "死亡哲学"]
+    },
+    {
+      "title": "《会饮篇》",
+      "title_en": "Symposium",
+      "author": "柏拉图（记述）",
+      "period": "中期",
+      "summary": "雅典宴会上的颂词竞赛，苏格拉底以狄奥提玛之口阐述爱欲理论。最后醉酒的阿尔基比亚德斯闯入，揭示了苏格拉底人格的非凡魅力。",
+      "keyThemes": ["爱欲", "爱之阶梯", "苏格拉底的人格"]
+    },
+    {
+      "title": "《泰阿泰德篇》",
+      "title_en": "Theaetetus",
+      "author": "柏拉图（记述）",
+      "period": "晚期",
+      "summary": "苏格拉底与青年数学家泰阿泰德讨论'知识是什么'。苏格拉底提出'助产术'隐喻，逐一检验三种知识定义（感知、真信念、真信念+解释），均以失败告终。",
+      "keyThemes": ["助产术", "知识的定义", "感知与知识"]
+    }
+  ],
+  "thematicQuotes": [
+    {
+      "chinese": "未经审视的生活是不值得过的。",
+      "english": "The unexamined life is not worth living.",
+      "source": "Plato, Apology 38a",
+      "context": "苏格拉底在被判处死刑后的最后陈述，阐述哲学的根本使命。"
+    },
+    {
+      "chinese": "我只知道一件事，就是我一无所知。",
+      "english": "I know that I know nothing.",
+      "source": "Plato, Apology 21d",
+      "context": "苏格拉底对德尔斐神谕的解释——智慧在于认识到自己的无知。"
+    },
+    {
+      "chinese": "我是什么？一只牛虻，由神赐予城邦的牛虻。",
+      "english": "I am a gadfly, given to the state by God.",
+      "source": "Plato, Apology 30e",
+      "context": "苏格拉底解释自己为何在雅典街头与人对话。"
+    },
+    {
+      "chinese": "美德即知识。",
+      "english": "Virtue is knowledge.",
+      "source": "Plato, Protagoras 361c",
+      "context": "苏格拉底伦理学的核心命题。"
+    },
+    {
+      "chinese": "没有人自愿作恶。",
+      "english": "No one errs willingly.",
+      "source": "Plato, Protagoras 358c",
+      "context": "德性即知识的推论——作恶源于无知而非恶意。"
+    },
+    {
+      "chinese": "去生活吧，还有去死。",
+      "english": "To live, and to die.",
+      "source": "Plato, Apology 28e",
+      "context": "苏格拉底回应害怕死亡的指控：一个好人无论生死都不应担忧。"
+    }
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释苏格拉底诘问法（Elenchus）的核心机制及其与助产术（Maieutics）的关系。",
+      "input": "",
+      "output": "苏格拉底诘问法（Elenchus）是一种通过问答揭示信念矛盾的哲学方法。其核心机制包括：1）对方提出一个定义或信念（如'正义就是强者之利'）；2）苏格拉底通过举例和推论揭示该定义的反例或内在矛盾；3）对方被迫承认无知或修正立场。诘问法的目的不是摧毁信念，而是通过'思想的助产术'帮助对方'分娩'出真正的知识。\n\n助产术（Maieutics）是苏格拉底在《泰阿泰德篇》中提出的教育学隐喻，将哲学方法比作助产士的技艺：助产士不自己生育孩子，而是帮助他人'分娩'出已经怀在腹中的孩子。这与诘问法的关系在于：两者都相信真理已在灵魂之中，哲学家的任务不是灌输，而是唤醒。\n\n关键区别在于：诘问法强调'检验'（elenchus = 审问/检验），助产术强调'催生'（maieutics = 分娩）。前者侧重于揭露矛盾，后者侧重于激发潜能。但两者在实践中是不可分割的：只有通过诘问法揭示错误信念的局限性，灵魂才能腾出空间迎接真正的知识。",
+      "source": "Plato, Apology; Theaetetus 148e-151d",
+      "tier": 1
+    },
+    {
+      "instruction": "解释'德性即知识'命题及其面临的挑战，特别是关于意志薄弱（akrasia）的问题。",
+      "input": "",
+      "output": "'德性即知识'（aretē estin epistēmē）是苏格拉底伦理学的核心命题，主张如果一个人真正知道什么是善，他必然会行善；作恶必然源于对'什么是真正善'的无知。\n\n这一命题面临的根本挑战是意志薄弱（akrasia / moral weakness）问题：现实中存在'明知故犯'的情况——一个人明知某事是恶的，却仍然去做。例如，吸烟者明知吸烟有害健康，却继续吸烟。\n\n苏格拉底的回应是：这种行为不是真正的'知道'。他认为'知道'不仅是命题性知识（知道某事为真），更是一种实践性智慧——对善的正确判断必然导致善的行动。如果一个人真正'知道'吸烟有害，他就会停止吸烟；继续吸烟说明他并没有真正'知道'。\n\n柏拉图在《理想国》中通过灵魂三分说修正了这一立场：承认欲望部分可以在理性'知道'某事是恶的情况下仍然驱动恶行。亚里士多德在《尼各马可伦理学》第七卷进一步分析了akrasia，区分了'知识'的多种状态（拥有知识但暂时遗忘 vs 真正无知）。",
+      "source": "Plato, Protagoras 358c; Republic 435c-441c; Aristotle, Nicomachean Ethics VII",
+      "tier": 1
+    },
+    {
+      "instruction": "苏格拉底之死对西方哲学产生了什么影响？",
+      "input": "",
+      "output": "苏格拉底之死（公元前399年）是西方哲学史上最具标志性的事件之一，其影响远超一个哲学家的个人命运。\n\n1. **哲学与政治的冲突**：苏格拉底之死揭示了哲学探究与民主政治之间的根本张力。一个以'审视生活'为使命的哲学家，在一个以'多数意见'为权威的民主城邦中，必然面临被指控'腐蚀青年'和'不敬神'的风险。这一事件促使后世哲学家（从柏拉图到罗尔斯）持续反思：哲学自由与政治秩序如何共存？\n\n2. **殉道者的原型**：苏格拉底平静接受死刑、拒绝越狱（《克里托篇》）的行为，成为西方文化中'为真理而死'的殉道者原型。从耶稣到伽利略，从托马斯·莫尔到甘地，苏格拉底式的殉道叙事不断重演。\n\n3. **'内在法庭'的确立**：苏格拉底在《申辩篇》中区分了'雅典法庭'和'真理法庭'——即使被世俗权力定罪，一个遵循真理的人仍然是正义的。这种'内在法庭'的概念成为基督教良心论、康德道德哲学和现代公民不服从理论的思想源头。\n\n4. **柏拉图哲学转向**：苏格拉底之死直接导致柏拉图对雅典民主的深刻怀疑，催生了《理想国》中的哲人王理想和《法律篇》中的法治构想。没有苏格拉底之死，就没有柏拉图的政治哲学。\n\n5. **现代公民不服从**：梭罗、马丁·路德·金、汉娜·阿伦特等都将苏格拉底作为公民不服从（civil disobedience）的先驱——在承认法律权威的同时，以道德理由拒绝执行不正义的法律。",
+      "source": "Plato, Apology; Crito; Republic; C.D.C. Reeve, Socrates in the Apology (1989)",
+      "tier": 1
+    }
+  ]
+}

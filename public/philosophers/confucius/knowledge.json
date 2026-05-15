@@ -1,0 +1,117 @@
+{
+  "philosopher": {
+    "name": "孔子",
+    "name_en": "Confucius",
+    "name_zh_pinyin": "Kǒng Zǐ",
+    "name_grc": "孔丘",
+    "lived": "公元前551年—公元前479年",
+    "birthplace": "鲁国陬邑（今山东曲阜）",
+    "era": "先秦 / 春秋时期",
+    "school": "儒家",
+    "occupation": "思想家、教育家、政治家",
+    "summary": "孔子是儒家思想的创始人，中国两千年文明的精神奠基者。他不是神学家，而是伦理学家和教育家——关心的是如何做一个完整的人。核心概念包括：仁（人际关怀的核心）、礼（社会规范与内在修养的统一）、中庸（恰到好处的平衡）、正名（名实相符的政治秩序）。孔子开创私学，弟子三千，贤者七十二。其思想通过《论语》流传，深刻影响了东亚文明乃至世界。",
+    "summary_en": "Confucius is the founder of Confucianism and one of the most influential thinkers in world history. His philosophy centers on ren (benevolence / humaneness), li (ritual propriety), and the cultivation of moral virtue through self-cultivation and education."
+  },
+  "lifeEvents": [
+    {"year": "公元前551年", "event": "出生于鲁国", "details": "名丘，字仲尼。父亲叔梁纥为鲁国武士，母亲颜徵在。三岁丧父，家道中落。"},
+    {"year": "公元前532年", "event": "开办私学", "details": "打破贵族垄断教育的传统，开创'有教无类'的平民教育。"},
+    {"year": "公元前501—496年", "event": "担任鲁国官职", "details": "先后任中都宰、司空、司寇（掌管刑狱），政绩卓著。但因与季氏等权贵矛盾，于公元前496年离开鲁国，开始周游列国。"},
+    {"year": "公元前496—484年", "event": "周游列国", "details": "历时十四年，先后到过卫、曹、宋、郑、陈、蔡、楚等国，试图推行自己的政治主张，但均未成功。期间'累累若丧家之狗'，但始终不改其志。"},
+    {"year": "公元前484年", "event": "返回鲁国", "details": "晚年回到鲁国，专心从事教育和文献整理工作，修订《诗》《书》《礼》《乐》《易》《春秋》六经。"},
+    {"year": "公元前479年", "event": "逝世", "details": "享年73岁。葬于曲阜泗水北岸。弟子们守墓三年，子贡独守六年。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "ren",
+      "title": "仁",
+      "title_en": "Ren / Benevolence / Humaneness",
+      "category": "伦理学",
+      "description": "仁是儒家伦理学的核心范畴，意为'爱人'、'人道'、'人际关怀'。孔子对'仁'有多种表述：'爱人'（《颜渊》）、'己所不欲，勿施于人'（《颜渊》）、'己欲立而立人，己欲达而达人'（《雍也》）。仁不是抽象的道德规则，而是具体的、情境化的道德敏感性——在特定的关系中做恰当的事。仁与'礼'的关系是：仁是礼的精神内核，礼是仁的外在表现。没有仁的礼是空洞的仪式，没有礼的仁是盲目的善意。",
+      "keyWorks": ["《论语·颜渊》", "《论语·雍也》", "《论语·学而》"],
+      "primaryQuotes": [
+        {"chinese": "樊迟问仁。子曰：'爱人。'", "english": "Fan Chi asked about ren. The Master said: 'Love people.'", "source": "Analects 12:22"},
+        {"chinese": "己所不欲，勿施于人。", "english": "Do not do to others what you do not want done to yourself.", "source": "Analects 12:2, 15:24"},
+        {"chinese": "夫仁者，己欲立而立人，己欲达而达人。", "english": "The ren person, wishing to establish himself, also establishes others; wishing to achieve, also helps others achieve.", "source": "Analects 6:30"},
+        {"chinese": "克己复礼为仁。一日克己复礼，天下归仁焉。", "english": "To subdue oneself and return to li is ren. If for one day one subdues oneself and returns to li, the whole world will return to ren.", "source": "Analects 12:1"}
+      ],
+      "secondarySources": [
+        {"scholar": "Roger T. Ames & Henry Rosemont Jr.", "work": "The Analects of Confucius: A Philosophical Translation (1998)", "insight": "Ames 和 Rosemont 强调'仁'不是一个'属性'（如西方伦理学中的'美德'），而是一种'关系性成就'（relational achievement）——仁不是在孤立个体中完成的，而是在具体的 interpersonal 关系中实现的。"},
+        {"scholar": "Philip J. Ivanhoe", "work": "Confucian Moral Self Cultivation (2000)", "insight": "Ivanhoe 将'仁'解读为一种'修养'（self-cultivation）过程：仁不是某种天赋的品质，而是通过持续的道德实践（如学习、反思、克己）逐渐培养的。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "'仁'就是'善良'或'好心'。", "clarification": "仁不仅仅是善意。仁要求'恰当地'爱——爱父母不同于爱朋友，爱君主不同于爱百姓。仁是一种情境化的道德智慧，知道在特定关系中'什么是对的'。"},
+        {"misconception": "'己所不欲，勿施于人'是消极的金科玉律。", "clarification": "这确实是'消极'表述，但孔子同时提出了'积极'表述：'己欲立而立人，己欲达而达人'。儒家伦理学同时包含消极义务（不伤害）和积极义务（促进他人福祉）。"}
+      ]
+    },
+    {
+      "id": "li",
+      "title": "礼",
+      "title_en": "Li / Ritual Propriety",
+      "category": "伦理学 / 政治哲学",
+      "description": "礼是儒家伦理学的另一个核心范畴，涵盖礼仪、礼节、礼制、礼貌等。但礼在孔子哲学中的含义远超外在的仪式——它是'仁'的外在表达，是培养道德品格的'身体实践'。通过行礼（如祭祀、丧礼、宴饮之礼），人学会了'敬'（reverence）、'让'（deference）和'分寸'（proper measure）。孔子强调：'人而不仁，如礼何？'（《八佾》）——没有仁的礼是空洞的形式。同时，礼也是社会秩序的基石：'君君臣臣父父子子'（《颜渊》）——每个人都应按照自己的社会角色履行相应的义务。",
+      "keyWorks": ["《论语·学而》", "《论语·八佾》", "《论语·颜渊》"],
+      "primaryQuotes": [
+        {"chinese": "克己复礼为仁。", "english": "To subdue oneself and return to li is ren.", "source": "Analects 12:1"},
+        {"chinese": "人而不仁，如礼何？", "english": "If a person is without ren, what use is li?", "source": "Analects 3:3"},
+        {"chinese": "非礼勿视，非礼勿听，非礼勿言，非礼勿动。", "english": "Do not look at what is not li; do not listen to what is not li; do not speak what is not li; do not move where it is not li.", "source": "Analects 12:1"},
+        {"chinese": "礼之用，和为贵。", "english": "In the use of li, harmony is the most valuable.", "source": "Analects 1:12"}
+      ],
+      "secondarySources": [
+        {"scholar": "Herbert Fingarette", "work": "Confucius: The Secular as Sacred (1972)", "insight": "Fingarette 将礼比作'神圣的仪式'——礼不是僵化的规则，而是'将世俗行为神圣化'的方式。通过礼，日常的人际交往获得了超越性的意义。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "'礼'就是繁文缛节或等级压迫。", "clarification": "孔子时代的礼确实包含等级制度，但孔子的核心关怀是礼的精神内核——'敬'和'仁'。'礼之用，和为贵'（1:12）——礼的目的是和谐，而非压迫。当礼变成形式主义时，孔子明确反对：'礼，与其奢也，宁俭'（3:4）。"}
+      ]
+    },
+    {
+      "id": "zhong-yong",
+      "title": "中庸",
+      "title_en": "Zhongyong / Doctrine of the Mean",
+      "category": "伦理学",
+      "description": "中庸意为'中道'、'恰到好处'、'不偏不倚'。不是平庸或折中，而是在具体情境中找到最恰当的平衡点。'过犹不及'（《先进》）——过度和不足同样不好。中庸要求根据情境判断'什么是恰当的'，这需要高度的道德智慧和实践判断（类似亚里士多德的phronesis）。",
+      "keyWorks": ["《论语·雍也》", "《中庸》（《礼记》篇）"],
+      "primaryQuotes": [
+        {"chinese": "中庸之为德也，其至矣乎！民鲜能久矣。", "english": "The mean as a virtue — it is the highest! The people have rarely been able to sustain it for long.", "source": "Analects 6:29"},
+        {"chinese": "过犹不及。", "english": "Excess is as bad as deficiency.", "source": "Analects 11:16"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "中庸就是'和稀泥'或'骑墙'。", "clarification": "中庸不是无原则的妥协，而是'恰到好处'——在愤怒时知道何时该发怒，在宽容时知道何时该坚持。这需要高度的道德判断力和情境敏感性。"}
+      ]
+    },
+    {
+      "id": "zheng-ming",
+      "title": "正名",
+      "title_en": "Rectification of Names",
+      "category": "政治哲学 / 语言哲学",
+      "description": "正名是孔子的政治哲学核心：'名不正则言不顺，言不顺则事不成'（《子路》）。正名要求社会角色（君、臣、父、子）的实际行为与其名称所蕴含的规范相符。如果'君'的行为不符合'君'应有的标准，那么'君'这个名称就失去了意义。正名因此是一种'名实相符'的政治秩序要求。",
+      "keyWorks": ["《论语·子路》"],
+      "primaryQuotes": [
+        {"chinese": "名不正，则言不顺；言不顺，则事不成；事不成，则礼乐不兴。", "english": "If names are not correct, language will not be in accordance with the truth of things. If language is not in accordance with the truth of things, affairs cannot be carried on to success.", "source": "Analects 13:3"},
+        {"chinese": "君君，臣臣，父父，子子。", "english": "Let the ruler be a ruler, the minister a minister, the father a father, the son a son.", "source": "Analects 12:11"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "正名是维护等级制度的工具。", "clarification": "正名确实涉及社会角色，但其核心关怀是'名实相符'——一个统治者必须真正履行统治者的职责（仁政），否则他就不配称为'君'。正名也可以被理解为一种'问责机制'。"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《论语》", "title_en": "Analects", "summary": "记录孔子及其弟子言行的语录体著作，共20篇。是了解孔子思想最重要的文本。"},
+    {"title": "《春秋》", "summary": "孔子修订的鲁国编年史，以微言大义褒贬历史人物。"},
+    {"title": "《易传》", "summary": "传统认为孔子作《十翼》，解释《易经》的哲学含义。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "学而时习之，不亦说乎？", "english": "Is it not a pleasure, having learned something, to try it out at due intervals?", "source": "Analects 1:1"},
+    {"chinese": "己所不欲，勿施于人。", "english": "Do not do to others what you do not want done to yourself.", "source": "Analects 12:2"},
+    {"chinese": "三人行，必有我师焉。", "english": "When I walk along with two others, from at least one I will be able to learn.", "source": "Analects 7:22"},
+    {"chinese": "知者不惑，仁者不忧，勇者不惧。", "english": "The wise are not confused; the ren are not anxious; the courageous are not afraid.", "source": "Analects 9:29"},
+    {"chinese": "君子和而不同，小人同而不和。", "english": "The junzi harmonizes but does not conform; the petty man conforms but does not harmonize.", "source": "Analects 13:23"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较孔子的'仁'与西方哲学中'爱'（agape/eros）概念的异同。",
+      "output": "孔子的'仁'与西方'爱'概念既有相似之处，也有根本差异。\n\n相似之处：\n1）都强调对他人的关怀：仁的核心是'爱人'（12:22），与基督教的agape（无私之爱）和柏拉图eros（向上的爱）都有共通之处。\n2）都要求超越自我中心：'己欲立而立人'与'爱人如己'都强调推己及人。\n\n根本差异：\n1）仁是关系性的、情境化的，而非普遍的、无条件的。仁要求对父母孝、对朋友信、对君主忠——不同的关系有不同的仁的表现形式。相比之下，agape是无条件的、不分亲疏的。\n2）仁是'修养'的结果，而非天赋的或神赐的。仁需要通过'学'和'习'来培养，不是每个人生来就有的。\n3）仁不包含'超越'维度。柏拉图的爱欲（eros）最终指向'美本身'和'善之理念'，具有形而上学和宗教维度；仁始终停留在人际关系的层面，不指向超越的实在。\n\n当代意义：仁的概念对现代伦理学有重要启示：道德不是抽象规则的运用，而是在具体关系中的情境化判断。这与 care ethics（关怀伦理学）和 particularism（特殊主义）有深层共鸣。",
+      "source": "Analects; Ames & Rosemont, The Analects (1998); Ivanhoe, Confucian Moral Self Cultivation (2000)",
+      "tier": 1
+    }
+  ]
+}

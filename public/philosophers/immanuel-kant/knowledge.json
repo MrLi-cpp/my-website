@@ -1,0 +1,233 @@
+{
+  "philosopher": {
+    "name": "康德",
+    "name_en": "Immanuel Kant",
+    "name_de": "Immanuel Kant",
+    "lived": "1724年4月22日—1804年2月12日",
+    "birthplace": "普鲁士柯尼斯堡（Königsberg）",
+    "deathplace": "柯尼斯堡",
+    "nationality": "普鲁士",
+    "era": "启蒙时代 / 德国古典哲学",
+    "school": "德国观念论 / 批判哲学",
+    "occupation": "哲学家、逻辑学家",
+    "summary": "伊曼努尔·康德是近代哲学史上最具影响力的思想家之一，批判哲学的创始人。他一生未离开故乡柯尼斯堡，却改变了整个世界的思维方式。其核心贡献包括：认识论上的'哥白尼革命'（对象符合知识而非知识符合对象）、先验唯心论、现象与本体的区分；伦理学上的定言命令与自律原则；以及《什么是启蒙？》中对理性自主的经典辩护。康德试图为知识划定边界，为道德确立基础，为信仰留出空间。",
+    "summary_en": "Immanuel Kant is one of the most influential thinkers in modern philosophy, founder of Critical Philosophy. He spent his entire life in Königsberg, Prussia, yet transformed the way the world thinks. His central contributions include the Copernican Revolution in epistemology, transcendental idealism, the distinction between phenomena and noumena, the Categorical Imperative in ethics, and the classic defense of rational autonomy in 'What is Enlightenment?'"
+  },
+  "lifeEvents": [
+    {"year": "1724", "event": "出生于柯尼斯堡", "details": "父母为虔诚的路德宗信徒，父亲约翰·格奥尔格·康德是皮匠。家境贫寒但重视教育。"},
+    {"year": "1740", "event": "进入柯尼斯堡大学", "details": "最初学习神学，后转向哲学、数学和物理学。受教于马丁·克努岑（Martin Knutzen），接触到牛顿物理学和沃尔夫哲学。"},
+    {"year": "1746—1754", "event": "担任家庭教师", "details": "离开大学，在多个贵族家庭担任家庭教师。这段经历让他接触到普鲁士社会的各个阶层。"},
+    {"year": "1755", "event": "获得大学授课资格（Habilitation）", "details": "以拉丁文论文《论火》获得授课资格，开始在柯尼斯堡大学担任无薪讲师（Privatdozent），靠学生听课费维持生计。讲授课程涵盖逻辑学、形而上学、伦理学、自然地理学、人类学等。"},
+    {"year": "1755—1770", "event": "前批判期", "details": "发表了一系列科学和哲学著作，包括《自然通史与天体理论》（1755），提出星云假说解释太阳系起源（早于拉普拉斯）。此时期受莱布尼茨-沃尔夫体系影响，但已开始独立思考。"},
+    {"year": "1770", "event": "被任命为逻辑学与形而上学教授", "details": "就任柯尼斯堡大学正式教授职位，发表就职论文《论感觉世界与理智世界的形式与原则》，标志着从'前批判期'向'批判期'的转变。"},
+    {"year": "1781", "event": "《纯粹理性批判》出版", "details": "经过十余年的沉默思考，康德出版了这部'改变了形而上学命运'的巨著。初版反应冷淡，康德随后出版了更简明扼要的《未来形而上学导论》（1783）。1787年出版的第二版进行了大量修订。"},
+    {"year": "1785", "event": "《道德形而上学基础》出版", "details": "系统阐述了定言命令和自律原则，提出'只依据那些你能同时愿意它成为普遍法则的准则行动'。"},
+    {"year": "1788", "event": "《实践理性批判》出版", "details": "论证道德法则不需要理论理性的支持，实践理性自身就能确立道德的基础。结尾名言：'有两样东西，我越是思考，就越感到敬畏：头顶的星空，和心中的道德律。'"},
+    {"year": "1790", "event": "《判断力批判》出版", "details": "完成批判哲学三部曲，探讨审美判断与目的论判断，试图连接自然领域与自由领域。"},
+    {"year": "1793", "event": "《纯然理性界限内的宗教》出版", "details": "探讨宗教与道德的关系，主张宗教必须建立在道德基础上而非相反。此书遭到普鲁士国王腓特烈·威廉二世的审查。"},
+    {"year": "1794", "event": "被禁止公开发表宗教著作", "details": "腓特烈·威廉二世以'滥用哲学破坏基督教基本教义'为由，禁止康德继续公开发表宗教著作。康德承诺遵守，直到国王去世。"},
+    {"year": "1795", "event": "《永久和平论》出版", "details": "提出实现国际和平的六项先决条款和三项确定条款，包括建立共和制、国际联盟等。成为国际法与和平研究的经典文本。"},
+    {"year": "1797", "event": "《道德形而上学》出版", "details": "系统阐述法权论（Rechtslehre）和德性论（Tugendlehre），将定言命令应用于具体伦理领域。"},
+    {"year": "1798", "event": "《实用人类学》出版", "details": "基于三十余年讲授的人类学课程，探讨人的认知、情感和欲望能力。"},
+    {"year": "1804", "event": "逝世于柯尼斯堡", "details": "享年79岁。临终前最后一句话据说是'Es ist gut'（很好）。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "copernican-revolution",
+      "title": "哥白尼革命（认识论）",
+      "title_en": "Copernican Revolution in Epistemology",
+      "category": "认识论 / 形而上学",
+      "description": "康德的'哥白尼革命'是认识论上的根本性转向。传统认识论（从柏拉图到笛卡尔到洛克）假设：知识必须符合对象（即我们的认识能力必须适应外部实在）。康德反过来提出：对象必须符合我们的认识能力（即外部实在必须适应我们的先天认知结构）。就像哥白尼将太阳而非地球置于宇宙中心一样，康德将主体而非客体置于认识的中心。这一转向的核心含义是：我们认识的不是'物自体'（Ding an sich / thing-in-itself），而是被我们先天认知结构（时空形式和范畴）所建构的'现象'（Erscheinung / appearance）。",
+      "keyWorks": ["《纯粹理性批判》", "《未来形而上学导论》"],
+      "primaryQuotes": [
+        {
+          "chinese": "迄今为止，人们假定我们的知识必须依照对象；但是，通过这一假定，所有试图在对象之上先天地建立某种东西的努力，都在未等开始之前就归于失败了。因此，我们不妨尝试一下：如果我们假定对象必须依照我们的知识，那么形而上学的任务是否能够更好地完成？",
+          "english": "Hitherto it has been assumed that all our knowledge must conform to objects. But all attempts to extend our knowledge of objects a priori by means of something which would establish a connection between them have come to nothing... We should therefore make trial whether we may not have more success in the tasks of metaphysics, if we suppose that objects must conform to our knowledge.",
+          "source": "Critique of Pure Reason, Bxvi (2nd edition)",
+          "german": "Es ist hier die Frage, ob wir in der Metaphysik nicht ebenso wie in der Geometrie und Physik durch eine vorhergehende Untersuchung unseres Erkenntnisvermögens an dem Objekte vorherbestimmen können"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Henry E. Allison", "work": "Kant's Transcendental Idealism (1983/2004)", "insight": "Allison 论证哥白尼革命的核心是'先验观念论'与'经验实在论'的结合：现象是经验上真实的（不是幻觉），但先验上是被建构的（依赖于主体）。这一解释成为英语世界解读康德的主流。"},
+        {"scholar": "Paul Guyer", "work": "Kant and the Claims of Knowledge (1987)", "insight": "Guyer 提出了与Allison不同的解读，认为康德的理论中存在着'先验实在论'的张力——即物自体虽然不可知，但康德有时又暗示它存在并引起我们的感觉。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "哥白尼革命意味着'我们创造了实在'。", "clarification": "错误。康德区分了'现象'（我们认识的对象，被我们的认知结构所建构）和'物自体'（独立于我们认知的实在，但我们无法认识它）。我们'建构'的是现象，而非物自体本身。"},
+        {"misconception": "物自体（thing-in-itself）是康德体系中的多余设定。", "clarification": "这是费希特和某些新康德主义者的批评。但康德坚持物自体是必要的：1）它限制了现象的范围，防止我们将自己的认知结构误当成唯一的实在；2）它解释了为什么我们会有'感觉'——感觉需要一个来源；3）它为道德自由留出了空间（如果一切都是现象，就没有自由的可能）。"}
+      ]
+    },
+    {
+      "id": "categorical-imperative",
+      "title": "定言命令",
+      "title_en": "Categorical Imperative",
+      "category": "伦理学",
+      "description": "定言命令（kategorischer Imperativ）是康德伦理学的核心原则，区别于假言命令（hypothetical imperative，'如果你想X，就做Y'）。定言命令是无条件的、绝对的，其基础不是欲望或目的，而是理性自身的法则。康德提出了三种表述方式：1）普遍法则公式：'只依据那些你能同时愿意它成为普遍法则的准则行动'；2）人性公式：'在任何时候都要把人（无论你自己还是他人）当作目的，而不仅仅是手段'；3）自律公式：'每个理性存在者的意志都是普遍立法的意志'。三种公式被康德认为是'同一法则'的不同表达。",
+      "keyWorks": ["《道德形而上学基础》", "《实践理性批判》", "《道德形而上学》"],
+      "primaryQuotes": [
+        {
+          "chinese": "只依据那些你能同时愿意它成为普遍法则的准则行动。",
+          "english": "Act only according to that maxim whereby you can at the same time will that it should become a universal law.",
+          "source": "Groundwork of the Metaphysics of Morals, 421 (4:421)",
+          "german": "Handle nur nach derjenigen Maxime, durch die du zugleich wollen kannst, daß sie ein allgemeines Gesetz werde"
+        },
+        {
+          "chinese": "你要如此行动，即无论是你的人格中的人性，还是其他任何人的人格中的人性，你在任何时候都同时当作目的，而不仅仅当作手段来使用。",
+          "english": "Act in such a way that you treat humanity, whether in your own person or in the person of any other, never merely as a means to an end, but always at the same time as an end.",
+          "source": "Groundwork, 429 (4:429)",
+          "german": "Handle so, daß du die Menschheit sowohl in deiner Person, als in der Person eines jeden andern jederzeit zugleich als Zweck, niemals bloß als Mittel brauchest"
+        },
+        {
+          "chinese": "每个理性存在者的意志都是普遍立法的意志。",
+          "english": "The will of every rational being is a will that legislates universal law.",
+          "source": "Groundwork, 432 (4:432)",
+          "german": "Der Wille jedes vernünftigen Wesens ist allgemein gesetzgebend"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Christine M. Korsgaard", "work": "Creating the Kingdom of Ends (1996)", "insight": "Korsgaard 将定言命令解释为'实践同一性'的要求：当我们作为理性存在者行动时，我们必须将自己视为'立法者'而非仅仅'服从者'。这一解读强调了康德的'自律'概念对当代政治哲学的意义。"},
+        {"scholar": "Onora O'Neill", "work": "Constructions of Reason: Explorations of Kant's Practical Philosophy (1989)", "insight": "O'Neill 区分了'普遍化测试'（universalizability test）的不同层次：逻辑一致性测试（不自相矛盾）、意愿一致性测试（能真正意愿）和系统性测试（作为理性存在者能接受的系统）。"},
+        {"scholar": "Allen W. Wood", "work": "Kantian Ethics (2008)", "insight": "Wood 批评了将康德简化为'规则功利主义'的倾向，强调定言命令不是计算后果的工具，而是对行动理由的检验——一个行动是否合理，取决于其背后的理由能否被所有理性存在者共享。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "定言命令就是'己所不欲，勿施于人'。", "clarification": "康德明确反对将定言命令简化为这条黄金法则（Groundwork 430）。黄金法则以欲望和偏好为基础（'我不想被欺骗，所以我不欺骗'），而定言命令以理性为基础（'欺骗作为普遍法则会破坏承诺制度本身'）。此外，黄金法则无法解决'正义的惩罚'问题——一个罪犯不想被惩罚，但惩罚仍然是正义的。"},
+        {"misconception": "康德认为撒谎在任何情况下都是错误的。", "clarification": "康德确实在《道德形而上学》中论证'对杀人犯的诚实义务'（即使杀人犯来问受害者在哪里，也不应撒谎），但这一立场在当代康德主义中备受争议。Korsgaard 等学者认为康德论证的是'不能做出虚假陈述'，但可以通过'保留信息'或'改变话题'来应对。"},
+        {"misconception": "定言命令可以通过计算后果来检验。", "clarification": "康德明确反对后果主义。定言命令检验的不是'如果每个人都这样做会发生什么'（后果），而是'这个准则能否成为普遍法则而不自相矛盾'（逻辑）。例如，'承诺是假的'不能成为普遍法则，因为一旦成为普遍法则，承诺制度本身就会崩溃——这是一种逻辑矛盾，而非后果预测。"}
+      ]
+    },
+    {
+      "id": "phenomena-noumena",
+      "title": "现象与本体",
+      "title_en": "Phenomena and Noumena",
+      "category": "形而上学 / 认识论",
+      "description": "现象（Phaenomena / Erscheinungen）与本体（Noumena / Dinge an sich）的区分是康德先验观念论的核心。现象是我们通过感性直观和知性范畴所认识的对象——它们是经验上真实的，但先验上依赖于我们的认知结构。本体（物自体）则是独立于我们认知结构的实在——我们永远无法认识它，但可以思考它。康德强调：本体不是'另一个世界'的对象，而是一个'限制性概念'（Grenzbegriff），用来标记我们知识的边界。本体概念的必要性在于：1）它解释了感觉的来源（感觉需要一个'外部原因'）；2）它为自由意志留出空间（如果一切都是现象，就没有自由）；3）它防止我们将自己的认知结构误当成唯一的实在。",
+      "keyWorks": ["《纯粹理性批判》先验分析论和先验辩证论"],
+      "primaryQuotes": [
+        {
+          "chinese": "我们必须承认物自体的存在，作为现象的基础；但我们不能将范畴应用于物自体，因为范畴只有在与感性直观结合时才有意义。",
+          "english": "We must admit the existence of things in themselves as the ground of appearances; but we cannot apply the categories to things in themselves, for the categories have meaning only in combination with sensible intuition.",
+          "source": "Critique of Pure Reason, A251-252 / B307-308",
+          "german": "Wir müssen also die Dinge an sich zugeben, aber können die Kategorien nicht auf sie anwenden"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Henry E. Allison", "work": "Kant's Transcendental Idealism (2004)", "insight": "Allison 强调'物自体'不是'某种我们不知道是什么的东西'，而是一个'方法论上的设定'——它标志着我们知识的界限，而非一个正面的本体论主张。"},
+        {"scholar": "Graham Bird", "work": "Kant's Theory of Knowledge (2006)", "insight": "Bird 批评了将康德解读为'两个世界'（现象世界 vs 本体世界）的倾向，主张'一个世界、两种视角'的解读：同一个对象可以从'现象视角'（被认知）和'本体视角'（独立存在）来考虑。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "物自体是一个'东西'，只是我们不知道它是什么。", "clarification": "康德明确警告不要将物自体当成一个正面的对象（B307）。物自体是一个'限制性概念'（Grenzbegriff），用来标记我们知识的边界，而非一个可以被'发现'的实体。"},
+        {"misconception": "物自体是康德体系中的缺陷。", "clarification": "费希特和后康德哲学家确实批评了物自体，认为它是'不可解释之物'。但康德认为物自体是必要的：没有它，我们就无法解释感觉的来源，也无法为自由和道德留出空间。Allison 认为这是康德体系最深刻的洞见之一。"}
+      ]
+    },
+    {
+      "id": "enlightenment",
+      "title": "启蒙",
+      "title_en": "Enlightenment",
+      "category": "政治哲学 / 历史哲学",
+      "description": "康德在《什么是启蒙？》（1784）中给出了启蒙的经典定义：'启蒙是人脱离自我招致的监护。监护就是没有他人指导便无法使用自己的理性。自我招致，是因为这种无能不是由于缺乏理性，而是由于缺乏使用理性的决心和勇气。Sapere aude！要有勇气使用你自己的理性！这就是启蒙的口号。'康德区分了'公开使用理性'（作为学者在公共领域自由地发表意见）和'私人使用理性'（作为公务员或士兵在执行职务时服从命令）。前者必须是自由的，后者可以合理地受限。",
+      "keyWorks": ["《什么是启蒙？》"],
+      "primaryQuotes": [
+        {
+          "chinese": "启蒙是人脱离自我招致的监护。Sapere aude！要有勇气使用你自己的理性！这就是启蒙的口号。",
+          "english": "Enlightenment is man's emergence from his self-incurred immaturity. Immaturity is the inability to use one's own understanding without the guidance of another... Sapere aude! Have courage to use your own understanding! That is the motto of enlightenment.",
+          "source": "'What is Enlightenment?' (1784), 8:35",
+          "german": "Aufklärung ist der Ausgang des Menschen aus seiner selbstverschuldeten Unmündigkeit... Sapere aude! Habe Mut, dich deines eigenen Verstandes zu bedienen!"
+        },
+        {
+          "chinese": "而我所理解的对自己理性的公开运用，是指某人作为学者在全体读者面前所做出的那种运用。",
+          "english": "By the public use of one's own reason I understand that use which someone makes of it as a scholar before the entire reading public.",
+          "source": "'What is Enlightenment?', 8:37",
+          "german": "Den öffentlichen Gebrauch seines Vernunft verstehe ich denjenigen, den jemand als Gelehrter von dem ganzen Publikum des Leserwelt macht"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Michel Foucault", "work": "'What is Enlightenment?' (1984)", "insight": "福柯将康德的启蒙概念视为现代性批判的转折点。他认为康德的问题不是'什么是启蒙？'而是'什么是当下？'——即我们如何将自己视为一个历史时刻的主体？福柯的解读将启蒙从'理性解放'的叙事转变为'自我建构'的批判实践。"},
+        {"scholar": "Jürgen Habermas", "work": "The Philosophical Discourse of Modernity (1985)", "insight": "哈贝马斯将康德的启蒙概念作为其交往行为理论的基础：启蒙不仅是个人理性的觉醒，更是公共领域（Öffentlichkeit）的理性对话。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "康德认为启蒙意味着完全摆脱一切权威。", "clarification": "康德区分了'公开使用理性'（学者在公共领域自由发表意见）和'私人使用理性'（公民在执行职务时服从命令）。后者可以合理地受限，例如士兵服从命令、纳税人纳税。康德不是无政府主义者。"}
+      ]
+    },
+    {
+      "id": "autonomy",
+      "title": "自律 / 自律性",
+      "title_en": "Autonomy",
+      "category": "伦理学 / 政治哲学",
+      "description": "自律（Autonomie）是康德伦理学的最高原则。字面意思是'自我立法'（auto = 自我，nomos = 法则）。康德主张：道德法则不是来自外部权威（上帝、传统、自然），而是来自理性自身的自我立法。每个理性存在者都是'目的王国'（Reich der Zwecke）中的立法者，而非仅仅是服从者。自律的核心含义是：道德义务不是'我必须做X，因为上帝命令我'，而是'我做X，因为理性告诉我这是普遍的法则'。自律因此是自由的最高实现：不是为所欲为的'任意'（Willkür），而是按照理性法则行动的'意志'（Wille）。",
+      "keyWorks": ["《道德形而上学基础》", "《实践理性批判》"],
+      "primaryQuotes": [
+        {
+          "chinese": "自律的原则是：在任何时候都要依据那些你能够同时愿意它们成为普遍自然法则的准则来选择。",
+          "english": "The principle of autonomy is: Choose only in accordance with maxims that you can at the same time will as universal natural law.",
+          "source": "Groundwork, 434 (4:434)",
+          "german": "Das Prinzip der Autonomie ist also: wähle nur nach derjenigen Maxime, deren du zugleich wollen kannst, daß sie ein allgemeines Naturgesetz werde"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Christine Korsgaard", "work": "The Sources of Normativity (1996)", "insight": "Korsgaard 将康德的自律概念发展为'实践同一性'理论：道德法则之所以具有规范力，是因为遵守它构成了我们作为理性存在者的'实践同一性'。放弃道德法则就是放弃我们作为理性存在者的身份。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "自律就是'做自己想做的事'。", "clarification": "这是将自律与'任意'（Willkür / arbitrary choice）混淆了。康德的自律是'按照理性法则行动'，而非按照欲望行动。一个吸毒者'想'吸毒，但这恰恰是不自律——因为他的行为受欲望支配，而非理性法则。"}
+      ]
+    },
+    {
+      "id": "antinomies",
+      "title": "二律背反",
+      "title_en": "Antinomies of Pure Reason",
+      "category": "形而上学 / 辩证法",
+      "description": "二律背反（Antinomien）是康德在《纯粹理性批判》先验辩证论中展示的四组自相矛盾的命题，证明理性在试图超越经验界限时会陷入无法解决的矛盾。四组二律背反分别涉及：1）世界在时间和空间上是否有开端（正题：有；反题：无）；2）世界是否由不可分的简单实体构成（正题：是；反题：否）；3）世界是否存在自由因果性（正题：存在；反题：不存在）；4）世界是否存在绝对必然的存在者（正题：存在；反题：不存在）。康德的解决方案是'先验观念论'：正题和反题分别从'本体视角'和'现象视角'出发，两者在各自的领域内都是正确的，但一旦混淆两种视角就会陷入矛盾。第三组二律背反（自由因果性）对康德的实践哲学尤为重要：它为道德自由留出了空间。",
+      "keyWorks": ["《纯粹理性批判》先验辩证论"],
+      "primaryQuotes": [
+        {
+          "chinese": "这些二律背反的根源在于：理性试图将只能应用于现象的范畴扩展到物自体。",
+          "english": "The ground of these antinomies is that reason attempts to extend the categories, which can be applied only to appearances, to things in themselves.",
+          "source": "Critique of Pure Reason, A406/B433",
+          "german": "Der Grund dieser Antinomien liegt darin, daß die Vernunft die Kategorien, die nur auf Erscheinungen angewandt werden können, auf die Dinge an sich selbst erstreckt"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Graham Bird", "work": "Kant's Theory of Knowledge (2006)", "insight": "Bird 将二律背反视为康德对传统形而上学的系统性批判：当理性试图回答'世界是否有开端''人是否有自由''上帝是否存在'等问题时，它必然陷入自相矛盾。这表明这些问题超出了人类理性的界限。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "二律背反证明形而上学是不可能的。", "clarification": "康德不是说形而上学不可能，而是说'独断的'形而上学（试图像证明数学定理一样证明上帝存在）是不可能的。康德试图为'科学的'形而上学奠定基础——通过批判理性自身的界限，为实践哲学（道德和信仰）留出空间。"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《纯粹理性批判》", "title_de": "Kritik der reinen Vernunft", "year": "1781/1787", "summary": "康德最重要的著作。通过批判理性自身的界限，为知识划定范围：我们只能认识现象，不能认识物自体。提出了先验观念论、范畴理论、先验演绎、二律背反等核心概念。"},
+    {"title": "《未来形而上学导论》", "title_de": "Prolegomena zu einer jeden künftigen Metaphysik", "year": "1783", "summary": "《纯粹理性批判》的简明导论，用更通俗的语言阐述了批判哲学的核心论点。"},
+    {"title": "《道德形而上学基础》", "title_de": "Grundlegung zur Metaphysik der Sitten", "year": "1785", "summary": "系统阐述了定言命令、自律原则和目的王国。从'善的意志'出发，逐步推导出道德的最高原则。"},
+    {"title": "《实践理性批判》", "title_de": "Kritik der praktischen Vernunft", "year": "1788", "summary": "论证道德法则不需要理论理性的支持，实践理性自身就能确立道德的基础。包含著名的'星空与道德律'结语。"},
+    {"title": "《判断力批判》", "title_de": "Kritik der Urteilskraft", "year": "1790", "summary": "探讨审美判断与目的论判断，试图连接自然领域（必然性）与自由领域（目的性），完成批判哲学体系。"},
+    {"title": "《什么是启蒙？》", "title_de": "Beantwortung der Frage: Was ist Aufklärung?", "year": "1784", "summary": "给出了启蒙的经典定义：'脱离自我招致的监护'，'Sapere aude！要有勇气使用你自己的理性！'"},
+    {"title": "《永久和平论》", "title_de": "Zum ewigen Frieden", "year": "1795", "summary": "提出实现国际和平的六项先决条款和三项确定条款，包括建立共和制、国际联盟等。"},
+    {"title": "《道德形而上学》", "title_de": "Die Metaphysik der Sitten", "year": "1797", "summary": "系统阐述法权论和德性论，将定言命令应用于具体伦理领域。包含著名的'诚实对杀人犯'论证。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "有两样东西，我越是思考，就越感到敬畏：头顶的星空，和心中的道德律。", "english": "Two things fill the mind with ever new and increasing admiration and awe, the oftener and the more steadily we reflect on them: the starry heavens above and the moral law within.", "source": "Critique of Practical Reason, 161-162 (5:161-162)"},
+    {"chinese": "要有勇气使用你自己的理性！这就是启蒙的口号。", "english": "Have courage to use your own understanding! That is the motto of enlightenment.", "source": "'What is Enlightenment?'"},
+    {"chinese": "只依据那些你能同时愿意它成为普遍法则的准则行动。", "english": "Act only according to maxims you can will as universal law.", "source": "Groundwork of the Metaphysics of Morals"},
+    {"chinese": "人是目的，而不仅仅是手段。", "english": "Humanity is an end in itself, never merely a means.", "source": "Groundwork"},
+    {"chinese": "我们不得不悬置知识，以便为信仰腾出空间。", "english": "I have found it necessary to deny knowledge in order to make room for faith.", "source": "Critique of Pure Reason, Bxxx"},
+    {"chinese": "在纯粹理性的一切事务中，都允许意见（Meinung），但不能允许信仰（Glaube）——除非涉及实践的事务。", "english": "In all affairs of pure reason, opinion is allowed but not faith — except in practical matters.", "source": "Critique of Pure Reason"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释康德的'哥白尼革命'及其对传统认识论的影响。",
+      "output": "康德的'哥白尼革命'是认识论上的根本性转向。传统认识论（从柏拉图到洛克）假设知识必须符合对象。康德反过来提出：对象必须符合我们的认识能力。\n\n具体含义：1）我们认识的不是物自体（thing-in-itself），而是被我们先天认知结构（时空形式和范畴）所建构的现象；2）时空不是物自体的属性，而是我们感性的先天形式；3）范畴（因果性、实体性等）不是从经验中抽象出来的，而是知性的先天概念。\n\n对传统认识论的影响：1）否定了'镜子式'的认识论——知识不是对外部实在的被动反映；2）为先验知识（不依赖经验的知识）提供了基础——数学和自然科学之所以是普遍的，是因为它们依赖于主体的先天结构；3）划定了知识的界限——物自体不可知，形而上学不能像数学一样被证明。\n\n批评：费希特和黑格尔批评物自体是多余的设定；胡塞尔批评康德仍然保留了'自在之物'的残余实在论；分析哲学家（如Strawson）质疑'先验演绎'的有效性。",
+      "source": "Kant, Critique of Pure Reason Bxvi; Allison, Kant's Transcendental Idealism",
+      "tier": 1
+    },
+    {
+      "instruction": "解释康德的定言命令（Categorical Imperative）及其三种表述的关系。",
+      "output": "定言命令是康德伦理学的核心原则，是无条件的、绝对的道德法则。康德提出了三种表述方式：\n\n1）普遍法则公式：'只依据那些你能同时愿意它成为普遍法则的准则行动'。检验方法：如果你的行动准则被普遍化后会导致逻辑矛盾（如'承诺是假的'会破坏承诺制度本身），则该准则不道德。\n\n2）人性公式：'在任何时候都要把人当作目的，而不仅仅是手段'。核心含义：每个理性存在者都有绝对的价值（尊严），不能被工具化。例如，撒谎利用了他人的理性（你把他当成获取信息的工具，而非尊重他作为理性存在者的自主判断能力）。\n\n3）自律公式：'每个理性存在者的意志都是普遍立法的意志'。核心含义：道德法则不是来自外部权威，而是来自理性自身的自我立法。\n\n三种公式的关系：康德认为它们是'同一法则'的不同表达。普遍法则公式是形式上的检验；人性公式揭示了道德法则的内容（尊重人的尊严）；自律公式揭示了道德法则的来源（理性自我立法）。",
+      "source": "Kant, Groundwork of the Metaphysics of Morals 4:421-4:440",
+      "tier": 1
+    },
+    {
+      "instruction": "康德如何解决自由意志与决定论的矛盾？",
+      "output": "康德通过'现象与本体'的区分来解决自由与因果决定论的矛盾。\n\n1）决定论层面：在现象界（Phenomena），一切事件都服从因果律——这是自然科学的根基。人的行为作为'现象'也服从因果律，可以被心理学和社会学解释。\n\n2）自由层面：在本体界（Noumena），人是'物自体'——独立于时空和因果律。作为物自体，人拥有'自由意志'（free will），能够按照理性法则自我立法。\n\n3）相容论方案：康德不是'相容论者'（compatibilist）——他不认为自由和决定论在同一个层面相容。相反，他认为两者在不同层面都是正确的：作为现象，人被决定；作为本体，人是自由的。这被称为'双视角理论'（two-aspect theory）。\n\n4）第三组二律背反：康德在《纯粹理性批判》中将自由与因果性的冲突列为二律背反之一，并通过先验观念论解决之——正题和反题分别从本体视角和现象视角出发，两者在各自领域内都是正确的。\n\n批评：1）'双视角'是否只是语言游戏？如果自由无法对现象产生因果影响，它是否只是'空洞的自由'？2）现象与本体的区分是否是'两个世界'的形而上学？Allison的'一个世界、两种视角'解读试图回应这一问题。",
+      "source": "Kant, Critique of Pure Reason A405/B432-A567/B595; Groundwork 4:450-4:458",
+      "tier": 1
+    }
+  ]
+}

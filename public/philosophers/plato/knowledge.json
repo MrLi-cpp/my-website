@@ -1,0 +1,190 @@
+{
+  "philosopher": {
+    "name": "柏拉图",
+    "name_en": "Plato",
+    "name_grc": "Πλάτων",
+    "lived": "约公元前427年—公元前347年",
+    "birthplace": "雅典",
+    "school": "雅典学园（Academy）",
+    "teacher": "苏格拉底",
+    "summary": "柏拉图是西方哲学史上最具影响力的哲学家之一，苏格拉底的学生、亚里士多德的老师。他创立了雅典学园（Academy），这是西方历史上第一所高等教育机构。柏拉图以对话录形式写作，其思想涵盖形而上学、认识论、伦理学、政治哲学、美学等领域。核心教义包括理念论（Theory of Forms）、灵魂三分说、回忆说、哲人王等。",
+    "summary_en": "Plato is one of the most influential philosophers in the Western tradition. A student of Socrates and teacher of Aristotle, he founded the Academy in Athens, the first institution of higher learning in the Western world. His dialogues explore ethics, politics, metaphysics, epistemology, and aesthetics. Central doctrines include the Theory of Forms, the tripartite soul, anamnesis, and the philosopher-king."
+  },
+  "lifeEvents": [
+    {"year": "约公元前427年", "event": "出生于雅典Alopeke区", "details": "原名亚里斯多克勒斯（Aristocles），'柏拉图'为绰号。家庭属于雅典贵族阶层。"},
+    {"year": "约公元前407年", "event": "师从苏格拉底", "details": "约在20岁时成为苏格拉底的学生，深受其影响。"},
+    {"year": "公元前399年", "event": "苏格拉底被判处死刑", "details": "苏格拉底被雅典法庭判处死刑。此事件对柏拉图产生深远影响，促使他思考正义、法律与哲学的本质。"},
+    {"year": "公元前399—387年", "event": "游历期", "details": "离开雅典，先后游历麦加拉、埃及、昔兰尼、意大利南部和西西里。"},
+    {"year": "约公元前387年", "event": "在雅典建立学园（Academy）", "details": "在雅典城外创立学园，这是西方历史上第一所高等教育机构。学园门口据说刻有'不懂几何者不得入内'的铭文。"},
+    {"year": "公元前367、361年", "event": "两次西西里之行", "details": "前往叙拉古教导僭主小狄奥尼修斯二世哲学，试图将哲人王理想付诸实践。两次均以失败告终。"},
+    {"year": "公元前347年", "event": "逝世于雅典", "details": "享年约80岁。据第欧根尼·拉尔修记载，他是在一场婚礼上安静离世的。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "theory-of-forms",
+      "title": "理念论 / 形式论",
+      "title_en": "Theory of Forms",
+      "category": "形而上学 / 认识论",
+      "description": "理念论是柏拉图哲学的核心。柏拉图主张，我们所感知的物理世界只是真实世界的不完善副本或影子；真正的实在存在于另一个超越的、永恒的领域——理念世界。理念是永恒的、不变的、完美的、非物质的存在，是万物之所是。例如，世间有许多美丽的物体，但它们之所以是美的，是因为它们'分有'（participate in）了'美本身'这一理念。",
+      "keyWorks": ["《斐多篇》", "《理想国》第5-7卷", "《会饮篇》", "《巴门尼德篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "美本身，按照其本性，永远是单一的、自足的；而所有其他美的事物之所以是美的，是因为它们分有了美本身。",
+          "english": "Beauty itself, by itself, according to its own nature, is always one in form; and all the other beautiful things share in that.",
+          "source": "Symposium 211b",
+          "greek": "αὐτὸ καθ' αὐτὸ μεθ' αὐτοῦ μονοειδὲς ἀεὶ ὄν"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Julia Annas", "work": "Plato: A Very Short Introduction (2003)", "insight": "Annas 强调理念论并非僵化教条，而是一种邀请读者深入思考的框架。'分有'和'摹仿'等核心隐喻始终未能得到充分解释，这恰恰表明柏拉图有意让读者自行思考形而上学问题。"},
+        {"scholar": "Gail Fine", "work": "Plato 1: Metaphysics and Epistemology (1999)", "insight": "Fine 深入探讨了'分离问题'——理念是否独立于可感事物而存在——以及'第三人论证'等批判性挑战。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "理念论认为'理念'只存在于人的头脑中。", "clarification": "错误。柏拉图的理念是客观存在的、独立于人类心灵和物理世界的实体。'Idea'源于希腊语ἰδέα，意为'形式'，而非'想法'。"},
+        {"misconception": "柏拉图完全否定物理世界的价值。", "clarification": "柏拉图认为物理世界'次于'理念世界，但并非完全无价值。《蒂迈欧篇》中，宇宙被描述为神圣工匠尽力将理念摹印于质料之上的产物。"}
+      ]
+    },
+    {
+      "id": "allegory-of-cave",
+      "title": "洞穴寓言",
+      "title_en": "Allegory of the Cave",
+      "category": "认识论 / 政治哲学",
+      "description": "洞穴寓言是《理想国》第七卷中最著名的寓言。寓言描绘了一群被锁在洞穴中的囚犯，只能看到墙壁上的影子。其中一人被解放，爬出洞穴，最终能看到阳光下的真实事物，乃至太阳本身——喻指'善之理念'。这位获得解放的人若返回洞穴帮助同伴，反而会被嘲笑甚至杀害——暗指苏格拉底在雅典的命运。",
+      "keyWorks": ["《理想国》第七卷"],
+      "primaryQuotes": [
+        {
+          "chinese": "请看这样一幅情景：有一些人被锁在一个洞穴的深处……他们就像这样只能看见自己的影子和彼此的身影。",
+          "english": "See human beings as though they were in an underground cave-like dwelling... They are in it from childhood with their legs and necks in bonds so that they are fixed, seeing only in front of them...",
+          "source": "Republic 514a-b",
+          "greek": "ἰδοὺ γὰρ ἀνθρώπους οἷον ἐν καταγείῳ οἰκήσει σπηλαιώδει"
+        },
+        {
+          "chinese": "太阳提供了季节与年份的光，是可见世界中一切事物可见和被产生的原因；而在可理知世界中，善之理念同样提供了真理和理性知识的光。",
+          "english": "The sun provides the seasons and the years, is the steward of all things in the visible region, and is in a certain way the cause of all those things he and his companions had been seeing.",
+          "source": "Republic 509b-c",
+          "greek": "ἥλιος οὐ μόνον τοῖς ὁρατοῖς φανερὸν εἶναι παρέχει"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Julia Annas", "work": "An Introduction to Plato's Republic (1981)", "insight": "Annas 指出洞穴寓言不仅是认识论寓言，更是政治寓言。寓言的'苦涩核心'在于：哲人被迫返回洞穴时会被嘲笑和迫害——明确指向苏格拉底之死。"},
+        {"scholar": "Heidegger", "work": "The Essence of Truth (1931/42)", "insight": "海德格尔将洞穴寓言解读为西方'真理'概念转变的关键时刻：从古希腊的'无蔽'（aletheia）到现代的'正确判断'。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "洞穴寓言意味着'不要看物质世界，只看精神世界'。", "clarification": "寓言的核心不是简单的二元对立，而是教育的渐进过程：从影子到木偶，到倒影，再到真实事物，最后到太阳。哲学家必须'返回洞穴'——政治义务是哲学生活的必要组成部分。"}
+      ]
+    },
+    {
+      "id": "anamnesis",
+      "title": "回忆说 / 灵魂先在论",
+      "title_en": "Theory of Recollection",
+      "category": "认识论 / 灵魂论",
+      "description": "回忆说（Anamnesis）主张灵魂在进入肉体之前曾存在于理念世界，直接'看见'过真理和理念；当灵魂与肉体结合后，这些知识被'遗忘'了；然而，通过适当的提问和引导，灵魂可以'回忆起'那些曾经知道的知识。《美诺篇》中著名的'奴隶男孩几何实验'被用来证明：一个未受过教育的奴隶男孩在苏格拉底引导下能够'发现'几何真理。",
+      "keyWorks": ["《美诺篇》", "《斐多篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "既然灵魂是不朽的，重生过多次，曾经见过此世与冥间的一切，那么它一定已经学到了一切事物。因此，灵魂回忆起它曾知道的某样东西——这就是人们所谓的'学习'。",
+          "english": "Since the soul is immortal, has been born many times, and has seen both what is here and what is in Hades — all things — there is nothing it has not learned. So it is in no way surprising that it can recollect what it formerly knew...",
+          "source": "Meno 81c-d",
+          "greek": "ἐπειδὴ ἡ ψυχὴ ἀθάνατός τε καὶ πολλάκις γεγονυῖα"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Terence Irwin", "work": "Plato's Ethics (1995)", "insight": "Irwin 将回忆说置于柏拉图伦理学的整体框架中：回忆说不仅解释数学知识的来源，更解释了道德知识的可能性。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "回忆说意味着'人的大脑里储存了所有知识'。", "clarification": "这不是简单的记忆提取。柏拉图强调的是灵魂在另一个存在状态中'看见'过理念。回忆说需要灵魂'转向'——一种存在论层面的重新定向。"}
+      ]
+    },
+    {
+      "id": "tripartite-soul",
+      "title": "灵魂三分",
+      "title_en": "Tripartite Soul",
+      "category": "灵魂论 / 伦理学",
+      "description": "灵魂三分说是柏拉图在《理想国》中提出的心理学理论。灵魂分为三个部分：1）理性部分——追求真理与智慧；2）意气/激情部分——追求荣誉、勇敢；3）欲望部分——追求食物、性、财富等身体欲望。在正义的灵魂中，理性统治，意气辅佐，欲望服从。这一理论与城邦三分（统治者、卫士、生产者）形成类比。",
+      "keyWorks": ["《理想国》第四卷、第八-九卷"],
+      "primaryQuotes": [
+        {
+          "chinese": "让我们假设灵魂中有三个部分，一个是进行推理的部分，另一个是产生愤怒等非理性激情的部分，第三个是产生欲望的部分……",
+          "english": "Let us assume that there are three parts of the soul, one with which a person reasons, one with which he feels anger and other irrational passions, and one with which he desires...",
+          "source": "Republic 435c",
+          "greek": "τριῶν ὄντων τῶν ἐν τῇ ψυχῇ γενῶν"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Terence Irwin", "work": "Plato's Ethics (1995)", "insight": "Irwin 强调灵魂三分说标志着柏拉图对苏格拉底伦理学的重要修正。苏格拉底认为美德即知识，但柏拉图通过灵魂三分承认欲望部分可以在理性明知的情况下违背理性——即道德软弱（akrasia）。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "灵魂三分等于'理性vs情感'的简单二元对立。", "clarification": "这是严重简化。柏拉图明确区分了三部分而非两部分。'意气'（thymos）是一个独立的、既非理性也非欲望的部分，追求荣誉和正义感。"}
+      ]
+    },
+    {
+      "id": "philosopher-king",
+      "title": "哲人王",
+      "title_en": "Philosopher-King",
+      "category": "政治哲学",
+      "description": "哲人王是《理想国》中提出的政治纲领：'除非哲学家成为城邦的国王，或者统治者真诚而充分地研究哲学，否则城邦和人类都不会有好运。'哲学家是唯一能够看见'善之理念'的人，因此也是唯一有资格统治的人。哲人王的培养需要长达数十年的严格教育。此概念引发了持续两千多年的争论。",
+      "keyWorks": ["《理想国》第五-七卷"],
+      "primaryQuotes": [
+        {
+          "chinese": "除非哲学家成为我们这些城邦的国王，或者那些我们现在称之为国王和统治者的人能够真诚而充分地研究哲学……否则城邦和人类都不会有好运。",
+          "english": "Until philosophers rule as kings or those who are now called kings and leading men genuinely and adequately philosophize... cities will have no rest from evils, Glaucon, nor, I think, will the human race.",
+          "source": "Republic 473c-d",
+          "greek": "οὐ πρότερον παύσεται τὰ ἀνθρώπινα κακά"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Karl Popper", "work": "The Open Society and Its Enemies (1945)", "insight": "波普尔将哲人王视为极权主义的先驱：哲人王垄断对'真理'的宣称，拒绝批判和多元，以'善'的名义实施社会工程。"},
+        {"scholar": "Melissa Lane", "work": "Of Rule and Office (2023)", "insight": "Lane 认为哲人王不是传统意义上的君主，而是一种功能性角色：统治是为了城邦的善，而非统治者的私利。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "柏拉图主张哲学家应该渴望权力。", "clarification": "恰恰相反。柏拉图反复强调真正的哲学家'不渴望统治'。统治对他们而言是一种'被迫的'义务——如同一个人不得不放下眼前的盛宴去帮助落水者。"}
+      ]
+    },
+    {
+      "id": "eros",
+      "title": "爱欲（厄洛斯）",
+      "title_en": "Eros / Love",
+      "category": "伦理学 / 美学",
+      "description": "爱欲（Eros）是柏拉图在《会饮篇》中通过狄奥提玛之口系统阐述的核心概念。爱欲是丰饶神与贫乏神的后代，永远渴望却不完全拥有。爱欲的终极对象是'美本身'，其上升之路（'爱之阶梯'）从爱一个身体开始，逐步上升到爱灵魂、制度、知识，最终上升到对'美本身'的凝视。",
+      "keyWorks": ["《会饮篇》", "《斐德罗篇》"],
+      "primaryQuotes": [
+        {
+          "chinese": "[爱之阶梯的终点]：他[真正的爱者]将不再珍视一个身体的美……而是会凝视美本身，那不可思议的、纯粹的、清澈的、未被玷污的美。",
+          "english": "He will no longer value beauty of a body, or of many bodies, or of all bodies, but will think the beauty of bodies a thing of no importance. He will gaze at Beauty itself, that inconceivable, pure, clear, unmixed beauty...",
+          "source": "Symposium 210e-211b",
+          "greek": "αὐτὸ καθ' αὐτὸ μεθ' αὐτοῦ μονοειδὲς ἀεὶ ὄν"
+        }
+      ],
+      "secondarySources": [
+        {"scholar": "Gregory Vlastos", "work": "'The Individual as an Object of Love in Plato' (1973)", "insight": "Vlastos 批评柏拉图式的爱忽视了对具体个人的爱，将人仅仅视为'美之理念'的'实例'，而非'目的自身'。"},
+        {"scholar": "Terence Irwin", "work": "Plato's Ethics (1995)", "insight": "Irwin 反驳了Vlastos的批评：欲望上升的过程改变了欲望的对象，但并未取消对他人的关怀——只不过从肉体的转变为灵魂的和制度的。"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "'柏拉图式的爱'就是'精神恋爱'，不包含肉体欲望。", "clarification": "柏拉图的爱欲理论不简单否定肉体欲望，而是将其视为上升之路的第一步。爱一个身体是'正当的'和'必要的'起点。问题在于停留在此阶段而不继续上升。"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《申辩篇》", "period": "早期", "summary": "苏格拉底在雅典法庭上的辩护词。"},
+    {"title": "《理想国》", "period": "中期", "summary": "柏拉图最全面的对话录，涵盖正义、城邦、灵魂、知识、善之理念。"},
+    {"title": "《会饮篇》", "period": "中期", "summary": "宴会上的颂词竞赛，阐述爱欲理论与爱之阶梯。"},
+    {"title": "《斐多篇》", "period": "中期", "summary": "苏格拉底临刑前的最后对话，主题：灵魂的不朽。"},
+    {"title": "《巴门尼德篇》", "period": "晚期", "summary": "巴门尼德对年轻苏格拉底的严厉批评，揭示了理念论的内在困难。"},
+    {"title": "《智者篇》", "period": "晚期", "summary": "通过划分法（diairesis）界定'智者'的本质，发展了辩证术。"},
+    {"title": "《蒂迈欧篇》", "period": "晚期", "summary": "宇宙生成论，神圣工匠（Demiurge）以理念为模型创造宇宙。"},
+    {"title": "《法律篇》", "period": "晚期", "summary": "柏拉图最成熟的政治哲学，从哲人王理想转向法治和混合政体。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "除非哲学家成为国王，否则城邦不会有好运。", "english": "Until philosophers are kings... cities will have no rest from evils.", "source": "Republic 473c-d"},
+    {"chinese": "美本身，永远以单一的形式存在。", "english": "Beauty itself, always one in form.", "source": "Symposium 211b"},
+    {"chinese": "未经审视的生活是不值得过的。", "english": "The unexamined life is not worth living.", "source": "Apology 38a"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释柏拉图的理念论（Theory of Forms）及其面临的批评。",
+      "output": "理念论是柏拉图哲学的核心，主张物理世界只是真实世界的不完善副本，真正的实在存在于超越的理念世界。理念是永恒的、不变的、完美的存在。\n\n主要批评包括：1）'分离问题'——理念是否独立于可感事物存在？如果理念完全分离，我们如何认识它们？2）'第三人论证'——如果理念A与具体事物a相似是因为它们都分有了另一个理念B，那么A与B之间又需要一个理念C来解释相似性，导致无限倒退。3）'空理念问题'——'秃头''泥'等负面概念是否有理念？4）亚里士多德的批评——理念是'诗意的虚构'，将多上加了不必要的一。\n\n柏拉图的回应体现在《巴门尼德篇》和《智者篇》中：晚期对话发展了更精致的'理念论'，可能放弃了'分有'和'摹仿'的隐喻，转向更复杂的形而上学结构。",
+      "source": "Plato, Phaedo; Republic; Parmenides; Aristotle, Metaphysics I.9",
+      "tier": 1
+    }
+  ]
+}

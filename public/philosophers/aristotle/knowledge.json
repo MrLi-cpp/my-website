@@ -1,0 +1,425 @@
+{
+  "philosopher": {
+    "name_en": "Aristotle",
+    "name_zh": "亚里士多德",
+    "lifetime": "384–322 BCE",
+    "birthplace": "Stagira, Macedon",
+    "school": "Peripatetic School / 逍遥学派"
+  },
+  "overview": {
+    "summary_zh": "亚里士多德是古希腊哲学、逻辑学与科学传统的奠基人之一。他在柏拉图学园求学二十余年，后创立逍遥学派。其思想体系涵盖形而上学、伦理学、政治学、逻辑学、物理学、诗学、生物学等领域，以系统的分类方法、目的论框架与对'实体'(ousia)的追问为核心特征。",
+    "key_works": [
+      {"title_zh": "形而上学", "title_en": "Metaphysics", "focus": "实体、四因、潜能与现实"},
+      {"title_zh": "尼各马可伦理学", "title_en": "Nicomachean Ethics", "focus": "美德、中庸、幸福(eudaimonia)"},
+      {"title_zh": "政治学", "title_en": "Politics", "focus": "城邦、政体、公民"},
+      {"title_zh": "工具论/逻辑学", "title_en": "Organon", "focus": "三段论、范畴、证明"},
+      {"title_zh": "物理学", "title_en": "Physics", "focus": "自然、运动、四因"},
+      {"title_zh": "论灵魂", "title_en": "De Anima", "focus": "灵魂、感知、理智"},
+      {"title_zh": "诗学", "title_en": "Poetics", "focus": "悲剧、摹仿、净化"}
+    ]
+  },
+  "concepts": [
+    {
+      "id": "substance-ousia",
+      "title_zh": "实体 / 本体",
+      "title_en": "Substance / Ousia",
+      "definition_zh": "实体(ousia)是亚里士多德形而上学的核心概念，意为'是其所是'的根本存在者。在《范畴篇》中，实体是'既不说谓于一个主体，也不存在于一个主体之中'的终极承载者；在《形而上学》Ζ卷中，实体被追问为'这是什么'(ti esti)的本质。",
+      "primary_sources": [
+        {
+          "quote_en": "A substance — that which is called a substance most strictly, primarily, and most of all — is that which is neither said of a subject nor in a subject, e.g., the individual man or the individual horse.",
+          "source": "Categories 2, 1a20–1b10",
+          "context_zh": "《范畴篇》对实体的最初界定：第一实体是个体事物，第二实体是种属。"
+        },
+        {
+          "quote_en": "The question which was raised of old and is raised now and always, and is always the subject of doubt, viz. what being is, is just the question, what is substance? For it is this that some assert to be one, others more than one, and that some assert to be limited in number, others unlimited. And so we also must consider chiefly and primarily and almost exclusively what that is which is in this sense.",
+          "source": "Metaphysics VII.2, 1028b2–7",
+          "context_zh": "《形而上学》将实体问题提升为'存在之为存在'的核心追问。"
+        },
+        {
+          "quote_en": "By a form I mean the essence of each thing and its primary substance.",
+          "source": "Metaphysics VII.17, 1041b7–8",
+          "context_zh": "在后期形而上学中，形式(eidos)被确认为首要实体。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Michael Frede",
+          "work": "Categories in Aristotle (1981)",
+          "insight_zh": "Frede 论证《范畴篇》中的范畴表同时是'谓词类型'与'存在者类型'的双重分类，实体范畴的优先性既关乎逻辑主词，也关乎形而上学上的终极承载者。"
+        },
+        {
+          "scholar": "Terence Irwin",
+          "work": "Aristotle's First Principles (1988)",
+          "insight_zh": "Irwin 指出，从《范畴篇》到《形而上学》Ζ卷的实体观转变，并非简单的从'个体'到'形式'的转向，而是亚里士多德逐步发现'本质'(to ti en einai)才是实体的严格意义。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：亚里士多德始终认为'具体的个别事物'（如这匹马）是唯一的实体。\n✅ 澄清：早期《范畴篇》中第一实体确实是个体，但《形而上学》Ζ卷深入分析后，认为'形式'(eidos)或'本质'(essence)才是首要实体——这是哲学发展而非矛盾。",
+        "❌ 误解：'实体'是亚里士多德独创的全新概念。\n✅ 澄清：ousia一词在希腊日常语言中指'财产、所有物'，柏拉图已在不同语境中使用。亚里士多德的创新在于将其系统化为形而上学核心范畴。",
+        "❌ 误解：实体与属性是西方哲学中始终如二的二分。\n✅ 澄清：亚里士多德的'实体'概念本身包含复杂层次（第一/第二实体、质料/形式复合体），后世经院哲学的实体-属性二元框架（如笛卡尔）是对亚里士多德的简化。"
+      ]
+    },
+    {
+      "id": "four-causes",
+      "title_zh": "四因说",
+      "title_en": "The Four Causes",
+      "definition_zh": "四因说是亚里士多德对'为什么'(dia ti)问题的系统性回答。任何事物的原因均可归为四类：质料因(hyle)、形式因(eidos/morphe)、动力因(to kinoun/efficient cause)、目的因(telos/final cause)。四因合释方能完整说明一物之存在与变化。",
+      "primary_sources": [
+        {
+          "quote_en": "We think we have scientific knowledge when we think we know the cause. And there are four causes... (1) the substance and essence (formal cause), (2) the matter or subject (material cause), (3) that from which the beginning of motion comes (efficient cause), and (4) that for the sake of which and the good (final cause).",
+          "source": "Metaphysics A.3, 983a24–b6; Physics II.3, 194b16–195a3",
+          "context_zh": "四因的经典出处，亚里士多德强调'知道原因'才是科学知识(episteme)的标志。"
+        },
+        {
+          "quote_en": "A statue is a cause of the statue not insofar as it is a statue, but insofar as it is bronze; but perhaps also in another way, for the statue is not the cause of the statue except insofar as it is bronze. But the bronze is not the cause except insofar as it is bronze. So there is a cause insofar as it is bronze, and another insofar as it is a statue.",
+          "source": "Physics II.3, 195a18–22 (paraphrase)",
+          "context_zh": "以铜像为例说明形式因与质料因的区分：作为铜像的铜像（形式）与作为铜的铜像（质料）各有其因果角色。"
+        },
+        {
+          "quote_en": "That for the sake of which a thing is done is in some sense a cause. This is especially plain when someone does something for the sake of something else; for example, health is the cause of walking about. 'Why is he walking about?' we say. 'To be healthy,' and in saying this we think we have given the cause.",
+          "source": "Physics II.3, 194b32–195a3",
+          "context_zh": "目的因的经典例证：人散步的目的是健康，目的因解释了行动的理由。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Jonathan Barnes",
+          "work": "Aristotle: A Very Short Introduction / Cambridge Companion to Aristotle",
+          "insight_zh": "Barnes 强调四因说并非四种互不相关的'原因'，而是从四个互补角度回答同一个'为什么'问题；对现代人而言最难接受的是目的因，但亚里士多德认为自然同样具有目的性。"
+        },
+        {
+          "scholar": "Sarah Broadie",
+          "work": "Nature and Divinity in Aristotle's Ethics and Metaphysics",
+          "insight_zh": "Broadie 深入分析了目的因在亚里士多德自然哲学中的运作：自然作为'不动的推动者'，其目的性并非外在的'设计者意图'，而是内在于自然过程的'趋于完善'。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：四因说是四种并列的、互不相关的'原因'，任选其一即可解释现象。\n✅ 澄清：四因是从四个互补维度回答同一个'为什么'问题；完整解释需要四因合参，如一座雕像需同时说明材质（质料）、造型（形式）、雕刻者（动力）、纪念功能（目的）。",
+        "❌ 误解：目的因(telos)等于'有意识的目的'或神的设计，是前科学的神学残余。\n✅ 澄清：亚里士多德的目的因是'自然趋于完善'的内在趋向，非人格神的设计；如种子内在地趋向长成树，而非神每次下令。这与基督教'智能设计'有根本区别。",
+        "❌ 误解：四因说已被近代科学完全取代，只具历史价值。\n✅ 澄清：现代科学虽以动力因（力学因果）为主，但功能解释（生物学中'器官的功能'）与信息解释（DNA作为'形式'的编码）仍可视为形式因与目的因的变体。"
+      ]
+    },
+    {
+      "id": "doctrine-of-mean",
+      "title_zh": "中庸之道 / 中道学说",
+      "title_en": "Doctrine of the Mean",
+      "definition_zh": "中庸之道是亚里士多德伦理学的核心原则：美德(arete)是两种恶性之间的中道(mesotes)——一种过度(excess)，一种不及(deficiency)。中道不是算术平均，而是'相对于我们'的恰当(orthos logos)，由实践智慧(phronesis)在具体情境中把握。",
+      "primary_sources": [
+        {
+          "quote_en": "Virtue is a state of character concerned with choice, lying in a mean, i.e., the mean relative to us, this being determined by a rational principle, and by that principle by which the man of practical wisdom would determine it. It is a mean between two vices, that which depends on excess and that which depends on defect; and again it is a mean because the vices respectively fall short of or exceed what is right in both passions and actions, while virtue both finds and chooses that which is intermediate.",
+          "source": "Nicomachean Ethics II.6, 1106b36–1107a8",
+          "context_zh": "《尼各马可伦理学》对中道的经典定义：美德作为品格状态，关乎选择，处于相对中道。"
+        },
+        {
+          "quote_en": "For instance, both fear and confidence and appetite and anger and pity and in general pleasure and pain may be felt both too much and too little, and in both cases not well; but to feel them at the right times, with reference to the right objects, towards the right people, with the right motive, and in the right way, is what is both intermediate and best, and this is characteristic of virtue.",
+          "source": "Nicomachean Ethics II.6, 1106b18–23",
+          "context_zh": "中道的具体说明：情感与行动的'适度'取决于对象、时机、方式、动机等多重维度。"
+        },
+        {
+          "quote_en": "Not every action nor every passion admits of a mean; for some have names that already imply badness, e.g., spite, shamelessness, envy, and in the case of actions adultery, theft, murder; for all of these and such-like things imply by their names that they are themselves bad, and not the excesses or deficiencies of them. It is not possible, then, ever to be right with regard to them; one must always be wrong.",
+          "source": "Nicomachean Ethics II.6, 1107a8–18",
+          "context_zh": "关键限定：并非所有行为都有中道，如通奸、盗窃、谋杀本身即为恶，不存在'适度的通奸'。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Terence Irwin",
+          "work": "Aristotle's First Principles (1988), 及 Nicomachean Ethics 相关研究",
+          "insight_zh": "Irwin 强调'相对于我们的中道'(mesotes pros hemas)引入了情境相对性：中道不是客观固定的算术平均值，而是依赖于行动者的具体处境与品格状态，由实践智慧(phronesis)裁决。"
+        },
+        {
+          "scholar": "Sarah Broadie",
+          "work": "Ethics with Aristotle (1991)",
+          "insight_zh": "Broadie 深入分析了中道与行动统一性的关系：中道不是简单的'折中'，而是将多种价值维度（如勇气兼顾危险与荣誉）整合为单一行动的'最优解'。"
+        },
+        {
+          "scholar": "Rosalind Hursthouse",
+          "work": "On Virtue Ethics (1999) 中关于亚里士多德的分析",
+          "insight_zh": "Hursthouse 指出，中道学说的真正哲学力量不在于'量上的中间'，而在于它揭示了美德是对复杂情境中多重理由的恰当回应。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：中庸之道就是'和稀泥'、'两边不得罪'的折中主义。\n✅ 澄清：中道绝非算术平均或政治妥协。它是'相对于我们'(pros hemas)的恰当点，由实践智慧(phronesis)在具体情境中裁定。勇气是鲁莽与怯懦之间的中道，但绝非两者各取一半。",
+        "❌ 误解：中道原则可应用于一切行为，存在'适度的谋杀'或'适度的通奸'。\n✅ 澄清：亚里士多德明确排除：某些行为（如谋杀、盗窃、通奸）本身即为恶，不存在中道；中道原则仅适用于'本身可取、但可过度或不足'的情感与行为（如恐惧、自信、慷慨）。",
+        "❌ 误解：中庸之道与孔子'中庸'思想本质上相同。\n✅ 澄清：两者有家族相似性，但存在关键差异：亚里士多德的中道是具体情境中的理性裁定（依赖phronesis），而孔子的中庸更强调'礼'的规范性约束与情感和谐。亚里士多德的中道有可分析的结构（过度-中道-不及），而孔子的中庸更富整体论色彩。"
+      ]
+    },
+    {
+      "id": "syllogism-logic",
+      "title_zh": "三段论 / 逻辑学",
+      "title_en": "Syllogism / Aristotle's Logic",
+      "definition_zh": "三段论(syllogismos/syllogism)是亚里士多德逻辑学的核心：从某些被设定为前提的东西中，必然地得出不同于前提的东西。三段论由大前提、小前提和结论组成，通过中项(middle term)连接。亚里士多德在《前分析篇》中系统研究了三个格(figure)与多个式(mood)，并证明了所有有效三段论均可归约为第一格的两个完善式(Barbara与Celarent)。",
+      "primary_sources": [
+        {
+          "quote_en": "A deduction is speech (logos) in which, certain things having been supposed, something different from those supposed results of necessity because of their being so.",
+          "source": "Prior Analytics I.2, 24b18–20",
+          "context_zh": "三段论的经典定义：'必然地得出'是核心特征，对应现代逻辑中的'有效性'(validity)。"
+        },
+        {
+          "quote_en": "All deductions can be reduced to the two universal deductions in the first figure.",
+          "source": "Prior Analytics I.7, 29b1 (metatheorem)",
+          "context_zh": "元理论成果：所有有效三段论均可归约为第一格的两个完善式（Barbara与Celarent），展现了惊人的元逻辑意识。"
+        },
+        {
+          "quote_en": "If M belongs to every N but to no X, then neither will N belong to any X. For if M belongs to no X, then neither does X belong to any M; but M belonged to every N; therefore, X will belong to no N (for the first figure has come about). And since the privative converts, neither will N belong to any X.",
+          "source": "Prior Analytics I.5, 27a9–12 (proof of Camestres)",
+          "context_zh": "亚里士多德对第二格式Camestres的完整证明，展示其'归约'(reduction)方法：通过换位(conversion)将第二格归约为第一格。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Jonathan Barnes",
+          "work": "Proof and the Syllogism (1981); Aristotle's Posterior Analytics (trans. & comm., 1994)",
+          "insight_zh": "Barnes 论证亚里士多德不仅发现了三段论的推理规则，更展示了元逻辑意识——如证明所有有效式可归约为第一格，这在古代极为罕见。"
+        },
+        {
+          "scholar": "Gisela Striker",
+          "work": "Aristotle, Prior Analytics I (Clarendon Series, 2009)",
+          "insight_zh": "Striker 细致分析了亚里士多德'完善式'(perfect)与'不完善式'(imperfect)的区分：完善式'无需外在词项即可展示必然结果'，而不完善式需要通过归约(直接或归谬)补全。"
+        },
+        {
+          "scholar": "Robin Smith",
+          "work": "Aristotle's Prior Analytics (1989); SEP entry on Aristotle's Logic",
+          "insight_zh": "Smith 强调亚里士多德与现代逻辑学家在'元理论兴趣'上的深层亲和：亚里士多德的核心目标不是提供实用论证指南，而是研究推理系统本身的性质——这正是现代逻辑的精神。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：亚里士多德认为三段论穷尽了一切有效推理形式，逻辑在他那里已'完成'。\n✅ 澄清：康德曾如此认为，但这是误读。亚里士多德的三段论是特定类型的推理（两个前提、一个共同中项、直言命题结论），他从未声称其穷尽所有推理；且他的'证明'(demonstration)与'辩证论证'(dialectical argument)理论远超三段论本身。",
+        "❌ 误解：三段论是僵化的、脱离内容的'形式推理'。\n✅ 澄清：对亚里士多德而言，三段论的项(horos)直接对应存在者（主体与谓词），其逻辑与形而上学密不可分。他未发展命题逻辑，正是因为他将断言视为对实在的言说。",
+        "❌ 误解：三段论被现代数理逻辑完全淘汰，只具历史博物馆价值。\n✅ 澄清：现代逻辑确实超越了直言三段论，但亚里士多德的元理论方法（系统分类、归约证明、完备性考量）直接预见了现代逻辑精神。且模态三段论(modal syllogistic)至今仍是逻辑史研究的活跃前沿。",
+        "❌ 误解：'三段论'等于'syllogism'的英文含义，即任何三命题推理。\n✅ 澄清：亚里士多德的sullogismos定义远比现代'syllogism'严格：结论必须'必然地'从前提得出，且结论必须不同于前提。这意味着结论重复前提的推理不属于sullogismos。"
+      ]
+    },
+    {
+      "id": "de-anima",
+      "title_zh": "灵魂论 / 论灵魂",
+      "title_en": "De Anima / On the Soul",
+      "definition_zh": "《论灵魂》(De Anima)是亚里士多德关于灵魂(psyche)的系统研究。他将灵魂定义为'潜在地拥有生命的自然躯体的形式'(entelecheia of a natural body potentially having life)，即灵魂是使躯体成为活体、并执行生命功能（营养、感知、欲望、运动、理智）的现实性。灵魂与躯体构成质料-形式复合体，灵魂不可脱离躯体独立存在（理智nous可能例外）。",
+      "primary_sources": [
+        {
+          "quote_en": "The soul is the first actuality (entelecheia) of a natural body potentially having life. And such a body is one that has organs. If, then, we have to give what is common to every soul, it will be the first actuality of a natural body potentially having life.",
+          "source": "De Anima II.1, 412a27–b6",
+          "context_zh": "灵魂的经典定义：灵魂是'潜在具有生命的自然躯体的第一现实性'，强调灵魂作为形式(entelecheia)与躯体质料的不可分割性。"
+        },
+        {
+          "quote_en": "It is not necessary to ask whether soul and body are one, just as it is not necessary to ask whether the wax and its shape are one, or in general whether the matter of each thing and that of which it is the matter are one; for while 'one' and 'being' are said in many ways, the most proper sense is actuality.",
+          "source": "De Anima II.1, 412b6–9",
+          "context_zh": "灵魂与躯体的一元关系：正如蜡与形状不可分离，灵魂与躯体也是质料-形式统一体，无需追问'是否同一'。"
+        },
+        {
+          "quote_en": "The part of the soul by which the soul knows and understands is either separate or not separate; but insofar as it is capable of understanding, it is not the actuality of any part of the body. For the activity of understanding is none of those things that are done through the body.",
+          "source": "De Anima III.4, 429a10–18 (paraphrase)",
+          "context_zh": "理智(nous)的特殊地位：理智是'被动理智'(nous pathetikos)与'主动理智'(nous poietikos)的复合，其中主动理智可能'分离、不混合、不被动'——这是亚里士多德哲学中最富争议的观点之一。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Jonathan Barnes",
+          "work": "Aristotle's De Anima (相关分析与剑桥指南章节)",
+          "insight_zh": "Barnes 指出，亚里士多德的灵魂论是'自然哲学'而非神学或超自然学说：灵魂是'生命原则'而非不朽的幽灵；这一框架使亚里士多德避免了柏拉图二元论的困境。"
+        },
+        {
+          "scholar": "Sarah Broadie",
+          "work": "Passage and Possibility (1982); 及关于主动理智的论文",
+          "insight_zh": "Broadie 深入分析了'主动理智'(nous poietikos)的地位：它作为'不混合、不被动、不朽'的要素，与亚里士多德整体灵魂论的质料-形式框架形成张力，历代注释家对此争论不休。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：亚里士多德的灵魂论是柏拉图式的二元论，认为灵魂可脱离躯体独立存在。\n✅ 澄清：亚里士多德明确反对灵魂-躯体的分离：灵魂是躯体的'形式'(eidos/entelecheia)，如同视力之于眼睛，不可独立存在。唯一可能的例外是'主动理智'(nous poietikos)，但即使此处争议极大。",
+        "❌ 误解：'灵魂'(psyche)在亚里士多德那里具有宗教或超自然含义，如基督教的不朽灵魂。\n✅ 澄清：对亚里士多德，psyche是'生命原则'，植物有营养灵魂，动物外加感知灵魂，人类再加理智灵魂。灵魂是生物学/自然哲学概念，非神学概念。",
+        "❌ 误解：主动理智(nous poietikos)是亚里士多德对'神'或'世界灵魂'的隐秘教义。\n✅ 澄清：主动理智的地位确实暧昧——它'不混合、不被动、神圣'，但《论灵魂》文本极为简略。后世阿维森纳、阿奎那将其与神关联，但这是解释传统的发展，非亚里士多德明言。"
+      ]
+    },
+    {
+      "id": "polis-politics",
+      "title_zh": "政治学 / 城邦",
+      "title_en": "Politics / The Polis",
+      "definition_zh": "城邦(polis)是亚里士多德政治学的核心范畴。人类'天生是政治动物'(zoon politikon)，城邦是人的自然完成形态。城邦不仅是生存共同体，更是'为了美好生活'(eu zen)而存在。亚里士多德系统分析了六种政体(politeia)——三种正宗（君主制、贵族制、共和制）与三种变态（僭主制、寡头制、民主制），并探讨了革命(stasis)的原因与预防。",
+      "primary_sources": [
+        {
+          "quote_en": "Since we see that every city-state is a sort of community and that every community is established for the sake of some good (for everyone does everything for the sake of what they believe to be good), it is clear that every community aims at some good, and the community which has the most authority of all and includes all the others aims highest, that is, at the good with the most authority. This is what is called the city-state or political community.",
+          "source": "Politics I.1, 1252a1–7",
+          "context_zh": "城邦的定义：共同体追求善，而城邦是'最具权威性'的共同体，追求最高的善。"
+        },
+        {
+          "quote_en": "Man is by nature a political animal. And he who by nature and not by mere accident is without a city-state, is either a bad man or above humanity... For man is more of a political animal than bees or any other gregarious animals... Nature makes nothing pointlessly, as we say, and no animal has speech except man. Now speech is for making clear what is beneficial or harmful, and hence also what is just or unjust.",
+          "source": "Politics I.2, 1253a1–18",
+          "context_zh": "'人是政治动物'的经典论证：语言(logos)使人能讨论正义与善，这是城邦生活的独特基础。"
+        },
+        {
+          "quote_en": "The city-state comes into being for the sake of living, but it exists for the sake of living well.",
+          "source": "Politics I.2, 1252b29–30",
+          "context_zh": "城邦的双重目的：起源是为生存，存在是为了美好生活(eu zen)。"
+        },
+        {
+          "quote_en": "Constitutions which aim at the common advantage are correct and just without qualification, whereas those which aim only at the advantage of the rulers are deviant and unjust, because they involve despotic rule which is inappropriate for a community of free persons.",
+          "source": "Politics III.6, 1279a17–21",
+          "context_zh": "政体分类原则：以'是否追求共同善'为区分正宗与变态政体的标准。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Jonathan Barnes",
+          "work": "Cambridge Companion to Aristotle 政治学章节",
+          "insight_zh": "Barnes 强调亚里士多德政治学的实践科学属性：它不是纯粹的经验描述，而是规范性的——关注'应该如何组织城邦以实现公民幸福'。"
+        },
+        {
+          "scholar": "Terence Irwin",
+          "work": "Aristotle's First Principles 中关于政治学自然主义的讨论",
+          "insight_zh": "Irwin 分析了'人是政治动物'的深层含义：这不仅是一个生物学观察，更是一个规范性论断——人只有在城邦中才能充分发展理性与美德，实现作为人的自然目的。"
+        },
+        {
+          "scholar": "Fred Miller / Richard Kraut",
+          "work": "Nature, Justice, and Rights in Aristotle's Politics (Miller); Aristotle on the Human Good (Kraut)",
+          "insight_zh": "Miller 与 Kraut 就'共同善'(koinon sumpheron)是否包含个体权利展开辩论：Kraut 偏向整体主义解读，Miller 则论证亚里士多德的政治正义包含对个体权利的承认。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：亚里士多德是'反民主'的专制拥护者，因为他在六种政体中仅将民主制列为'变态政体'。\n✅ 澄清：亚里士多德确实批评民主制，但也在III.11中承认'多数人的集体智慧可能优于少数精英'；更重要的是，'变态'(deviant)是相对于'追求共同善'而言，民主制作为'最不坏的变态政体'仍有其合法性。",
+        "❌ 误解：'人是政治动物'意味着人必须参与现代意义上的政治活动（如投票、竞选）。\n✅ 澄清：zoon politikon在希腊语境中指'属于城邦共同体'的存在者。对古希腊公民，政治参与是完整人性的实现方式；但这不等于亚里士多德预见了现代民主制度。",
+        "❌ 误解：亚里士多德支持奴隶制与自然性别等级，因此其政治学完全不可接受。\n✅ 澄清：确实，亚里士多德以'自然奴隶'(doulos by nature)和女性'审议能力缺乏权威'(akuron)为由为奴隶制与父权辩护——这些论证在现代视角下极为薄弱，甚至部分注释家认为其为讽刺。但应区分：其政治框架（四因分析政体、共同善原则、法治重要性）仍具思想史价值，不必因特定历史局限而全盘否定。",
+        "❌ 误解：城邦(polis)可简单等同于现代'国家'(state)或'城市'(city)。\n✅ 澄清：polis是小型、面对面的小共同体（如雅典约3万公民），政治、宗教、文化紧密交织。将其直接映射到现代民族国家或代议民主是危险的类比跳跃。"
+      ]
+    },
+    {
+      "id": "teleology",
+      "title_zh": "目的论",
+      "title_en": "Teleology",
+      "definition_zh": "目的论(teleologia)是亚里士多德自然哲学的核心原则：自然界的运作指向特定目的(telos)。这一原则贯穿其物理学、生物学与形而上学——从种子长成树、燕子筑巢到天体运动，均可用'为了…'(hou heneka / for the sake of which)解释。目的因与动力因在自然中往往合一：自然的'形式'既是'是什么'，也是'趋于什么'。",
+      "primary_sources": [
+        {
+          "quote_en": "Nature is a cause that operates for a purpose... As in the products of art, what a thing is and what it is for are the same; and the human being is the product of nature, if indeed any animal is so. For what each thing is when fully developed, we call its nature; and what each thing is for — its nature or form — we speak of as its end.",
+          "source": "Physics II.8, 198b10–199a8 (paraphrase of key passage)",
+          "context_zh": "《物理学》中目的论的核心论证：自然如艺术般运作，'是什么'与'是为了什么'相同；种子的自然就是长成树。"
+        },
+        {
+          "quote_en": "It is plain then that nature is a cause, and a cause in the sense of that for the sake of which. As regards what is for the sake of something, the question 'Why does it do this?' is answered by 'Because it is better so'; not simply, but in relation to the substance or nature of each thing.",
+          "source": "Physics II.8, 199a8–15",
+          "context_zh": "目的因作为因果解释：自然做某事'因为这样更好'——相对于该事物的自然或本质而言更好。"
+        },
+        {
+          "quote_en": "The final cause is an end, and that sort of end which is not for the sake of something else, but for whose sake everything else is done. For if someone is walking in order to keep healthy, and the health is in order to be happy, and the happiness is in order to... but we always end up at some such thing, and if we do not, it will be for the sake of something else and it will go on without limit.",
+          "source": "Metaphysics A.2, 982b7–10 / Nicomachean Ethics I.7, 1097a25–b21 (paraphrase)",
+          "context_zh": "目的链条的终点：如果一切目的都为了另一目的，将导致无限后退；因此必须存在'终极目的'(telos teleion / final end)——对亚里士多德，这就是幸福(eudaimonia)。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Jonathan Barnes",
+          "work": "Aristotle's Natural Philosophy (相关论文与剑桥指南章节)",
+          "insight_zh": "Barnes 分析了目的论与机械论的紧张：亚里士多德并非排斥机械因果，而是认为纯机械解释不足以说明自然——如心脏的搏动需要功能解释（为了什么）来补充动力解释（什么导致它）。"
+        },
+        {
+          "scholar": "Sarah Broadie",
+          "work": "Nature and Divinity in Aristotle's Ethics and Metaphysics",
+          "insight_zh": "Broadie 强调亚里士多德目的论中'形式'与'目的'的统一：对自然物而言，'形式'(eidos)就是'目的'(telos)，种子中已潜在地包含树的形式/目的。这不是外在设计，而是内在发展的趋向。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：亚里士多德的目的论是'智能设计论'，认为自然由神或理智(Nous)预先设计。\n✅ 澄清：亚里士多德的自然目的论是'内在的'(immanent)：种子趋向长成树，并非因为神设计了这棵树，而是因为'成为树'是这种子的内在形式/目的。神作为'不动的推动者'只推动天体运动，不直接设计每一只燕子或每一只眼睛。",
+        "❌ 误解：目的论已被达尔文进化论彻底证伪，在现代科学中毫无地位。\n✅ 澄清：达尔文确实用自然选择替代了'神创论目的论'，但生物学中的'功能解释'(如'心脏的功能是泵血')仍在使用。当代生物学哲学中，'目的论'以'功能'的形式存活，只是不再预设设计者。",
+        "❌ 误解：目的论与动力因(机械因果)在亚里士多德体系中是对立、互斥的。\n✅ 澄清：对亚里士多德，完整的自然解释需要四因合参，目的因与动力因往往合一：父本既是子代生命的动力因（推动者），也传递了形式因/目的因（子代将长成什么）。",
+        "❌ 误解：'目的'意味着有意识的目标或意图。\n✅ 澄清：亚里士多德严格区分'有目的'(hou heneka)与'有意识的目的'：自然'无意识地但恒定地'趋向目的，如同'医生治愈自己'的比喻——自然作为内在医生，无需思考即可运作。"
+      ]
+    },
+    {
+      "id": "potentiality-actuality",
+      "title_zh": "潜能与现实",
+      "title_en": "Potentiality and Actuality",
+      "definition_zh": "潜能(dynamis/potentiality)与现实(energeia/entelecheia/actuality)是亚里士多德形而上学与物理学中的一对核心范畴。潜能是'能够变为某物但尚未变为'的状态（如种子具有长成树的潜能）；现实是'已实现、已完成'的状态（如长成的大树）。Entelecheia(圆满实现)强调'拥有其目的在自身之中'(having its end within itself)。这对范畴用于解释变化(kinesis)与生成(genesis)、定义灵魂、说明实体层次。",
+      "primary_sources": [
+        {
+          "quote_en": "The potential is that for which nothing impossible results if the actuality belongs to it. I mean, for instance, that if it is possible for something to be a builder, there is nothing impossible in its building; and similarly if it is possible for something to be visible, there is nothing impossible in its being seen.",
+          "source": "Metaphysics IX.3, 1047a24–29",
+          "context_zh": "潜能的定义：'潜能是如果现实性归于它，不会导致任何不可能的状态'。"
+        },
+        {
+          "quote_en": "Actuality (energeia) is the state of a thing whose actuality is present in it not in the way in which we say that a thing is present potentially. I mean that the Hermes is present in the wood potentially, and the half-line in the whole line... But actuality is distinguished from these things; for we shall not be able to say of the thing which is actually seeing that it is potentially seeing.",
+          "source": "Metaphysics IX.6, 1048a30–b8 (paraphrase)",
+          "context_zh": "现实性的说明：现实与潜能的根本区别在于，现实是'已经完成'的状态（正在看 vs 有视力但未在看）。"
+        },
+        {
+          "quote_en": "We must distinguish when a thing is potentially and when it is not; for it is not at any and every time. For instance, is earth potentially a man? No, but rather when it has already become seed, and perhaps not even then.",
+          "source": "Metaphysics IX.7, 1048b37–1049a5",
+          "context_zh": "潜能的条件性：并非'一切皆有可能'——泥土并非潜在地是人，只有当它已成为种子时才潜在地是人。潜能需要适当的质料基础与条件。"
+        },
+        {
+          "quote_en": "It is clear that actuality is prior to potentiality. And by prior I mean not only in definition but also in time... For from the potential, the actual is always produced by the actual. E.g., man by man, musician by musician.",
+          "source": "Metaphysics IX.8, 1049b4–17",
+          "context_zh": "现实的优先性：现实中的人产生潜在的人（后代），现实的音乐家培养潜在的音乐家。现实在定义上、时间上、实体性上均优先于潜能。"
+        }
+      ],
+      "secondary_sources": [
+        {
+          "scholar": "Terence Irwin",
+          "work": "Aristotle's First Principles (1988)",
+          "insight_zh": "Irwin 分析了潜能-现实框架如何为《形而上学》的核心问题提供解答：实体(ousia)的追问最终落实为'形式作为第一现实性'——形式不是抽象共相，而是使个体成为其自身的现实原则。"
+        },
+        {
+          "scholar": "Sarah Broadie",
+          "work": "Passage and Possibility (1982)",
+          "insight_zh": "Broadie 的专著书名即取自潜能-现实框架。她深入分析了dynamis的多重含义（能力、潜能、被动承受力），指出亚里士多德在《形而上学》Θ卷中系统化了这些区分，为变化理论提供了形而上学基础。"
+        }
+      ],
+      "misconceptions_zh": [
+        "❌ 误解：'潜能'等于现代英语中'potential'所指的'可能性'或'潜在价值'。\n✅ 澄清：亚里士多德的dynamis是严格的形而上学概念：它指'在适当条件下必然趋向实现的内在倾向'，而非抽象的'可能性'。种子潜在地是树，意味着在适当条件下它必将长成树——这不是或然性，而是自然必然性。",
+        "❌ 误解：现实与潜能的关系类似于'结果'与'原因'。\n✅ 澄清：现实与潜能不是因果链条中的前后环节，而是同一存在者的两种存在方式。树是种子的现实性，同时树又潜在地是木材/柴火。现实与潜能构成一个层级阶梯（scala naturae），而非简单的时间序列。",
+        "❌ 误解：entelecheia只是energeia的同义词，无独立哲学意义。\n✅ 澄清：Entelecheia（圆满实现）与energeia（现实活动）在大多数语境中可互换，但entelecheia更强调'拥有其目的在自身之中'的完满状态。灵魂被定义为躯体的entelecheia，正是为了强调生命的自含目的性。",
+        "❌ 误解：潜能-现实框架仅适用于生物/自然领域。\n✅ 澄清：这对范畴被亚里士多德普遍应用于一切领域：物质变为物品、学习变为知识、建筑变为房屋、甚至神的永恒现实性。在神学语境中，神作为'纯粹现实'(actus purus)无任何潜能，因而是绝对完满的。"
+      ]
+    }
+  ],
+  "cross_references": [
+    {"from": "substance-ousia", "to": "four-causes", "relation_zh": "实体作为形式因，是四因解释的核心对象"},
+    {"from": "four-causes", "to": "teleology", "relation_zh": "目的因是目的论在因果框架中的具体化"},
+    {"from": "teleology", "to": "potentiality-actuality", "relation_zh": "自然的目的(telos)就是潜能趋向现实的过程终点"},
+    {"from": "potentiality-actuality", "to": "de-anima", "relation_zh": "灵魂被定义为'潜在具有生命的自然躯体的第一现实性'"},
+    {"from": "de-anima", "to": "polis-politics", "relation_zh": "城邦作为人类自然的'第二现实性'——人只有在城邦中才能充分实现政治本性"},
+    {"from": "polis-politics", "to": "doctrine-of-mean", "relation_zh": "最佳政体（中产阶级主导的共和制）是民主与寡头之间的中道"},
+    {"from": "doctrine-of-mean", "to": "syllogism-logic", "relation_zh": "实践智慧(phronesis)对中道的把握依赖 deliberation 的推理结构，与三段论同属理性活动"},
+    {"from": "syllogism-logic", "to": "substance-ousia", "relation_zh": "三段论的项(horos)直接对应实体范畴中的主体与谓词，逻辑学预设了形而上学的范畴框架"}
+  ],
+  "sources_meta": {
+    "primary_texts": [
+      {"title": "Metaphysics", "abbreviation": "Met.", "language": "Greek, with English translations from SEP and Oxford Classical Texts"},
+      {"title": "Nicomachean Ethics", "abbreviation": "NE / EN", "language": "Greek, with English translations from SEP and Ross"},
+      {"title": "Politics", "abbreviation": "Pol.", "language": "Greek, with English translations from SEP"},
+      {"title": "Prior Analytics / Posterior Analytics", "abbreviation": "An. Pr. / An. Post.", "language": "Greek, with English translations from SEP and Smith"},
+      {"title": "Physics", "abbreviation": "Phys.", "language": "Greek, with English translations from SEP"},
+      {"title": "De Anima", "abbreviation": "DA / De An.", "language": "Greek, with English translations from SEP"},
+      {"title": "Categories", "abbreviation": "Cat.", "language": "Greek, with English translations from SEP and Ackrill"},
+      {"title": "On Interpretation", "abbreviation": "De Int.", "language": "Greek, with English translations from SEP"},
+      {"title": "Topics / On Sophistical Refutations", "abbreviation": "Top. / SE", "language": "Greek, with English translations from SEP"}
+    ],
+    "secondary_sources": [
+      {"scholar": "Jonathan Barnes", "works": ["Aristotle: A Very Short Introduction", "Cambridge Companion to Aristotle (ed.)", "Posterior Analytics (trans. & comm.)", "Proof and the Syllogism (1981)"], "affiliation": "Oxford / Geneva"},
+      {"scholar": "Terence Irwin", "works": ["Aristotle's First Principles (1988)", "Nicomachean Ethics (trans. & comm.)"], "affiliation": "Oxford / Cornell"},
+      {"scholar": "Sarah Broadie", "works": ["Passage and Possibility (1982)", "Ethics with Aristotle (1991)", "Nature and Divinity in Aristotle's Ethics and Metaphysics"], "affiliation": "Oxford / St Andrews"},
+      {"scholar": "Gisela Striker", "works": ["Aristotle, Prior Analytics I (Clarendon Series, 2009)"], "affiliation": "Harvard"},
+      {"scholar": "Robin Smith", "works": ["Aristotle's Prior Analytics (1989)", "SEP entry on Aristotle's Logic"], "affiliation": "Texas A&M"},
+      {"scholar": "Michael Frede", "works": ["Categories in Aristotle (1981)", "Essays in Ancient Philosophy (1987)"], "affiliation": "Oxford / Berkeley"},
+      {"scholar": "Fred Miller", "works": ["Nature, Justice, and Rights in Aristotle's Politics"], "affiliation": "Arizona State"},
+      {"scholar": "Richard Kraut", "works": ["Aristotle on the Human Good"], "affiliation": "Northwestern"}
+    ],
+    "online_resources": [
+      {"title": "Stanford Encyclopedia of Philosophy: Aristotle", "url": "https://plato.stanford.edu/entries/aristotle/"},
+      {"title": "SEP: Aristotle's Metaphysics", "url": "https://plato.stanford.edu/entries/aristotle-metaphysics/"},
+      {"title": "SEP: Aristotle's Psychology", "url": "https://plato.stanford.edu/entries/aristotle-psychology/"},
+      {"title": "SEP: Aristotle's Ethics", "url": "https://plato.stanford.edu/entries/aristotle-ethics/"},
+      {"title": "SEP: Aristotle's Politics", "url": "https://plato.stanford.edu/entries/aristotle-politics/"},
+      {"title": "SEP: Aristotle's Logic", "url": "https://plato.stanford.edu/entries/aristotle-logic/"}
+    ]
+  },
+  "metadata": {
+    "generated_by": "philosopher-distiller subagent",
+    "philosopher": "Aristotle",
+    "language": "zh-CN",
+    "version": "1.0",
+    "concepts_count": 8,
+    "primary_quotes_count": 19,
+    "secondary_sources_count": 14,
+    "misconceptions_clarified": 22,
+    "data_sources": ["Stanford Encyclopedia of Philosophy", "Oxford Classical Texts", "Cambridge Companion to Aristotle"],
+    "generation_date": "2026-05-16"
+  }
+}
