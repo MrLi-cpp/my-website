@@ -1,0 +1,576 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第二章：后端骨架——让服务器"听懂"浏览器的请求</h1>
+
+<p><strong>本章目标</strong>：理解后端是什么，用 Express 搭建可处理 API 请求的服务器骨架，学会路由、中间件、JSON 响应。</p>
+
+<p><strong>学完后你能做什么</strong>：浏览器能向服务器"要数据"，服务器能"给数据"，双方用 JSON 格式对话。</p>
+
+<hr/>
+
+<h2>2.1 后端是什么？——餐厅服务员的比喻</h2>
+
+<p>想象你走进一家餐厅：</p>
+
+<ul>
+<li>你坐在座位上，看菜单（网页前端）</li>
+<li>你叫服务员过来，说"我要一份牛排"（发送请求）</li>
+<li>服务员把单子递给厨房（后端处理）</li>
+<li>厨房做菜（数据库查询、业务逻辑）</li>
+<li>服务员把菜端给你（返回响应）</li>
+</ul>
+
+<p>在这个比喻里：</p>
+
+<table>
+<tr><th>餐厅</th><th>网站</th></tr>
+<tr><td>菜单（菜品图片、价格、描述）</td><td>前端（HTML/CSS/JS 构成的界面）</td></tr>
+<tr><td>服务员</td><td>后端服务器（Express）</td></tr>
+<tr><td>厨房</td><td>数据库 + 业务逻辑</td></tr>
+<tr><td>食材</td><td>数据（用户信息、文章内容）</td></tr>
+</table>
+
+<p>前端负责"展示"，后端负责"处理"。前端是脸面，后端是大脑。</p>
+
+<div class="story">
+<h4>📖 故事时间：为什么网站需要后端？</h4>
+<p>1990 年代的网站几乎都是"静态网站"——HTML 文件放在服务器上，浏览器请求什么就返回什么。这种网站只能展示固定内容，无法交互。</p>
+<p>1993 年，NCSA 开发了 <strong>CGI</strong>（Common Gateway Interface，通用网关接口）。CGI 允许 Web 服务器调用外部程序来处理请求。比如，用户提交一个表单，CGI 调用一个 Perl 脚本，脚本处理数据后生成新的 HTML 返回。</p>
+<p>CGI 的问题是：每次请求都要启动一个新的进程。这就像餐厅每来一位客人就新招一个服务员——开销巨大。</p>
+<p>1997 年，PHP 出现了。PHP 的解决方案是"把程序嵌在 HTML 里"——服务器常驻内存，请求来了直接处理。这大大提升了性能。</p>
+<p>2009 年 Node.js 出现后，JavaScript 也能做后端了。Express 作为 Node.js 最流行的框架，简化了路由、中间件、模板渲染等常见任务。今天我们用 Express，就是在站在 30 年 Web 后端发展的肩膀上。</p>
+</div>
+
+<div class="think">
+<h4>🤔 为什么前后端要分离？</h4>
+<p>早期的 PHP/ASP/JSP 时代，前后端是不分离的。同一个文件里既有 HTML 标签，又有数据库查询代码，还有业务逻辑。这种"意大利面条代码"维护起来极其困难。</p>
+<p>2005 年后，随着 AJAX 技术成熟，前后端分离成为主流。前端用 JavaScript 调用后端 API 获取数据，然后动态渲染页面。后端只负责数据，前端只负责展示。</p>
+<p>好处是什么？</p>
+<ul>
+<li><strong>职责清晰</strong>：前端工程师专注交互和视觉效果，后端工程师专注数据和性能</li>
+<li><strong>并行开发</strong>：前后端可以同时开发，通过 API 文档约定接口</li>
+<li><strong>技术独立</strong>：前端可以用 React/Vue，后端可以用 Python/Java/Node.js，互不影响</li>
+<li><strong>多端适配</strong>：同一个后端 API 可以同时服务网页、手机 App、小程序</li>
+</ul>
+<p>我们的项目也遵循这个原则：public/ 文件夹里是前端代码，server.js 是后端代码，双方通过 JSON API 通信。</p>
+</div>
+
+<h2>2.2 路由——服务器的"菜单"</h2>
+
+<h3>2.2.1 什么是路由？</h3>
+
+<p>路由（Routing）就是"根据 URL 决定执行什么代码"。</p>
+
+<p>想象餐厅的服务员听到不同点菜指令：</p>
+<ul>
+<li>"我要牛排" → 传递给厨房 A（牛排师傅）</li>
+<li>"我要寿司" → 传递给厨房 B（日料师傅）</li>
+<li>"我要账单" → 传递给收银员</li>
+</ul>
+
+<p>在 Express 中：</p>
+
+<pre><code>app.get('/steak', (req, res) => {
+  res.send('牛排来了！');
+});
+
+app.get('/sushi', (req, res) => {
+  res.send('寿司来了！');
+});
+
+app.get('/bill', (req, res) => {
+  res.send('账单来了！');
+});
+</code></pre>
+
+<p><code>app.get('/steak', ...)</code> 表示：当浏览器用 GET 方法访问 <code>/steak</code> 路径时，执行后面的函数。</p>
+
+<h3>2.2.2 HTTP 方法——GET vs POST</h3>
+
+<p>HTTP 定义了多种"方法"（也叫动词），表示请求的目的：</p>
+
+<table>
+<tr><th>方法</th><th>含义</th><th>用途</th><th>是否安全*</th></tr>
+<tr><td>GET</td><td>获取</td><td>浏览页面、查询数据</td><td>是</td></tr>
+<tr><td>POST</td><td>创建</td><td>提交表单、注册账号</td><td>否</td></tr>
+<tr><td>PUT</td><td>更新</td><td>修改资料、编辑文章</td><td>否</td></tr>
+<tr><td>DELETE</td><td>删除</td><td>删除文章、注销账号</td><td>否</td></tr>
+<tr><td>PATCH</td><td>部分更新</td><td>修改部分字段</td><td>否</td></tr>
+</table>
+
+<p>*"安全"指的是：多次执行不会产生副作用。GET 请求不会修改服务器数据，POST/PUT/DELETE 会。</p>
+
+<div class="think">
+<h4>🤔 为什么 GET 和 POST 要分开？</h4>
+<p>这个区分来自 RESTful 架构的设计理念。REST（Representational State Transfer）是 Roy Fielding 在 2000 年博士论文中提出的架构风格，主张用 HTTP 方法表达操作意图。</p>
+<p>REST 的核心思想：URL 是资源（名词），HTTP 方法是操作（动词）。比如：</p>
+<ul>
+<li><code>GET /users/1</code> → 获取 ID 为 1 的用户</li>
+<li><code>POST /users</code> → 创建一个新用户</li>
+<li><code>PUT /users/1</code> → 修改 ID 为 1 的用户</li>
+<li><code>DELETE /users/1</code> → 删除 ID 为 1 的用户</li>
+</ul>
+<p>这种设计的好处是<strong>语义清晰</strong>。看 API 就能知道它在做什么，不需要读文档。而且浏览器、CDN、搜索引擎都能利用 GET 的"安全"特性做缓存。</p>
+<p>我们的项目虽然没有严格遵循 RESTful（比如有些操作直接用 POST），但基本理念是一致的。</p>
+</div>
+
+<h2>2.3 中间件——Express 的灵魂</h2>
+
+<h3>2.3.1 什么是中间件？</h3>
+
+<p>中间件（Middleware）是 Express 最强大的设计。它是一个函数，接收请求对象（req）、响应对象（res）、以及一个<code>next()</code> 函数。</p>
+
+<p>中间件可以做三件事：</p>
+<ul>
+<li>处理请求（比如解析 JSON 数据）</li>
+<li>拒绝请求（比如权限检查不通过）</li>
+<li>放行给下一个中间件（调用 next()）</li>
+</ul>
+
+<pre><code>// 自定义中间件示例
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next(); // 放行，继续执行后续的中间件或路由
+});
+</code></pre>
+
+<p>这个中间件的作用是：记录每个请求的到达时间、HTTP 方法和 URL。调用 <code>next()</code> 表示"我处理完了，继续下一个"。如果不调用 <code>next()</code>，请求就会"卡住"，浏览器永远等不到响应。</p>
+
+<div class="story">
+<h4>📖 故事时间：中间件模式的起源</h4>
+<p>中间件的概念不是 Express 发明的。它来自软件架构中的"管道-过滤器"模式（Pipes and Filters Pattern）。</p>
+<p>这个模式最早出现在 Unix 操作系统的设计中。Unix 的哲学是：每个程序只做一件事，然后把多个程序用"管道"连接起来。</p>
+<p>比如：</p>
+<p><code>cat file.txt | grep "error" | sort | uniq -c</code></p>
+<p>这条命令的意思是：读取文件 → 过滤包含 "error" 的行 → 排序 → 统计重复次数。每个程序只做一件事，通过管道传递数据。</p>
+<p>Express 的中间件就是这个思路：每个中间件处理请求的一个方面（日志、解析、认证），通过 <code>next()</code> 传递控制权。</p>
+<p>这种设计的好处是<strong>可组合</strong>。你可以像搭积木一样组合中间件：日志中间件 + 认证中间件 + 解析中间件 + 路由处理。想加功能就加一个中间件，想删功能就删掉它，不影响其他部分。</p>
+</div>
+
+<h3>2.3.2 常用内置中间件</h3>
+
+<p>Express 提供了几个常用内置中间件：</p>
+
+<table>
+<tr><th>中间件</th><th>作用</th><th>使用方式</th></tr>
+<tr><td>express.json()</td><td>解析请求体中的 JSON 数据</td><td>app.use(express.json())</td></tr>
+<tr><td>express.urlencoded()</td><td>解析表单提交的 x-www-form-urlencoded 数据</td><td>app.use(express.urlencoded({ extended: true }))</td></tr>
+<tr><td>express.static()</td><td>托管静态文件（CSS/JS/图片）</td><td>app.use(express.static('public'))</td></tr>
+</table>
+
+<p>为什么需要 express.json()？</p>
+
+<p>当浏览器发送 POST 请求时，请求体里可能带着 JSON 数据。比如注册账号时，浏览器发送：</p>
+
+<pre><code>POST /api/register
+Content-Type: application/json
+
+{
+  "username": "jiguang",
+  "password": "secret123"
+}
+</code></pre>
+
+<p>如果不加 <code>express.json()</code>，服务器收到的 <code>req.body</code> 是 <code>undefined</code>，完全读不到用户名和密码。这个中间件会自动把请求体中的 JSON 字符串解析成 JavaScript 对象。</p>
+
+<div class="think">
+<h4>🤔 为什么默认不自动解析 JSON？</h4>
+<p>你可能会想：既然解析 JSON 这么常用，为什么 Express 不默认开启？</p>
+<p>这是 Express "极简主义"哲学的体现。Express 的核心非常轻量，所有功能都是可选的。这样做有几个好处：</p>
+<ul>
+<li><strong>性能</strong>：不需要的功能不加载，减少内存占用</li>
+<li><strong>灵活</strong>：你可以用自己习惯的 JSON 解析库（比如 body-parser 的替代品）</li>
+<li><strong>安全</strong>：JSON 解析有潜在的安全风险（比如大体积 JSON 导致内存耗尽），默认关闭意味着你需要显式决定"我要这个风险"</li>
+</ul>
+<p>这种"显式优于隐式"（Explicit is better than implicit）的设计哲学来自 Python 的 Zen of Python，也是很多优秀框架的共同选择。</p>
+</div>
+
+<h2>2.4 JSON 响应——前后端的"通用语言"</h2>
+
+<h3>2.4.1 什么是 JSON？</h3>
+
+<p>JSON（JavaScript Object Notation，JavaScript 对象表示法）是一种轻量级的数据交换格式。它的语法和 JavaScript 对象几乎一样：</p>
+
+<pre><code>{
+  "name": "霁光",
+  "age": 20,
+  "isAdmin": false,
+  "hobbies": ["编程", "写作", "摄影"]
+}
+</code></pre>
+
+<p>JSON 的规则很简单：</p>
+<ul>
+<li>键必须是字符串（用双引号包裹）</li>
+<li>值可以是字符串、数字、布尔值、null、数组、对象</li>
+<li>不支持函数、日期、undefined（JSON 没有这些类型）</li>
+</ul>
+
+<div class="story">
+<h4>📖 故事时间：JSON 的诞生</h4>
+<p>2001 年，Douglas Crockford（JavaScript 领域的传奇人物）在一家公司做顾问。当时公司内部需要一种数据交换格式，XML 太臃肿，YAML 太复杂。Crockford 说："JavaScript 的对象语法已经很完美了，我们只需要把它标准化。"</p>
+<p>他花了一下午定义了 JSON 的语法规范，然后在 2002 年在 json.org 发布。JSON 的"卖点"是极其简单：</p>
+<ul>
+<li><strong>人可读</strong>：不像二进制格式需要专用工具查看</li>
+<li><strong>机器可解析</strong>：几乎所有编程语言都有 JSON 解析库</li>
+<li><strong>体积小</strong>：比 XML 少了很多冗余标签</li>
+</ul>
+<p>JSON 迅速取代 XML 成为 Web API 的事实标准。今天，你很难找到一个不支持 JSON 的 Web 服务。Douglas Crockford 因为 JSON 获得了巨大的声誉，但他从未为 JSON 申请专利——他说："JSON 是送给互联网的礼物。"</p>
+</div>
+
+<h3>2.4.2 服务器返回 JSON</h3>
+
+<pre><code>app.get('/api/user', (req, res) => {
+  res.json({
+    name: '霁光',
+    bio: '记录生活 · 沉淀思考',
+    website: 'http://localhost:3000'
+  });
+});
+</code></pre>
+
+<p><code>res.json()</code> 会自动：</p>
+<ul>
+<li>把 JavaScript 对象转换成 JSON 字符串</li>
+<li>设置 Content-Type 为 application/json</li>
+<li>发送响应</li>
+</ul>
+
+<p>如果不用 <code>res.json()</code>，你需要手动写：</p>
+
+<pre><code>app.get('/api/user', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify({ name: '霁光', bio: '...' }));
+});
+</code></pre>
+
+<p><code>res.json()</code> 只是帮你封装了这些操作，让你写更少的代码。</p>
+
+<h2>2.5 本章实操——搭建后端骨架</h2>
+
+<div class="step">
+<strong>步骤1：安装依赖</strong><br>
+</div>
+
+<pre><code>cd ~/Desktop/my-website
+npm install express</code></pre>
+
+<div class="step">
+<strong>步骤2：创建 server.js 骨架</strong><br>
+</div>
+
+<pre><code>// 文件位置：my-website/server.js
+
+const express = require('express');
+const app = express();
+
+// ===== 中间件 =====
+app.use(express.json());                    // 解析 JSON 请求体
+app.use(express.static('public'));          // 托管静态文件
+
+// ===== 路由 =====
+// 测试 API：返回当前时间
+app.get('/api/time', (req, res) => {
+  res.json({
+    time: new Date().toLocaleString('zh-CN'),
+    message: '服务器运行正常'
+  });
+});
+
+// 测试 API：接收 POST 请求
+app.post('/api/echo', (req, res) => {
+  res.json({
+    received: req.body,
+    message: '服务器收到了你的数据！'
+  });
+});
+
+// ===== 启动 =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`服务器已启动！访问 http://localhost:${PORT}`);
+});
+</code></pre>
+
+<h3>逐行解析</h3>
+
+<p><strong>const PORT = process.env.PORT || 3000;</strong></p>
+
+<p>这一行让服务器端口可配置。如果环境变量 PORT 存在（比如部署到服务器时设为 80），就用环境变量的值；否则默认用 3000。</p>
+
+<p><code>process.env</code> 是 Node.js 提供的环境变量对象。环境变量是操作系统级别的键值对配置，不会写入代码，因此适合放敏感信息（比如数据库密码）。</p>
+
+<div class="think">
+<h4>🤔 为什么用 || 而不是 if-else？</h4>
+<p><code>process.env.PORT || 3000</code> 是 JavaScript 的"短路求值"特性。逻辑或运算符 <code>||</code> 的规则是：如果左边是"真值"（truthy），返回左边；否则返回右边。</p>
+<p>JavaScript 中，以下值是"假值"（falsy）：</p>
+<ul>
+<li>false</li>
+<li>0</li>
+<li>""（空字符串）</li>
+<li>null</li>
+<li>undefined</li>
+<li>NaN</li>
+</ul>
+<p>其他所有值都是真值（包括 "0"、[]、{}）。所以当 process.env.PORT 未定义时（undefined），|| 返回 3000。</p>
+<p>这种写法比 <code>if (process.env.PORT) { PORT = process.env.PORT; } else { PORT = 3000; }</code> 简洁得多，是 JavaScript 程序员的惯用写法。</p>
+</div>
+
+<div class="step">
+<strong>步骤3：测试 GET API</strong><br>
+启动服务器后，在浏览器访问 <code>http://localhost:3000/api/time</code>，你应该看到：
+</div>
+
+<pre><code>{
+  "time": "2026/5/15 14:30:00",
+  "message": "服务器运行正常"
+}
+</code></pre>
+
+<div class="step">
+<strong>步骤4：测试 POST API</strong><br>
+POST 请求不能直接用浏览器地址栏测试（浏览器地址栏只能发 GET 请求）。打开 Chrome DevTools（F12），切换到 Console 标签，输入：
+</div>
+
+<pre><code>fetch('/api/echo', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name: '霁光', hobby: '编程' })
+})
+.then(res => res.json())
+.then(data => console.log(data));
+</code></pre>
+
+<p>你应该看到返回：</p>
+
+<pre><code>{
+  "received": { "name": "霁光", "hobby": "编程" },
+  "message": "服务器收到了你的数据！"
+}
+</code></pre>
+
+<h2>2.6 fetch API——前端如何调用后端</h2>
+
+<p>fetch 是现代浏览器内置的 HTTP 请求 API。它是 XMLHttpRequest 的替代品，API 更简洁，基于 Promise。</p>
+
+<div class="story">
+<h4>📖 故事时间：从 XMLHttpRequest 到 fetch</h4>
+<p>1999 年，微软在 IE5 中引入了 XMLHttpRequest（XHR），让浏览器可以在不刷新页面的情况下向服务器请求数据。这是 AJAX（Asynchronous JavaScript and XML）技术的基础。</p>
+<p>但 XHR 的 API 设计很糟糕。一个简单的 GET 请求需要写这么多代码：</p>
+<pre><code>var xhr = new XMLHttpRequest();
+xhr.open('GET', '/api/data', true);
+xhr.onreadystatechange = function() {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    console.log(xhr.responseText);
+  }
+};
+xhr.send();
+</code></pre>
+<p><code>readyState</code> 的 4 个状态、<code>status</code> 码判断、回调函数嵌套……代码非常冗长。</p>
+<p>2015 年，fetch API 作为 Promise 风格的替代品被标准化。同样的功能只需：</p>
+<pre><code>fetch('/api/data')
+  .then(res => res.json())
+  .then(data => console.log(data));
+</code></pre>
+<p>简洁、链式、符合现代 JavaScript 习惯。今天，除非需要进度条上传等高级功能，fetch 已经完全替代了 XHR。</p>
+</div>
+
+<p><strong>fetch 的基本用法：</strong></p>
+
+<pre><code>// GET 请求（获取数据）
+fetch('/api/time')
+  .then(response => response.json())   // 解析 JSON
+  .then(data => console.log(data))     // 使用数据
+  .catch(error => console.error(error)); // 处理错误
+
+// POST 请求（发送数据）
+fetch('/api/echo', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ name: '霁光' })
+});
+</code></pre>
+
+<p><strong>关键概念：</strong></p>
+
+<ul>
+<li><code>fetch()</code> 返回一个 Promise，表示"未来的结果"</li>
+<li><code>.then()</code> 在 Promise 成功时执行</li>
+<li><code>.catch()</code> 在 Promise 失败时执行（比如网络断开）</li>
+<li><code>response.json()</code> 也是 Promise，表示"解析 JSON 完成后的结果"</li>
+</ul>
+
+<div class="think">
+<h4>🤔 为什么 fetch 的 API 设计成 Promise？</h4>
+<p>Promise 是 JavaScript 异步编程的核心概念。传统回调函数的问题是"回调地狱"（Callback Hell）——嵌套层级太深，代码难以阅读。</p>
+<pre><code>// 回调地狱示例
+getData(function(a) {
+  getMoreData(a, function(b) {
+    getMoreData(b, function(c) {
+      getMoreData(c, function(d) {
+        console.log(d);
+      });
+    });
+  });
+});
+</code></pre>
+<p>Promise 的链式调用让异步代码看起来像同步代码：</p>
+<pre><code>getData()
+  .then(a => getMoreData(a))
+  .then(b => getMoreData(b))
+  .then(c => getMoreData(c))
+  .then(d => console.log(d));
+</code></pre>
+<p>这种"扁平化"的代码结构是现代 JavaScript 的标配。async/await（ES2017）进一步让异步代码看起来像同步代码，我们在后续章节会用到。</p>
+</div>
+
+<h2>2.7 错误处理——让程序"优雅地失败"</h2>
+
+<p>任何程序都会出错。网络断开、数据库连接失败、代码写错……一个好的后端不会让错误信息直接暴露给用户，而是"优雅地处理"。</p>
+
+<h3>2.7.1 404 处理</h3>
+
+<pre><code>// 放在所有路由的最后
+app.use((req, res) => {
+  res.status(404).json({
+    error: '接口不存在',
+    path: req.path
+  });
+});
+</code></pre>
+
+<p>这个中间件没有路径限制（<code>app.use</code> 不带路径），它会捕获所有没有被前面路由处理的请求。返回 404 状态码和友好的错误信息。</p>
+
+<div class="think">
+<h4>🤔 为什么 404 中间件要放在最后？</h4>
+<p>Express 的路由匹配是<strong>顺序的</strong>。请求从上到下依次匹配，一旦匹配成功就停止。如果 404 中间件放在前面，它会拦截所有请求，后面的路由永远不会执行。</p>
+<p>这就像餐厅的服务流程：迎宾 → 点餐 → 上菜 → 送客。你不能把"送客"放在"点餐"前面。</p>
+<p>所以 Express 中间件的顺序非常关键。常见的顺序是：</p>
+<ol>
+<li>日志中间件（最先，记录所有请求）</li>
+<li>解析中间件（json、urlencoded）</li>
+<li>静态文件中间件（express.static）</li>
+<li>认证中间件（如果需要）</li>
+<li>业务路由（GET / POST / PUT / DELETE）</li>
+<li>404 处理（最后）</li>
+</ol>
+</div>
+
+<h3>2.7.2 全局错误捕获</h3>
+
+<pre><code>// 捕获同步和异步错误
+app.use((err, req, res, next) => {
+  console.error('服务器错误:', err);
+  res.status(500).json({
+    error: '服务器内部错误',
+    message: process.env.NODE_ENV === 'development' ? err.message : '请稍后重试'
+  });
+});
+</code></pre>
+
+<p>这个中间件有四个参数（<code>err, req, res, next</code>），Express 通过参数数量识别这是"错误处理中间件"。它捕获所有抛出的异常，防止服务器崩溃。</p>
+
+<p><code>process.env.NODE_ENV</code> 的判断是为了安全：开发环境显示详细错误信息方便调试，生产环境只显示"请稍后重试"，防止泄露敏感信息。</p>
+
+<h2>2.8 本章代码总览</h2>
+
+<pre><code>// 文件位置：my-website/server.js（第二章版本）
+
+const express = require('express');
+const app = express();
+
+// 中间件
+app.use(express.json());
+app.use(express.static('public'));
+
+// 路由
+app.get('/api/time', (req, res) => {
+  res.json({ time: new Date().toLocaleString('zh-CN') });
+});
+
+app.post('/api/echo', (req, res) => {
+  res.json({ received: req.body });
+});
+
+// 404 兜底
+app.use((req, res) => {
+  res.status(404).json({ error: '接口不存在' });
+});
+
+// 启动
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`服务器已启动！访问 http://localhost:${PORT}`);
+});
+</code></pre>
+
+<h2>2.9 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr><td>req.body 是 undefined</td><td>POST 请求收不到数据</td><td>没加 express.json() 中间件</td><td>app.use(express.json())</td></tr>
+<tr><td>404 返回 HTML</td><td>访问 /api/xxx 看到 Express 默认 404 页面</td><td>没自定义 404 中间件</td><td>在所有路由后加 app.use((req, res) => ...)</td></tr>
+<tr><td>fetch 报错 CORS</td><td>浏览器控制台显示 CORS policy 错误</td><td>跨域请求被浏览器拦截</td><td>安装 cors 包：npm install cors，然后 app.use(require('cors')())</td></tr>
+<tr><td>端口被占用</td><td>Error: EADDRINUSE</td><td>另一个进程占用了端口</td><td>换端口：PORT=3001 node server.js；或杀掉占用进程</td></tr>
+<tr><td>JSON 解析失败</td><td>req.body 是 {} 但明明发了数据</td><td>Content-Type 不是 application/json</td><td>fetch 时加 headers: { 'Content-Type': 'application/json' }</td></tr>
+</table>
+
+<h2>2.10 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ 理解"前端展示，后端处理"的分工</li>
+<li>□ 理解 HTTP 方法（GET/POST/PUT/DELETE）的含义</li>
+<li>□ 理解路由的作用：URL → 处理函数</li>
+<li>□ 理解中间件的作用：req → 处理 → next → 处理 → res</li>
+<li>□ 理解 JSON 是前后端的通用数据格式</li>
+<li>□ 能用 fetch 发送 GET 和 POST 请求</li>
+<li>□ 理解 Promise 和 .then() 的用法</li>
+<li>□ 理解中间件顺序的重要性</li>
+<li>□ 知道为什么 404 中间件要放在最后</li>
+<li>□ 知道开发环境和生产环境的错误信息应该不同</li>
+</ul>
+</div>
+
+<h2>2.11 下章预告</h2>
+
+<p>下一章，我们要把主页升级为"四联屏"——用 CSS 实现四个全屏区块的滑动效果。你会学到 CSS 变量、position 定位、scroll-snap 等高级技术。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第二章完 —</p>
+
+</body></html>

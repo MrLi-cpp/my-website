@@ -1,0 +1,606 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+.practice { background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.practice h4 { margin: 0 0 8px; color: #2e7d32; font-size: 12pt; }
+.review { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.review h4 { margin: 0 0 8px; color: #1565c0; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第七章：博客系统——Markdown 渲染与文章管理</h1>
+
+<p><strong>本章目标</strong>：实现博客功能。用户可以发布文章，访客可以浏览文章列表和详情。文章支持 Markdown 格式渲染。</p>
+
+<p><strong>学完后你能做什么</strong>：有一个完整的博客系统——列表页展示所有文章，详情页渲染 Markdown 格式的文章内容，支持浏览计数和标签筛选。</p>
+
+<hr/>
+
+<h2>7.1 为什么博客需要 Markdown？</h2>
+
+<p>HTML 是网页的标记语言，但直接写 HTML 很繁琐：</p>
+
+<pre><code>&lt;h1&gt;标题&lt;/h1&gt;
+&lt;p&gt;这是&lt;strong&gt;加粗&lt;/strong&gt;的文字&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;列表项1&lt;/li&gt;
+  &lt;li&gt;列表项2&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+
+<p>Markdown 是一种轻量级标记语言，用更简洁的语法达到同样的效果：</p>
+
+<pre><code># 标题
+
+这是**加粗**的文字
+
+- 列表项1
+- 列表项2</code></pre>
+
+<p>Markdown 让你专注于内容写作，而不是 HTML 标签。</p>
+
+<div class="story">
+<h4>📖 故事时间：Markdown 的诞生</h4>
+<p>2004 年，John Gruber 和 Aaron Swartz 合作创造了 Markdown。Gruber 是一位科技博主，他对当时流行的"用 HTML 写博客"很不满意——写作时要在内容和标签之间来回切换，思路经常被打断。</p>
+<p>Markdown 的设计目标是："用一种易读易写的纯文本格式，然后转换成有效的 HTML。"它的语法参考了电子邮件中常用的纯文本标记习惯：</p>
+<ul>
+<li>*星号包围* = 斜体</li>
+<li>**双星号** = 加粗</li>
+<li>&gt; 大于号 = 引用</li>
+<li>`反引号` = 代码</li>
+</ul>
+<p>2012 年，GitHub 推出了 GitHub Flavored Markdown（GFM），增加了表格、任务列表、代码高亮等扩展。今天，Markdown 是程序员写文档、博客、README 的标准格式。GitHub、Notion、Obsidian、Typora 都支持 Markdown。</p>
+<p>有趣的是，Markdown 至今没有官方标准。John Gruber 只定义了最初的语法规范，但没有标准化组织维护它。这导致不同平台对 Markdown 的解析略有差异。CommonMark（2014 年）试图解决这个问题，但 GFM 等扩展仍然是各平台自己的实现。</p>
+<p>Aaron Swartz 是一位天才程序员和互联网活动家。他参与了 RSS 1.0 规范、Creative Commons 技术框架、 Reddit 的早期开发。但他最著名的事迹是 2011 年通过 MIT 网络下载了 JSTOR 学术数据库的数百万篇论文，被美国政府以"计算机欺诈"起诉。面对 35 年监禁和 100 万美元罚款的威胁，Aaron 在 2013 年 1 月自杀，年仅 26 岁。他的死引发了关于学术开放获取和计算机犯罪法律边界的广泛讨论。</p>
+</div>
+
+<h2>7.2 Markdown 语法速查</h2>
+
+<table>
+<tr><th>语法</th><th>效果</th></tr>
+<tr><td># 标题</td><td>h1 标题</td></tr>
+<tr><td>## 标题</td><td>h2 标题</td></tr>
+<tr><td>**加粗**</td><td>加粗文字</td></tr>
+<tr><td>*斜体*</td><td>斜体文字</td></tr>
+<tr><td>`代码`</td><td>行内代码</td></tr>
+<tr><td>```js<br>代码块<br>```</td><td>代码块（带语言标识）</td></tr>
+<tr><td>&gt; 引用</td><td>引用块</td></tr>
+<tr><td>- 列表</td><td>无序列表</td></tr>
+<tr><td>1. 列表</td><td>有序列表</td></tr>
+<tr><td>[文字](URL)</td><td>链接</td></tr>
+<tr><td>![alt](URL)</td><td>图片</td></tr>
+<tr><td>|a|b|<br>|-|-|<br>|1|2|</td><td>表格</td></tr>
+<tr><td>---</td><td>分隔线</td></tr>
+</table>
+
+<h2>7.3 数据库设计——blogs 表</h2>
+
+<h3>7.3.1 表结构</h3>
+
+<pre><code>CREATE TABLE IF NOT EXISTS blogs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  summary TEXT,
+  cover_image TEXT,
+  tags TEXT,
+  user_id INTEGER NOT NULL,
+  view_count INTEGER DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);</code></pre>
+
+<p>字段说明：</p>
+
+<table>
+<tr><th>字段</th><th>说明</th><th>用途</th></tr>
+<tr><td>title</td><td>文章标题</td><td>列表页和详情页显示</td></tr>
+<tr><td>content</td><td>文章内容</td><td>Markdown 格式的正文</td></tr>
+<tr><td>summary</td><td>摘要</td><td>列表页显示，不显示全文</td></tr>
+<tr><td>cover_image</td><td>封面图 URL</td><td>列表页的缩略图</td></tr>
+<tr><td>tags</td><td>标签</td><td>逗号分隔，如 "技术,前端,教程"</td></tr>
+<tr><td>user_id</td><td>作者 ID</td><td>外键，关联 users 表</td></tr>
+<tr><td>view_count</td><td>浏览次数</td><td>统计文章阅读量</td></tr>
+<tr><td>updated_at</td><td>最后更新时间</td><td>显示文章是否近期更新</td></tr>
+</table>
+
+<p>summary 字段的设计思路：列表页不需要显示全文，只需要一段摘要。如果没有 summary，可以用 content 的前 100 字自动截取。</p>
+
+<h2>7.4 后端 API</h2>
+
+<h3>7.4.1 发布文章</h3>
+
+<pre><code>app.post('/api/blogs', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  const { title, content, summary, tags } = req.body;
+  
+  if (!title || !content) {
+    return res.status(400).json({ error: '标题和内容不能为空' });
+  }
+  
+  db.run(
+    `INSERT INTO blogs (title, content, summary, tags, user_id)
+     VALUES (?, ?, ?, ?, ?)`,
+    [title, content, summary || '', tags || '', req.session.userId],
+    function(err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ id: this.lastID, message: '发布成功' });
+    }
+  );
+});</code></pre>
+
+<p>summary || '' 表示：如果 summary 没传，用空字符串。这是 JavaScript 的"逻辑或"运算符——当 summary 为 undefined、null 或空字符串时，返回 ''。</p>
+
+<h3>7.4.2 获取文章列表</h3>
+
+<pre><code>app.get('/api/blogs', (req, res) => {
+  db.all(
+    `SELECT 
+      blogs.id,
+      blogs.title,
+      blogs.summary,
+      blogs.tags,
+      blogs.view_count,
+      blogs.created_at,
+      users.username
+    FROM blogs
+    JOIN users ON blogs.user_id = users.id
+    ORDER BY blogs.created_at DESC`,
+    [],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
+    }
+  );
+});</code></pre>
+
+<h3>7.4.3 获取单篇文章</h3>
+
+<pre><code>app.get('/api/blogs/:id', (req, res) => {
+  const blogId = req.params.id;
+  
+  // 先获取文章
+  db.get(
+    `SELECT blogs.*, users.username
+     FROM blogs
+     JOIN users ON blogs.user_id = users.id
+     WHERE blogs.id = ?`,
+    [blogId],
+    (err, blog) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      
+      if (!blog) {
+        return res.status(404).json({ error: '文章不存在' });
+      }
+      
+      // 浏览次数 +1
+      db.run(
+        'UPDATE blogs SET view_count = view_count + 1 WHERE id = ?',
+        [blogId]
+      );
+      
+      res.json(blog);
+    }
+  );
+});</code></pre>
+
+<p>这里有两个数据库操作：1）查询文章详情；2）更新浏览次数。这两个操作不在同一个事务中，所以浏览次数更新失败不会影响文章查询。</p>
+
+<p>如果你担心并发问题（两个用户同时读同一篇文章，view_count 只加了 1），可以用事务。但对于个人网站，这种并发概率极低，不需要过度优化。</p>
+
+<h3>7.4.4 更新文章</h3>
+
+<pre><code>app.put('/api/blogs/:id', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  const { title, content, summary, tags } = req.body;
+  const blogId = req.params.id;
+  
+  // 检查是否是作者
+  db.get(
+    'SELECT user_id FROM blogs WHERE id = ?',
+    [blogId],
+    (err, blog) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (!blog) return res.status(404).json({ error: '文章不存在' });
+      if (blog.user_id !== req.session.userId) {
+        return res.status(403).json({ error: '只能修改自己的文章' });
+      }
+      
+      db.run(
+        `UPDATE blogs 
+         SET title = ?, content = ?, summary = ?, tags = ?, updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`,
+        [title, content, summary, tags, blogId],
+        function(err) {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ message: '更新成功' });
+        }
+      );
+    }
+  );
+});</code></pre>
+
+<h2>7.5 前端实现——博客列表页</h2>
+
+<h3>7.5.1 blog-hub.html</h3>
+
+<pre><code>&lt;!-- 文件位置：my-website/public/blog-hub.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;博客 - 霁光&lt;/title&gt;
+  &lt;link rel="stylesheet" href="/style.css"&gt;
+  &lt;style&gt;
+    .blog-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .blog-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .blog-card:hover {
+      border-color: rgba(201, 169, 110, 0.3);
+    }
+    
+    .blog-title {
+      font-size: 20px;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+    }
+    
+    .blog-summary {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    
+    .blog-meta {
+      display: flex;
+      gap: 16px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    
+    .blog-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(201, 169, 110, 0.1);
+      border: 1px solid rgba(201, 169, 110, 0.2);
+      border-radius: 4px;
+      color: var(--accent-gold);
+      font-size: 12px;
+      margin-right: 6px;
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="blog-container"&gt;
+    &lt;h1 style="color: var(--accent-gold); margin-bottom: 24px;"&gt;博客&lt;/h1&gt;
+    &lt;div id="blog-list"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  
+  &lt;script&gt;
+    async function loadBlogs() {
+      const res = await fetch('/api/blogs');
+      const blogs = await res.json();
+      
+      const container = document.getElementById('blog-list');
+      container.innerHTML = blogs.map(blog =&gt; `
+        &lt;div class="blog-card" onclick="location.href='/blog-detail.html?id=${blog.id}'"&gt;
+          &lt;div class="blog-title"&gt;${escapeHtml(blog.title)}&lt;/div&gt;
+          &lt;div class="blog-summary"&gt;${escapeHtml(blog.summary)}&lt;/div&gt;
+          ${blog.tags ? blog.tags.split(',').map(t =&gt; `&lt;span class="blog-tag"&gt;${escapeHtml(t.trim())}&lt;/span&gt;`).join('') : ''}
+          &lt;div class="blog-meta"&gt;
+            &lt;span&gt;${escapeHtml(blog.username)}&lt;/span&gt;
+            &lt;span&gt;${new Date(blog.created_at).toLocaleDateString('zh-CN')}&lt;/span&gt;
+            &lt;span&gt;${blog.view_count} 阅读&lt;/span&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+      `).join('');
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    loadBlogs();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>标签渲染逻辑：blog.tags 是逗号分隔的字符串，如 "技术,前端,教程"。用 split(',') 分割成数组，再用 map() 生成每个标签的 HTML。</p>
+
+<h2>7.6 Markdown 渲染——marked.js</h2>
+
+<h3>7.6.1 为什么不在后端渲染 Markdown？</h3>
+
+<p>有两个选择：</p>
+<ul>
+<li><strong>后端渲染</strong>：服务器把 Markdown 转成 HTML，前端直接显示</li>
+<li><strong>前端渲染</strong>：前端拿到 Markdown 文本，用 JavaScript 转成 HTML</li>
+</ul>
+
+<p>我们选择前端渲染，因为：</p>
+<ul>
+<li>减轻服务器负担（服务器不用做 Markdown 解析）</li>
+<li>可以配合代码高亮库（Prism.js）实现客户端代码高亮</li>
+<li>如果需要编辑文章，前端可以直接显示原始 Markdown</li>
+<li>支持实时预览（输入 Markdown 时即时看到渲染效果）</li>
+</ul>
+
+<div class="think">
+<h4>🤔 后端渲染有什么优势？</h4>
+<p>虽然我们用前端渲染，但了解后端渲染的优势也很重要：</p>
+<ul>
+<li><strong>SEO</strong>：搜索引擎爬虫看到的已经是渲染好的 HTML，对 SEO 更友好</li>
+<li><strong>首屏速度</strong>：浏览器直接收到 HTML，不需要等待 JS 执行</li>
+<li><strong>安全性</strong>：后端可以控制渲染过程，过滤危险标签</li>
+</ul>
+<p>对于需要 SEO 的公开博客，可以用"同构渲染"（Isomorphic Rendering）——首次访问时后端渲染，后续交互用前端渲染。Next.js、Nuxt.js 等框架就是做这个的。</p>
+</div>
+
+<h3>7.6.2 使用 marked.js</h3>
+
+<div class="step">
+<strong>步骤</strong><br/>
+在 blog-detail.html 中引入 marked.js（通过 CDN）：
+</div>
+
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"&gt;&lt;/script&gt;</code></pre>
+
+<p>使用：</p>
+
+<pre><code>// 把 Markdown 文本转成 HTML
+document.getElementById('content').innerHTML = marked.parse(blog.content);</code></pre>
+
+<p>marked.js 的解析流程：1）词法分析（把 Markdown 文本切成 token）；2）语法分析（把 token 转成 HTML AST）；3）渲染（把 AST 转成 HTML 字符串）。</p>
+
+<h3>7.6.3 XSS 防护——渲染后的 HTML 也要安全</h3>
+
+<p>marked.js 默认会过滤一些危险标签，但不够严格。更好的做法是用 DOMPurify：</p>
+
+<pre><code>&lt;script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.1/dist/purify.min.js"&gt;&lt;/script&gt;
+
+// 先渲染 Markdown，再净化 HTML
+const rawHtml = marked.parse(blog.content);
+const safeHtml = DOMPurify.sanitize(rawHtml);
+document.getElementById('content').innerHTML = safeHtml;</code></pre>
+
+<div class="think">
+<h4>🤔 为什么 Markdown 也可能有 XSS？</h4>
+<p>Markdown 允许嵌入 HTML。如果用户输入：</p>
+<pre><code>&lt;script&gt;alert('xss')&lt;/script&gt;</code></pre>
+<p>marked.js 可能会原样保留这段 HTML（取决于配置）。DOMPurify 会删除所有 script 标签和危险属性（如 onclick、onerror），确保最终渲染的 HTML 是安全的。</p>
+<p>另一个 XSS 向量是图片：</p>
+<pre><code>![x](" onerror="alert('xss'))</code></pre>
+<p>DOMPurify 会移除 onerror 属性，阻止这个攻击。</p>
+</div>
+
+<h3>7.6.4 代码高亮——Prism.js</h3>
+
+<p>marked.js 渲染代码块时会生成 &lt;pre&gt;&lt;code class="language-js"&gt;...&lt;/code&gt;&lt;/pre&gt;。要给代码块加语法高亮，需要 Prism.js：</p>
+
+<pre><code>&lt;!-- 引入 Prism.js CSS 和 JS --&gt;
+&lt;link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"&gt;&lt;/script&gt;
+
+// 页面加载后调用
+Prism.highlightAll();</code></pre>
+
+<p>Prism.js 会根据 code 标签的 class（如 language-js）来应用对应语言的语法高亮规则。</p>
+
+<h2>7.7 博客详情页</h2>
+
+<p>详情页的核心功能：</p>
+<ul>
+<li>从 URL 参数获取文章 ID</li>
+<li>请求 /api/blogs/:id 获取文章数据</li>
+<li>渲染标题、作者、时间、浏览数</li>
+<li>用 marked.js + DOMPurify 渲染正文</li>
+<li>用 Prism.js 高亮代码块</li>
+</ul>
+
+<pre><code>// 从 URL 获取 id 参数
+const urlParams = new URLSearchParams(location.search);
+const blogId = urlParams.get('id');
+
+async function loadBlog() {
+  const res = await fetch(`/api/blogs/${blogId}`);
+  
+  if (!res.ok) {
+    document.getElementById('content').innerHTML = '&lt;p&gt;文章不存在&lt;/p&gt;';
+    return;
+  }
+  
+  const blog = await res.json();
+  
+  document.getElementById('title').textContent = blog.title;
+  document.getElementById('meta').textContent = 
+    `${blog.username} · ${new Date(blog.created_at).toLocaleDateString('zh-CN')} · ${blog.view_count} 阅读`;
+  
+  // 渲染 Markdown
+  const rawHtml = marked.parse(blog.content);
+  const safeHtml = DOMPurify.sanitize(rawHtml);
+  document.getElementById('content').innerHTML = safeHtml;
+  
+  // 代码高亮
+  Prism.highlightAll();
+}</code></pre>
+
+<h2>7.8 编辑文章功能</h2>
+
+<p>编辑页面和发布页面可以共用同一个表单，区别是：</p>
+<ul>
+<li>编辑时预填充已有数据</li>
+<li>调用 PUT /api/blogs/:id 而不是 POST /api/blogs</li>
+<li>只有作者能看到"编辑"按钮</li>
+</ul>
+
+<pre><code>// 页面加载时，如果是编辑模式，获取文章数据预填充表单
+async function init() {
+  const urlParams = new URLSearchParams(location.search);
+  const editId = urlParams.get('edit');
+  
+  if (editId) {
+    const res = await fetch(`/api/blogs/${editId}`);
+    const blog = await res.json();
+    
+    document.getElementById('title').value = blog.title;
+    document.getElementById('content').value = blog.content;
+    document.getElementById('summary').value = blog.summary;
+    document.getElementById('tags').value = blog.tags;
+    
+    // 修改表单提交逻辑为 PUT
+    document.getElementById('form').onsubmit = () => updateBlog(editId);
+  }
+}</code></pre>
+
+<h2>7.9 知识点回顾</h2>
+
+<div class="review">
+<h4>📚 本章核心概念回顾</h4>
+<ul>
+<li><strong>Markdown</strong>：轻量级标记语言，用纯文本语法生成 HTML。</li>
+<li><strong>marked.js</strong>：JavaScript Markdown 解析器，把 Markdown 转成 HTML。</li>
+<li><strong>DOMPurify</strong>：HTML 净化库，移除危险标签和属性，防止 XSS。</li>
+<li><strong>Prism.js</strong>：代码语法高亮库，支持数百种编程语言。</li>
+<li><strong>前端渲染 vs 后端渲染</strong>：前端渲染减轻服务器负担，后端渲染利于 SEO。</li>
+<li><strong>URL 参数</strong>：URLSearchParams 用于解析 ?id=123 形式的参数。</li>
+<li><strong>view_count</strong>：非关键数据更新，不需要事务，可以用异步更新。</li>
+</ul>
+</div>
+
+<div class="practice">
+<h4>📝 练习时间</h4>
+<ol>
+<li>写一段包含标题、列表、代码块、链接的 Markdown，观察 marked.js 的渲染结果。</li>
+<li>尝试在 Markdown 中嵌入 &lt;script&gt;alert('xss')&lt;/script&gt;，验证 DOMPurify 是否过滤。</li>
+<li>在博客详情页添加"编辑"按钮，但只有作者能看到。</li>
+<li>实现标签筛选功能：点击某个标签，只显示该标签的文章。</li>
+<li>给博客列表页添加分页功能（每页 10 条，用 LIMIT 和 OFFSET）。</li>
+</ol>
+</div>
+
+<h2>7.10 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>Markdown 没渲染</td>
+  <td>页面显示原始 Markdown 文本</td>
+  <td>marked.js 没加载或调用方式错误</td>
+  <td>检查 CDN 链接；用 marked.parse() 而不是 marked()</td>
+</tr>
+<tr>
+  <td>代码块没高亮</td>
+  <td>代码块是灰色背景，没有语法高亮</td>
+  <td>没引入 Prism.js 或 CSS，或没调用 highlightAll()</td>
+  <td>引入 Prism.js 和对应的主题 CSS；页面加载后调用 highlightAll()</td>
+</tr>
+<tr>
+  <td>文章列表加载慢</td>
+  <td>列表页半天没内容</td>
+  <td>文章太多或 N+1 查询</td>
+  <td>加 LIMIT 分页；检查是否有循环查询</td>
+</tr>
+<tr>
+  <td>图片不显示</td>
+  <td>Markdown 里的图片是裂图</td>
+  <td>图片路径错误或图片不存在</td>
+  <td>检查图片 URL 是否正确；相对路径 vs 绝对路径</td>
+</tr>
+<tr>
+  <td>XSS 攻击成功</td>
+  <td>输入的 script 被执行了</td>
+  <td>没用 DOMPurify 或配置不当</td>
+  <td>marked.parse 后用 DOMPurify.sanitize 净化</td>
+</tr>
+<tr>
+  <td>浏览数不准确</td>
+  <td>刷新页面 view_count 不增加</td>
+  <td>浏览器缓存了 API 响应</td>
+  <td>API 加缓存控制头；或前端加时间戳参数</td>
+</tr>
+</table>
+
+<h2>7.11 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ 数据库有 blogs 表，包含 title/content/summary/tags/view_count 等字段</li>
+<li>□ 能发布博客文章</li>
+<li>□ 博客列表页显示所有文章（标题/摘要/作者/时间/阅读数/标签）</li>
+<li>□ 点击文章进入详情页</li>
+<li>□ 详情页正确渲染 Markdown 格式（标题/列表/加粗/链接/代码块）</li>
+<li>□ Markdown 中的代码块有语法高亮</li>
+<li>□ 输入恶意 HTML 不会执行 XSS（DOMPurify 生效）</li>
+<li>□ 能编辑自己的文章</li>
+<li>□ 浏览次数会随着访问增加</li>
+<li>□ 理解 Markdown 和 HTML 的关系</li>
+<li>□ 理解为什么 Markdown 也要做 XSS 防护</li>
+<li>□ 理解前端渲染和后端渲染的优劣</li>
+</ul>
+</div>
+
+<h2>7.12 下章预告</h2>
+
+<p>下一章，我们要实现"学习站"——一个记录学习进度、管理学习资料的功能模块。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第七章完 —</p>
+
+</body></html>

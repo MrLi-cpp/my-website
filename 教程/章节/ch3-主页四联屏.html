@@ -1,0 +1,515 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第三章：主页四联屏——用 CSS 创造沉浸式滑动体验</h1>
+
+<p><strong>本章目标</strong>：将主页升级为四个全屏区块，用户滚动时每个区块"占满整个屏幕"，形成电影般的画面切换效果。</p>
+
+<p><strong>学完后你能看到什么</strong>：滚动鼠标时，主页像电影画面一样一页一页切换，每个页面占满整个屏幕。四个页面分别是：霁光主页、朋友圈入口、博客入口、关于我。</p>
+
+<hr/>
+
+<h2>3.1 为什么要做"全屏区块"？</h2>
+
+<p>传统的网页是"长页面"——内容从上到下排列，滚动是连续的。全屏区块的设计打破了这种连续性：滚动一下，画面"跳"到下一页，就像翻 PPT 一样。</p>
+
+<p>这种设计在 2010 年后流行起来，尤其是苹果的产品页面（比如 iPhone 介绍页）。苹果发现：全屏画面 + 滚动切换，比长页面的"信息轰炸"更能传达产品的质感和理念。</p>
+
+<div class="story">
+<h4>📖 故事时间：全屏滚动的设计哲学</h4>
+<p>2010 年，苹果发布了 iPhone 4 的产品页面。设计师们决定采用一种全新的展示方式：每个 iPhone 特性占一个全屏，滚动时画面平滑切换。</p>
+<p>这个设计的灵感来自杂志。传统网页是"报纸"——信息密集，需要快速浏览。但高端产品需要"杂志"的体验——大幅图片、留白、沉浸感。苹果把网页从"报纸"变成了"杂志"。</p>
+<p>这种设计后来被总结为"全屏滚动"（Fullscreen Scrolling）或"视差滚动"（Parallax Scrolling）。它有两个核心特点：</p>
+<ol>
+<li><strong>分页感</strong>：每个屏幕是一个独立的"页"，有自己的主题</li>
+<li><strong>沉浸感</strong>：全屏画面让用户专注当前内容，不被其他元素干扰</li>
+</ol>
+<p>霁光的四联屏也是这个思路：第一屏是品牌（霁光），第二屏是朋友圈（生活），第三屏是博客（思考），第四屏是关于我（人物）。四个屏幕像四幅画作，构成完整的叙事。</p>
+</div>
+
+<h2>3.2 CSS 变量——让配色方案可维护</h2>
+
+<p>在前两章中，我们把颜色直接写在 CSS 里（比如 <code>color: #c9a96e</code>）。但这样做有个问题：如果你想换配色，需要把所有 <code>#c9a96e</code> 都找出来改掉。如果有 50 处用了这个颜色，改起来很痛苦。</p>
+
+<p>CSS 变量（Custom Properties）解决了这个问题。你可以定义一个变量，然后在多处引用它。改颜色时只需要改变量的定义。</p>
+
+<h3>3.2.1 定义 CSS 变量</h3>
+
+<p>CSS 变量用 <code>--</code> 前缀定义，用 <code>var()</code> 函数引用：</p>
+
+<pre><code>/* 定义在 :root 选择器中，全局可用 */
+:root {
+  --bg-primary: #0c0c0e;      /* 主背景 */
+  --bg-secondary: #141417;     /* 次背景 */
+  --bg-card: rgba(255,255,255,0.02);  /* 卡片背景 */
+  
+  --accent-gold: #c9a96e;      /* 金色强调 */
+  --accent-red: #c0392b;       /* 红色强调 */
+  --accent-warm: #a09a90;      /* 暖灰 */
+  
+  --text-primary: #f0ece6;     /* 主文字 */
+  --text-secondary: #a09a90;   /* 次文字 */
+  --text-muted: #6a6560;       /* 弱化文字 */
+  
+  --border: rgba(255,255,255,0.06);  /* 边框色 */
+  
+  --font-serif: "Noto Serif SC", "PingFang SC", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}</code></pre>
+
+<p><code>:root</code> 是什么？它选中的是文档的根元素（对于 HTML 来说就是 <code>&lt;html&gt;</code>）。把变量定义在 <code>:root</code> 里意味着所有元素都能访问这些变量。</p>
+
+<div class="think">
+<h4>🤔 为什么用 -- 前缀而不是 $ 或 @？</h4>
+<p>Sass 和 Less 等 CSS 预处理器用 <code>$variable</code> 或 <code>@variable</code> 表示变量。CSS 原生变量选择 <code>--variable</code> 是为了避免冲突——预处理器不会用 -- 开头，所以两者可以共存。</p>
+<p>而且 <code>--</code> 在命令行中有"选项"的含义（比如 <code>node --version</code>），CSS 工作组觉得这个语义很合适：变量就是"可配置的选项"。</p>
+<p>CSS 变量于 2016 年被所有主流浏览器支持，彻底改变了 CSS 的组织方式。今天，没有 CSS 变量的项目会被认为"不够现代"。</p>
+</div>
+
+<h3>3.2.2 使用 CSS 变量</h3>
+
+<pre><code>/* 以前 */
+.home-title {
+  color: #c9a96e;
+}
+
+/* 现在 */
+.home-title {
+  color: var(--accent-gold);
+}
+
+/* 带默认值：如果 --accent-gold 不存在，用 #d4af37 */
+.home-title {
+  color: var(--accent-gold, #d4af37);
+}</code></pre>
+
+<h3>3.2.3 为什么现在才引入 CSS 变量？</h3>
+
+<p>你可能好奇：既然 CSS 变量这么好，为什么前两章没讲？</p>
+
+<p>因为 CSS 变量是一个"进阶"概念。初学者如果一开始就接触变量，可能会混淆"变量名"和"属性值"。先学会直接写颜色值，再引入变量，理解会更深刻。</p>
+
+<p>而且 CSS 变量的最佳使用场景就是"多处复用"——四联屏有四个区块，每个区块可能用到相同的颜色，这时候变量的价值才真正体现出来。</p>
+
+<h2>3.3 全屏区块的实现——scroll-snap</h2>
+
+<p>实现全屏滚动有两个方案：</p>
+
+<ul>
+<li><strong>JavaScript 方案</strong>：监听 scroll 事件，计算当前位置，强制滚动到最近的整屏。缺点：性能差，滚动不流畅。</li>
+<li><strong>CSS 方案（scroll-snap）</strong>：浏览器原生支持，性能最好，代码最少。优点：硬件加速，平滑自然。</li>
+</ul>
+
+<p>我们选择 CSS 方案。</p>
+
+<div class="story">
+<h4>📖 故事时间：scroll-snap 的坎坷标准化之路</h4>
+<p>2015 年，苹果在 iOS Safari 中率先实现了 CSS Scroll Snapping（当时叫 -webkit-scroll-snap）。这是一个"私有前缀"特性，只有 Safari 能用。</p>
+<p>其他浏览器厂商看到了这个特性的价值，但想要一个"标准化的"版本。W3C CSS 工作组花了两年时间讨论 API 设计——比如：snap 应该发生在元素还是容器层面？怎么控制 snap 的"严格程度"？</p>
+<p>2017 年，CSS Scroll Snap Module Level 1 正式发布。2019 年，所有主流浏览器都支持了标准语法。这个特性从苹果私有的实验性功能，变成了 Web 标准的一部分——这是"浏览器前缀→标准化"的典型案例。</p>
+<p>这也是为什么我们写代码时不需要加 <code>-webkit-</code> 前缀了。但在 2016 年，你还需要写两套代码（一套带前缀，一套标准语法）来兼容所有浏览器。</p>
+</div>
+
+<h3>3.3.1 核心 CSS 属性</h3>
+
+<pre><code>/* 容器设置 */
+.scroll-container {
+  height: 100vh;                    /* 容器高度 = 视口高度 */
+  overflow-y: scroll;               /* 允许垂直滚动 */
+  scroll-snap-type: y mandatory;    /* Y轴方向，强制 snap */
+}
+
+/* 每个区块设置 */
+.screen {
+  height: 100vh;                    /* 每个区块 = 一屏高度 */
+  scroll-snap-align: start;         /* 滚动时对齐到区块的起始位置 */
+}</code></pre>
+
+<p><strong>逐行解析：</strong></p>
+
+<p><code>scroll-snap-type: y mandatory</code>：告诉浏览器，这个容器的滚动需要"snap"（吸附）。<code>y</code> 表示只在垂直方向吸附。<code>mandatory</code> 表示"强制"——滚动结束后必须停在一个 snap 点上，不能停在两个区块之间。</p>
+
+<p>另一个可选值是 <code>proximity</code>（接近），表示"如果滚动停止位置接近 snap 点，就吸附过去；否则保持原样"。<code>mandatory</code> 更适合全屏滚动，因为它保证了"一页一页"的体验。</p>
+
+<p><code>scroll-snap-align: start</code>：每个区块定义自己的"snap 对齐方式"。<code>start</code> 表示区块的顶部对齐到容器的顶部。你也可以用 <code>end</code>（底部对齐）或 <code>center</code>（居中对齐）。</p>
+
+<div class="think">
+<h4>🤔 为什么 scroll-snap 比 JavaScript 方案好？</h4>
+<p>JavaScript 监听 scroll 事件的问题是：scroll 事件触发频率极高（每 16ms 一次，对应 60fps）。如果在事件处理函数里做复杂的计算，会导致"卡顿"（jank）——页面掉帧。</p>
+<p>scroll-snap 由浏览器底层实现，走的是硬件加速路径（GPU 合成层）。浏览器在渲染线程之外计算 snap 位置，不影响主线程的 JavaScript 执行。这就是为什么 CSS 动画通常比 JavaScript 动画更流畅。</p>
+<p>这也是现代 Web 开发的一个重要原则：<strong>能用 CSS 做的，不要用 JavaScript</strong>。CSS 动画和过渡由浏览器优化过，性能更好；JavaScript 动画需要自己管理帧率、缓动曲线、硬件加速，容易出问题。</p>
+</div>
+
+<h2>3.4 四联屏的完整实现</h2>
+
+<h3>3.4.1 HTML 结构</h3>
+
+<pre><code><!-- 文件位置：my-website/public/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>霁光 · 个人网站</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- 整个页面是一个滚动容器 -->
+  <div class="scroll-container">
+    
+    <!-- ===== 第一屏：主页 ===== -->
+    <section class="screen home-screen">
+      <div class="home-wrap">
+        <h1 class="home-title">霁光</h1>
+        <p class="home-desc">记录生活 · 沉淀思考 · 分享成长</p>
+        <div class="scroll-hint">
+          <span>向下滚动</span>
+          <div class="scroll-arrow">↓</div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- ===== 第二屏：朋友圈 ===== -->
+    <section class="screen moments-screen">
+      <div class="screen-content">
+        <div class="screen-icon">📸</div>
+        <h2 class="screen-title">朋友圈</h2>
+        <p class="screen-desc">记录生活中的点滴瞬间</p>
+        <button class="screen-btn" onclick="location.href='/moments.html'">进入朋友圈</button>
+      </div>
+    </section>
+    
+    <!-- ===== 第三屏：博客 ===== -->
+    <section class="screen blog-screen">
+      <div class="screen-content">
+        <div class="screen-icon">✍️</div>
+        <h2 class="screen-title">博客</h2>
+        <p class="screen-desc">沉淀深度思考与技术分析</p>
+        <button class="screen-btn" onclick="location.href='/blog-hub.html'">进入博客</button>
+      </div>
+    </section>
+    
+    <!-- ===== 第四屏：关于我 ===== -->
+    <section class="screen about-screen">
+      <div class="screen-content">
+        <div class="screen-icon">⛩️</div>
+        <h2 class="screen-title">关于我</h2>
+        <p class="screen-desc">一个热爱技术与人文的创作者</p>
+        <button class="screen-btn" onclick="location.href='/about.html'">了解更多</button>
+      </div>
+    </section>
+    
+  </div>
+</body>
+</html></code></pre>
+
+<p><strong>结构解析：</strong></p>
+
+<ul>
+<li><code>&lt;section&gt;</code> 标签：HTML5 语义化标签，表示文档中的一个"区块"或"节"。用 section 而不是 div，是因为它有语义——屏幕阅读器知道"这是一个内容区块"。</li>
+<li><code>&lt;div class="scroll-container"&gt;</code>：外层容器，负责滚动和 snap 行为。</li>
+<li>每个 <code>&lt;section&gt;</code> 是一屏，内部是这一屏的内容。</li>
+</ul>
+
+<h3>3.4.2 CSS 样式</h3>
+
+<pre><code>/* 文件位置：my-website/public/style.css */
+
+/* ===== CSS 变量 ===== */
+:root {
+  --bg-primary: #0c0c0e;
+  --bg-secondary: #141417;
+  --accent-gold: #c9a96e;
+  --accent-red: #c0392b;
+  --text-primary: #f0ece6;
+  --text-secondary: #a09a90;
+  --text-muted: #6a6560;
+  --border: rgba(255,255,255,0.06);
+  --font-serif: "Noto Serif SC", "PingFang SC", serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ===== 基础重置 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;    /* 禁止 body 滚动，由 scroll-container 控制 */
+}
+
+/* ===== 滚动容器 ===== */
+.scroll-container {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;   /* 平滑滚动动画 */
+}
+
+/* 隐藏滚动条（可选，但为了美观） */
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ===== 全屏区块 ===== */
+.screen {
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ===== 第一屏：主页 ===== */
+.home-screen {
+  background: var(--bg-primary);
+}
+
+.home-wrap {
+  text-align: center;
+}
+
+.home-title {
+  font-family: var(--font-serif);
+  font-size: 72px;
+  font-weight: 300;
+  letter-spacing: 16px;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.home-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  letter-spacing: 6px;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 12px;
+  animation: bounce 2s infinite;
+}
+
+.scroll-arrow {
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* ===== 通用屏幕内容 ===== */
+.screen-content {
+  text-align: center;
+}
+
+.screen-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+}
+
+.screen-title {
+  font-family: var(--font-serif);
+  font-size: 36px;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+}
+
+.screen-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  margin-bottom: 32px;
+}
+
+.screen-btn {
+  padding: 12px 32px;
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.screen-btn:hover {
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+}
+
+/* ===== 各屏背景微调 ===== */
+.moments-screen { background: var(--bg-secondary); }
+.blog-screen { background: var(--bg-primary); }
+.about-screen { background: var(--bg-secondary); }</code></pre>
+
+<h2>3.5 动画——让页面"活"起来</h2>
+
+<h3>3.5.1 @keyframes 和 animation</h3>
+
+<p>我们给"向下滚动"提示加了一个弹跳动画：</p>
+
+<pre><code>@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}</code></pre>
+
+<p><code>@keyframes</code> 定义了一个动画序列。<code>0%</code> 是动画开始时的状态，<code>50%</code> 是中间状态，<code>100%</code> 是结束状态。浏览器会自动计算中间帧，形成平滑动画。</p>
+
+<p>应用动画：</p>
+
+<pre><code>.scroll-hint {
+  animation: bounce 2s infinite;
+  /*            名称   时长  循环次数 */
+}</code></pre>
+
+<p><code>infinite</code> 表示无限循环。你也可以写 <code>3</code> 表示只播放 3 次。</p>
+
+<div class="story">
+<h4>📖 故事时间：CSS 动画的历史</h4>
+<p>CSS 动画的发展经历了三个阶段：</p>
+<p><strong>第一阶段（1990s）：GIF 动画。</strong> 早期的网页动画就是 GIF 图片——一个文件包含多帧图像，循环播放。缺点是画质差、不能交互、文件大。</p>
+<p><strong>第二阶段（2000s）：Flash。</strong> Adobe Flash 插件提供了强大的矢量动画和交互能力，一度占据了 Web 动画的统治地位。2005 年 YouTube 就用 Flash 播放视频。但 Flash 的问题是：需要安装插件、安全性差（漏洞无数）、移动设备不支持。乔布斯 2010 年发布的《Thoughts on Flash》公开信宣判了 Flash 的死刑。</p>
+<p><strong>第三阶段（2010s+）：CSS3 + JavaScript。</strong> 2011 年，CSS3 Animations 和 Transitions 被主流浏览器支持。配合 HTML5 Canvas 和 WebGL，浏览器原生就能实现复杂的动画效果，不再需要插件。</p>
+<p>今天我们用 <code>@keyframes</code> 做简单动画，用 CSS Transitions 做状态变化，用 JavaScript 的 requestAnimationFrame 做复杂交互。Flash 已经完全退出了历史舞台，连 Adobe 都在 2020 年停止了对 Flash 的支持。</p>
+</div>
+
+<h3>3.5.2 按钮 hover 效果</h3>
+
+<pre><code>.screen-btn {
+  background: transparent;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  transition: all 0.3s ease;
+}
+
+.screen-btn:hover {
+  background: var(--accent-gold);
+  color: var(--bg-primary);
+}</code></pre>
+
+<p>这个 hover 效果的设计思路是"反色"：默认状态下按钮是透明的，文字是金色；hover 时背景变成金色，文字变成深色。这种"填充式"的反馈非常直观。</p>
+
+<div class="think">
+<h4>🤔 为什么选择"反色"而不是"发光"？</h4>
+<p>"发光"效果（box-shadow + border-color 变化）适合卡片这种"大面积"元素。但对于按钮这种"小面积"元素，发光效果不够明显——金色的光晕在深色背景上几乎看不见。</p>
+<p>"反色"（颜色互换）是按钮 hover 的经典方案。它的原理是"对比"——hover 前后颜色差异越大，用户的感知越强。金色(#c9a96e) 和深色(#0c0c0e) 的对比度足够高，hover 效果一目了然。</p>
+<p>这体现了 UI 设计的一个原则：<strong>根据元素大小选择合适的反馈方式</strong>。小元素用颜色变化，大元素用阴影/缩放，整个页面用过渡动画。</p>
+</div>
+
+<h2>3.6 为什么 body 要 overflow: hidden？</h2>
+
+<p>你可能注意到我们给 body 加了 <code>overflow: hidden</code>，同时又给 scroll-container 加了 <code>overflow-y: scroll</code>。为什么不直接在 body 上滚动？</p>
+
+<p>原因是：scroll-snap 需要作用在"滚动容器"上。如果让 body 滚动，scroll-snap 会作用在整个页面上——但页面上可能有其他元素（比如弹窗、导航栏）也会参与滚动，导致 snap 行为混乱。</p>
+
+<p>通过把滚动限制在一个明确的容器（.scroll-container）里，我们实现了"隔离"——只有这个容器里的子元素会 snap，外部元素不受影响。</p>
+
+<p>这也方便我们以后添加"非全屏"的内容。比如页面底部加一个 footer，它不在 .scroll-container 里，所以不受 snap 影响。</p>
+
+<h2>3.7 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>滚动不 snap</td>
+  <td>滚动后停在两屏之间</td>
+  <td>scroll-snap-type 或 scroll-snap-align 没设置对</td>
+  <td>容器设 scroll-snap-type: y mandatory，子元素设 scroll-snap-align: start</td>
+</tr>
+<tr>
+  <td>滚动条太丑</td>
+  <td>滚动条破坏全屏沉浸感</td>
+  <td>浏览器默认滚动条样式</td>
+  <td>用 ::-webkit-scrollbar { display: none; } 隐藏（WebKit 浏览器）</td>
+</tr>
+<tr>
+  <td>手机上一屏高度不对</td>
+  <td>内容被手机地址栏遮挡</td>
+  <td>100vh 在移动端包含地址栏高度</td>
+  <td>用 100dvh（dynamic viewport height）代替 100vh</td>
+</tr>
+<tr>
+  <td>按钮点击没反应</td>
+  <td>点击按钮不跳转</td>
+  <td>onclick 路径错误或文件不存在</td>
+  <td>检查 href 路径是否正确，目标页面是否存在</td>
+</tr>
+<tr>
+  <td>CSS 变量没生效</td>
+  <td>颜色还是默认值</td>
+  <td>变量名拼写错误或浏览器不支持</td>
+  <td>检查拼写；用浏览器 DevTools 查看 computed styles</td>
+</tr>
+</table>
+
+<h2>3.8 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ 页面有四个全屏区块，每块占满一屏</li>
+<li>□ 滚动时自动 snap 到最近的整屏</li>
+<li>□ 第一屏有"霁光"标题和"向下滚动"提示</li>
+<li>□ "向下滚动"箭头有弹跳动画</li>
+<li>□ 其他三屏有图标、标题、描述和按钮</li>
+<li>□ 按钮 hover 时反色（金色背景 + 深色文字）</li>
+<li>□ 理解 CSS 变量的定义和使用</li>
+<li>□ 理解 scroll-snap-type 和 scroll-snap-align</li>
+<li>□ 理解 @keyframes 和 animation 的基本用法</li>
+<li>□ 知道为什么 overflow: hidden 要放在 body 上</li>
+</ul>
+</div>
+
+<h2>3.9 下章预告</h2>
+
+<p>下一章，我们要实现"极简朋友圈"——用户可以发表文字动态，所有访客都能看到。这是第一个涉及数据库的功能！</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第三章完 —</p>
+
+</body></html>

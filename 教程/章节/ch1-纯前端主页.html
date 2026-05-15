@@ -1,0 +1,626 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第一章：纯前端主页——从零开始画一个好看的页面</h1>
+
+<p><strong>本章目标</strong>：只写 HTML + CSS，不碰后端。完成一个大气的主页，有标题、个人介绍、三个入口卡片（朋友圈/关于我/博客）。</p>
+
+<p><strong>学完后你能看到什么</strong>：打开 <code>localhost:3000</code>，深色背景上金色大字"霁光"居中，下面三个白色半透明卡片排成一排。鼠标放上去卡片会平滑放大，边框泛出金色光晕。</p>
+
+<hr/>
+
+<h2>1.1 为什么先学前端？</h2>
+
+<p>很多编程教程一上来就让你配数据库、写 API、搭服务器……结果折腾半天，屏幕上除了错误提示什么都没有。这对于初学者来说非常打击积极性——你花了三小时，只学会怎么安装软件，连一个"看得见"的东西都没做出来。</p>
+
+<p>我们的思路是反过来的：<strong>先做出看得见的东西，再学背后的原理</strong>。就像学画画，老师不会让你先学颜料化学成分，而是直接给你画笔和纸，让你画一朵花。画完之后，你自然会对"为什么这个颜色混那个颜色变成紫色"产生好奇——这时候再讲原理，你听得进去。</p>
+
+<div class="story">
+<h4>📖 故事时间：HTML 和 CSS 是怎么诞生的？</h4>
+<p>1989年，Tim Berners-Lee 发明万维网时，网页只有纯文本。你可以用 <code>&lt;h1&gt;</code> 标签标记标题，用 <code>&lt;p&gt;</code> 标记段落，但页面的样式完全由浏览器决定。比如标题多大、什么颜色、段落的行间距——用户改不了，浏览器厂商说了算。</p>
+<p>1993年，NCSA Mosaic 浏览器（第一个流行的图形界面浏览器）的团队想要一种方式，让用户控制网页的样式。一位叫 <strong>Håkon Wium Lie</strong> 的挪威程序员在 CERN 工作期间，提交了一份提议：Cascading HTML Style Sheets（层叠 HTML 样式表）。</p>
+<p>"层叠"（Cascading）是什么意思？想象一个公司的组织架构：总公司有统一的 dress code（正装），但某个分公司允许穿休闲装，某个部门的经理又允许周五穿拖鞋。最终每个员工的着装，是"总公司→分公司→部门→个人"层层叠加的结果。</p>
+<p>CSS 的层叠机制也是这个逻辑：浏览器有默认样式，用户可以在浏览器设置里覆盖，网页作者可以用 style 标签覆盖，还可以用 !important 强行覆盖。优先级从高到低：</p>
+<ol>
+<li>!important 声明（最高）</li>
+<li>内联样式（style="..."）</li>
+<li>ID 选择器（#xxx）</li>
+<li>类/属性/伪类选择器（.xxx）</li>
+<li>标签/伪元素选择器（div）</li>
+<li>浏览器默认样式（最低）</li>
+</ol>
+<p>Håkon 的提议最初遭到了 Tim Berners-Lee 的反对。Tim 认为样式应该通过 HTML 属性来控制（比如 <code>&lt;font color="red"&gt;</code>），而不是引入一套独立的语言。但浏览器厂商们（特别是 Netscape 和 Microsoft）发现，独立的样式语言更有利于统一标准。1996年，CSS Level 1 正式发布。</p>
+<p>今天，Håkon Wium Lie 是 CSS 标准的共同编辑之一，他在 Opera 浏览器公司工作了十多年，推动了 CSS 的现代化。CSS 从最初只能改颜色和字体，发展到今天能做动画、3D 变换、Grid 布局——但"层叠"的核心理念始终没变。</p>
+</div>
+
+<h2>1.2 HTML 骨架——页面的"骨骼"</h2>
+
+<h3>1.2.1 什么是 HTML？</h3>
+
+<p>HTML（HyperText Markup Language，超文本标记语言）不是编程语言，而是<strong>标记语言</strong>。它的作用是给文本"打标签"，告诉浏览器"这是标题""这是段落""这是链接"。</p>
+
+<p>"超文本"是什么意思？普通的文本是线性的——你一行一行往下读。超文本可以<strong>跳转</strong>——点击一个词就能跳到另一个文档。这就是 <code>&lt;a&gt;</code>（anchor，锚点）标签的由来。</p>
+
+<div class="think">
+<h4>🤔 为什么叫"标记"语言？</h4>
+<p>想象你在写一篇论文，用荧光笔给不同类型的内容做标记：黄色标记重要结论，蓝色标记引用文献，绿色标记待办事项。HTML 标签就是"荧光笔"——<code>&lt;h1&gt;</code> 标记"这是大标题"，<code>&lt;p&gt;</code> 标记"这是普通段落"。</p>
+<p>浏览器看到标记后，会按照约定好的方式显示内容。<code>&lt;h1&gt;</code> 默认显示为 2em 大小的粗体字，<code>&lt;strong&gt;</code> 默认显示为粗体。</p>
+<p>但你也可以用 CSS 覆盖这些默认显示方式——这就是为什么 HTML 和 CSS 是分开的。HTML 负责"这是什么"，CSS 负责"长什么样"。这种分离让同一份内容可以适配不同的设备（电脑、手机、打印机）。</p>
+</div>
+
+<h3>1.2.2 DOCTYPE 和文档结构</h3>
+
+<p>每个 HTML 文件的第一行都应该是：</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;</code></pre>
+
+<p>这行代码告诉浏览器："这是一个 HTML5 文档，请用标准模式渲染。"</p>
+
+<div class="story">
+<h4>📖 故事时间：DOCTYPE 的奇怪语法</h4>
+<p>&lt;!DOCTYPE html&gt; 的语法看起来有点怪——为什么不写成 &lt;html version="5"&gt; 之类更直观的格式？</p>
+<p>答案要追溯到 1997 年的 HTML 4.01。那时候的 DOCTYPE 长这样：</p>
+<p>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;</p>
+<p>这个语法来自 SGML（标准通用标记语言），而 SGML 又来自更早的 GML（通用标记语言）。GML 是 IBM 在 1960 年代发明的，它的 DOCTYPE 声明就采用了 &lt;!... 的格式。</p>
+<p>2008 年，HTML5 的制定者们想简化 DOCTYPE。他们本可以彻底废弃这个怪异的语法，但考虑到：</p>
+<ul>
+<li>老旧的浏览器（比如 IE6）看到不认识的 DOCTYPE 会进入"怪异模式"（Quirks Mode），用 1990 年代的 bug 渲染页面</li>
+<li>&lt;!DOCTYPE html&gt; 虽然语法怪异，但所有浏览器都认识</li>
+</ul>
+<p>于是他们保留了 DOCTYPE，但把它缩短到最短。这就是为什么我们今天还在写 &lt;!DOCTYPE html&gt;——它本质上是一个"触发标准模式的开关"，没有其他实际意义。</p>
+</div>
+
+<h3>1.2.3 lang 和 charset</h3>
+
+<pre><code>&lt;html lang="zh-CN"&gt;&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;</code></pre>
+
+<p><code>lang="zh-CN"</code> 指定页面语言是简体中文。这有什么实际作用？</p>
+
+<ul>
+<li>屏幕阅读器（给视障人士用的读屏软件）会根据 lang 决定用什么语音朗读</li>
+<li>浏览器的翻译功能会根据 lang 决定是否提示"翻译此页"</li>
+<li>搜索引擎会根据 lang 决定把页面展示给哪个语言区的用户</li>
+</ul>
+
+<p><code>charset="UTF-8"</code> 指定字符编码为 UTF-8。UTF-8 是目前最通用的字符编码，它用 1-4 个字节表示一个字符。ASCII 字符（英文字母、数字）用 1 个字节，中文用 3 个字节，emoji 用 4 个字节。</p>
+
+<div class="think">
+<h4>🤔 为什么 UTF-8 成为了标准？</h4>
+<p>在 UTF-8 之前，中文网页常用 GB2312 或 GBK 编码。这些编码只支持中文和部分符号，如果要显示日文、韩文、阿拉伯文，就得用完全不同的编码。</p>
+<p>更糟糕的是：如果浏览器用错误的编码解析页面，中文就会变成乱码（俗称"锟斤拷"——这是 Unicode 替换字符 U+FFFD 在 GBK 编码下的显示结果）。</p>
+<p>UTF-8 解决了所有问题：一个编码覆盖全世界所有语言，而且是 ASCII 的超集（纯英文的 UTF-8 文件和 ASCII 文件完全一样）。2007年，UTF-8 成为 Web 上使用最多的编码。今天，超过 95% 的网页使用 UTF-8。</p>
+<p>这就是为什么你绝对不能忘记写 <code>&lt;meta charset="UTF-8"&gt;</code>——没有它，中文就有概率变成乱码。</p>
+</div>
+
+<h3>1.2.4 viewport——移动端适配的关键</h3>
+
+<pre><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+
+<p>这行代码是移动互联网时代的产物。</p>
+
+<div class="story">
+<h4>📖 故事时间：为什么 iPhone 刚出来时网页都很小？</h4>
+<p>2007 年，第一代 iPhone 发布。它的屏幕宽度是 320 像素。但当时的大多数网页是为 1024 像素宽的桌面显示器设计的。</p>
+<p>苹果的解决方案很巧妙：Safari 浏览器假装自己的宽度是 980 像素（桌面显示器的常见宽度），把整个网页缩小到 320 像素的屏幕上显示。这样网页布局不会乱，但文字变得非常小，需要双指放大才能阅读。</p>
+<p>2010 年，苹果在 iOS Safari 中引入了 viewport meta 标签。开发者可以告诉浏览器："不要用 980 像素来渲染我，用设备的真实宽度。"</p>
+<p><code>width=device-width</code> 就是"宽度 = 设备宽度"。<code>initial-scale=1.0</code> 是"初始缩放比例 = 100%"，防止某些浏览器自动缩放。</p>
+<p>这个设计后来被所有移动浏览器采纳，成为了响应式网页的基础。没有 viewport，你的网页在手机上永远是被缩小的桌面版。</p>
+</div>
+
+<h2>1.3 CSS 盒子模型——理解页面布局的基石</h2>
+
+<h3>1.3.1 什么是盒子模型？</h3>
+
+<p>CSS 把每个 HTML 元素都视为一个"盒子"。这个盒子由四层组成：</p>
+
+<pre><code>┌─────────────────────────────┐
+│         margin（外边距）       │  ← 盒子与其他盒子的间距
+│   ┌─────────────────────┐   │
+│   │      border（边框）  │   │  ← 盒子的边框
+│   │   ┌─────────────┐   │   │
+│   │   │ padding（内边距）│   │   │  ← 边框与内容的间距
+│   │   │   ┌─────┐   │   │   │
+│   │   │   │content│   │   │   │  ← 实际内容（文字、图片等）
+│   │   │   └─────┘   │   │   │
+│   │   └─────────────┘   │   │
+│   └─────────────────────┘   │
+└─────────────────────────────┘</code></pre>
+
+<p>这四层的关系：</p>
+
+<table>
+<tr><th>层</th><th>作用</th><th>类比</th></tr>
+<tr><td>content</td><td>实际内容（文字、图片）</td><td>房间的家具</td></tr>
+<tr><td>padding</td><td>内容与边框的距离</td><td>家具与墙壁的距离</td></tr>
+<tr><td>border</td><td>边框</td><td>墙壁</td></tr>
+<tr><td>margin</td><td>盒子与其他盒子的距离</td><td>房间与隔壁房间的距离</td></tr>
+</table>
+
+<div class="think">
+<h4>🤔 为什么要分成四层？</h4>
+<p>盒子模型的设计体现了"关注点分离"的理念。margin 负责"与邻居的关系"，padding 负责"内部空间"，border 负责"边界可视化"，content 负责"实际内容"。</p>
+<p>这种分离让你可以独立控制每个方面：想让卡片内部更宽敞？改 padding。想让两个卡片离得更远？改 margin。想让边框更明显？改 border。想换内容？改 content。</p>
+<p>如果没有这个分层，你就只能用 margin 做所有事——那 padding 和 border 的效果就实现不了。早期的 HTML 表格布局（用 <code>&lt;table&gt;</code> 做页面布局）就有这个问题：间距控制极其笨拙，设计师不得不用各种 hack（比如透明 spacer GIF 图片）来模拟 margin 和 padding。</p>
+<p>CSS 盒子模型的出现，让网页设计从"拼积木"变成了"搭建筑"。</p>
+</div>
+
+<h3>1.3.2 为什么 width/height 默认不包含 padding 和 border？</h3>
+
+<p>默认情况下（<code>box-sizing: content-box</code>），你设置的 width 和 height 只包含 content 区域。这意味着：</p>
+
+<pre><code>.entry-card {
+  width: 140px;           /* 这只是 content 的宽度！ */
+  padding: 20px;          /* 左右各加 20px */
+  border: 1px solid red;  /* 左右各加 1px */
+  /* 实际占用宽度 = 140 + 20*2 + 1*2 = 182px */
+}</code></pre>
+
+<p>这种设计被几乎所有设计师认为是反直觉的。你明明说了 width=140，结果它占了 182？</p>
+
+<p>解决方案就是我们在第零章用过的 <code>box-sizing: border-box</code>：</p>
+
+<pre><code>* {
+  box-sizing: border-box;
+}
+
+.entry-card {
+  width: 140px;           /* 现在这是总宽度！ */
+  padding: 20px;
+  border: 1px solid red;
+  /* content 宽度 = 140 - 20*2 - 1*2 = 98px */
+}</code></pre>
+
+<p><code>border-box</code> 让 width/height 表示"整个盒子占用的空间"，padding 和 border 从内部扣除。这样 <code>width: 140px</code> 就真的占用 140px，不会有意外。</p>
+
+<h2>1.4 Flexbox 布局——现代网页的一维布局方案</h2>
+
+<h3>1.4.1 为什么需要 Flexbox？</h3>
+
+<p>在 Flexbox 出现之前，网页布局主要靠三种方式：</p>
+
+<ul>
+<li><strong>表格布局</strong>（1990年代）：用 <code>&lt;table&gt;</code> 标签做布局。缺点是语义错误（表格应该放表格数据），而且极其不灵活。</li>
+<li><strong>浮动布局</strong>（2000年代）：用 <code>float: left</code> 让元素并排。缺点是需要"清除浮动"hack，而且无法垂直居中。</li>
+<li><strong>定位布局</strong>（2000年代）：用 <code>position: absolute</code> 精确定位。缺点是元素脱离文档流，布局极易破碎。</li>
+</ul>
+
+<p>这三种方式都有一个共同问题：<strong>垂直居中极其困难</strong>。</p>
+
+<p>在浮动布局时代，实现垂直居中需要知道父元素的高度，然后用 margin-top: calc(50% - 高度/2) 之类的计算——如果高度变化，CSS 就要重写。</p>
+
+<div class="story">
+<h4>📖 故事时间：Flexbox 的漫长诞生</h4>
+<p>2009年，W3C 发布了 Flexbox 的第一个工作草案。但第一个实现（WebKit 浏览器引擎）用的语法和现在完全不同：</p>
+<p><code>display: box; box-orient: horizontal;</code></p>
+<p>2011年，语法大改：</p>
+<p><code>display: flexbox; flex-pack: center;</code></p>
+<p>2012年，再次大改，终于稳定为现在的语法：</p>
+<p><code>display: flex; justify-content: center; align-items: center;</code></p>
+<p>这个反复修改的过程让开发者很头疼——要写三套 CSS 前缀才能兼容所有浏览器。这就是著名的"浏览器前缀地狱"：</p>
+<p><code>display: -webkit-box; display: -moz-box; display: -ms-flexbox; display: -webkit-flex; display: flex;</code></p>
+<p>幸运的是，今天你只需要写 <code>display: flex;</code> 就够了。所有现代浏览器（Chrome、Firefox、Safari、Edge）都支持标准语法。</p>
+<p>Flexbox 的名字来源于"Flexible Box"（弹性盒子）。它的核心思想是：容器（flex container）定义主轴方向，子元素（flex items）自动填充可用空间，或者在空间不足时自动收缩。</p>
+<p>这就解决了一个经典问题：如何让三个按钮等宽分布？在浮动布局时代，你需要给每个按钮设 width: 33.333%。但如果增加第四个按钮，就要改成 25%。用 Flexbox，只需 <code>flex: 1;</code>，每个子元素自动均分空间——加多少个都能自适应。</p>
+</div>
+
+<h3>1.4.2 我们的主页用了哪些 Flexbox 属性？</h3>
+
+<pre><code>.home-wrap {
+  display: flex;
+  flex-direction: column;      /* 主轴方向：从上到下 */
+  align-items: center;         /* 交叉轴对齐：居中 */
+  justify-content: center;     /* 主轴对齐：居中 */
+  min-height: 100vh;           /* 最小高度 = 视口高度 */
+}
+
+.home-entries {
+  display: flex;
+  gap: 20px;                   /* 子元素间距 */
+  justify-content: center;     /* 水平居中 */
+  flex-wrap: wrap;             /* 空间不够时换行 */
+}</code></pre>
+
+<p><strong>详解：</strong></p>
+
+<ul>
+<li><code>display: flex</code>：开启 Flexbox 布局。子元素自动变成 flex items。</li>
+<li><code>flex-direction: column</code>：主轴方向为垂直（从上到下）。默认是 row（水平从左到右）。</li>
+<li><code>justify-content: center</code>：主轴上的对齐方式。column 模式下主轴是垂直方向，所以这是"垂直居中"。</li>
+<li><code>align-items: center</code>：交叉轴上的对齐方式。column 模式下交叉轴是水平方向，所以这是"水平居中"。</li>
+<li><code>min-height: 100vh</code>：最小高度为视口高度的 100%。<code>vh</code> 是 viewport height 的缩写，1vh = 视口高度的 1%。这样即使内容很少，页面也会占满整个屏幕。</li>
+<li><code>gap: 20px</code>：子元素之间的间距。这个属性是 Flexbox 和 Grid 共用的，比老式的 margin 方案简洁多了。</li>
+<li><code>flex-wrap: wrap</code>：空间不够时换行。没有它，三个卡片会在窄屏幕上被挤变形。</li>
+</ul>
+
+<div class="think">
+<h4>🤔 为什么 justify-content 和 align-items 容易搞混？</h4>
+<p>这是很多初学者的痛点。记忆口诀：</p>
+<p><strong>justify 管主轴，align 管交叉轴。</strong></p>
+<p>当 flex-direction 是 row（默认值）时：主轴 = 水平，交叉轴 = 垂直。所以 justify-content 控制水平对齐，align-items 控制垂直对齐。</p>
+<p>当 flex-direction 是 column 时：主轴 = 垂直，交叉轴 = 水平。所以 justify-content 控制垂直对齐，align-items 控制水平对齐。</p>
+<p>这个命名来自早期排版术语。在活字印刷时代，"justify" 指的是调整字间距让文字两端对齐。在 CSS 中，它被扩展为"沿主轴分布"。</p>
+<p>如果你觉得太难记，可以用一个更直观的方法：把 <code>justify-content</code> 想成"justify = 排布"，<code>align-items</code> 想成"align = 对齐"。主轴上怎么排布，交叉轴上怎么对齐。</p>
+</div>
+
+<h2>1.5 颜色与视觉设计——为什么选择"暗金"配色？</h2>
+
+<h3>1.5.1 配色方案分析</h3>
+
+<p>我们的主页使用了以下配色：</p>
+
+<table>
+<tr><th>用途</th><th>色值</th><th>RGB</th><th>感觉</th></tr>
+<tr><td>背景</td><td>#0c0c0e</td><td>接近纯黑，略带蓝</td><td>深邃、沉稳、高级感</td></tr>
+<tr><td>主标题</td><td>#c9a96e</td><td>暗金色</td><td>典雅、品质、文化感</td></tr>
+<tr><td>正文</td><td>#f0ece6</td><td>暖白</td><td>柔和、不刺眼</td></tr>
+<tr><td>次要文字</td><td>#a09a90</td><td>灰棕</td><td>低调、层次</td></tr>
+</table>
+
+<div class="story">
+<h4>📖 故事时间：暗金配色的文化渊源</h4>
+<p>"暗金"配色不是随意选的。黑色 + 金色的组合在人类审美中有着悠久的历史：</p>
+<ul>
+<li>古埃及：法老的棺椁用黑曜石和黄金装饰，象征永恒与神圣</li>
+<li>中世纪欧洲：宗教画用金箔贴背景，黑色天鹅绒边框，营造庄严感</li>
+<li>现代奢侈品：GUCCI、Dolce & Gabbana 的经典配色就是黑金</li>
+<li>Apple 的暗色模式：2019 年 iOS 13 推出 Dark Mode，黑色背景 + 金色/橙色强调色成为高端 UI 的趋势</li>
+</ul>
+<p>为什么选择暗色背景而不是白色？</p>
+<p>第一，暗色模式更护眼。白色屏幕的亮度（尤其是蓝光）会刺激视网膜，长时间阅读容易疲劳。暗色背景减少了光线进入眼睛的量。</p>
+<p>第二，暗色模式更省电。OLED 屏幕（iPhone 12 及之后的机型、大部分安卓旗舰）在显示黑色时，像素是完全关闭的，几乎不耗电。</p>
+<p>第三，暗色背景让内容更突出。白色背景上，所有元素都在"发光"；暗色背景上，只有你想突出的元素在发光，其他元素自然隐入背景。这种"光与暗的对比"天然具有戏剧感和高级感。</p>
+<p>至于为什么选择金色而不是红色、蓝色？金色在人类文化中象征着"珍贵""成就""品质"。给网站用金色，潜意识里传达了"这个网站是有价值的"的信息。红色太激烈，蓝色太冰冷，绿色太活泼——对于"记录生活、沉淀思考"的网站来说，金色刚刚好。</p>
+</div>
+
+<h3>1.5.2 颜色的技术实现</h3>
+
+<p>CSS 中颜色可以用多种方式表示：</p>
+
+<table>
+<tr><th>格式</th><th>示例</th><th>适用场景</th></tr>
+<tr><td>十六进制</td><td>#0c0c0e</td><td>最常用，简洁</td></tr>
+<tr><td>RGB</td><td>rgb(12, 12, 14)</td><td>需要计算透明度时</td></tr>
+<tr><td>RGBA</td><td>rgba(201, 169, 110, 0.5)</td><td>半透明颜色</td></tr>
+<tr><td>HSL</td><td>hsl(38, 43%, 61%)</td><td>需要调整亮度/饱和度时</td></tr>
+<tr><td>颜色名</td><td>black, gold, red</td><td>学习时快速测试</td></tr>
+</table>
+
+<p>我们主要用十六进制，因为它最简洁。#c9a96e 展开就是 rgb(201, 169, 110)。</p>
+
+<p><code>rgba(255, 255, 255, 0.02)</code> 是什么意思？</p>
+
+<p>RGBA 的第四个参数是 alpha（透明度），范围 0（完全透明）到 1（完全不透明）。0.02 表示几乎透明，只保留一点点白色调。这用来做卡片背景——比纯黑背景稍微亮一点点，但不明显，营造出微妙的层次感。</p>
+
+<div class="think">
+<h4>🤔 为什么卡片背景用 rgba 而不是 solid color？</h4>
+<p>如果用纯灰色（比如 #1a1a1a）做卡片背景，它就是一个固定的颜色。但如果以后你想换主背景色，卡片背景也要跟着改。</p>
+<p>用 <code>rgba(255,255,255,0.02)</code> 的好处是：它是"在当前背景上加一点点白色"。无论背景色是什么（黑色、深蓝、深红），卡片都会比背景稍微亮一点点。这种"相对亮度"的设计比"绝对颜色"更灵活。</p>
+<p>这也是为什么很多现代 UI 框架（比如 Tailwind CSS）推荐用 opacity 控制层次，而不是用固定的灰色。opacity 是"叠加在背景上的效果"，而固定灰色是"独立于背景的颜色"。</p>
+</div>
+
+<h2>1.6 过渡动画——让页面"活"起来</h2>
+
+<h3>1.6.1 transition 属性详解</h3>
+
+<pre><code>.entry-card {
+  transition: all 0.3s ease;
+}
+</code></pre>
+
+<p>这行代码的意思是：当 <code>.entry-card</code> 的任何 CSS 属性发生变化时，用 0.3 秒的时间平滑过渡，使用 ease 时间函数。</p>
+
+<p><strong>展开写法：</strong></p>
+
+<pre><code>.entry-card {
+  transition-property: all;        /* 哪些属性要过渡 */
+  transition-duration: 0.3s;       /* 过渡时间 */
+  transition-timing-function: ease; /* 时间曲线 */
+  transition-delay: 0s;            /* 延迟多久开始 */
+}
+</code></pre>
+
+<p><strong>transition-property</strong>：指定哪些属性变化时有动画。可以是 <code>all</code>（所有属性），也可以是具体的属性名列表（<code>transition: transform 0.3s, border-color 0.5s</code>）。</p>
+
+<p><strong>transition-duration</strong>：动画持续时间。太短（0.1s）用户可能注意不到，太长（1s）会让人觉得卡顿。0.3s 是 UI 动画的"甜点值"——足够让用户感知到变化，又不会拖慢操作。</p>
+
+<p><strong>transition-timing-function</strong>：速度曲线。</p>
+
+<table>
+<tr><th>值</th><th>贝塞尔曲线</th><th>效果</th></tr>
+<tr><td>linear</td><td>匀速直线</td><td>从头到尾速度一样，机械感</td></tr>
+<tr><td>ease</td><td>先快后慢</td><td>默认，最自然</td></tr>
+<tr><td>ease-in</td><td>慢-快</td><td>加速，像物体下落</td></tr>
+<tr><td>ease-out</td><td>快-慢</td><td>减速，像物体滑入</td></tr>
+<tr><td>ease-in-out</td><td>慢-快-慢</td><td>对称，像钟摆</td></tr>
+</table>
+
+<div class="story">
+<h4>📖 故事时间：贝塞尔曲线与迪士尼动画</h4>
+<p><code>ease</code> 背后的数学是<strong>贝塞尔曲线</strong>（Bézier Curve）。这是一种由法国工程师 Pierre Bézier 在 1960 年代为雷诺汽车公司发明的曲线，用来设计汽车外形。</p>
+<p>贝塞尔曲线的特点是：通过几个"控制点"就能定义一条平滑的曲线。在 CSS 中，<code>cubic-bezier(0.25, 0.1, 0.25, 1.0)</code> 这四个数字就是两个控制点的坐标。</p>
+<p>迪士尼动画师们在 1930 年代总结出的"动画十二原则"中，有一条叫"缓入缓出"（Slow In and Slow Out）：真实的运动不会是匀速的，加速和减速让动画更有质感。CSS 的 ease 函数本质上就是这条原则的数学实现。</p>
+<p>这就是为什么 ease 看起来比 linear 更舒服——linear 太机械了，像机器人；ease 有加速和减速，像自然界的运动。</p>
+</div>
+
+<h3>1.6.2 我们的 hover 效果</h3>
+
+<pre><code>.entry-card:hover {
+  transform: scale(1.08);
+  border-color: rgba(201, 169, 110, 0.4);
+  box-shadow: 0 0 30px rgba(201, 169, 110, 0.1);
+}</code></pre>
+
+<p><strong>逐行详解：</strong></p>
+
+<p><code>transform: scale(1.08)</code>：缩放变换。<code>scale(1.08)</code> 表示放大到原来的 108%。为什么是 1.08 而不是 1.1？</p>
+
+<p>UI 设计中的缩放有一个"刚刚好"的区间：1.05（5%）太不明显，用户可能注意不到；1.15（15%）太夸张，会破坏布局。1.08（8%）是一个经过大量 A/B 测试验证的"甜点值"——足够引起注意，又不会过于突兀。</p>
+
+<p><code>border-color: rgba(201, 169, 110, 0.4)</code>：边框颜色变成金色，但透明度只有 40%。为什么不直接用 <code>#c9a96e</code>（不透明金色）？</p>
+
+<p>因为不透明的金色边框会很刺眼，像一个发光的框。半透明的效果更柔和，暗示"被激活了"但不抢夺注意力。这是"减法设计"的理念——不要给用户太多刺激。</p>
+
+<p><code>box-shadow: 0 0 30px rgba(201, 169, 110, 0.1)</code>：外发光效果。</p>
+
+<p><code>box-shadow</code> 的语法是 <code>x偏移 y偏移 模糊半径 颜色</code>。这里 x 和 y 都是 0，表示光源在正上方，向四周均匀扩散。30px 是模糊半径——越大越柔和。颜色是 10% 透明度的金色。</p>
+
+<p>为什么不加 spread（扩展半径，第四个数字）？因为加了 spread 会让阴影边缘变硬，失去"光晕"的柔和感。我们的目标是营造"泛金光"的氛围，而不是"有一个金色的框"。</p>
+
+<div class="think">
+<h4>🤔 为什么:hover 要同时改变三个属性？</h4>
+<p>如果只改变一个属性（比如只放大），效果会很单调。同时改变三个属性（大小、边框、阴影）会形成"层次丰富的反馈"：</p>
+<ul>
+<li>放大 → 告诉用户"这个元素被激活了"</li>
+<li>金色边框 → 告诉用户"这是当前焦点"</li>
+<li>光晕 → 告诉用户"这个元素很重要"</li>
+</ul>
+<p>这三个信号叠加在一起，给用户一个完整的"这个卡片可以点击"的认知。这是视觉设计中的"冗余编码"原则——用多种方式传达同一个信息，确保用户不会错过。</p>
+<p>但也要避免过度设计。如果再加一个旋转、一个颜色变化、一个文字变大，就会信息过载，让用户感到混乱。三个属性是"刚好足够"的阈值。</p>
+</div>
+
+<h2>1.7 响应式设计——为什么你的网站要在手机上也能看？</h2>
+
+<h3>1.7.1 为什么必须做响应式？</h3>
+
+<p>2016年是一个转折点：全球移动互联网流量首次超过了桌面互联网流量。今天，超过 60% 的网页浏览发生在手机上。</p>
+
+<p>如果你的网站在手机上显示错乱（文字太小、需要横向滚动、按钮点不到），你会失去大多数访客。</p>
+
+<div class="story">
+<h4>📖 故事时间：响应式设计的诞生</h4>
+<p>2010年，设计师 <strong>Ethan Marcotte</strong> 在 A List Apart 杂志上发表了一篇文章《Responsive Web Design》（响应式网页设计）。他提出了三个核心技术：</p>
+<ol>
+<li><strong>流式布局</strong>（Fluid Grids）：用百分比而不是固定像素定义宽度</li>
+<li><strong>弹性图片</strong>（Flexible Images）：图片最大宽度不超过容器宽度</li>
+<li><strong>媒体查询</strong>（Media Queries）：根据屏幕宽度应用不同的 CSS</li>
+</ol>
+<p>这篇文章彻底改变了网页设计。在此之前，常见的做法是"桌面版 + 移动版"两个网站（比如 m.taobao.com）。维护两个网站成本极高，而且内容同步困难。响应式设计让"一个网站适配所有设备"成为可能。</p>
+<p>Ethan 后来把响应式设计的理念写成了一本书《Responsive Web Design》，成为了这个领域的圣经。今天，响应式设计不再是"可选项"，而是"必须项"。Google 的搜索排名算法会惩罚没有移动适配的网站。</p>
+</div>
+
+<h3>1.7.2 我们的响应式策略</h3>
+
+<p>我们的主页没有做复杂的媒体查询，但有几个天然的响应式特性：</p>
+
+<ul>
+<li><code>flex-wrap: wrap</code>：三个卡片在窄屏幕上自动换行，不会挤在一起</li>
+<li><code>min-height: 100vh</code>：内容始终占满屏幕高度，不会留空白</li>
+<li><code>padding: 40px 20px</code>：左右 20px 的 padding 确保文字不会贴边</li>
+</ul>
+
+<p>这种"移动优先"的设计思路是：先确保在小屏幕上能看，然后再考虑大屏幕上的优化。这比"先设计桌面版再砍功能到手机版"更合理。</p>
+
+<h2>1.8 本章代码总览</h2>
+
+<h3>1.8.1 完整 index.html</h3>
+
+<pre><code><!-- 文件位置：my-website/public/index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>霁光 · 个人网站</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="home-wrap">
+    <h1 class="home-title">霁光</h1>
+    <p class="home-desc">记录生活 · 沉淀思考 · 分享成长</p>
+    <div class="home-entries">
+      <div class="entry-card">
+        <span class="entry-icon">📸</span>
+        <div class="entry-label">朋友圈</div>
+      </div>
+      <div class="entry-card">
+        <span class="entry-icon">⛩️</span>
+        <div class="entry-label">关于我</div>
+      </div>
+      <div class="entry-card">
+        <span class="entry-icon">✍️</span>
+        <div class="entry-label">博客</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html></code></pre>
+
+<h3>1.8.2 完整 style.css</h3>
+
+<pre><code>/* 文件位置：my-website/public/style.css */
+
+/* ===== 基础重置 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: #0c0c0e;
+  color: #f0ece6;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+/* ===== 主页布局 ===== */
+.home-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.home-title {
+  font-size: 48px;
+  font-weight: 300;
+  letter-spacing: 12px;
+  color: #c9a96e;
+  margin-bottom: 12px;
+}
+
+.home-desc {
+  font-size: 14px;
+  color: #a09a90;
+  letter-spacing: 4px;
+  margin-bottom: 60px;
+}
+
+/* ===== 入口卡片 ===== */
+.home-entries {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.entry-card {
+  width: 140px;
+  height: 160px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.entry-card:hover {
+  transform: scale(1.08);
+  border-color: rgba(201, 169, 110, 0.4);
+  box-shadow: 0 0 30px rgba(201, 169, 110, 0.1);
+}
+
+.entry-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.entry-label {
+  font-size: 14px;
+  color: #f0ece6;
+}
+</code></pre>
+
+<h2>1.9 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>卡片不居中</td>
+  <td>三个卡片偏左或偏右</td>
+  <td>父元素没设 text-align 或 justify-content</td>
+  <td>给 .home-entries 加 justify-content: center</td>
+</tr>
+<tr>
+  <td>手机上看布局错乱</td>
+  <td>三个卡片挤在一起，文字重叠</td>
+  <td>没加 flex-wrap: wrap 或 viewport meta</td>
+  <td>加 flex-wrap: wrap 和 <meta name="viewport"></td>
+</tr>
+<tr>
+  <td>hover 效果太生硬</td>
+  <td>鼠标放上去瞬间变化，没有过渡</td>
+  <td>没加 transition</td>
+  <td>给 .entry-card 加 transition: all 0.3s ease</td>
+</tr>
+<tr>
+  <td>中文显示成方块</td>
+  <td>网页上中文是 □□□</td>
+  <td>没指定中文字体，或系统缺少字体</td>
+  <td>font-family 里加 "PingFang SC" 或 "Microsoft YaHei"</td>
+</tr>
+<tr>
+  <td>修改后不生效</td>
+  <td>改了 CSS 但页面没变</td>
+  <td>浏览器缓存了旧版本</td>
+  <td>按 Ctrl+F5（Mac: Cmd+Shift+R）强制刷新</td>
+</tr>
+</table>
+
+<h2>1.10 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ 浏览器访问 localhost:3000 能看到页面</li>
+<li>□ 页面背景是深蓝色（#0c0c0e）</li>
+<li>□ "霁光"两个字是金色（#c9a96e），居中对齐</li>
+<li>□ 下面有三个白色边框的入口卡片</li>
+<li>□ 三个卡片水平排列，间距均匀</li>
+<li>□ 鼠标放上去卡片放大，边框变成金色，有光晕</li>
+<li>□ 理解 HTML 标签的作用（h1, p, div, span）</li>
+<li>□ 理解 CSS 选择器（.class, #id, 标签名）</li>
+<li>□ 理解 box-sizing: border-box 的作用</li>
+<li>□ 理解 display: flex 的基本用法</li>
+<li>□ 理解 transition 的作用</li>
+<li>□ 理解为什么 CSS 和 HTML 要分开</li>
+</ul>
+</div>
+
+<h2>1.11 下章预告</h2>
+
+<p>下一章，我们要给网站装上"大脑"——用 Express 写后端代码。届时，你的网页不再只是"展示"，而是能"思考"：接收浏览器的请求，返回不同的内容。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第一章完 —</p>
+
+</body></html>

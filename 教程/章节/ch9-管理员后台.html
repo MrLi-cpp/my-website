@@ -1,0 +1,382 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+.practice { background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.practice h4 { margin: 0 0 8px; color: #2e7d32; font-size: 12pt; }
+.review { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.review h4 { margin: 0 0 8px; color: #1565c0; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第九章：管理员后台——权限管理与数据统计</h1>
+
+<p><strong>本章目标</strong>：实现管理员后台。只有管理员能进入，可以查看统计数据、管理文章和动态。你将理解 RBAC 权限模型、数据统计查询和后台界面设计。</p>
+
+<p><strong>学完后你能做什么</strong>：有一个 /admin.html 页面，管理员登录后可以看到：用户数量、文章数量、动态数量、最新内容列表。可以删除违规内容。</p>
+
+<hr/>
+
+<h2>9.1 为什么需要管理员后台？</h2>
+
+<p>任何有用户生成内容的系统都需要管理功能：删除违规内容、查看统计数据、管理用户权限。如果没有后台，这些内容就只能通过直接操作数据库来管理——既不安全也不方便。</p>
+
+<h3>9.1.1 权限管理的演进</h3>
+
+<p>计算机系统的权限管理经历了几个阶段：</p>
+
+<p><strong>第一阶段（1960s）：无权限区分。</strong> 早期多用户系统没有权限概念，所有用户都能访问所有文件。这导致了严重的安全问题——学生可以删除教授的研究数据。</p>
+
+<p><strong>第二阶段（1970s）：UNIX 权限模型。</strong> UNIX 引入了"用户-组-其他"的三层权限（rwx），用数字表示（如 755）。这个模型简单有效，但粒度太粗——只能控制"读/写/执行"，无法做更细的控制。</p>
+
+<p><strong>第三阶段（1990s）：ACL（访问控制列表）。</strong> 每个资源有一个列表，记录谁能访问。ACL 比 UNIX 权限更灵活，但管理复杂——1000 个文件 × 100 个用户 = 10 万条权限记录。</p>
+
+<p><strong>第四阶段（2000s+）：RBAC（基于角色的访问控制）。</strong> 用户有角色，角色有权限。用户通过角色获得权限。这是今天最流行的权限模型。</p>
+
+<div class="story">
+<h4>📖 故事时间：RBAC 的诞生</h4>
+<p>1992 年，美国国家标准与技术研究院（NIST）的研究员 David Ferraiolo 和 Richard Kuhn 提出了 RBAC 模型。他们的动机很简单：美国政府机构有数百万员工，每个人需要访问不同的系统和数据。用 ACL 管理是不可能的。</p>
+<p>RBAC 的核心洞察是："权限应该分配给角色，而不是个人。"一个人可能有多个角色（如"医生"+"研究员"），一个角色可以被多个人共享。这大大减少了权限管理的复杂度。</p>
+<p>2004 年，NIST 发布了 RBAC 标准（ANSI/INCITS 359）。今天，RBAC 是几乎所有企业系统的标准权限模型。Windows Active Directory、AWS IAM、Kubernetes RBAC 都是基于这个模型。</p>
+<p>RBAC 有三种级别：</p>
+<ul>
+<li><strong>RBAC0（核心）</strong>：用户-角色-权限的基本映射</li>
+<li><strong>RBAC1（层级）</strong>：角色可以继承（如"医生"继承"员工"的所有权限）</li>
+<li><strong>RBAC2（约束）</strong>：角色互斥（如一个人不能同时是"会计"和"审计"）</li>
+</ul>
+<p>我们的项目用最简单的 RBAC0：两种角色——普通用户（user）和管理员（admin）。</p>
+</div>
+
+<h2>9.2 添加管理员字段</h2>
+
+<p>在 users 表中添加 is_admin 字段：</p>
+
+<pre><code>ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0;</code></pre>
+
+<p>SQLite 的 ALTER TABLE 能力有限，不支持某些修改。如果报错，可以：</p>
+<ol>
+<li>删除 database.sqlite 重新创建（开发环境）</li>
+<li>或者用创建新表→迁移数据→重命名的方法（生产环境）</li>
+</ol>
+
+<p>设置管理员账号：</p>
+
+<pre><code>UPDATE users SET is_admin = 1 WHERE username = 'lijiguang';</code></pre>
+
+<div class="think">
+<h4>🤔 为什么用 is_admin 而不是 role 表？</h4>
+<p>你可能想：如果要支持更多角色（如"版主"、"VIP"），是不是应该建一个 roles 表？</p>
+<p>对于个人网站，两种角色足够用了。is_admin 字段是最简单的实现——0 或 1，不需要额外的表和 JOIN。</p>
+<p>但如果未来需要扩展（如"版主"可以管理特定板块），就需要 roles 表 + user_roles 关联表。这就是从 RBAC0 升级到 RBAC1 的过程。设计时要考虑"演进"——简单方案满足当前需求，同时预留扩展空间。</p>
+</div>
+
+<h2>9.3 管理员中间件</h2>
+
+<p>创建一个可复用的管理员检查中间件：</p>
+
+<pre><code>function requireAdmin(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  db.get(
+    'SELECT is_admin FROM users WHERE id = ?',
+    [req.session.userId],
+    (err, user) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      
+      if (!user || !user.is_admin) {
+        return res.status(403).json({ error: '需要管理员权限' });
+      }
+      
+      next();  // 是管理员，继续执行
+    }
+  );
+}</code></pre>
+
+<p>中间件的设计思路："先验证，后放行"。如果验证失败，直接返回错误响应，不调用 next()；如果验证通过，调用 next() 让请求进入后续处理。</p>
+
+<p>使用方式：</p>
+
+<pre><code>app.get('/api/admin/stats', requireAdmin, (req, res) => {
+  // 只有管理员能执行到这里
+  db.get('SELECT COUNT(*) as user_count FROM users', [], (err, userCount) => {
+    db.get('SELECT COUNT(*) as post_count FROM posts', [], (err2, postCount) => {
+      db.get('SELECT COUNT(*) as blog_count FROM blogs', [], (err3, blogCount) => {
+        res.json({
+          users: userCount.user_count,
+          posts: postCount.post_count,
+          blogs: blogCount.blog_count
+        });
+      });
+    });
+  });
+});</code></pre>
+
+<div class="tip">
+<strong>💡 中间件链</strong><br/>
+Express 的路由支持多个中间件：app.get('/path', middleware1, middleware2, handler)。它们按顺序执行，每个中间件可以选择调用 next() 继续，或结束请求。
+</div>
+
+<h2>9.4 管理员 API</h2>
+
+<h3>9.4.1 获取所有文章（管理员可删任意文章）</h3>
+
+<pre><code>app.get('/api/admin/blogs', requireAdmin, (req, res) => {
+  db.all(
+    `SELECT blogs.*, users.username
+     FROM blogs
+     JOIN users ON blogs.user_id = users.id
+     ORDER BY blogs.created_at DESC
+     LIMIT 50`,
+    [],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+});</code></pre>
+
+<h3>9.4.2 管理员删除任意文章</h3>
+
+<pre><code>app.delete('/api/admin/blogs/:id', requireAdmin, (req, res) => {
+  db.run(
+    'DELETE FROM blogs WHERE id = ?',
+    [req.params.id],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ message: '删除成功' });
+    }
+  );
+});</code></pre>
+
+<p>注意：管理员删除不检查 user_id——管理员可以删除任何人的内容。这是 RBAC 的核心：角色决定权限边界。</p>
+
+<h3>9.4.3 获取所有动态</h3>
+
+<pre><code>app.get('/api/admin/posts', requireAdmin, (req, res) => {
+  db.all(
+    `SELECT posts.*, users.username
+     FROM posts
+     JOIN users ON posts.user_id = users.id
+     ORDER BY posts.created_at DESC
+     LIMIT 50`,
+    [],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+});</code></pre>
+
+<h3>9.4.4 获取所有用户</h3>
+
+<pre><code>app.get('/api/admin/users', requireAdmin, (req, res) => {
+  db.all(
+    `SELECT id, username, is_admin, created_at 
+     FROM users 
+     ORDER BY created_at DESC`,
+    [],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+});</code></pre>
+
+<h2>9.5 前端 admin.html</h2>
+
+<p>管理员后台的设计要点：</p>
+<ul>
+<li><strong>数据统计卡片</strong>：用户/文章/动态数量，大字体显示</li>
+<li><strong>内容列表</strong>：可删除的表格，带操作按钮</li>
+<li><strong>权限检查</strong>：非管理员访问时提示无权</li>
+<li><strong>Tab 切换</strong>：统计/博客/动态/用户 四个面板</li>
+</ul>
+
+<pre><code>/* 统计卡片样式 */
+.stat-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 36px;
+  color: var(--accent-gold);
+  font-weight: 300;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+/* Tab 切换 */
+.tab-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--accent-gold);
+  border-bottom-color: var(--accent-gold);
+}</code></pre>
+
+<h2>9.6 数据统计查询详解</h2>
+
+<h3>9.6.1 COUNT 聚合函数</h3>
+
+<pre><code>SELECT COUNT(*) as total FROM users;</code></pre>
+
+<p>COUNT(*) 计算所有行数，COUNT(column) 计算该列非 NULL 的行数。对于计数，COUNT(*) 是最快的——数据库不需要检查列值是否为 NULL。</p>
+
+<h3>9.6.2 更多统计查询</h3>
+
+<pre><code>-- 今日新增用户
+SELECT COUNT(*) as today_users 
+FROM users 
+WHERE DATE(created_at) = DATE('now');
+
+-- 本月文章数
+SELECT COUNT(*) as month_blogs 
+FROM blogs 
+WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now');
+
+-- 最活跃作者（发文最多）
+SELECT user_id, COUNT(*) as blog_count 
+FROM blogs 
+GROUP BY user_id 
+ORDER BY blog_count DESC 
+LIMIT 5;</code></pre>
+
+<div class="practice">
+<h4>📝 练习时间</h4>
+<ol>
+<li>写一个查询：统计每个用户的发文数量和总浏览量。</li>
+<li>写一个查询：找出最近 7 天没有发表动态的用户。</li>
+<li>实现"封禁用户"功能：添加 banned 字段，被禁用户无法登录。</li>
+<li>给管理员后台添加"最近 7 天注册趋势"图表（用 Chart.js）。</li>
+<li>实现"操作日志"：管理员每次删除/编辑操作都记录到 logs 表。</li>
+</ol>
+</div>
+
+<h2>9.7 知识点回顾</h2>
+
+<div class="review">
+<h4>📚 本章核心概念回顾</h4>
+<ul>
+<li><strong>RBAC</strong>：基于角色的访问控制。用户有角色，角色有权限。</li>
+<li><strong>RBAC0/1/2</strong>：核心、层级、约束三个级别。</li>
+<li><strong>requireAdmin</strong>：可复用的管理员验证中间件。</li>
+<li><strong>中间件链</strong>：app.get('/path', middleware1, middleware2, handler)。</li>
+<li><strong>COUNT(*)</strong>：聚合函数，计算行数。</li>
+<li><strong>GROUP BY</strong>：按字段分组聚合。</li>
+<li><strong>strftime</strong>：SQLite 日期格式化函数。</li>
+<li><strong>信息隐藏</strong>：403/404 不区分具体原因，防止信息泄露。</li>
+</ul>
+</div>
+
+<h2>9.8 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>无法添加字段</td>
+  <td>ALTER TABLE 报错</td>
+  <td>SQLite 对 ALTER TABLE 支持有限</td>
+  <td>删除 database.sqlite 重新创建；或用新表迁移法</td>
+</tr>
+<tr>
+  <td>非管理员能访问后台</td>
+  <td>普通用户看到了管理面板</td>
+  <td>requireAdmin 中间件没加或检查逻辑有误</td>
+  <td>确保每个管理 API 都用了 requireAdmin；检查 is_admin 值</td>
+</tr>
+<tr>
+  <td>统计显示 0</td>
+  <td>统计卡片都是 0</td>
+  <td>数据库为空或查询条件错误</td>
+  <td>检查 COUNT(*) 查询是否正确；DATE() 函数格式</td>
+</tr>
+<tr>
+  <td>Tab 切换不工作</td>
+  <td>点击 Tab 内容没变</td>
+  <td>JS 事件监听没绑定或 class 切换逻辑错误</td>
+  <td>检查 onclick 事件；检查 active class 的 CSS 选择器</td>
+</tr>
+<tr>
+  <td>管理员删除失败</td>
+  <td>点击删除但记录还在</td>
+  <td>DELETE 语句条件错误或外键约束</td>
+  <td>检查 WHERE 条件；检查外键级联设置</td>
+</tr>
+<tr>
+  <td>普通用户看到管理员菜单</td>
+  <td>导航栏有"后台"入口</td>
+  <td>前端没根据权限动态显示</td>
+  <td>先调 /api/me 判断 is_admin，再决定是否渲染入口</td>
+</tr>
+</table>
+
+<h2>9.9 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ users 表有 is_admin 字段</li>
+<li>□ 至少有一个管理员账号（is_admin = 1）</li>
+<li>□ 管理员可以访问 /admin.html</li>
+<li>□ 非管理员访问管理 API 返回 403</li>
+<li>□ 统计面板显示用户/文章/动态数量</li>
+<li>□ 管理员可以删除任意文章和动态</li>
+<li>□ 理解 RBAC 权限模型</li>
+<li>□ 理解中间件可复用的设计</li>
+<li>□ 理解 COUNT(*) 和 GROUP BY</li>
+<li>□ 理解为什么普通用户看不到管理员菜单</li>
+</ul>
+</div>
+
+<h2>9.10 下章预告</h2>
+
+<p>下一章，我们要实现私信系统——两个用户之间的实时消息交流。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第九章完 —</p>
+
+</body></html>

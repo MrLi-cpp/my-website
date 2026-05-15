@@ -1,0 +1,522 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第四章：极简朋友圈——第一个数据库功能</h1>
+
+<p><strong>本章目标</strong>：实现一个简单的"朋友圈"功能。用户可以发表文字动态，所有访客都能看到发表的动态。首次接触数据库（SQLite）。</p>
+
+<p><strong>学完后你能做什么</strong>：刷新页面能看到之前发表的动态，关闭浏览器再打开，动态还在——数据被永久保存了。</p>
+
+<hr/>
+
+<h2>4.1 为什么需要数据库？——从"失忆"到"记住"</h2>
+
+<p>前三章我们做的网站都是"失忆"的——页面刷新后，所有状态都重置。这是因为数据只存在浏览器的内存里，没有保存到磁盘。</p>
+
+<p>数据库的作用就是"持久化存储"——把数据写入磁盘，即使服务器重启、浏览器关闭，数据也不会丢失。</p>
+
+<div class="story">
+<h4>📖 故事时间：数据库的诞生</h4>
+<p>1960 年代，计算机主要用于科学计算（比如计算导弹轨迹）。数据存储用磁带或穿孔卡片，没有"数据库"的概念。</p>
+<p>1970 年，IBM 的研究员 <strong>Edgar F. Codd</strong> 发表了一篇论文《A Relational Model of Data for Large Shared Data Banks》，提出了"关系模型"——用二维表格（行和列）组织数据，用 SQL 语言查询。</p>
+<p>这篇论文彻底改变了数据管理。在此之前，数据存储用"层次模型"（树形结构）或"网状模型"（图结构），查询极其复杂。Codd 的关系模型让数据操作变得简单直观。</p>
+<p>但 IBM 没有重视这个发明——当时 IBM 已经在用层次模型的 IMS 数据库，不愿意推翻重来。1979 年，Larry Ellison 创立了 Oracle 公司，基于 Codd 的论文开发了第一个商用关系数据库。Oracle 后来成为了全球最大的数据库公司之一，Larry Ellison 也成为了亿万富翁。</p>
+<p>Codd 本人没有从关系中获利——他一直留在 IBM 做研究。但他的论文被公认为数据库领域最重要的论文之一，他在 1981 年获得了图灵奖。</p>
+</div>
+
+<h2>4.2 SQLite——零配置的轻量级数据库</h2>
+
+<h3>4.2.1 为什么选择 SQLite？</h3>
+
+<p>常见的数据库有：</p>
+
+<table>
+<tr><th>数据库</th><th>特点</th><th>适用场景</th></tr>
+<tr><td>SQLite</td><td>零配置、单文件、嵌入式</td><td>个人项目、小型应用、原型开发</td></tr>
+<tr><td>MySQL</td><td>开源、成熟、社区大</td><td>中小型网站、电商</td></tr>
+<tr><td>PostgreSQL</td><td>功能强大、标准兼容</td><td>企业级应用、复杂查询</td></tr>
+<tr><td>MongoDB</td><td>NoSQL、文档存储、灵活</td><td>大数据、快速迭代</td></tr>
+</table>
+
+<p>我们选择 SQLite 的原因是：</p>
+<ul>
+<li><strong>零配置</strong>：不需要安装数据库服务器，不需要配置用户权限</li>
+<li><strong>单文件</strong>：整个数据库就是一个 .sqlite 文件，备份只需复制文件</li>
+<li><strong>足够用</strong>：对于个人网站的流量，SQLite 完全够用</li>
+<li><strong>轻量级</strong>：node-sqlite3 包体积很小，启动速度快</li>
+</ul>
+
+<div class="think">
+<h4>🤔 SQLite 能支撑多大的流量？</h4>
+<p>SQLite 的官网上有一句话："SQLite works great as the database engine for most low to medium traffic websites."</p>
+<p>SQLite 能处理的并发量取决于操作类型：读操作可以并发，写操作需要加锁。对于个人网站，并发量通常不超过几十个，SQLite 完全没问题。</p>
+<p>只有当流量达到每天百万级访问时，你才需要考虑 MySQL 或 PostgreSQL。在那之前，SQLite 是最简单的选择。</p>
+<p>很多大型软件也用 SQLite 做内部数据存储：Chrome 浏览器用 SQLite 存历史记录和 Cookie，微信用 SQLite 存聊天记录，iOS 的 Core Data 底层也是 SQLite。</p>
+</div>
+
+<h3>4.2.2 安装 SQLite 驱动</h3>
+
+<div class="step">
+<strong>步骤</strong><br>
+</div>
+
+<pre><code>cd ~/Desktop/my-website
+npm install sqlite3</code></pre>
+
+<p>sqlite3 是 Node.js 连接 SQLite 的驱动包。它把 JavaScript 的函数调用翻译成 SQLite 能理解的 C 语言 API。</p>
+
+<h2>4.3 创建数据表——设计朋友圈的数据结构</h2>
+
+<h3>4.3.1 表的设计思路</h3>
+
+<p>朋友圈需要存储什么信息？</p>
+<ul>
+<li>谁发的？→ 用户名</li>
+<li>发了什么？→ 文字内容</li>
+<li>什么时候发的？→ 发布时间</li>
+</ul>
+
+<p>于是我们设计一个 <code>posts</code> 表：</p>
+
+<table>
+<tr><th>字段名</th><th>类型</th><th>说明</th></tr>
+<tr><td>id</td><td>INTEGER</td><td>主键，自增</td></tr>
+<tr><td>content</td><td>TEXT</td><td>动态内容</td></tr>
+<tr><td>author</td><td>TEXT</td><td>作者名</td></tr>
+<tr><td>created_at</td><td>DATETIME</td><td>发布时间</td></tr>
+</table>
+
+<h3>4.3.2 初始化数据库</h3>
+
+<p>在 server.js 中添加数据库初始化代码：</p>
+
+<pre><code>// 文件位置：my-website/server.js（第四章版本）
+
+const express = require('express');
+const sqlite3 = require('sqlite3').verbose();
+const app = express();
+
+// ===== 中间件 =====
+app.use(express.json());
+app.use(express.static('public'));
+
+// ===== 数据库初始化 =====
+const db = new sqlite3.Database('./database.sqlite');
+
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS posts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      content TEXT NOT NULL,
+      author TEXT DEFAULT '匿名',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+});
+
+// ===== 路由 =====
+// 获取所有动态（按时间倒序）
+app.get('/api/posts', (req, res) => {
+  db.all(
+    'SELECT * FROM posts ORDER BY created_at DESC',
+    [],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
+    }
+  );
+});
+
+// 发表动态
+app.post('/api/posts', (req, res) => {
+  const { content, author } = req.body;
+  
+  if (!content || content.trim() === '') {
+    return res.status(400).json({ error: '内容不能为空' });
+  }
+  
+  db.run(
+    'INSERT INTO posts (content, author) VALUES (?, ?)',
+    [content, author || '匿名'],
+    function(err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({
+        id: this.lastID,
+        content,
+        author: author || '匿名',
+        created_at: new Date().toISOString()
+      });
+    }
+  );
+});
+
+// ===== 启动 =====
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`服务器已启动！访问 http://localhost:${PORT}`);
+});
+</code></pre>
+
+<h3>4.3.3 逐行解析</h3>
+
+<p><strong>const db = new sqlite3.Database('./database.sqlite');</strong></p>
+
+<p>创建数据库连接。如果 <code>database.sqlite</code> 文件不存在，SQLite 会自动创建它。</p>
+
+<p><strong>db.serialize(() => { ... });</strong></p>
+
+<p><code>serialize</code> 表示"串行执行"——里面的 SQL 语句按顺序执行，不会并发。这是初始化时的最佳实践，防止 CREATE TABLE 和 INSERT 互相干扰。</p>
+
+<p><strong>CREATE TABLE IF NOT EXISTS</strong></p>
+
+<p><code>IF NOT EXISTS</code> 表示"如果表不存在就创建，存在就什么都不做"。这样服务器重启时不会报错（表已经存在了）。</p>
+
+<p><strong>id INTEGER PRIMARY KEY AUTOINCREMENT</strong></p>
+
+<p>这是 SQLite 的自增主键语法。</p>
+<ul>
+<li><code>INTEGER</code>：整数类型</li>
+<li><code>PRIMARY KEY</code>：主键，唯一标识每一行</li>
+<li><code>AUTOINCREMENT</code>：插入新行时自动递增</li>
+</ul>
+
+<p><strong>content TEXT NOT NULL</strong></p>
+
+<p><code>NOT NULL</code> 表示这个字段不能为空。如果插入数据时不提供 content，SQLite 会报错。</p>
+
+<p><strong>author TEXT DEFAULT '匿名'</strong></p>
+
+<p><code>DEFAULT</code> 表示默认值。如果插入数据时不提供 author，自动设为 '匿名'。</p>
+
+<p><strong>created_at DATETIME DEFAULT CURRENT_TIMESTAMP</strong></p>
+
+<p><code>DEFAULT CURRENT_TIMESTAMP</code> 表示默认值为当前时间。插入数据时如果不提供时间，自动记录插入时刻。</p>
+
+<div class="think">
+<h4>🤔 为什么用 id 而不是直接用内容做标识？</h4>
+<p>你可能想：内容本身就是唯一的，为什么还需要 id？</p>
+<p>问题在于：内容可能重复（比如两条"今天天气真好"），内容可能很长（不适合做索引），内容可能修改（改内容后标识也变了）。</p>
+<p>id 是"代理键"（Surrogate Key）——一个与业务无关的唯一标识。它的优点是：</p>
+<ul>
+<li>永远不变（即使内容修改，id 不变）</li>
+<li>长度固定（整数比长文本高效得多）</li>
+<li>适合关联（其他表引用 posts 时用 id）</li>
+</ul>
+<p>几乎所有数据库表都应该有一个自增 id 作为主键。这是数据库设计的最佳实践。</p>
+</div>
+
+<h2>4.4 SQL 查询详解</h2>
+
+<h3>4.4.1 SELECT * FROM posts</h3>
+
+<p><code>SELECT</code> 是 SQL 中用于查询数据的关键字。</p>
+
+<pre><code>SELECT * FROM posts ORDER BY created_at DESC</code></pre>
+
+<p>逐词解析：</p>
+<ul>
+<li><code>SELECT</code>：我要查询数据</li>
+<li><code>*</code>：所有字段（id, content, author, created_at）</li>
+<li><code>FROM posts</code>：从 posts 表查</li>
+<li><code>ORDER BY created_at</code>：按 created_at 字段排序</li>
+<li><code>DESC</code>：降序（Descending），最新的在前面</li>
+</ul>
+
+<p>如果不加 <code>ORDER BY</code>，返回的顺序是不确定的（取决于 SQLite 的内部存储顺序）。所以查询时通常都要显式排序。</p>
+
+<h3>4.4.2 INSERT INTO posts</h3>
+
+<pre><code>INSERT INTO posts (content, author) VALUES (?, ?)</code></pre>
+
+<p>逐词解析：</p>
+<ul>
+<li><code>INSERT INTO posts</code>：我要往 posts 表里插入数据</li>
+<li><code>(content, author)</code>：要插入的字段</li>
+<li><code>VALUES (?, ?)</code>：具体的值，用 <code>?</code> 作为占位符</li>
+</ul>
+
+<p><code>?</code> 是"参数占位符"，防止 SQL 注入攻击。我们会在后面展开讲。</p>
+
+<h2>4.5 前端页面——显示和发表动态</h2>
+
+<h3>4.5.1 创建 moments.html</h3>
+
+<pre><code><!-- 文件位置：my-website/public/moments.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>朋友圈 - 霁光</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .moments-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    .moment-form {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .moment-form textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px;
+      border-radius: 8px;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+    }
+    
+    .moment-form button {
+      margin-top: 12px;
+      padding: 10px 24px;
+      background: var(--accent-gold);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .moment-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .moment-author {
+      color: var(--accent-gold);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    
+    .moment-content {
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 8px;
+    }
+    
+    .moment-time {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="moments-container">
+    <h1 style="color: var(--accent-gold); margin-bottom: 24px;">朋友圈</h1>
+    
+    <!-- 发表表单 -->
+    <div class="moment-form">
+      <textarea id="content" placeholder="分享你的瞬间..."></textarea>
+      <input type="text" id="author" placeholder="你的名字（可选）" 
+             style="margin-top: 8px; width: 200px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
+      <button onclick="postMoment()">发表</button>
+    </div>
+    
+    <!-- 动态列表 -->
+    <div id="moments-list"></div>
+  </div>
+  
+  <script>
+    // 页面加载时获取所有动态
+    async function loadMoments() {
+      const res = await fetch('/api/posts');
+      const posts = await res.json();
+      
+      const container = document.getElementById('moments-list');
+      container.innerHTML = posts.map(post => `
+        <div class="moment-card">
+          <div class="moment-author">${escapeHtml(post.author)}</div>
+          <div class="moment-content">${escapeHtml(post.content)}</div>
+          <div class="moment-time">${new Date(post.created_at).toLocaleString('zh-CN')}</div>
+        </div>
+      `).join('');
+    }
+    
+    // 发表动态
+    async function postMoment() {
+      const content = document.getElementById('content').value;
+      const author = document.getElementById('author').value;
+      
+      if (!content.trim()) {
+        alert('内容不能为空');
+        return;
+      }
+      
+      const res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, author })
+      });
+      
+      if (res.ok) {
+        document.getElementById('content').value = '';
+        document.getElementById('author').value = '';
+        loadMoments();  // 刷新列表
+      }
+    }
+    
+    // 防止 XSS 攻击：转义 HTML 特殊字符
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // 页面加载时执行
+    loadMoments();
+  </script>
+</body>
+</html>
+</code></pre>
+
+<h2>4.6 XSS 攻击——为什么需要 escapeHtml？</h2>
+
+<h3>4.6.1 什么是 XSS？</h3>
+
+<p>XSS（Cross-Site Scripting，跨站脚本攻击）是 Web 安全中最常见的攻击方式之一。</p>
+
+<p>攻击原理：如果用户输入的内容包含 HTML 代码，而你直接把它插入到页面中，浏览器会执行这些代码。</p>
+
+<p>比如，用户在朋友圈输入：</p>
+
+<pre><code>&lt;script&gt;alert('你被攻击了！')&lt;/script&gt;</code></pre>
+
+<p>如果直接显示在页面上，所有看到这条动态的人都会弹出一个对话框。更严重的攻击可以：</p>
+<ul>
+<li>窃取用户的 Cookie（从而冒充用户身份）</li>
+<li>跳转到钓鱼网站</li>
+<li>在页面上植入恶意代码</li>
+</ul>
+
+<div class="story">
+<h4>📖 故事时间：历史上著名的 XSS 攻击</h4>
+<p>2005 年，Samy Kamkar 在 MySpace 上发布了一个 XSS 蠕虫。他在个人资料里嵌入了一段 JavaScript 代码，当其他用户访问他的页面时，这段代码会自动：1）把 Samy 加为好友；2）在受害者自己的资料里也嵌入同样的代码。</p>
+<p>这个蠕虫在 20 小时内感染了超过 100 万个 MySpace 用户，让 Samy 成为了 MySpace 上最受欢迎的人。MySpace 不得不关闭网站来清理蠕虫。Samy 后来被 FBI 起诉，罚了社区服务和赔偿。</p>
+<p>这个故事告诉我们：XSS 不仅仅是"弹个对话框"那么简单，它可以传播、感染、造成大规模破坏。</p>
+</div>
+
+<h3>4.6.2 如何防御 XSS？</h3>
+
+<p>最简单的防御方法是"转义"（Escape）——把 HTML 特殊字符转换成安全的形式：</p>
+
+<table>
+<tr><th>原始字符</th><th>转义后</th></tr>
+<tr><td>&lt;</td><td>&amp;lt;</td></tr>
+<tr><td>&gt;</td><td>&amp;gt;</td></tr>
+<tr><td>&amp;</td><td>&amp;amp;</td></tr>
+<tr><td>"</td><td>&amp;quot;</td></tr>
+</table>
+
+<p>转义后，<code>&lt;script&gt;</code> 变成 <code>&amp;lt;script&amp;gt;</code>，浏览器会把它当作纯文本显示，而不会执行。</p>
+
+<p>我们的 <code>escapeHtml</code> 函数利用了一个巧妙的技巧：创建一个 div，把文本设为 textContent（纯文本），然后读取 innerHTML（HTML 表示）。浏览器会自动完成转义。</p>
+
+<h2>4.7 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>数据库文件不生成</td>
+  <td>没有看到 database.sqlite</td>
+  <td>服务器还没执行过写入操作</td>
+  <td>发表一条动态后，SQLite 会自动创建文件</td>
+</tr>
+<tr>
+  <td>SQL 语法错误</td>
+  <td>服务器报错 SQLITE_ERROR</td>
+  <td>SQL 语句写错了</td>
+  <td>检查 SQL 语法，特别是逗号、括号、引号</td>
+</tr>
+<tr>
+  <td>发表后列表不刷新</td>
+  <td>点了发表但页面没变</td>
+  <td>没调用 loadMoments() 刷新</td>
+  <td>在 postMoment 成功后调用 loadMoments()</td>
+</tr>
+<tr>
+  <td>中文乱码</td>
+  <td>数据库里的中文是 ???</td>
+  <td>编码问题</td>
+  <td>确保 HTML 有 &lt;meta charset="UTF-8"&gt;，SQLite 默认支持 UTF-8</td>
+</tr>
+<tr>
+  <td>数据丢失</td>
+  <td>重启服务器后数据没了</td>
+  <td>数据库文件路径不对或被删除</td>
+  <td>检查 database.sqlite 是否在项目根目录</td>
+</tr>
+</table>
+
+<h2>4.8 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ 安装 sqlite3 包成功</li>
+<li>□ database.sqlite 文件在发表第一条动态后自动生成</li>
+<li>□ 访问 /moments.html 能看到朋友圈页面</li>
+<li>□ 能发表动态，刷新后动态还在</li>
+<li>□ 动态按时间倒序排列（最新的在上面）</li>
+<li>□ 理解 SELECT、INSERT、ORDER BY DESC 的 SQL 语法</li>
+<li>□ 理解 id、PRIMARY KEY、AUTOINCREMENT 的作用</li>
+<li>□ 理解 ? 占位符的作用（防止 SQL 注入）</li>
+<li>□ 理解 XSS 攻击原理和防御方法</li>
+<li>□ 理解为什么需要 escapeHtml 转义用户输入</li>
+</ul>
+</div>
+
+<h2>4.9 下章预告</h2>
+
+<p>下一章，我们要实现"用户系统"——注册、登录、退出。用户登录后才能发表动态，而且只能删自己发的。这会涉及密码加密、Session 会话管理等安全技术。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第四章完 —</p>
+
+</body></html>

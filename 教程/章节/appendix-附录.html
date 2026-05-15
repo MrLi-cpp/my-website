@@ -1,0 +1,282 @@
+
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+.practice { background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.practice h4 { margin: 0 0 8px; color: #2e7d32; font-size: 12pt; }
+.review { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.review h4 { margin: 0 0 8px; color: #1565c0; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>附录：速查手册与扩展阅读</h1>
+
+<p><strong>附录不是必读的</strong>，它是你在学习和开发过程中的"参考书"。遇到问题时翻到对应章节，快速找到答案。</p>
+
+<hr/>
+
+<h2>A.1 HTTP 状态码速查</h2>
+
+<table>
+<tr><th>状态码</th><th>含义</th><th>常见场景</th></tr>
+<tr><td>200 OK</td><td>请求成功</td><td>GET/POST 正常返回</td></tr>
+<tr><td>201 Created</td><td>创建成功</td><td>POST 创建资源后返回</td></tr>
+<tr><td>400 Bad Request</td><td>请求参数错误</td><td>缺少必填字段</td></tr>
+<tr><td>401 Unauthorized</td><td>未认证</td><td>没登录就访问需要登录的接口</td></tr>
+<tr><td>403 Forbidden</td><td>无权限</td><td>登录了但不是管理员</td></tr>
+<tr><td>404 Not Found</td><td>资源不存在</td><td>URL 错误或数据不存在</td></tr>
+<tr><td>409 Conflict</td><td>冲突</td><td>用户名已存在</td></tr>
+<tr><td>500 Internal Server Error</td><td>服务器内部错误</td><td>代码抛异常、数据库连接失败</td></tr>
+</table>
+
+<h2>A.2 SQL 速查</h2>
+
+<h3>A.2.1 数据定义（DDL）</h3>
+
+<pre><code>-- 创建表
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT NOT NULL UNIQUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 修改表（添加列）
+ALTER TABLE users ADD COLUMN email TEXT;
+
+-- 删除表
+DROP TABLE users;
+
+-- 创建索引（加速查询）
+CREATE INDEX idx_username ON users(username);
+</code></pre>
+
+<h3>A.2.2 数据操作（DML）</h3>
+
+<pre><code>-- 插入
+INSERT INTO users (username) VALUES ('霁光');
+
+-- 查询
+SELECT * FROM users;
+SELECT username, created_at FROM users WHERE id = 1;
+SELECT * FROM users ORDER BY created_at DESC LIMIT 10;
+
+-- 更新
+UPDATE users SET username = '新名字' WHERE id = 1;
+
+-- 删除
+DELETE FROM users WHERE id = 1;
+</code></pre>
+
+<h3>A.2.3 联表查询</h3>
+
+<pre><code>-- INNER JOIN（只返回匹配的行）
+SELECT posts.*, users.username
+FROM posts
+JOIN users ON posts.user_id = users.id;
+
+-- LEFT JOIN（返回左表所有行）
+SELECT posts.*, users.username
+FROM posts
+LEFT JOIN users ON posts.user_id = users.id;
+
+-- 聚合
+SELECT user_id, COUNT(*) as count FROM posts GROUP BY user_id;
+</code></pre>
+
+<h2>A.3 Express 中间件速查</h2>
+
+<pre><code>// 解析 JSON 请求体
+app.use(express.json());
+
+// 解析 URL 编码表单
+app.use(express.urlencoded({ extended: true }));
+
+// 静态文件服务
+app.use(express.static('public'));
+
+// 自定义中间件
+function logger(req, res, next) {
+  console.log(`${req.method} ${req.path}`);
+  next();
+}
+app.use(logger);
+
+// 路由级中间件（只作用于特定路由）
+app.use('/api/admin', requireAdmin);
+</code></pre>
+
+<h2>A.4 常用 npm 包</h2>
+
+<table>
+<tr><th>包名</th><th>作用</th><th>安装命令</th></tr>
+<tr><td>express</td><td>Web 框架</td><td>npm install express</td></tr>
+<tr><td>sqlite3</td><td>SQLite 驱动</td><td>npm install sqlite3</td></tr>
+<tr><td>bcryptjs</td><td>密码哈希</td><td>npm install bcryptjs</td></tr>
+<tr><td>express-session</td><td>Session 管理</td><td>npm install express-session</td></tr>
+<tr><td>session-file-store</td><td>Session 文件存储</td><td>npm install session-file-store</td></tr>
+<tr><td>multer</td><td>文件上传</td><td>npm install multer</td></tr>
+<tr><td>dotenv</td><td>环境变量</td><td>npm install dotenv</td></tr>
+<tr><td>pm2</td><td>进程管理</td><td>npm install -g pm2</td></tr>
+</table>
+
+<h2>A.5 Linux 命令速查</h2>
+
+<pre><code># 文件操作
+ls              # 列出文件
+ls -la          # 列出所有文件（含隐藏文件）
+cd 目录名       # 进入目录
+pwd             # 显示当前路径
+mkdir 目录名    # 创建目录
+rm 文件名       # 删除文件
+rm -rf 目录     # 删除目录及内容（危险！）
+cp 源 目标      # 复制
+mv 源 目标      # 移动/重命名
+
+# 进程管理
+ps aux          # 列出所有进程
+kill PID        # 终止进程
+killall node    # 终止所有 node 进程
+netstat -tlnp   # 查看端口占用
+
+# 网络
+curl URL        # 发送 HTTP 请求
+wget URL        # 下载文件
+ssh 用户@IP     # SSH 连接
+scp -r 本地 远程 # 复制文件到服务器
+
+# 权限
+chmod 755 文件  # 修改权限
+chown 用户 文件 # 修改所有者
+sudo 命令       # 以 root 执行
+</code></pre>
+
+<h2>A.6 Git 速查</h2>
+
+<pre><code># 基础
+git init                    # 初始化仓库
+git clone URL               # 克隆仓库
+git status                  # 查看状态
+git add 文件名              # 添加文件到暂存区
+git add .                   # 添加所有改动
+git commit -m "描述"        # 提交
+git push origin main       # 推送到远程
+git pull origin main       # 拉取远程更新
+
+# 分支
+git branch                  # 列出分支
+git branch 新分支           # 创建分支
+git checkout 分支           # 切换分支
+git merge 分支              # 合并分支
+
+# 撤销
+git checkout -- 文件       # 撤销文件修改
+git reset HEAD 文件        # 取消暂存
+git log --oneline          # 查看提交历史
+</code></pre>
+
+<h2>A.7 浏览器 DevTools 速查</h2>
+
+<p>打开方式：F12 或 Ctrl+Shift+I（Mac: Cmd+Option+I）</p>
+
+<table>
+<tr><th>面板</th><th>用途</th><th>常用操作</th></tr>
+<tr><td>Elements</td><td>查看和修改 HTML/CSS</td><td>选中元素 → 右侧改样式</td></tr>
+<tr><td>Console</td><td>JavaScript 控制台</td><td>输入 JS 代码执行</td></tr>
+<tr><td>Network</td><td>网络请求监控</td><td>看 API 请求和响应</td></tr>
+<tr><td>Application</td><td>存储、Cookie、Session</td><td>查看 localStorage、Cookies</td></tr>
+<tr><td>Sources</td><td>调试 JavaScript</td><td>打断点、单步执行</td></tr>
+</table>
+
+<h2>A.8 扩展方向推荐</h2>
+
+<p>完成本书后，你可以继续深入以下方向：</p>
+
+<h3>A.8.1 前端进阶</h3>
+<ul>
+<li><strong>Vue.js / React</strong>：学习现代前端框架，提升开发效率</li>
+<li><strong>TypeScript</strong>：为 JavaScript 添加类型系统，减少运行时错误</li>
+<li><strong>Tailwind CSS</strong>：原子化 CSS 框架，快速构建界面</li>
+<li><strong>Next.js / Nuxt.js</strong>：全栈框架，支持 SSR、SSG、API 路由</li>
+</ul>
+
+<h3>A.8.2 后端进阶</h3>
+<ul>
+<li><strong>RESTful API 设计</strong>：学习 API 设计的最佳实践</li>
+<li><strong>JWT 认证</strong>：用 JSON Web Token 替代 Session</li>
+<li><strong>Redis</strong>：内存数据库，做缓存和消息队列</li>
+<li><strong>Docker</strong>：容器化部署，环境一致性</li>
+<li><strong>GraphQL</strong>：灵活的数据查询语言</li>
+</ul>
+
+<h3>A.8.3 数据库进阶</h3>
+<ul>
+<li><strong>MySQL / PostgreSQL</strong>：学习大型关系数据库</li>
+<li><strong>索引优化</strong>：理解 B+ 树索引，优化查询性能</li>
+<li><strong>事务</strong>：ACID 特性，并发控制</li>
+<li><strong>MongoDB</strong>：NoSQL 文档数据库</li>
+</ul>
+
+<h3>A.8.4 运维进阶</h3>
+<ul>
+<li><strong>CI/CD</strong>：GitHub Actions 自动测试和部署</li>
+<li><strong>监控</strong>：日志收集、性能监控、告警</li>
+<li><strong>CDN</strong>：内容分发网络，加速静态资源</li>
+<li><strong>Kubernetes</strong>：容器编排，大规模部署</li>
+</ul>
+
+<h2>A.9 推荐阅读</h2>
+
+<table>
+<tr><th>书名/资源</th><th>类型</th><th>说明</th></tr>
+<tr><td>《你不知道的 JavaScript》</td><td>书籍</td><td>深入理解 JS 核心机制</td></tr>
+<tr><td>MDN Web Docs</td><td>文档</td><td>最权威的 Web 技术文档</td></tr>
+<tr><td>《SQL 必知必会》</td><td>书籍</td><td>SQL 入门经典</td></tr>
+<tr><td>Node.js 官方文档</td><td>文档</td><td>API 参考和最佳实践</td></tr>
+<tr><td>《图解 HTTP》</td><td>书籍</td><td>HTTP 协议入门</td></tr>
+<tr><td>《JavaScript 高级程序设计》</td><td>书籍</td><td>红宝书，前端必读</td></tr>
+<tr><td>《深入浅出 Node.js》</td><td>书籍</td><td>Node.js 底层原理</td></tr>
+<tr><td>freeCodeCamp</td><td>在线课程</td><td>免费的全栈开发课程</td></tr>
+</table>
+
+<h2>A.10 开发工具推荐</h2>
+
+<table>
+<tr><th>工具</th><th>用途</th><th>替代品</th></tr>
+<tr><td>VS Code</td><td>代码编辑器</td><td>Sublime Text、WebStorm</td></tr>
+<tr><td>Postman</td><td>API 测试</td><td>Insomnia、Hoppscotch</td></tr>
+<tr><td>TablePlus</td><td>数据库 GUI</td><td>DBeaver、DataGrip</td></tr>
+<tr><td>GitHub Desktop</td><td>Git 图形界面</td><td>SourceTree、Fork</td></tr>
+<tr><td>Termius</td><td>SSH 客户端</td><td>iTerm2、PuTTY</td></tr>
+</table>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 附录完 —</p>
+
+</body></html>

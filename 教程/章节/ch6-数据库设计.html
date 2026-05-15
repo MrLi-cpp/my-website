@@ -1,0 +1,554 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+.practice { background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.practice h4 { margin: 0 0 8px; color: #2e7d32; font-size: 12pt; }
+.review { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.review h4 { margin: 0 0 8px; color: #1565c0; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第六章：数据库设计——关系、外键与联表查询</h1>
+
+<p><strong>本章目标</strong>：理解数据库表之间的关系，用外键约束保证数据一致性，学会 JOIN 查询获取关联数据。</p>
+
+<p><strong>学完后你能做什么</strong>：朋友圈动态会显示"谁发的"（关联 users 表），用户可以删除自己的动态。你能设计简单的关系数据库。</p>
+
+<hr/>
+
+<h2>6.1 为什么需要多张表？——避免数据冗余</h2>
+
+<p>第四章的朋友圈表只有 posts，没有用户信息。如果要显示"谁发的"，我们在 posts 表里直接存用户名：</p>
+
+<pre><code>posts 表（单表设计）：
+| id | content | author_name | author_avatar | created_at |
+|----|---------|-------------|---------------|------------|
+| 1  | 你好    | 霁光        | avatar1.jpg   | 2026-05-15 |
+| 2  | 今天天气好 | 小明      | avatar2.jpg   | 2026-05-15 |
+| 3  | 哈哈哈  | 霁光        | avatar1.jpg   | 2026-05-15 |
+</code></pre>
+
+<p>这有什么问题？</p>
+<ul>
+<li><strong>数据冗余</strong>：霁光的头像 avatar1.jpg 重复存储了两次</li>
+<li><strong>更新异常</strong>：如果霁光换了头像，需要把所有 posts 里的 avatar 都改掉。如果有 1000 条动态，就要改 1000 次</li>
+<li><strong>插入异常</strong>：如果想存更多用户信息（签名、邮箱），要加很多字段到 posts 里，posts 表越来越臃肿</li>
+<li><strong>删除异常</strong>：如果删除了霁光的所有动态，霁光的用户信息也一起消失了</li>
+</ul>
+
+<p>解决方案：把"用户"和"动态"分开成两张表，用"外键"关联。</p>
+
+<div class="story">
+<h4>📖 故事时间：数据库范式的由来</h4>
+<p>1970年代，Edgar Codd 不仅发明了关系模型，还提出了"范式"（Normal Form）理论——一套规范化数据库设计的规则。</p>
+<p>第一范式（1NF）：每个字段都是原子值，不可再分。第二范式（2NF）：消除部分依赖。第三范式（3NF）：消除传递依赖。</p>
+<p>范式的目标是减少数据冗余和更新异常。但过度范式化也有问题——表太多，查询时需要大量 JOIN，性能下降。所以实际设计中，经常在范式和性能之间折中。</p>
+<p>我们的设计：users 表和 posts 表分离，这是 3NF 的典型应用。但我们也做了反范式化——posts 表里冗余存了 author_name（为了方便查询），在需要精确数据时再 JOIN users 表。</p>
+<p>Codd 的范式理论虽然在学术界被广泛接受，但数据库工程师们很快发现：完全的范式化在生产环境中并不总是最优的。很多时候，为了提高查询性能，会故意引入一些冗余——这就是"反范式化"（Denormalization）。比如电商网站的订单表通常会冗余存储商品名称和价格，而不是每次查询都去 JOIN 商品表。</p>
+</div>
+
+<h2>6.2 外键——表与表之间的"纽带"</h2>
+
+<h3>6.2.1 什么是外键？</h3>
+
+<p>外键（Foreign Key）是一个表中的字段，它引用另一个表的主键。外键建立了两个表之间的关系。</p>
+
+<pre><code>users 表：
+| id | username | password_hash | avatar       |
+|----|----------|---------------|--------------|
+| 1  | 霁光     | $2a$10$...    | avatar1.jpg  |
+| 2  | 小明     | $2a$10$...    | avatar2.jpg  |
+
+posts 表：
+| id | content | user_id | created_at |
+|----|---------|---------|------------|
+| 1  | 你好    | 1       | 2026-05-15 |  ← user_id=1 引用 users.id=1（霁光）
+| 2  | 哈哈    | 2       | 2026-05-15 |  ← user_id=2 引用 users.id=2（小明）
+| 3  | 哈哈哈  | 1       | 2026-05-15 |  ← user_id=1 引用 users.id=1（霁光）
+</code></pre>
+
+<p>posts.user_id 就是外键。它告诉数据库："这个动态属于哪个用户"。</p>
+
+<p>现在霁光换了头像，只需要改 users 表里的一行。所有关联的 posts 都不需要动——因为 posts 只存 user_id，不存头像。</p>
+
+<div class="think">
+<h4>🤔 为什么用 user_id 而不是 username 做外键？</h4>
+<p>username 也可以唯一标识用户（因为有 UNIQUE 约束）。但用 id 做外键更好，因为：</p>
+<ul>
+<li>id 永远不会变（主键不可修改），username 可能改（用户想改名）</li>
+<li>id 是整数，比字符串比较更快（数据库索引对整数更高效）</li>
+<li>id 更短，节省存储空间（4 字节 vs 可能 20+ 字节）</li>
+<li>id 适合自动递增，username 需要用户输入</li>
+</ul>
+<p>这就是为什么数据库设计原则是"用代理键（surrogate key，即 id）做外键，而不是自然键（natural key，如 username/email）"。</p>
+<p>代理键和自然键的争论在数据库界持续了几十年。支持者认为代理键更稳定、更高效；反对者认为自然键更有业务意义，避免了额外的 JOIN。实际项目中，两者常常结合使用——用 id 做主键和外键，同时在需要时冗余存储自然键（如 username）以减少 JOIN。</p>
+</div>
+
+<h3>6.2.2 修改 posts 表结构</h3>
+
+<p>由于 SQLite 的 ALTER TABLE 能力有限（不支持 DROP COLUMN、修改列类型等），我们需要采用更谨慎的方式来修改表结构。</p>
+
+<p>在开发阶段，最简单的方法是：直接删除 database.sqlite 文件，让服务器重新创建表（数据会丢失，开发时没关系）。</p>
+
+<p>生产环境中的正确方法（"创建新表→迁移数据→重命名"）：</p>
+
+<pre><code>-- 1. 创建新表
+CREATE TABLE posts_new (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  content TEXT NOT NULL,
+  user_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- 2. 迁移数据
+INSERT INTO posts_new (id, content, user_id, created_at)
+SELECT id, content, 1, created_at FROM posts;  -- 假设所有旧动态都归用户 1
+
+-- 3. 删除旧表
+DROP TABLE posts;
+
+-- 4. 重命名新表
+ALTER TABLE posts_new RENAME TO posts;
+</code></pre>
+
+<p>在我们的代码中，只需要修改初始化时的 CREATE TABLE 语句：</p>
+
+<pre><code>db.run(`
+  CREATE TABLE IF NOT EXISTS posts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  )
+`);
+</code></pre>
+
+<p><code>FOREIGN KEY (user_id) REFERENCES users(id)</code>：定义外键约束。</p>
+<p><code>ON DELETE CASCADE</code>：级联删除。如果 users 表里的某用户被删除，所有引用该用户的 posts 记录也自动删除。这保持了数据一致性——不会出现"动态还在但用户不存在了"的悬空数据。</p>
+
+<div class="tip">
+<strong>⚠️ SQLite 外键默认关闭</strong><br/>
+SQLite 为了兼容旧版本，默认不执行外键约束。需要在连接数据库后执行：
+<pre><code>db.run('PRAGMA foreign_keys = ON');</code></pre>
+否则 ON DELETE CASCADE 不会生效！
+</div>
+
+<h2>6.3 JOIN 查询——从多张表取数据</h2>
+
+<h3>6.3.1 为什么需要 JOIN？</h3>
+
+<p>现在我们有两张表。要显示"动态内容 + 用户名"，需要同时查 posts 和 users。</p>
+
+<p><strong>方法一：查两次（N+1 查询）</strong></p>
+
+<pre><code>// 先查所有动态
+const posts = await db.all('SELECT * FROM posts');
+
+// 再为每条动态查用户名
+for (const post of posts) {
+  const user = await db.get(
+    'SELECT username FROM users WHERE id = ?', 
+    [post.user_id]
+  );
+  post.username = user.username;
+}
+</code></pre>
+
+<p>这种方法叫"N+1 查询"：1 次查 posts + N 次查 users。如果 N 很大（比如 100 条动态），就需要 101 次数据库查询，性能极差。</p>
+
+<p>N+1 查询是 Web 开发中最常见的性能陷阱之一。ORM（对象关系映射）工具（如 Sequelize、TypeORM）特别容易生成这种查询，因为它们通常是"懒加载"（lazy loading）的——先加载主对象，再按需加载关联对象。</p>
+
+<h3>6.3.2 JOIN 语法详解</h3>
+
+<pre><code>SELECT 
+  posts.id,
+  posts.content,
+  posts.created_at,
+  users.username,
+  users.avatar
+FROM posts
+JOIN users ON posts.user_id = users.id
+ORDER BY posts.created_at DESC;
+</code></pre>
+
+<p><strong>逐词解析：</strong></p>
+<ul>
+<li><code>SELECT posts.id, posts.content, ...</code>：我要选哪些字段。指定表名.字段名，避免两个表有同名字段时的歧义。</li>
+<li><code>FROM posts</code>：从 posts 表开始查。posts 是"左表"或"驱动表"。</li>
+<li><code>JOIN users ON posts.user_id = users.id</code>：关联 users 表，条件是 posts.user_id = users.id。只有满足这个条件的行才会出现在结果中。</li>
+<li><code>ORDER BY posts.created_at DESC</code>：按时间倒序，最新的在前面。</li>
+</ul>
+
+<p>这条 SQL 只执行一次查询，但返回了 posts 和 users 的联合数据。数据库内部会优化执行计划，比 N+1 查询快得多。</p>
+
+<div class="think">
+<h4>🤔 JOIN 是怎么工作的？</h4>
+<p>数据库执行 JOIN 时，会做"笛卡尔积"然后过滤：</p>
+<ol>
+<li>先把 posts 和 users 的每一行两两组合（posts 有 100 行，users 有 10 行，组合后有 1000 行）</li>
+<li>用 ON 条件过滤：只保留 posts.user_id = users.id 的组合</li>
+<li>返回过滤后的结果</li>
+</ol>
+<p>实际数据库不会真的生成 1000 行临时数据——它会用索引直接找到匹配的行，效率很高。但笛卡尔积的概念帮助你理解 JOIN 的本质。</p>
+<p>数据库优化器还会选择最高效的 JOIN 算法：</p>
+<ul>
+<li><strong>Nested Loop Join</strong>：对小表有效，逐行匹配</li>
+<li><strong>Hash Join</strong>：对大表有效，用哈希表加速匹配</li>
+<li><strong>Merge Join</strong>：对有序数据有效，类似归并排序</li>
+</ul>
+<p>SQLite 主要用 Nested Loop Join，因为它通常处理的数据量不大。</p>
+</div>
+
+<h3>6.3.3 JOIN 的类型</h3>
+
+<table>
+<tr><th>类型</th><th>说明</th><th>结果</th></tr>
+<tr><td>INNER JOIN</td><td>只返回两表匹配的行（不匹配的行丢弃）</td><td>有 user_id 的动态 + 对应的用户信息</td></tr>
+<tr><td>LEFT JOIN</td><td>返回左表所有行，右表不匹配填 NULL</td><td>所有动态（包括用户已删除的），用户信息可能 NULL</td></tr>
+<tr><td>RIGHT JOIN</td><td>返回右表所有行，左表不匹配填 NULL</td><td>SQLite 不支持 RIGHT JOIN</td></tr>
+<tr><td>FULL JOIN</td><td>返回两表所有行，不匹配填 NULL</td><td>SQLite 不支持 FULL JOIN</td></tr>
+<tr><td>CROSS JOIN</td><td>笛卡尔积（所有组合）</td><td>posts 行数 × users 行数</td></tr>
+</table>
+
+<p>我们用 INNER JOIN，因为 posts 必须有对应的用户（user_id NOT NULL）。</p>
+
+<p>LEFT JOIN 的典型场景：显示所有订单，包括客户已注销的订单（客户信息可能为 NULL）。</p>
+
+<h3>6.3.4 多表 JOIN</h3>
+
+<p>如果需要同时查 posts、users 和 comments（假设有评论表），可以链式 JOIN：</p>
+
+<pre><code>SELECT 
+  posts.title,
+  users.username,
+  COUNT(comments.id) as comment_count
+FROM posts
+JOIN users ON posts.user_id = users.id
+LEFT JOIN comments ON comments.post_id = posts.id
+GROUP BY posts.id;
+</code></pre>
+
+<p>这条 SQL 同时 JOIN 了三张表，还用 GROUP BY 聚合了评论数量。这就是关系数据库的强大之处——复杂的数据关系可以用一条 SQL 表达出来。</p>
+
+<h2>6.4 修改后的朋友圈 API</h2>
+
+<h3>6.4.1 获取动态（带用户名）</h3>
+
+<pre><code>app.get('/api/posts', (req, res) => {
+  db.all(
+    `SELECT 
+      posts.id,
+      posts.content,
+      posts.created_at,
+      users.username,
+      users.avatar
+    FROM posts
+    JOIN users ON posts.user_id = users.id
+    ORDER BY posts.created_at DESC`,
+    [],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
+    }
+  );
+});
+</code></pre>
+
+<p>现在返回的数据里包含了 username 和 avatar，前端可以直接显示"霁光 发表了：你好"。</p>
+
+<h3>6.4.2 发表动态（需要登录）</h3>
+
+<pre><code>app.post('/api/posts', (req, res) => {
+  // 检查登录状态
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  const { content } = req.body;
+  
+  if (!content || content.trim() === '') {
+    return res.status(400).json({ error: '内容不能为空' });
+  }
+  
+  db.run(
+    'INSERT INTO posts (content, user_id) VALUES (?, ?)',
+    [content, req.session.userId],
+    function(err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({
+        id: this.lastID,
+        content,
+        user_id: req.session.userId,
+        created_at: new Date().toISOString()
+      });
+    }
+  );
+});
+</code></pre>
+
+<p>关键变化：INSERT 时不再传 author 字符串，而是传 user_id（从 Session 中获取）。这保证了动态和用户的关联关系。</p>
+
+<h3>6.4.3 删除自己的动态</h3>
+
+<pre><code>app.delete('/api/posts/:id', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  const postId = req.params.id;
+  
+  // 先查这条动态是谁发的
+  db.get(
+    'SELECT user_id FROM posts WHERE id = ?',
+    [postId],
+    (err, post) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      
+      if (!post) {
+        return res.status(404).json({ error: '动态不存在' });
+      }
+      
+      // 只能删除自己的动态
+      if (post.user_id !== req.session.userId) {
+        return res.status(403).json({ error: '只能删除自己的动态' });
+      }
+      
+      db.run(
+        'DELETE FROM posts WHERE id = ?',
+        [postId],
+        function(err) {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          res.json({ message: '删除成功' });
+        }
+      );
+    }
+  );
+});
+</code></pre>
+
+<p>这里有三层安全检查：</p>
+<ol>
+<li>检查是否登录（401 Unauthorized）</li>
+<li>检查动态是否存在（404 Not Found）</li>
+<li>检查是否是动态的作者（403 Forbidden）</li>
+</ol>
+
+<p>这三个检查的顺序很重要——先验证认证，再验证资源存在，最后验证权限。如果顺序反过来，攻击者可以通过 403/404 的差异来推断资源是否存在（信息泄露）。</p>
+
+<h2>6.5 数据库事务——保证操作的原子性</h2>
+
+<h3>6.5.1 为什么需要事务？</h3>
+
+<p>假设有一个"转账"操作：从 A 账户扣 100 元，给 B 账户加 100 元。如果扣款成功但加款失败，钱就凭空消失了。</p>
+
+<p>事务（Transaction）保证一组操作要么全部成功，要么全部失败——这就是 ACID 特性中的"原子性"（Atomicity）。</p>
+
+<p>ACID 是数据库事务的四个核心特性：</p>
+
+<table>
+<tr><th>特性</th><th>含义</th><th>说明</th></tr>
+<tr><td>Atomicity（原子性）</td><td>要么全成功，要么全失败</td><td>没有中间状态</td></tr>
+<tr><td>Consistency（一致性）</td><td>数据始终保持有效状态</td><td>转账后总额不变</td></tr>
+<tr><td>Isolation（隔离性）</td><td>并发事务互不干扰</td><td>A 转账时 B 看不到中间状态</td></tr>
+<tr><td>Durability（持久性）</td><td>提交后数据永久保存</td><td>即使断电数据不丢失</td></tr>
+</table>
+
+<div class="story">
+<h4>📖 故事时间：Jim Gray 和事务处理</h4>
+<p>Jim Gray 是数据库领域的天才科学家。他在 1970 年代发明了事务处理的概念，并因此获得了 1998 年图灵奖。</p>
+<p>Gray 提出了"两阶段提交"（2PC）协议，解决了分布式系统中的事务一致性问题。他的论文《The Transaction Concept》被认为是数据库领域最重要的论文之一。</p>
+<p>2007 年，Gray 在旧金山湾失踪（他在帆船航行时失联），引发了科技界的巨大震动。尽管进行了大规模搜救，Gray 的遗体至今未找到。他的贡献——事务处理——却是每一台服务器、每一个数据库每天都在使用的基础技术。</p>
+</div>
+
+<h3>6.5.2 SQLite 中的事务</h3>
+
+<p>SQLite 中默认每条 SQL 语句都是一个事务（自动提交模式）。但我们也可以手动控制：</p>
+
+<pre><code>db.serialize(() => {
+  db.run('BEGIN TRANSACTION');
+  
+  db.run('UPDATE accounts SET balance = balance - 100 WHERE id = 1');
+  db.run('UPDATE accounts SET balance = balance + 100 WHERE id = 2');
+  
+  db.run('COMMIT', (err) => {
+    if (err) {
+      db.run('ROLLBACK');  // 出错时回滚
+    }
+  });
+});
+</code></pre>
+
+<p><code>BEGIN TRANSACTION</code> 开始事务，<code>COMMIT</code> 提交事务，<code>ROLLBACK</code> 回滚事务（撤销所有修改）。</p>
+
+<p>在个人网站中，大部分单条 SQL 操作不需要显式事务。但如果一个请求涉及多条 SQL（比如"删除用户+删除用户所有动态"），就需要事务来保证原子性。</p>
+
+<h2>6.6 索引——加速查询</h2>
+
+<h3>6.6.1 为什么需要索引？</h3>
+
+<p>假设 posts 表有 100 万条记录，查询某个用户的所有动态：</p>
+
+<pre><code>SELECT * FROM posts WHERE user_id = 5;
+</code></pre>
+
+<p>没有索引时，数据库需要扫描所有 100 万行（"全表扫描"），时间复杂度 O(N)。</p>
+
+<p>有索引时，数据库使用 B+ 树索引，时间复杂度 O(log N)。对于 100 万行数据，全表扫描可能需要几秒，索引查询只需要几毫秒。</p>
+
+<h3>6.6.2 创建索引</h3>
+
+<pre><code>-- 为 posts.user_id 创建索引
+CREATE INDEX idx_posts_user_id ON posts(user_id);
+
+-- 为 users.username 创建索引（加速登录查询）
+CREATE INDEX idx_users_username ON users(username);
+</code></pre>
+
+<p>索引的代价：</p>
+<ul>
+<li><strong>存储空间</strong>：索引需要额外存储空间（通常占表大小的 10%~30%）</li>
+<li><strong>写入变慢</strong>：INSERT/UPDATE/DELETE 时需要同时更新索引</li>
+</ul>
+
+<p>所以不是越多越好。只在频繁查询的字段上创建索引，写入频繁的字段（如 view_count）谨慎建索引。</p>
+
+<div class="think">
+<h4>🤔 为什么 SQLite 自动给主键建索引？</h4>
+<p>SQLite 的 PRIMARY KEY 自动创建索引，因为主键常用于 WHERE、JOIN、ORDER BY。如果没有索引，主键就失去了"快速查找"的意义。</p>
+<p>但 SQLite 有一个特殊行为：INTEGER PRIMARY KEY 实际上是 rowid 的别名，不创建额外的 B+ 树索引——因为 rowid 本身就有 B+ 树结构。这比其他数据库更高效。</p>
+</div>
+
+<h2>6.7 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>FOREIGN KEY 不生效</td>
+  <td>删除了用户但动态还在</td>
+  <td>SQLite 默认关闭外键约束</td>
+  <td>db.run('PRAGMA foreign_keys = ON')</td>
+</tr>
+<tr>
+  <td>JOIN 后数据重复</td>
+  <td>同一条动态出现多次</td>
+  <td>ON 条件写错了，导致一对多匹配</td>
+  <td>检查 ON 条件是否唯一；考虑用 GROUP BY</td>
+</tr>
+<tr>
+  <td>无法删除 database.sqlite</td>
+  <td>文件被占用</td>
+  <td>服务器还在运行，数据库连接没关</td>
+  <td>先停止服务器（Ctrl+C）</td>
+</tr>
+<tr>
+  <td>N+1 查询性能差</td>
+  <td>列表加载慢</td>
+  <td>循环里每次查数据库</td>
+  <td>用 JOIN 一次查询；或用 IN 批量查询</td>
+</tr>
+<tr>
+  <td>ALTER TABLE 报错</td>
+  <td>无法修改表结构</td>
+  <td>SQLite ALTER TABLE 能力有限</td>
+  <td>用"创建新表→迁移数据→重命名"法</td>
+</tr>
+<tr>
+  <td>索引没生效</td>
+  <td>加了索引查询还是慢</td>
+  <td>查询条件没用到索引字段</td>
+  <td>用 EXPLAIN QUERY PLAN 检查执行计划</td>
+</tr>
+</table>
+
+<h2>6.8 知识点回顾</h2>
+
+<div class="review">
+<h4>📚 本章核心概念回顾</h4>
+<ul>
+<li><strong>外键（Foreign Key）</strong>：一个表的字段引用另一个表的主键，建立表间关系。</li>
+<li><strong>级联删除（CASCADE）</strong>：删除父表记录时自动删除子表关联记录。</li>
+<li><strong>JOIN</strong>：从多张表联合查询数据。INNER JOIN 只返回匹配行，LEFT JOIN 返回左表所有行。</li>
+<li><strong>N+1 查询</strong>：1 次主查询 + N 次关联查询的性能陷阱。用 JOIN 解决。</li>
+<li><strong>事务（Transaction）</strong>：一组操作的原子单位。BEGIN → 操作 → COMMIT/ROLLBACK。</li>
+<li><strong>ACID</strong>：原子性、一致性、隔离性、持久性。数据库事务的核心特性。</li>
+<li><strong>索引（Index）</strong>：加速查询的数据结构（B+ 树）。牺牲写入性能换取查询性能。</li>
+<li><strong>代理键（Surrogate Key）</strong>：与业务无关的 id。比自然键更稳定、更高效。</li>
+</ul>
+</div>
+
+<div class="practice">
+<h4>📝 练习时间</h4>
+<ol>
+<li>设计一个"评论系统"的数据库表结构：comments 表需要哪些字段？外键如何设计？</li>
+<li>写一条 SQL：查询"霁光"发表的所有动态，以及每条动态的评论数量。</li>
+<li>用 EXPLAIN QUERY PLAN 查看一条 SQL 的执行计划，理解数据库是否用了索引。</li>
+<li>尝试删除 database.sqlite，观察服务器重启后是否自动重建表。</li>
+<li>为 posts.created_at 创建索引，对比创建前后的查询速度。</li>
+</ol>
+</div>
+
+<h2>6.9 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ posts 表有 user_id 外键字段</li>
+<li>□ 外键约束生效（PRAGMA foreign_keys = ON）</li>
+<li>□ 删除用户后动态被级联删除</li>
+<li>□ 获取动态时返回用户名和头像（JOIN 查询）</li>
+<li>□ 发表动态需要登录</li>
+<li>□ 只能删除自己的动态</li>
+<li>□ 理解 INNER JOIN 和 LEFT JOIN 的区别</li>
+<li>□ 理解为什么用 id 做外键而不是 username</li>
+<li>□ 理解 ON DELETE CASCADE 的作用</li>
+<li>□ 知道 N+1 查询问题，学会用 JOIN 解决</li>
+<li>□ 理解事务的 BEGIN/COMMIT/ROLLBACK</li>
+<li>□ 知道索引的作用和代价</li>
+</ul>
+</div>
+
+<h2>6.10 下章预告</h2>
+
+<p>下一章，我们要实现博客系统——文章列表、文章详情、Markdown 渲染。这会涉及更多的数据库设计和前端交互。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第六章完 —</p>
+
+</body></html>

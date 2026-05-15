@@ -1,0 +1,381 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+.practice { background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.practice h4 { margin: 0 0 8px; color: #2e7d32; font-size: 12pt; }
+.review { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.review h4 { margin: 0 0 8px; color: #1565c0; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第八章：学习站——记录成长轨迹</h1>
+
+<p><strong>本章目标</strong>：实现一个"学习站"功能，记录正在学习的技术、学习进度、笔记和资源链接。</p>
+
+<p><strong>学完后你能做什么</strong>：有一个个人学习管理面板，可以添加学习项目、标记进度、写学习笔记。你能理解 CRUD（增删改查）的完整实现。</p>
+
+<hr/>
+
+<h2>8.1 为什么要有"学习站"？</h2>
+
+<p>很多开发者都有"学了很多但忘了"的困扰。今天看了 React 文档，下周就忘了 useEffect 的依赖数组怎么用。学习站的作用就是：把学习过程"外化"——记录下来，随时回顾。</p>
+
+<h3>8.1.1 费曼学习法</h3>
+
+<p>物理学家理查德·费曼有一个著名的学习方法："如果你不能用简单的语言解释一个概念，说明你还没真正理解它。"</p>
+
+<p>费曼学习法的四个步骤：</p>
+<ol>
+<li>选择一个概念</li>
+<li>假装教给一个新手（用简单语言）</li>
+<li>卡壳时回去重新学习</li>
+<li>简化和类比</li>
+</ol>
+
+<p>学习站就是这个过程的"记录器"。你每学一个技术，都写一篇笔记——这既帮助理解，也留下了一个可检索的知识库。</p>
+
+<h3>8.1.2 学习站的核心功能</h3>
+
+<ul>
+<li><strong>学习项目管理</strong>：添加正在学习的技术（如 React、Docker、Python）</li>
+<li><strong>进度追踪</strong>：用百分比表示学习进度（0%~100%）</li>
+<li><strong>状态标记</strong>：正在学 / 已完成 / 暂停</li>
+<li><strong>学习笔记</strong>：记录关键知识点、遇到的问题、解决方案</li>
+<li><strong>资源链接</strong>：收藏相关的教程、文档、视频链接</li>
+</ul>
+
+<div class="story">
+<h4>📖 故事时间：Anki 与间隔重复</h4>
+<p>学习的一个核心问题是"遗忘曲线"——学完后如果不复习，几天内就会忘掉大部分内容。德国心理学家赫尔曼·艾宾浩斯在 1885 年发现了这个现象，并绘制了著名的"艾宾浩斯遗忘曲线"。</p>
+<p>2006 年，大学生 Damien Elmes 开发了一款开源软件 Anki，基于"间隔重复"（Spaced Repetition）算法。它的原理是：在遗忘即将发生的时间点复习，用最少的复习次数达到最好的记忆效果。</p>
+<p>Anki 的算法会在你第一次学习后 1 天让你复习，然后是 3 天、7 天、15 天、30 天……随着记忆越来越牢固，间隔越来越长。今天 Anki 有数百万用户，是语言学习者和医学生的必备工具。</p>
+<p>我们的学习站虽然没有 Anki 那么复杂的算法，但"记录+回顾"的核心思想是一致的。</p>
+</div>
+
+<h2>8.2 数据库设计——learning_items 表</h2>
+
+<pre><code>CREATE TABLE IF NOT EXISTS learning_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  category TEXT,
+  status TEXT DEFAULT 'learning',
+  progress INTEGER DEFAULT 0,
+  notes TEXT,
+  resource_url TEXT,
+  user_id INTEGER NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);</code></pre>
+
+<p>字段说明：</p>
+
+<table>
+<tr><th>字段</th><th>类型</th><th>说明</th></tr>
+<tr><td>title</td><td>TEXT</td><td>学习项目名称，如 "React Hooks 深入"</td></tr>
+<tr><td>category</td><td>TEXT</td><td>分类，如 "前端"、"后端"、"DevOps"</td></tr>
+<tr><td>status</td><td>TEXT</td><td>learning / completed / paused</td></tr>
+<tr><td>progress</td><td>INTEGER</td><td>进度百分比（0-100）</td></tr>
+<tr><td>notes</td><td>TEXT</td><td>学习笔记</td></tr>
+<tr><td>resource_url</td><td>TEXT</td><td>资源链接</td></tr>
+<tr><td>user_id</td><td>INTEGER</td><td>用户ID，外键</td></tr>
+</table>
+
+<p>status 字段有三个取值：</p>
+<ul>
+<li><code>learning</code>：正在学（默认）</li>
+<li><code>completed</code>：已完成</li>
+<li><code>paused</code>：暂停</li>
+</ul>
+
+<div class="think">
+<h4>🤔 为什么 progress 和 status 都要存？</h4>
+<p>你可能觉得这两个字段冗余——progress=100 不就是 completed 吗？为什么还要 status？</p>
+<p>问题在于：progress=100 不一定意味着"完成了"。用户可能只是把课程视频全部看了一遍（progress=100），但还没有做练习、没有复习。status 表示用户的主观状态，progress 表示客观进度。两者结合才能准确描述学习状态。</p>
+<p>另一个场景：用户学到 80% 时暂停了（status=paused, progress=80）。如果只存 progress，就不知道用户是"正在学 80%"还是"暂停在 80%".</p>
+</div>
+
+<h2>8.3 后端 API——完整的 CRUD</h2>
+
+<p>CRUD 是数据库操作的四个基本操作：Create（创建）、Read（读取）、Update（更新）、Delete（删除）。</p>
+
+<h3>8.3.1 获取学习列表（Read）</h3>
+
+<pre><code>app.get('/api/learning', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  db.all(
+    'SELECT * FROM learning_items WHERE user_id = ? ORDER BY created_at DESC',
+    [req.session.userId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+});</code></pre>
+
+<h3>8.3.2 添加学习项目（Create）</h3>
+
+<pre><code>app.post('/api/learning', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  const { title, category, resource_url } = req.body;
+  
+  if (!title) {
+    return res.status(400).json({ error: '标题不能为空' });
+  }
+  
+  db.run(
+    'INSERT INTO learning_items (title, category, resource_url, user_id) VALUES (?, ?, ?, ?)',
+    [title, category || '', resource_url || '', req.session.userId],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ id: this.lastID, message: '添加成功' });
+    }
+  );
+});</code></pre>
+
+<h3>8.3.3 更新进度（Update）</h3>
+
+<pre><code>app.put('/api/learning/:id', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  const { progress, status, notes } = req.body;
+  const itemId = req.params.id;
+  
+  // 验证 progress 范围
+  if (progress !== undefined && (progress < 0 || progress > 100)) {
+    return res.status(400).json({ error: '进度必须在 0-100 之间' });
+  }
+  
+  db.run(
+    'UPDATE learning_items SET progress = ?, status = ?, notes = ? WHERE id = ? AND user_id = ?',
+    [progress, status, notes, itemId, req.session.userId],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (this.changes === 0) {
+        return res.status(403).json({ error: '只能修改自己的学习项目' });
+      }
+      res.json({ message: '更新成功' });
+    }
+  );
+});</code></pre>
+
+<p><code>this.changes === 0</code> 的判断很重要：它表示 UPDATE 没有影响任何行。这发生在两种情况下：1）itemId 不存在；2）存在但不属于当前用户。我们统一返回 403，不区分具体原因（信息隐藏原则）。</p>
+
+<h3>8.3.4 删除（Delete）</h3>
+
+<pre><code>app.delete('/api/learning/:id', (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ error: '请先登录' });
+  }
+  
+  db.run(
+    'DELETE FROM learning_items WHERE id = ? AND user_id = ?',
+    [req.params.id, req.session.userId],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (this.changes === 0) {
+        return res.status(403).json({ error: '只能删除自己的学习项目' });
+      }
+      res.json({ message: '删除成功' });
+    }
+  );
+});</code></pre>
+
+<h2>8.4 前端页面</h2>
+
+<h3>8.4.1 进度条组件</h3>
+
+<p>进度条是 CSS 的经典应用——一个外层容器作为背景，一个内层元素根据进度设置宽度：</p>
+
+<pre><code>/* 进度条样式 */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-gold);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 根据进度动态设置 width */
+.progress-fill[data-progress="30"] { width: 30%; }
+.progress-fill[data-progress="60"] { width: 60%; }
+.progress-fill[data-progress="100"] { width: 100%; }</code></pre>
+
+<p>实际使用时，用 JavaScript 动态设置宽度：</p>
+
+<pre><code>function renderProgress(percent) {
+  return `
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: ${percent}%"></div>
+    </div>
+    <span class="progress-text">${percent}%</span>
+  `;
+}</code></pre>
+
+<h3>8.4.2 状态标签</h3>
+
+<pre><code>.status-learning { 
+  color: #f39c12; 
+  background: rgba(243, 156, 18, 0.1);
+}
+.status-completed { 
+  color: #1e8449; 
+  background: rgba(30, 132, 73, 0.1);
+}
+.status-paused { 
+  color: var(--text-muted); 
+  background: rgba(160, 154, 144, 0.1);
+}</code></pre>
+
+<h3>8.4.3 添加/编辑表单</h3>
+
+<p>表单需要：标题输入框、分类下拉选择、资源链接输入框、进度滑块、状态单选按钮、笔记文本域。</p>
+
+<pre><code>/* 滑块样式 */
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 3px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent-gold);
+  border-radius: 50%;
+  cursor: pointer;
+}</code></pre>
+
+<h2>8.5 知识点回顾</h2>
+
+<div class="review">
+<h4>📚 本章核心概念回顾</h4>
+<ul>
+<li><strong>CRUD</strong>：Create（创建）、Read（读取）、Update（更新）、Delete（删除）。数据库操作的四个基本操作。</li>
+<li><strong>progress + status</strong>：客观进度和主观状态结合，准确描述学习情况。</li>
+<li><strong>this.changes</strong>：SQLite 回调中 this.changes 表示影响的行数。0 表示没有匹配的行。</li>
+<li><strong>信息隐藏</strong>：更新/删除失败时统一返回 403，不区分"不存在"和"无权"。</li>
+<li><strong>CSS 进度条</strong>：外层容器 + 内层填充元素，width 根据进度动态设置。</li>
+<li><strong>range 滑块</strong>：HTML5 input[type="range"] 用 CSS 自定义样式。</li>
+</ul>
+</div>
+
+<div class="practice">
+<h4>📝 练习时间</h4>
+<ol>
+<li>实现一个"番茄钟"学习计时功能：25 分钟专注学习，记录到学习项目的时长字段。</li>
+<li>给学习站添加"分类筛选"功能：只显示"前端"分类的学习项目。</li>
+<li>实现"拖拽排序"：用户可以拖拽调整学习项目的顺序（需要新增 sort_order 字段）。</li>
+<li>添加"学习时长统计"：记录每个项目的总学习时长，用饼图展示时间分配。</li>
+<li>实现"今日学习打卡"功能：每天学习后打卡，连续打卡形成 streak。</li>
+</ol>
+</div>
+
+<h2>8.6 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>进度不更新</td>
+  <td>拖动滑块后端没变化</td>
+  <td>PUT 请求 body 格式错误或没发出去</td>
+  <td>检查 fetch 的 method 和 body；确保 Content-Type: application/json</td>
+</tr>
+<tr>
+  <td>进度条宽度不对</td>
+  <td>进度 50% 但进度条只占 10%</td>
+  <td>没把 progress 值转成百分比宽度</td>
+  <td>style="width: ${item.progress}%"</td>
+</tr>
+<tr>
+  <td>只能看自己的</td>
+  <td>别人的学习项目看不到</td>
+  <td>API 过滤了 user_id</td>
+  <td>这是设计如此，如果要公开需要改 API 去掉 user_id 过滤</td>
+</tr>
+<tr>
+  <td>this.changes 未定义</td>
+  <td>更新成功但 this.changes 报错</td>
+  <td>使用了箭头函数，this 不指向正确的对象</td>
+  <td>用普通 function 而不是箭头函数作为回调</td>
+</tr>
+<tr>
+  <td>进度超过 100</td>
+  <td>滑块拖到 150%</td>
+  <td>前端没限制最大值</td>
+  <td>input max="100"；后端也验证 0-100</td>
+</tr>
+</table>
+
+<h2>8.7 预期结果检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 本章里程碑——逐一检查</h4>
+<ul>
+<li>□ 数据库有 learning_items 表</li>
+<li>□ 能添加学习项目</li>
+<li>□ 列表页显示所有项目（标题/分类/进度/状态）</li>
+<li>□ 进度条正确显示百分比</li>
+<li>□ 能更新进度和状态</li>
+<li>□ 能写学习笔记</li>
+<li>□ 能删除项目</li>
+<li>□ 只能操作自己的项目</li>
+<li>□ 理解 CRUD 四个操作</li>
+<li>□ 理解 this.changes 的作用</li>
+<li>□ 理解为什么 progress 和 status 都要存</li>
+</ul>
+</div>
+
+<h2>8.8 下章预告</h2>
+
+<p>下一章，我们要实现管理员后台——文章/动态的管理面板，以及数据统计功能。</p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 第八章完 —</p>
+
+</body></html>

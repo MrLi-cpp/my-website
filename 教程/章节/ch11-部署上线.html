@@ -1,0 +1,432 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'>
+<style>
+@page { size: A4; margin: 18mm 16mm; }
+body { font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei","Segoe UI",sans-serif; font-size: 11pt; line-height: 1.85; color: #2c3e50; margin: 0; padding: 0; }
+h1 { font-size: 22pt; color: #1a5276; border-bottom: 3px solid #1a5276; padding-bottom: 10px; margin-top: 0; page-break-before: always; }
+h1:first-of-type { page-break-before: auto; }
+h2 { font-size: 16pt; color: #1e8449; margin-top: 28px; border-left: 5px solid #1e8449; padding-left: 12px; }
+h3 { font-size: 13pt; color: #2e86c1; margin-top: 22px; }
+code { background: #f5f7f9; padding: 2px 6px; border-radius: 4px; font-family: "SF Mono","Courier New","Menlo",monospace; font-size: 9.5pt; color: #c0392b; }
+pre { background: #f5f7f9; padding: 12px 14px; border-radius: 6px; overflow-x: auto; border-left: 3px solid #2e86c1; font-size: 9.5pt; line-height: 1.6; }
+table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 10pt; }
+th, td { border: 1px solid #ddd; padding: 7px 10px; text-align: left; }
+th { background: #1a5276; color: white; font-weight: 600; }
+tr:nth-child(even) { background: #f8f9fa; }
+blockquote { border-left: 4px solid #1a5276; margin: 14px 0; padding: 8px 16px; background: #f8f9fa; color: #555; font-size: 10.5pt; }
+hr { border: none; border-top: 2px solid #ddd; margin: 30px 0; }
+ul, ol { padding-left: 24px; }
+li { margin: 4px 0; }
+strong { color: #1a5276; }
+.emergency { background: #fff3f3; border: 1px solid #e74c3c; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.emergency h4 { margin: 0 0 8px; color: #c0392b; font-size: 12pt; }
+.milestone { background: #eafaf1; border: 1px solid #1e8449; border-radius: 8px; padding: 14px 18px; margin: 16px 0; }
+.milestone h4 { margin: 0 0 8px; color: #1e8449; font-size: 12pt; }
+.tip { background: #fffbe6; border: 1px solid #f0c040; border-radius: 8px; padding: 12px 16px; margin: 16px 0; font-size: 10.5pt; }
+.step { background: #f0f8ff; border-left: 4px solid #3498db; padding: 12px 16px; margin: 14px 0; }
+.step strong { color: #2980b9; }
+.story { background: #fef9f3; border: 1px solid #e67e22; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.story h4 { margin: 0 0 8px; color: #d35400; font-size: 12pt; }
+.think { background: #f3f0ff; border: 1px solid #8e44ad; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.think h4 { margin: 0 0 8px; color: #6c3483; font-size: 12pt; }
+.practice { background: #e8f5e9; border: 1px solid #4caf50; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.practice h4 { margin: 0 0 8px; color: #2e7d32; font-size: 12pt; }
+.review { background: #e3f2fd; border: 1px solid #2196f3; border-radius: 8px; padding: 14px 18px; margin: 20px 0; }
+.review h4 { margin: 0 0 8px; color: #1565c0; font-size: 12pt; }
+</style>
+</head><body>
+
+<h1>第十一章：部署上线——把网站放到公网上</h1>
+
+<p><strong>本章目标</strong>：把本地开发的网站部署到云服务器，让全世界都能访问。你将理解 Linux 服务器、进程管理、反向代理和 HTTPS。</p>
+
+<p><strong>学完后你能做什么</strong>：有一个可以通过域名访问的真实网站，服务器重启后自动恢复。</p>
+
+<hr/>
+
+<h2>11.1 部署概述</h2>
+
+<p>部署就是把你的代码放到一台"一直开机的电脑"（服务器）上运行。这台电脑有公网 IP，所以任何人都能访问。</p>
+
+<h3>11.1.1 需要准备什么？</h3>
+
+<ul>
+<li><strong>云服务器</strong>：阿里云、腾讯云、AWS、DigitalOcean、Vultr 等</li>
+<li><strong>域名</strong>：比如 jiguang.com（可选，但推荐）</li>
+<li><strong>Node.js</strong>：服务器上要安装和开发环境相同的 Node 版本</li>
+<li><strong>Git</strong>：用于代码同步</li>
+</ul>
+
+<h3>11.1.2 部署流程概览</h3>
+
+<pre><code>1. 购买云服务器 → 获取公网 IP
+2. 连接服务器 → 安装 Node.js
+3. 上传代码 → Git clone 或 scp
+4. 安装依赖 → npm install
+5. 启动服务 → PM2 进程守护
+6. 配置 Nginx → 反向代理 + 静态文件
+7. 申请域名 → DNS 解析到服务器 IP
+8. 配置 HTTPS → Let's Encrypt 证书
+</code></pre>
+
+<div class="story">
+<h4>📖 故事时间：云计算的演进</h4>
+<p>2006 年，Amazon 推出了 EC2（Elastic Compute Cloud）——世界上第一个商业化的云服务器服务。在此之前，如果你想托管一个网站，需要：</p>
+<ol>
+<li>购买物理服务器（几千到几万美元）</li>
+<li>租用机房机架（每月几百美元）</li>
+<li>自己安装操作系统、配置网络</li>
+<li>服务器坏了要自己修</li>
+</ol>
+<p>EC2 的创新在于"虚拟化"——一台物理服务器可以虚拟出多台云服务器，按需分配资源。用户只需要在网页上点击几下，就能在几分钟内获得一台可用的服务器。按小时计费，用多少付多少。</p>
+<p>这个模式彻底改变了 IT 行业。今天，个人开发者可以用几美元/月的价格租用一台云服务器，而在 2005 年，同样的服务需要几千美元的前期投入。</p>
+<p>中国的阿里云（2009）、腾讯云（2010）后来也推出了类似服务，价格更便宜，对国内用户更友好。</p>
+</div>
+
+<h2>11.2 服务器环境准备</h2>
+
+<h3>11.2.1 连接服务器</h3>
+
+<p>通过 SSH 连接到云服务器：</p>
+
+<pre><code>ssh root@你的服务器IP</code></pre>
+
+<p>第一次连接时会提示验证服务器指纹（fingerprint），输入 yes 确认。</p>
+
+<h3>11.2.2 安装 Node.js</h3>
+
+<pre><code># Ubuntu/Debian
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 验证
+node --version  # v20.x.x
+npm --version   # 10.x.x</code></pre>
+
+<p>NodeSource 是一个第三方仓库，提供比 Ubuntu 官方仓库更新的 Node.js 版本。Ubuntu 官方仓库的 Node 版本通常落后 2-3 年。</p>
+
+<div class="think">
+<h4>🤔 为什么不用 nvm 安装 Node？</h4>
+<p>nvm（Node Version Manager）是开发环境中管理 Node 版本的好工具，可以切换不同版本。但在生产服务器上，简单稳定更重要——直接用系统包管理器安装一个固定版本，不需要 nvm 的灵活性。</p>
+<p>如果你确实需要多版本管理（比如同时运行 Node 16 和 Node 20 的项目），可以用 nvm 或 n（另一个版本管理器）。</p>
+</div>
+
+<h3>11.2.3 安装 Git</h3>
+
+<pre><code>sudo apt update
+sudo apt install git
+
+git config --global user.name "你的名字"
+git config --global user.email "你的邮箱"</code></pre>
+
+<h2>11.3 上传代码</h2>
+
+<h3>11.3.1 用 Git 克隆（推荐）</h3>
+
+<pre><code>git clone https://github.com/你的用户名/my-website.git
+cd my-website
+npm install</code></pre>
+
+<p>这种方式的好处：以后更新代码只需要 <code>git pull</code>。</p>
+
+<h3>11.3.2 或者用 scp 上传</h3>
+
+<pre><code>scp -r ~/Desktop/my-website root@你的服务器IP:/var/www/</code></pre>
+
+<p>scp（Secure Copy）通过 SSH 加密传输文件。-r 表示递归复制目录。</p>
+
+<h3>11.3.3 生产环境配置</h3>
+
+<p>生产环境需要一些开发环境没有的设置：</p>
+
+<pre><code># .env 文件（不要提交到 Git！）
+PORT=3000
+SESSION_SECRET=your-random-secret-key-here
+NODE_ENV=production</code></pre>
+
+<pre><code>npm install dotenv
+
+// server.js 顶部
+require('dotenv').config();
+
+const PORT = process.env.PORT || 3000;
+const SESSION_SECRET = process.env.SESSION_SECRET || 'fallback-secret';
+</code></pre>
+
+<div class="tip">
+<strong>⚠️ 安全警告</strong><br/>
+.env 文件包含敏感信息，必须加入 .gitignore：
+<pre><code>echo ".env" >> .gitignore
+echo "node_modules/" >> .gitignore
+echo "database.sqlite" >> .gitignore
+echo "sessions/" >> .gitignore
+echo "uploads/" >> .gitignore</code></pre>
+</div>
+
+<h2>11.4 进程守护——PM2</h2>
+
+<p>直接用 <code>node server.js</code> 启动的问题是：SSH 断开或服务器重启后，进程会停止。而且如果代码抛出未捕获的异常，进程会崩溃。</p>
+
+<p>PM2 是 Node.js 的进程管理器：崩溃自动重启、开机自动启动、日志管理、负载均衡。</p>
+
+<div class="step">
+<strong>步骤</strong><br/>
+</div>
+
+<pre><code>sudo npm install -g pm2
+
+# 启动
+pm2 start server.js --name "my-website"
+
+# 查看状态
+pm2 status
+pm2 logs my-website
+
+# 重启
+pm2 restart my-website
+
+# 停止
+pm2 stop my-website
+
+# 开机自启
+pm2 startup
+pm2 save</code></pre>
+
+<p>pm2 startup 会生成一个系统服务脚本，让 PM2 在系统启动时自动运行。pm2 save 保存当前进程列表，下次启动时自动恢复。</p>
+
+<div class="story">
+<h4>📖 故事时间：进程管理器的发展</h4>
+<p>早期的 Node.js 部署用 nohup（"no hang up"）命令：nohup node server.js &。这能让进程在 SSH 断开后继续运行，但没有自动重启功能。</p>
+<p>2013 年，Alexandre Strzelewicz 创立了 PM2，目标是"让 Node.js 应用的部署和监控变得简单"。PM2 的名字来源于 "Process Manager 2"（第二版）。</p>
+<p>PM2 的一个杀手级功能是"集群模式"（Cluster Mode）：它可以启动多个 Node.js 进程，利用多核 CPU。对于高流量网站，这能显著提升性能。</p>
+<p>另一个流行选择是 systemd——Linux 系统自带的进程管理器。很多大公司更喜欢 systemd，因为它不需要额外的依赖。但 PM2 对 Node.js 更友好，有专门的日志格式和监控面板。</p>
+</div>
+
+<h2>11.5 Nginx 反向代理</h2>
+
+<p>为什么要用 Nginx？</p>
+<ul>
+<li>Node.js 直接暴露端口不够安全</li>
+<li>Nginx 可以处理静态文件，减轻 Node 负担</li>
+<li>Nginx 可以做负载均衡、SSL、压缩、缓存</li>
+<li>Nginx 可以一个端口服务多个网站（虚拟主机）</li>
+</ul>
+
+<h3>11.5.1 安装 Nginx</h3>
+
+<pre><code>sudo apt install nginx
+
+# 验证
+sudo systemctl status nginx</code></pre>
+
+<h3>11.5.2 配置反向代理</h3>
+
+<pre><code># 创建配置文件
+sudo nano /etc/nginx/sites-available/my-website
+
+server {
+    listen 80;
+    server_name www.jiguang.com jiguang.com;
+
+    # 静态文件直接由 Nginx 处理
+    location /static/ {
+        alias /var/www/my-website/public/;
+        expires 30d;
+    }
+
+    # 其他请求转发到 Node.js
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_cache_bypass $http_upgrade;
+    }
+}</code></pre>
+
+<pre><code># 启用配置
+sudo ln -s /etc/nginx/sites-available/my-website /etc/nginx/sites-enabled/
+sudo nginx -t  # 测试配置
+sudo systemctl reload nginx  # 重载配置</code></pre>
+
+<div class="think">
+<h4>🤔 为什么需要 X-Forwarded-For？</h4>
+<p>当 Nginx 做反向代理时，Node.js 看到的请求 IP 是 127.0.0.1（本地），而不是用户的真实 IP。X-Forwarded-For 头记录了用户的真实 IP，经过的每一层代理都会追加自己的 IP。</p>
+<p>如果你的应用需要记录访问者 IP（如防刷、日志分析），需要读取 X-Forwarded-For 而不是 req.ip。</p>
+</div>
+
+<h2>11.6 HTTPS——SSL 证书</h2>
+
+<p>HTTPS 加密了浏览器和服务器之间的通信，防止中间人窃听和篡改。没有 HTTPS 的网站会被浏览器标记为"不安全"。</p>
+
+<div class="story">
+<h4>📖 故事时间：Let's Encrypt 的革命</h4>
+<p>2014 年之前，SSL 证书需要购买，每年几十到几百美元。小型网站和个人开发者往往不用 HTTPS——成本太高。</p>
+<p>2014 年，Mozilla、Cisco、Akamai、IdenTrust 等公司联合发起了 Let's Encrypt 项目，目标是"让互联网上的每一台服务器都能免费获得 SSL 证书"。</p>
+<p>2016 年，Let's Encrypt 正式开放。它用 ACME 协议自动验证域名所有权、签发证书、续期证书。整个过程完全自动化，不需要人工干预。</p>
+<p>Let's Encrypt 的影响是巨大的：HTTPS 使用率从 2014 年的 30% 飙升到 2024 年的 95% 以上。今天，不用 HTTPS 的网站反而是少数。</p>
+<p>Let's Encrypt 的证书有效期只有 90 天（商业证书通常是 1-2 年），这是故意的——迫使用户实现自动化续期，减少因遗忘续期导致的安全问题。</p>
+</div>
+
+<h3>11.6.1 申请 Let's Encrypt 证书</h3>
+
+<pre><code>sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d www.jiguang.com -d jiguang.com</code></pre>
+
+<p>certbot 会自动：验证域名所有权 → 申请证书 → 修改 Nginx 配置 → 启用 HTTPS。</p>
+
+<h3>11.6.2 自动续期</h3>
+
+<p>Let's Encrypt 证书有效期 90 天，需要自动续期：</p>
+
+<pre><code>sudo certbot renew --dry-run  # 测试续期</code></pre>
+
+<p>certbot 安装时会自动创建一个 cron 任务，每天检查证书是否需要续期。</p>
+
+<h2>11.7 域名和 DNS</h2>
+
+<h3>11.7.1 购买域名</h3>
+
+<p>常见的域名注册商：阿里云、腾讯云、GoDaddy、Namecheap。一个 .com 域名通常 60-100 元/年。</p>
+
+<h3>11.7.2 DNS 解析</h3>
+
+<p>在域名管理后台添加 A 记录：</p>
+
+<table>
+<tr><th>记录类型</th><th>主机记录</th><th>记录值</th><th>说明</th></tr>
+<tr><td>A</td><td>@</td><td>你的服务器IP</td><td>根域名 jiguang.com</td></tr>
+<tr><td>A</td><td>www</td><td>你的服务器IP</td><td>www.jiguang.com</td></tr>
+</table>
+
+<p>A 记录把域名映射到 IPv4 地址。AAAA 记录用于 IPv6。</p>
+
+<p>DNS 传播需要时间（通常几分钟到几小时），因为 DNS 记录会缓存在各地的 DNS 服务器上。</p>
+
+<h2>11.8 完整部署检查清单</h2>
+
+<div class="milestone">
+<h4>🎯 部署前逐一检查</h4>
+<ul>
+<li>□ 云服务器已购买并可以 SSH 连接</li>
+<li>□ 服务器上安装了 Node.js v20+</li>
+<li>□ 代码已上传到服务器（Git clone 或 scp）</li>
+<li>□ npm install 成功安装依赖</li>
+<li>□ .env 文件已创建，包含 SESSION_SECRET</li>
+<li>□ .env 在 .gitignore 中</li>
+<li>□ PM2 启动了网站进程</li>
+<li>□ Nginx 配置完成，80 端口可访问</li>
+<li>□ 域名解析到服务器 IP</li>
+<li>□ HTTPS 证书已申请并生效</li>
+<li>□ 网站可以通过 https://你的域名 访问</li>
+<li>□ 重启服务器后网站自动恢复（pm2 startup）</li>
+</ul>
+</div>
+
+<h2>11.9 知识点回顾</h2>
+
+<div class="review">
+<h4>📚 本章核心概念回顾</h4>
+<ul>
+<li><strong>SSH</strong>：Secure Shell，加密远程登录协议。</li>
+<li><strong>PM2</strong>：Node.js 进程管理器，支持自动重启、开机自启、日志管理。</li>
+<li><strong>Nginx</strong>：高性能 Web 服务器，做反向代理、静态文件服务、负载均衡。</li>
+<li><strong>反向代理</strong>：客户端 → Nginx → Node.js。Nginx 对外暴露，Node.js 只监听本地。</li>
+<li><strong>Let's Encrypt</strong>：免费的 SSL 证书颁发机构，90 天有效期，自动续期。</li>
+<li><strong>HTTPS</strong>：HTTP + SSL/TLS 加密，防止中间人攻击。</li>
+<li><strong>DNS A 记录</strong>：域名 → IPv4 地址的映射。</li>
+<li><strong>.env</strong>：环境变量文件，存储敏感配置，不提交到 Git。</li>
+<li><strong>X-Forwarded-For</strong>：反向代理时传递原始客户端 IP 的 HTTP 头。</li>
+</ul>
+</div>
+
+<div class="practice">
+<h4>📝 练习时间</h4>
+<ol>
+<li>用 Certbot 申请证书后，检查 Nginx 配置文件的变化（多了 ssl_certificate 等指令）。</li>
+<li>配置 HTTP 自动跳转到 HTTPS（301 重定向）。</li>
+<li>添加 gzip 压缩：Nginx 配置 gzip on，减少传输大小。</li>
+<li>配置 Nginx 缓存静态文件：图片/CSS/JS 缓存 30 天。</li>
+<li>用 Docker 容器化部署：Dockerfile + docker-compose.yml。</li>
+<li>配置 CI/CD：GitHub Actions 自动部署到服务器。</li>
+</ol>
+</div>
+
+<h2>11.10 常见问题急救站</h2>
+
+<table>
+<tr><th>问题</th><th>现象</th><th>原因</th><th>解决方案</th></tr>
+<tr>
+  <td>端口被占用</td>
+  <td>node server.js 报错 EADDRINUSE</td>
+  <td>3000 端口已有进程占用</td>
+  <td>netstat -tlnp | grep 3000 查找并 kill；或换端口</td>
+</tr>
+<tr>
+  <td>防火墙阻止</td>
+  <td>浏览器访问超时</td>
+  <td>云服务器安全组没开放 80/443</td>
+  <td>在控制台添加安全组规则（入站 80, 443, 22）</td>
+</tr>
+<tr>
+  <td>PM2 进程不启动</td>
+  <td>重启后网站无法访问</td>
+  <td>没执行 pm2 save</td>
+  <td>pm2 save 保存当前进程列表；pm2 startup 配置开机自启</td>
+</tr>
+<tr>
+  <td>静态文件 404</td>
+  <td>CSS/JS 文件加载失败</td>
+  <td>Nginx 没配置静态文件路径</td>
+  <td>检查 location /static/ 的 alias 路径；检查文件权限</td>
+</tr>
+<tr>
+  <td>证书过期</td>
+  <td>浏览器警告"不安全"</td>
+  <td>Let's Encrypt 证书没续期</td>
+  <td>certbot renew；检查 cron 任务是否正常</td>
+</tr>
+<tr>
+  <td>域名不解析</td>
+  <td>ping 域名不通</td>
+  <td>DNS 没配置或没传播</td>
+  <td>检查 DNS A 记录；用 dig 或 nslookup 检查；等待传播</td>
+</tr>
+<tr>
+  <td>HTTPS  Mixed Content</td>
+  <td>页面部分资源不加载</td>
+  <td>HTTPS 页面引用了 HTTP 资源</td>
+  <td>所有资源改为 https:// 或 //（协议相对 URL）</td>
+</tr>
+</table>
+
+<h2>11.11 全书回顾</h2>
+
+<p>恭喜！你已经完成了从零搭建个人网站的全过程。回顾一下你学到的：</p>
+
+<table>
+<tr><th>章节</th><th>核心技能</th></tr>
+<tr><td>Ch0</td><td>Node.js、npm、Express 基础</td></tr>
+<tr><td>Ch1</td><td>HTML/CSS 结构与样式</td></tr>
+<tr><td>Ch2</td><td>后端 API、JSON、HTTP 方法</td></tr>
+<tr><td>Ch3</td><td>CSS 变量、scroll-snap、动画</td></tr>
+<tr><td>Ch4</td><td>SQLite 数据库、SQL 基础</td></tr>
+<tr><td>Ch5</td><td>bcrypt 密码哈希、Session 认证</td></tr>
+<tr><td>Ch6</td><td>外键、JOIN 查询、数据关系</td></tr>
+<tr><td>Ch7</td><td>博客系统、Markdown 渲染</td></tr>
+<tr><td>Ch8</td><td>学习进度管理、CRUD</td></tr>
+<tr><td>Ch9</td><td>RBAC 权限、管理员后台</td></tr>
+<tr><td>Ch10</td><td>私信系统、轮询机制</td></tr>
+<tr><td>Ch11</td><td>Linux 部署、Nginx、HTTPS</td></tr>
+</table>
+
+<p>你已经掌握了全栈开发的核心技能。接下来可以：优化 UI、添加评论功能、实现真正的 WebSocket 实时通信、接入第三方登录（GitHub/Google）、做 SEO 优化、添加搜索功能、实现数据备份……网站的可能性是无限的。</p>
+
+<p>最重要的是：<strong>保持学习，保持记录，保持分享。</strong></p>
+
+<hr/>
+<p style="text-align:center;color:#7a7a7a;margin-top:40px;">— 全书完，感谢学习 —</p>
+
+</body></html>
