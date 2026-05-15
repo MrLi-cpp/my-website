@@ -1,0 +1,310 @@
+{
+  "philosopher": {
+    "name": "弗里德里希·尼采",
+    "nameEn": "Friedrich Nietzsche",
+    "nameDe": "Friedrich Wilhelm Nietzsche",
+    "years": "1844–1900",
+    "nationality": "德国",
+    "disciplines": ["哲学", "古典语文学", "文化批评"],
+    "era": "19世纪后期",
+    "school": "唯意志论 / 生命哲学 / 后现代思想先驱",
+    "influencedBy": ["叔本华", "瓦格纳", "赫拉克利特", "斯宾诺莎", "歌德"],
+    "influenced": ["海德格尔", "福柯", "德勒兹", "德里达", "加缪", "萨特"]
+  },
+  "lifeEvents": [
+    { "year": 1844, "event": "出生于普鲁士王国洛肯村，父亲为路德宗牧师" },
+    { "year": 1864, "event": "进入波恩大学学习神学与古典语文学" },
+    { "year": 1869, "event": "年仅24岁受聘为巴塞尔大学古典语文学教授" },
+    { "year": 1872, "event": "出版《悲剧的诞生》，标志从语文学转向哲学" },
+    { "year": 1876, "event": "与瓦格纳决裂，健康急剧恶化" },
+    { "year": 1879, "event": "因病辞去巴塞尔大学教职" },
+    { "year": 1882, "event": "与露·莎乐美相识，求婚遭拒，与妹妹伊丽莎白关系恶化" },
+    { "year": 1883, "event": "开始创作《查拉图斯特拉如是说》" },
+    { "year": 1888, "event": "创作高峰：完成《偶像的黄昏》《反基督》《瞧！这个人》" },
+    { "year": 1889, "event": "1月3日都灵街头抱马痛哭，精神彻底崩溃" },
+    { "year": 1900, "event": "8月25日因肺炎与脑梅毒（争议）逝世于魏玛" }
+  ],
+  "coreConcepts": [
+    {
+      "id": "will-to-power",
+      "name": "权力意志",
+      "nameEn": "Will to Power",
+      "tier": 1,
+      "definition": "生命的根本驱动力不是生存（达尔文式），而是对力量的扩展、对障碍的克服、对等级的提升。一切生命现象——从细胞分裂到帝国扩张——都是权力意志的不同形态。",
+      "nuancedReading": "权力意志≠政治权力。尼采批判追求'幸福'和'舒适'的英国功利主义，认为真正的生命冲动是不断超越自身局限。",
+      "primarySources": [
+        {
+          "text": "生命本身就是权力意志；自我保存只是其间接的、最频繁的结果之一。",
+          "work": "《善恶的彼岸》",
+          "section": "§13"
+        },
+        {
+          "text": "凡有生命处，就有权力意志；甚至在一个生命的奴隶意志中，也仍有对主人的意志。",
+          "work": "《查拉图斯特拉如是说》",
+          "section": "II, '论自我超越'"
+        }
+      ],
+      "secondarySources": [
+        {
+          "author": "Brian Leiter",
+          "work": "Nietzsche on Morality",
+          "interpretation": "权力意志应被理解为一种因果力量的形而上学主张，而非价值判断。"
+        },
+        {
+          "author": "Maudemarie Clark",
+          "work": "Nietzsche on Truth and Philosophy",
+          "interpretation": "后期尼采将权力意志视为一种假设性解释，而非确定真理。"
+        }
+      ],
+      "commonMisconceptions": [
+        "'权力'指政治统治（实为形而上学的力量冲动）",
+        "尼采主张强者有权压迫弱者（实为批判弱者道德对强者的怨恨）",
+        "权力意志是对'成功'的崇拜（实为对'成为'过程的肯定）"
+      ]
+    },
+    {
+      "id": "eternal-recurrence",
+      "name": "永恒轮回",
+      "nameEn": "Eternal Recurrence / Eternal Return",
+      "tier": 1,
+      "definition": "宇宙中的每一个瞬间、每一个痛苦、每一个喜悦都将无限次重复。不是物理假说，而是存在的试金石：你能否如此热爱生命，以至于愿意让它永远重复？",
+      "nuancedReading": "永恒轮回是'最高肯定公式'。尼采在《快乐的科学》中首次以思想实验形式提出，在《查拉图斯特拉》中深化为命运之爱的核心意象。",
+      "primarySources": [
+        {
+          "text": "你现在所过的生活，你将不得不再次过，甚至无数次地过；其中没有任何新的东西，只是你的每一次痛苦、每一次快乐、每一个思想和叹息，以及所有无法言说的大大小小的事，都将在你身上重演……",
+          "work": "《快乐的科学》",
+          "section": "§341"
+        },
+        {
+          "text": "'这就是生活吗？'我要对死神说，'那好，再来一次！'",
+          "work": "《查拉图斯特拉如是说》",
+          "section": "III, '论伟大的渴望'"
+        }
+      ],
+      "secondarySources": [
+        {
+          "author": "Paul Löwith",
+          "work": "Nietzsche's Philosophy of the Eternal Recurrence of the Same",
+          "interpretation": "永恒轮回是尼采对线性进步史观的根本否定，是对古希腊循环时间观的回归。"
+        },
+        {
+          "author": "Alexander Nehamas",
+          "work": "Nietzsche: Life as Literature",
+          "interpretation": "应被理解为一种风格学问题：我们能否把生命塑造成一件值得无限重复的艺术品？"
+        }
+      ],
+      "commonMisconceptions": [
+        "是物理/宇宙学假说（实为存在论思想实验）",
+        "导致虚无主义绝望（实为反虚无主义的最高肯定）",
+        "与佛教轮回相同（尼采的轮回是主动的amor fati）"
+      ]
+    },
+    {
+      "id": "ubermensch",
+      "name": "超人",
+      "nameEn": "Übermensch",
+      "tier": 1,
+      "definition": "人是一座桥梁，连接动物与超人。超人不是更强的现代人，而是一个克服了善恶二元对立、以自我立法为存在方式的全新人类类型。超人的价值标准：大地（此世）、身体、力量、肯定。",
+      "nuancedReading": "Übermensch 被译作'超人'，但此'超'非'超级'，而是'超越'。超人超越的不是别人，而是作为'道德动物'的自身。",
+      "primarySources": [
+        {
+          "text": "我来教你们何为超人：人应该是被超越的某种东西。你们曾做了什么来超越他呢？",
+          "work": "《查拉图斯特拉如是说》",
+          "section": "序章 §3"
+        },
+        {
+          "text": "我教你们超人。人是应该被超越的某种东西。你们做了什么来超越他呢？",
+          "work": "《查拉图斯特拉如是说》",
+          "section": "序章 §3"
+        }
+      ],
+      "secondarySources": [
+        {
+          "author": "Kaufmann",
+          "work": "Nietzsche: Philosopher, Psychologist, Antichrist",
+          "interpretation": "超人是尼采对达尔文进化论的哲学回应：进化的方向不是生存，而是自我超越。"
+        },
+        {
+          "author": "Deleuze",
+          "work": "尼采与哲学",
+          "interpretation": "超人是强力意志的肯定性产物，不是等级制的顶端，而是不断生成中的存在方式。"
+        }
+      ],
+      "commonMisconceptions": [
+        "超人=尼采崇拜的'强者'或'精英'（实为对'完善'的哲学构想）",
+        "超人与纳粹'优等民族'有关（尼采明确反对民族主义与种族主义）",
+        "超人是未来科幻式进化产物（实为精神/存在论层面的自我创造）"
+      ]
+    },
+    {
+      "id": "master-slave-morality",
+      "name": "主奴道德",
+      "nameEn": "Master-Slave Morality",
+      "tier": 1,
+      "definition": "道德起源于权力关系，而非理性或神授。主人道德以'好'（高贵、力量、肯定）与'坏'（卑贱、软弱、贫乏）区分；奴隶道德以'善'（平等、顺从、仁慈）与'恶'（傲慢、强大、独立）区分。后者是怨恨（Ressentiment）的产物。",
+      "nuancedReading": "尼采不是主张恢复主人统治，而是诊断奴隶道德如何成为现代文化的隐蔽病理。'平等'的诉求背后是对强者生命力的怨恨式否定。",
+      "primarySources": [
+        {
+          "text": "他设想存在一种等级制的对立——一种等级的下降：他说'卑贱'——这是从他的高傲高度降下来看。",
+          "work": "《论道德的谱系》",
+          "section": "I, §10"
+        },
+        {
+          "text": "怨恨本身成为创造性的，并给予价值——对怨恨者自己那种怨恨的本能，一种意义和正义……",
+          "work": "《论道德的谱系》",
+          "section": "I, §10"
+        }
+      ],
+      "secondarySources": [
+        {
+          "author": "Deleuze",
+          "work": "尼采与哲学",
+          "interpretation": "主奴辩证法不是历史阶段论，而是两种力（affirmation vs. negation）的永恒张力。"
+        }
+      ],
+      "commonMisconceptions": [
+        "尼采支持奴隶制（实为概念分析，非政治主张）",
+        "主人道德=法西斯主义（尼采同时批判暴君与群氓）",
+        "尼采否定一切道德（否定的是道德化过程，主张价值重估）"
+      ]
+    },
+    {
+      "id": "death-of-god",
+      "name": "上帝之死",
+      "nameEn": "The Death of God",
+      "tier": 1,
+      "definition": "不是神学命题，而是文化诊断：西方文明赖以支撑的最高价值（上帝、真理、目的、意义）已经自我瓦解。虚无主义是这一事件的心理后果。尼采的任务：在没有上帝的废墟上建立新的肯定性价值。",
+      "nuancedReading": "上帝之死不是无神论者的胜利宣言，而是对欧洲文化危机的诊断。尼采甚至说：'上帝死了，因为我们杀死了他——你和我。'",
+      "primarySources": [
+        {
+          "text": "上帝死了！上帝永远死了！是我们把他杀死的！我们，这最残忍的凶手，将如何安慰自己？",
+          "work": "《快乐的科学》",
+          "section": "§125"
+        },
+        {
+          "text": "当查拉图斯特拉独自一人的时候，他对自己的心说道：'难道这是可能的！这位老圣人在他的森林里还不曾听说，上帝死了！'",
+          "work": "《查拉图斯特拉如是说》",
+          "section": "序章 §2"
+        }
+      ],
+      "secondarySources": [
+        {
+          "author": "Martin Heidegger",
+          "work": "尼采的话'上帝死了'",
+          "interpretation": "上帝之死意味着超感性世界的彻底崩塌，形而上学时代的终结。"
+        }
+      ],
+      "commonMisconceptions": [
+        "尼采是个无神论者因此庆祝上帝之死（实为哀悼与任务并存）",
+        "上帝之死=科学胜利（尼采说科学也是'真理意志'的残余）",
+        "上帝之死导致道德真空（尼采试图以大地价值填补）"
+      ]
+    },
+    {
+      "id": "ressentiment",
+      "name": "怨恨",
+      "nameEn": "Ressentiment",
+      "tier": 2,
+      "definition": "奴隶道德的心理根源。因无力直接反抗强者，将仇恨内化为道德判断：把强者的力量定义为'恶'，把自己的软弱定义为'善'。怨恨者创造一个彼岸世界（天堂）来贬低此世。",
+      "primarySources": [
+        {
+          "text": "怨恨本身成为创造性的，并给予价值——对怨恨者自己那种怨恨的本能，一种意义和正义……",
+          "work": "《论道德的谱系》",
+          "section": "I, §10"
+        }
+      ]
+    },
+    {
+      "id": "amor-fati",
+      "name": "命运之爱",
+      "nameEn": "Amor Fati",
+      "tier": 2,
+      "definition": "不是被动接受命运，而是主动热爱命运的全部——包括痛苦、失败、疾病、孤独。这是尼采的'最高肯定公式'。",
+      "primarySources": [
+        {
+          "text": "我衡量一个人的伟大，是根据他在多大程度上和在多大范围内能够把自己的存在安排得有序，以至于它可以成为他不在场的自我的映射。",
+          "work": "《瞧！这个人》",
+          "section": "'为什么我如此有智慧'"
+        }
+      ]
+    },
+    {
+      "id": "perspectivism",
+      "name": "透视主义",
+      "nameEn": "Perspectivism",
+      "tier": 2,
+      "definition": "知识不是对'自在之物'的镜像反映，而是从特定生命立场（perspective）出发的解释。不存在无视角的真理，但存在更强力、更丰富的视角。",
+      "primarySources": [
+        {
+          "text": "没有事实，只有解释。",
+          "work": "遗稿笔记",
+          "section": "KSA 12, 7[60]"
+        }
+      ]
+    },
+    {
+      "id": "nietzschean-aesthetics",
+      "name": "尼采美学",
+      "nameEn": "Nietzschean Aesthetics",
+      "tier": 2,
+      "definition": "艺术是对存在的最高肯定。酒神精神（Dionysian）代表狂喜、毁灭与合一；日神精神（Apollonian）代表形式、梦境与个体化。悲剧是两者的结合。艺术的价值在于使生命可承受。",
+      "primarySources": [
+        {
+          "text": "艺术比真理更有价值。",
+          "work": "《悲剧的诞生》",
+          "section": "前言"
+        }
+      ]
+    }
+  ],
+  "keyWorks": [
+    { "title": "《悲剧的诞生》", "titleEn": "The Birth of Tragedy", "year": 1872, "theme": "酒神与日神、叔本华式悲观主义、艺术救赎" },
+    { "title": "《不合时宜的考察》", "titleEn": "Untimely Meditations", "year": "1873–1876", "theme": "文化批评、历史哲学、瓦格纳" },
+    { "title": "《人性的，太人性的》", "titleEn": "Human, All Too Human", "year": 1878, "theme": "启蒙转向、自由精神、道德心理学" },
+    { "title": "《曙光》", "titleEn": "Daybreak", "year": 1881, "theme": "道德偏见、自我克服、新启蒙" },
+    { "title": "《快乐的科学》", "titleEn": "The Gay Science", "year": 1882, "theme": "上帝之死、永恒轮回、amor fati" },
+    { "title": "《查拉图斯特拉如是说》", "titleEn": "Thus Spoke Zarathustra", "year": "1883–1885", "theme": "超人、永恒轮回、价值重估、孤独" },
+    { "title": "《善恶的彼岸》", "titleEn": "Beyond Good and Evil", "year": 1886, "theme": "权力意志、哲学批判、新哲学家" },
+    { "title": "《论道德的谱系》", "titleEn": "On the Genealogy of Morals", "year": 1887, "theme": "怨恨、内疚、禁欲理想、惩罚" },
+    { "title": "《偶像的黄昏》", "titleEn": "Twilight of the Idols", "year": 1889, "theme": "苏格拉底问题、真理意志、四大谬误" },
+    { "title": "《反基督》", "titleEn": "The Antichrist", "year": 1895, "theme": "基督教批判、犹太教、道德心理学" },
+    { "title": "《瞧！这个人》", "titleEn": "Ecce Homo", "year": 1908, "theme": "自传、自我解释、命运之爱" }
+  ],
+  "thematicQuotes": [
+    { "text": "凡杀不死我的，必使我更强大。", "work": "《偶像的黄昏》", "theme": "苦难与超越" },
+    { "text": "没有事实，只有解释。", "work": "遗稿", "theme": "认识论" },
+    { "text": "艺术比真理更有价值。", "work": "《悲剧的诞生》", "theme": "美学" },
+    { "text": "我来教你们何为超人：人应该是被超越的某种东西。", "work": "《查拉图斯特拉如是说》", "theme": "自我超越" },
+    { "text": "所谓高贵的灵魂，即对自己怀有敬畏之心。", "work": "《善恶的彼岸》", "theme": "自尊" },
+    { "text": "一个人知道自己为何而活，就能忍受任何一种生活。", "work": "《偶像的黄昏》", "theme": "意义与承受" },
+    { "text": "在真正的高贵中，伟大的同情与伟大的蔑视是合一的。", "work": "《善恶的彼岸》", "theme": "高贵与同情" },
+    { "text": "一切深刻的东西都喜爱面具。", "work": "《善恶的彼岸》", "theme": "表里" }
+  ],
+  "sftDataset": {
+    "description": "用于指令微调的苏格拉底式对话语料",
+    "format": "alpaca",
+    "samples": [
+      {
+        "instruction": "解释尼采的'权力意志'概念",
+        "input": "",
+        "output": "权力意志是尼采哲学的核心概念，但它经常被误解。\n\n首先澄清几个常见误解：\n1. '权力'不是政治统治，而是一种形而上学的力量冲动\n2. 权力意志不是尼采为'强者压迫弱者'辩护\n3. 它也不是对'成功'的崇拜\n\n在尼采看来，生命的根本驱动力不是生存（达尔文意义上的），而是对力量的扩展、对障碍的克服、对等级的提升。从细胞分裂到艺术创作，都是权力意志的不同形态。\n\n一手文本证据：《善恶的彼岸》§13：'生命本身就是权力意志；自我保存只是其间接的、最频繁的结果之一。'\n\n二手权威解读：Brian Leiter 在《Nietzsche on Morality》中指出，权力意志应被理解为一种因果力量的形而上学主张，而非价值判断。",
+        "citations": [
+          { "source": "《善恶的彼岸》§13", "text": "生命本身就是权力意志；自我保存只是其间接的、最频繁的结果之一。" },
+          { "source": "Brian Leiter, Nietzsche on Morality", "text": "权力意志应被理解为一种因果力量的形而上学主张，而非价值判断。" }
+        ],
+        "concepts": ["权力意志", "生命哲学", "形而上学"]
+      },
+      {
+        "instruction": "如何理解尼采的'永恒轮回'？它只是一个思想实验吗？",
+        "input": "",
+        "output": "永恒轮回（Eternal Recurrence）是尼采最深刻的思想之一，但它确实不是一个物理假说，而是一个存在论的思想实验。\n\n核心含义：宇宙中的每一个瞬间、每一个痛苦、每一个喜悦都将无限次重复。问题不在于它是否'真的'会发生，而在于：你能否如此热爱生命，以至于愿意让它永远重复？\n\n一手文本证据：《快乐的科学》§341：'你现在所过的生活，你将不得不再次过，甚至无数次地过……'\n\nPaul Löwith 在《Nietzsche's Philosophy of the Eternal Recurrence》中的解读：永恒轮回是尼采对线性进步史观的根本否定，是对古希腊循环时间观的回归。\n\nAlexander Nehamas 则提出了一个更个人化的解读：永恒轮回应被理解为一种风格学问题——我们能否把生命塑造成一件值得无限重复的艺术品？",
+        "citations": [
+          { "source": "《快乐的科学》§341", "text": "你现在所过的生活，你将不得不再次过，甚至无数次地过；其中没有任何新的东西……" },
+          { "source": "Paul Löwith", "text": "永恒轮回是尼采对线性进步史观的根本否定。" },
+          { "source": "Alexander Nehamas", "text": "我们能否把生命塑造成一件值得无限重复的艺术品？" }
+        ],
+        "concepts": ["永恒轮回", "amor fati", "时间哲学"]
+      }
+    ]
+  }
+}
