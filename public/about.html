@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
   <title>关于我 - 霁光</title>
   <link rel="stylesheet" href="/style.css?v=2">
   <style>
@@ -83,7 +86,7 @@
     </div>
   </div>
 
-  <script src="/script.js?v=3"></script>
+  <script src="/script.js?v=6"></script>
   <script>
     // 防缓存：about.html 版本 v3
     async function initAbout() {
@@ -124,9 +127,12 @@
           }
         }
         
-        document.getElementById('statPosts').textContent = posts.length;
-        document.getElementById('statBlogs').textContent = blogs.length;
-        document.getElementById('statLearning').textContent = learning.length;
+        const statPosts = document.getElementById('statPosts');
+        const statBlogs = document.getElementById('statBlogs');
+        const statLearning = document.getElementById('statLearning');
+        if (statPosts) statPosts.textContent = Array.isArray(posts) ? posts.length : '—';
+        if (statBlogs) statBlogs.textContent = Array.isArray(blogs) ? blogs.length : '—';
+        if (statLearning) statLearning.textContent = Array.isArray(learning) ? learning.length : '—';
       } catch (e) {
         console.log('加载个人信息失败', e);
       }

@@ -201,9 +201,10 @@
           >
             📖 我的故事
           </a>
-          <div class="about-stats">
+          <div class="about-stats" id="aboutStats">
             <div class="about-stat"><div class="about-stat-num" id="statPosts">0</div><div class="about-stat-label">朋友圈</div></div>
             <div class="about-stat"><div class="about-stat-num" id="statBlogs">0</div><div class="about-stat-label">博客</div></div>
+            <div class="about-stat"><div class="about-stat-num" id="statLearning">0</div><div class="about-stat-label">学习站</div></div>
             <div class="about-stat"><div class="about-stat-num">∞</div><div class="about-stat-label">可能性</div></div>
           </div>
           <div class="about-quote">「山川异域，风月同天」</div>
@@ -271,7 +272,7 @@
     </div>
   </div>
 
-  <script src="/script.js?v=4"></script>
+  <script src="/script.js?v=6"></script>
   <script src="/moments-core.js?v=4"></script>
   <script>
     // ===== 页面切换 =====
@@ -774,10 +775,11 @@ async function loadBlogDetail(id) {
     // ===== 关于我 =====
     async function initAbout() {
       try {
-        const [profile, posts, blogs] = await Promise.all([
+        const [profile, posts, blogs, learning] = await Promise.all([
           get('/api/profile').catch(() => null),
           get('/api/posts').catch(() => []),
-          get('/api/blogs').catch(() => [])
+          get('/api/blogs').catch(() => []),
+          get('/api/learning').catch(() => [])
         ]);
         if (profile) {
           document.getElementById('aboutName').textContent = profile.name || '霁光';
@@ -789,8 +791,12 @@ async function loadBlogDetail(id) {
           if (profile.email) { document.getElementById('linkEmail').href = 'mailto:' + profile.email; document.getElementById('linkEmail').textContent = '✉️ 邮箱：' + profile.email; }
           if (profile.wechat) { document.getElementById('linkWechat').textContent = '💬 微信号：' + profile.wechat; document.getElementById('linkWechat').removeAttribute('href'); }
         }
-        document.getElementById('statPosts').textContent = posts.length;
-        document.getElementById('statBlogs').textContent = blogs.length;
+        const statPosts = document.getElementById('statPosts');
+        const statBlogs = document.getElementById('statBlogs');
+        const statLearning = document.getElementById('statLearning');
+        if (statPosts) statPosts.textContent = Array.isArray(posts) ? posts.length : '—';
+        if (statBlogs) statBlogs.textContent = Array.isArray(blogs) ? blogs.length : '—';
+        if (statLearning) statLearning.textContent = Array.isArray(learning) ? learning.length : '—';
       } catch(e) {}
     }
 

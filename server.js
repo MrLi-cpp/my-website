@@ -397,7 +397,7 @@ app.use(session({
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000,
     sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     httpOnly: true
   }
 }));
@@ -411,7 +411,9 @@ app.use((req, res, next) => {
 });
 // CSRF token API
 app.get('/api/csrf-token', (req, res) => {
-  req.session.csrfToken = generateCsrfToken();
+  if (!req.session.csrfToken) {
+    req.session.csrfToken = generateCsrfToken();
+  }
   res.json({ csrfToken: req.session.csrfToken });
 });
 // HSTS + 安全响应头

@@ -1,8 +1,32 @@
+// ========== CSRF Token ==========
+let csrfToken = null;
+
+async function fetchCsrfToken() {
+  try {
+    const res = await fetch('/api/csrf-token', { credentials: 'include' });
+    const data = await res.json();
+    csrfToken = data.csrfToken;
+    return csrfToken;
+  } catch (e) {
+    console.warn('获取 CSRF token 失败:', e);
+    return null;
+  }
+}
+
+// 页面加载时预获取
+try { fetchCsrfToken(); } catch(e) {}
+
 // ========== 通用工具 ==========
 const API_BASE = '';
 
 async function get(url) {
   const res = await fetch(API_BASE + url, { credentials: 'include' });
+  const contentType = res.headers.get('content-type') || '';
+  // 健壮解析：如果不是 JSON，尝试读文本提示
+  if (!contentType.includes('application/json')) {
+    const text = await res.text();
+    throw new Error(text?.includes('DOCTYPE') ? '服务器返回了网页而非数据，请检查网络或刷新重试' : (text || '请求失败'));
+  }
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || '请求失败');
@@ -11,10 +35,16 @@ async function get(url) {
 }
 
 async function post(url, data) {
+  if (!csrfToken) await fetchCsrfToken();
+  const isFormData = data instanceof FormData;
+  const headers = {};
+  if (!isFormData) headers['Content-Type'] = 'application/json';
+  if (csrfToken) headers['x-csrf-token'] = csrfToken;
+
   const res = await fetch(API_BASE + url, {
     method: 'POST',
-    headers: data instanceof FormData ? {} : { 'Content-Type': 'application/json' },
-    body: data instanceof FormData ? data : JSON.stringify(data),
+    headers,
+    body: isFormData ? data : JSON.stringify(data),
     credentials: 'include'
   });
   if (!res.ok) {
@@ -25,9 +55,13 @@ async function post(url, data) {
 }
 
 async function put(url, data) {
+  if (!csrfToken) await fetchCsrfToken();
+  const headers = { 'Content-Type': 'application/json' };
+  if (csrfToken) headers['x-csrf-token'] = csrfToken;
+
   const res = await fetch(API_BASE + url, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify(data),
     credentials: 'include'
   });
@@ -39,8 +73,13 @@ async function put(url, data) {
 }
 
 async function del(url) {
+  if (!csrfToken) await fetchCsrfToken();
+  const headers = {};
+  if (csrfToken) headers['x-csrf-token'] = csrfToken;
+
   const res = await fetch(API_BASE + url, {
     method: 'DELETE',
+    headers,
     credentials: 'include'
   });
   if (!res.ok) {

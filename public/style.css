@@ -1057,7 +1057,7 @@ body.index-page {
 .about-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
 .about-link { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 12px; letter-spacing: 1px; }
 .about-link:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
-.about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 380px; margin: 0 auto 32px; }
+.about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 520px; margin: 0 auto 32px; }
 .about-stat { padding: 18px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; }
 .about-stat-num { font-family: var(--font-serif); font-size: 24px; color: var(--accent-gold); margin-bottom: 4px; }
 .about-stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; }
