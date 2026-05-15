@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>选择哲学家 · 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    .select-page {
+      background: var(--bg-primary);
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+
+    .select-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 32px;
+    }
+
+    .select-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .select-header h1 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      color: var(--accent-gold);
+      letter-spacing: 6px;
+      margin-bottom: 12px;
+    }
+    .select-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 哲学家卡片网格 */
+    .philo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .philo-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .philo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .philo-card:hover {
+      border-color: rgba(201,169,110,0.25);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .philo-card:hover::before {
+      opacity: 0.6;
+    }
+
+    .philo-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .philo-card-avatar {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      background: rgba(201,169,110,0.06);
+      border: 1px solid rgba(201,169,110,0.15);
+      flex-shrink: 0;
+    }
+    .philo-card-title {
+      flex: 1;
+    }
+    .philo-card-name {
+      font-family: var(--font-serif);
+      font-size: 18px;
+      color: var(--text-primary);
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+    .philo-card-en {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .philo-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .philo-card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .philo-card-tags span {
+      font-size: 11px;
+      color: var(--accent-gold);
+      border: 1px solid rgba(201,169,110,0.15);
+      padding: 4px 12px;
+      border-radius: 12px;
+      background: rgba(201,169,110,0.04);
+    }
+
+    .philo-card-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .philo-card-action-text {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+    .philo-card-action-arrow {
+      font-size: 14px;
+      color: var(--accent-gold);
+      transition: transform 0.3s;
+    }
+    .philo-card:hover .philo-card-action-arrow {
+      transform: translateX(4px);
+    }
+
+    /* 空态/加载 */
+    .select-loading {
+      text-align: center;
+      padding: 80px 0;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .select-container { padding: 24px 16px; }
+      .philo-grid { grid-template-columns: 1fr; }
+      .select-header h1 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body class="select-page">
+
+  <!-- 顶部导航 -->
+  <nav class="top-nav">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <a class="top-nav-brand" href="/index.html" style="text-decoration:none;color:var(--accent-gold);">霁光</a>
+      <span class="nav-philosopher-btn" style="opacity:1;border-color:var(--accent-gold);background:rgba(201,169,110,0.08);">选择哲学家</span>
+    </div>
+    <div class="top-nav-login" id="topNavLogin">
+      <span class="top-nav-user" id="navUserName" style="display:none;"></span>
+      <a class="nav-profile-btn" href="/profile.html" id="navProfileBtn" style="display:none;">个人中心</a>
+      <a class="nav-login-btn" href="/login.html" id="navLoginBtn">登录</a>
+      <button class="nav-logout-btn" id="navLogoutBtn" style="display:none;" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <!-- 标准返回按钮 -->
+  <a class="unified-back" href="/index.html">← 返回主页</a>
+
+  <div class="select-container">
+    <div class="select-header">
+      <h1>选择你的对话者</h1>
+      <p>每一位哲学家都是一种思想的锋利</p>
+    </div>
+
+    <div class="philo-grid" id="philoGrid">
+      <!-- 由 JS 动态渲染 -->
+    </div>
+  </div>
+
+  <script>
+    const PHILOSOPHERS = [
+      {
+        id: 'nietzsche',
+        avatar: '⚡',
+        name: '尼采',
+        nameEn: 'Friedrich Nietzsche',
+        years: '1844–1900',
+        desc: '对西方价值体系进行系统性批判与重估。权力意志、超人、永恒轮回、主奴道德、上帝之死——他的每一个概念都是一把刀。',
+        tags: ['权力意志', '超人', '永恒轮回', '主奴道德', '透视主义']
+      },
+      {
+        id: 'hegel',
+        avatar: '🜲',
+        name: '黑格尔',
+        nameEn: 'Georg Wilhelm Friedrich Hegel',
+        years: '1770–1831',
+        desc: '以辩证的方法展示精神如何从抽象存在逐步展开为绝对知识。逻辑、历史、国家、美学——一切都被纳入体系的熔炉。',
+        tags: ['绝对精神', '辩证法', '主奴辩证法', '历史哲学', '国家哲学']
+      }
+    ];
+
+    function renderGrid() {
+      const grid = document.getElementById('philoGrid');
+      grid.innerHTML = PHILOSOPHERS.map(p => `
+        <div class="philo-card" onclick="enterChat('${p.id}')">
+          <div class="philo-card-header">
+            <div class="philo-card-avatar">${p.avatar}</div>
+            <div class="philo-card-title">
+              <div class="philo-card-name">${p.name}</div>
+              <div class="philo-card-en">${p.nameEn} · ${p.years}</div>
+            </div>
+          </div>
+          <div class="philo-card-desc">${p.desc}</div>
+          <div class="philo-card-tags">
+            ${p.tags.map(t => `<span>${t}</span>`).join('')}
+          </div>
+          <div class="philo-card-action">
+            <span class="philo-card-action-text">开始对话</span>
+            <span class="philo-card-action-arrow">→</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function enterChat(id) {
+      window.location.href = `/philosopher.html?id=${id}`;
+    }
+
+    // 顶部导航状态
+    async function checkNavLogin() {
+      try {
+        const res = await fetch('/api/me');
+        const user = await res.json();
+        if (user && user.id) {
+          document.getElementById('navUserName').textContent = user.username;
+          document.getElementById('navUserName').style.display = 'inline';
+          document.getElementById('navProfileBtn').style.display = 'inline-block';
+          document.getElementById('navLoginBtn').style.display = 'none';
+          document.getElementById('navLogoutBtn').style.display = 'inline-block';
+        }
+      } catch {}
+    }
+
+    async function logout() {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/index.html';
+    }
+
+    renderGrid();
+    checkNavLogin();
+  </script>
+</body>
+</html>

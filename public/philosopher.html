@@ -376,10 +376,9 @@
   <div class="philo-container" id="philoContainer" style="display:none;">
     <!-- 侧边栏 -->
     <aside class="philo-sidebar" id="philoSidebar">
-      <div class="philo-switcher" id="philoSwitcher">
-        <button class="philo-switch-btn active" data-id="nietzsche" onclick="switchPhilosopher('nietzsche')">尼采</button>
-        <button class="philo-switch-btn" data-id="hegel" onclick="switchPhilosopher('hegel')">黑格尔</button>
-      </div>
+      <!-- 标准返回按钮（返回选择页） -->
+      <a class="unified-back" href="/philosopher-select.html" style="position:relative;top:auto;left:auto;margin-bottom:20px;">← 返回</a>
+
       <div class="philo-sidebar-avatar" id="sidebarAvatar">⚡</div>
       <div class="philo-sidebar-name" id="sidebarName">弗里德里希·尼采</div>
       <div class="philo-sidebar-en" id="sidebarEn">Friedrich Nietzsche · 1844–1900</div>
@@ -393,6 +392,7 @@
       <div class="philo-sidebar-divider"></div>
       <div class="philo-sidebar-actions">
         <a class="philo-sidebar-btn" href="/philosopher-profile.html" style="text-decoration:none;display:block;">📋 哲学档案</a>
+        <a class="philo-sidebar-btn" href="/philosopher-select.html" style="text-decoration:none;display:block;">🔄 切换哲学家</a>
         <button class="philo-sidebar-btn" onclick="clearSession()">清空对话</button>
         <button class="philo-sidebar-btn danger" onclick="resetAll()">完全重置</button>
       </div>

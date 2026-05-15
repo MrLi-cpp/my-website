@@ -66,18 +66,9 @@ window.initPhilosopherChat = async function() {
   }
 };
 
-// 切换哲学家
+// 切换哲学家（现在跳转到选择页面）
 window.switchPhilosopher = function(pid) {
-  if (pid === currentPhilosopher) return;
-  currentPhilosopher = pid;
-
-  // 更新切换按钮状态
-  document.querySelectorAll('.philo-switch-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.id === pid);
-  });
-
-  updateSidebar();
-  loadChatHistory();
+  window.location.href = '/philosopher-select.html';
 };
 
 function updateSidebar() {
