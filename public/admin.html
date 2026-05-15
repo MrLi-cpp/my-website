@@ -543,6 +543,14 @@
           <option value="diary">日记</option>
         </select>
       </div>
+      <div class="edit-field" id="editCategoryField" style="display:none;">
+        <label>分类</label>
+        <select id="editCategory">
+          <option value="web">🌐 网站学习</option>
+          <option value="llm">🤖 大模型</option>
+          <option value="other">📚 其他</option>
+        </select>
+      </div>
       <div style="display:flex;gap:12px;margin-top:20px;">
         <button class="btn btn-primary" onclick="saveEdit()">保存</button>
         <button class="btn btn-secondary" onclick="hideEditModal()">取消</button>
@@ -688,6 +696,7 @@
               <div class="list-content">${escapeHtml(item.title)}</div>
               <div class="list-meta">
                 ${formatDate(item.display_date || item.created_at)}
+                ${item.category === 'web' ? ' · 🌐 网站学习' : item.category === 'llm' ? ' · 🤖 大模型' : ' · 📚 其他'}
                 ${item.html_file ? ' · HTML文件' : ''}
               </div>
             </div>
@@ -761,6 +770,8 @@
         document.getElementById('editImageField').style.display = 'none';
         document.getElementById('editCoverField').style.display = 'block';
         document.getElementById('editHtmlField').style.display = 'block';
+        document.getElementById('editCategoryField').style.display = 'block';
+        document.getElementById('editCategory').value = item.category || 'other';
         renderEditCover();
         renderEditHtml();
       }
@@ -951,6 +962,7 @@
           data.append('title', content);
           data.append('display_date', date);
           data.append('location', location);
+          data.append('category', document.getElementById('editCategory').value);
           if (editingNewCover) data.append('cover', editingNewCover);
           if (editingNewHtml) data.append('html', editingNewHtml);
           const res = await fetch('/api/learning/' + editingId, { method: 'PUT', body: data, credentials: 'same-origin' });

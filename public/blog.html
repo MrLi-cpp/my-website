@@ -409,8 +409,10 @@
       const hasCover = blog.cover_image;
       const titleHtml = escapeHtml(blog.title);
       const excerpt = blog.content ? blog.content.slice(0, 40).replace(/[#*`|\-\[\]\(\)]/g, '') + (blog.content.length > 40 ? '…' : '') : '';
-      const coverHtml = hasCover
-        ? `<img src="${blog.cover_image}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'blog-cover-placeholder\\'><span class=\\'cover-title\\'>'+titleHtml+'</span><div class=\\'cover-sep\\'></div></div>'">`
+      // 安全校验 cover_image URL，拒绝 javascript: 等危险协议
+      const safeCover = hasCover && isSafeImageUrl(blog.cover_image) ? blog.cover_image : '';
+      const coverHtml = safeCover
+        ? `<img src="${escapeHtml(safeCover)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'blog-cover-placeholder\\'><span class=\\'cover-title\\'>'+titleHtml+'</span><div class=\\'cover-sep\\'></div></div>'">`
         : `<div class="blog-cover-placeholder"><span class="cover-title">${titleHtml}</span><div class="cover-sep"></div>${excerpt ? `<span class="cover-desc">${escapeHtml(excerpt)}</span>` : ''}</div>`;
       return `
         <div class="blog-card" data-id="${blog.id}">

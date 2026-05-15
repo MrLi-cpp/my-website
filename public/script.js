@@ -109,5 +109,16 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// 安全 URL 校验：只允许 http/https/相对路径图片
+function isSafeImageUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  try {
+    const u = new URL(url, window.location.href);
+    return u.protocol === 'http:' || u.protocol === 'https:' || (url.startsWith('/') && !url.startsWith('//'));
+  } catch {
+    return url.startsWith('/') && !url.startsWith('//');
+  }
+}
+
 // ========== 全局加载用户 ==========
 loadUser();

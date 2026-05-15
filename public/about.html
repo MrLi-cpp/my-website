@@ -18,12 +18,15 @@
     .about-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
     .about-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); text-decoration: none; font-size: 13px; letter-spacing: 1px; transition: all 0.3s; }
     .about-link:hover { border-color: var(--accent-gold); color: var(--accent-gold); background: rgba(201,169,110,0.05); transform: scale(1.06); box-shadow: 0 0 20px rgba(201,169,110,0.08); }
-    .about-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 400px; margin: 0 auto 40px; }
+    .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 520px; margin: 0 auto 40px; }
     .about-stat { padding: 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; transition: all 0.3s; }
     .about-stat:hover { transform: scale(1.05); border-color: rgba(201,169,110,0.25); box-shadow: 0 0 16px rgba(201,169,110,0.06); }
     .about-stat-num { font-family: var(--font-serif); font-size: 28px; color: var(--accent-gold); margin-bottom: 4px; }
     .about-stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; }
     .about-quote { font-family: var(--font-serif); font-size: 18px; color: var(--text-muted); letter-spacing: 4px; line-height: 2; margin-top: 40px; opacity: 0.7; }
+    @media (max-width: 480px) {
+      .about-stats { grid-template-columns: repeat(2, 1fr); max-width: 280px; }
+    }
   </style>
 </head>
 <body style="background:var(--bg-primary);">
@@ -67,6 +70,10 @@
           <div class="about-stat-label">博客</div>
         </div>
         <div class="about-stat">
+          <div class="about-stat-num" id="statLearning">0</div>
+          <div class="about-stat-label">学习站</div>
+        </div>
+        <div class="about-stat">
           <div class="about-stat-num">∞</div>
           <div class="about-stat-label">可能性</div>
         </div>
@@ -76,14 +83,16 @@
     </div>
   </div>
 
-  <script src="/script.js?v=2"></script>
+  <script src="/script.js?v=3"></script>
   <script>
+    // 防缓存：about.html 版本 v3
     async function initAbout() {
       try {
-        const [profile, posts, blogs] = await Promise.all([
+        const [profile, posts, blogs, learning] = await Promise.all([
           get('/api/profile').catch(() => null),
           get('/api/posts').catch(() => []),
-          get('/api/blogs').catch(() => [])
+          get('/api/blogs').catch(() => []),
+          get('/api/learning').catch(() => [])
         ]);
         
         if (profile) {
@@ -93,7 +102,17 @@
             document.getElementById('aboutBio').textContent = profile.bio;
           }
           if (profile.avatar) {
-            document.getElementById('avatarWrap').innerHTML = `<img class="about-avatar" src="${profile.avatar}" alt="">`;
+            const wrap = document.getElementById('avatarWrap');
+            wrap.innerHTML = '';
+            const img = document.createElement('img');
+            img.className = 'about-avatar';
+            img.src = profile.avatar;
+            img.alt = '';
+            img.onerror = function() {
+              this.style.display = 'none';
+              wrap.textContent = (profile.name || '霁').charAt(0);
+            };
+            wrap.appendChild(img);
           }
           if (profile.email) {
             document.getElementById('linkEmail').href = 'mailto:' + profile.email;
@@ -107,6 +126,7 @@
         
         document.getElementById('statPosts').textContent = posts.length;
         document.getElementById('statBlogs').textContent = blogs.length;
+        document.getElementById('statLearning').textContent = learning.length;
       } catch (e) {
         console.log('加载个人信息失败', e);
       }

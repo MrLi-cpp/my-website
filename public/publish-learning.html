@@ -34,6 +34,23 @@
       letter-spacing: 2px;
       text-transform: uppercase;
     }
+    .form-group select {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-radius: 0;
+      padding: 12px 4px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-sans);
+      outline: none;
+      transition: border-color 0.3s;
+      cursor: pointer;
+    }
+    .form-group select:focus {
+      border-bottom-color: var(--accent-gold);
+    }
     .form-group input,
     .form-group textarea {
       width: 100%;
@@ -143,6 +160,15 @@
 
     <form id="learningForm">
       <div class="form-group">
+        <label>分类 <span class="required-note">*</span></label>
+        <select id="learnCategory" required>
+          <option value="">选择分类</option>
+          <option value="web">🌐 网站学习</option>
+          <option value="llm">🤖 大模型</option>
+          <option value="other">📚 其他</option>
+        </select>
+      </div>
+      <div class="form-group">
         <label>标题 <span class="required-note">*</span></label>
         <input type="text" id="learnTitle" placeholder="资料标题" required>
       </div>
@@ -188,15 +214,17 @@
       e.preventDefault();
       const title = document.getElementById('learnTitle').value.trim();
       const date = document.getElementById('learnDate').value;
+      const category = document.getElementById('learnCategory').value;
       const cover = document.getElementById('learnCover').files[0];
       const htmlFile = document.getElementById('learnHtml').files[0];
-      if (!title || !date || !htmlFile) {
-        alert('请填写标题、日期并上传 HTML 文件');
+      if (!title || !date || !htmlFile || !category) {
+        alert('请填写标题、日期、分类并上传 HTML 文件');
         return;
       }
       const data = new FormData();
       data.append('title', title);
       data.append('display_date', date);
+      data.append('category', category);
       if (cover) data.append('cover', cover);
       data.append('html', htmlFile);
       try {

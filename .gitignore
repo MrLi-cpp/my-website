@@ -11,6 +11,10 @@ uploads/
 
 # Logs
 *.log
+nohup.out
+
+# Local notes and memory
+memory/
 
 # Credentials
 cookies.txt

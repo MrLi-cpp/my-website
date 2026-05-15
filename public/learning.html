@@ -12,6 +12,80 @@
     .learning-header p { font-size: 12px; color: var(--text-muted); letter-spacing: 4px; margin-top: 10px; }
     .learning-header-line { width: 40px; height: 1px; background: var(--accent-gold); margin: 16px auto 0; opacity: 0.4; }
 
+    /* 分类选择页 */
+    .learning-hub {
+      max-width: 560px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .learning-cat-card {
+      width: 100%;
+      padding: 28px 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+      text-decoration: none;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .learning-cat-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(201,169,110,0.4);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+    }
+    .learning-cat-icon {
+      font-size: 36px;
+      flex-shrink: 0;
+      width: 60px; height: 60px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(201,169,110,0.08);
+      border-radius: 12px;
+    }
+    .learning-cat-body { flex: 1; text-align: left; }
+    .learning-cat-title {
+      font-size: 18px;
+      letter-spacing: 4px;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .learning-cat-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+    .learning-cat-count {
+      background: rgba(201,169,110,0.15);
+      color: var(--accent-gold);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      letter-spacing: 1px;
+      font-family: var(--font-serif);
+    }
+    .learning-cat-arrow {
+      font-size: 22px;
+      color: var(--accent-gold);
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: all 0.4s;
+    }
+    .learning-cat-card:hover .learning-cat-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* 列表页 */
     .learning-grid {
       max-width: 1200px;
       margin: 0 auto;
@@ -52,10 +126,7 @@
       text-align: center;
       gap: 12px;
     }
-    .learning-cover-placeholder .cover-icon {
-      font-size: 48px;
-      opacity: 0.6;
-    }
+    .learning-cover-placeholder .cover-icon { font-size: 48px; opacity: 0.6; }
     .learning-cover-placeholder .cover-title {
       font-family: var(--font-serif);
       font-size: 20px; font-weight: 400;
@@ -102,6 +173,10 @@
     }
 
     @media (max-width: 640px) {
+      .learning-hub { max-width: 100%; }
+      .learning-cat-card { padding: 20px 18px; gap: 14px; }
+      .learning-cat-icon { width: 48px; height: 48px; font-size: 28px; }
+      .learning-cat-title { font-size: 16px; }
       .learning-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
       .learning-skeleton { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     }
@@ -111,44 +186,129 @@
 
   <a href="/blog-hub.html" class="btn-back">返回</a>
 
-  <div class="learning-page" id="learningListPage">
+  <div class="learning-page" id="learningPage">
     <div class="learning-header">
       <h1>学习站</h1>
       <p>资料 · 笔记 · 沉淀</p>
       <div class="learning-header-line"></div>
     </div>
-    <div class="learning-grid" id="learningGrid"></div>
+    <div id="learningContent"></div>
   </div>
 
   <script src="/script.js?v=4"></script>
   <script>
     async function initLearning() {
       await loadUser();
-      const grid = document.getElementById('learningGrid');
-      grid.innerHTML = `
-        <div class="learning-skeleton">
+      const container = document.getElementById('learningContent');
+      const params = new URLSearchParams(location.search);
+      const category = params.get('category');
+
+      if (!category) {
+        // 无参数：显示分类选择页
+        await renderHub(container);
+        return;
+      }
+
+      // 有参数：显示列表
+      await renderList(container, category);
+    }
+
+    async function renderHub(container) {
+      // 先显示骨架
+      container.innerHTML = `
+        <div class="learning-hub">
+          <div class="learning-cat-card" style="opacity:0.6;">
+            <div class="learning-cat-icon">🌐</div>
+            <div class="learning-cat-body">
+              <div class="learning-cat-title">网站学习</div>
+              <div class="learning-cat-desc">Web · 开发 · 技术</div>
+            </div>
+            <div class="learning-cat-count">—</div>
+          </div>
+          <div class="learning-cat-card" style="opacity:0.6;">
+            <div class="learning-cat-icon">🤖</div>
+            <div class="learning-cat-body">
+              <div class="learning-cat-title">大模型</div>
+              <div class="learning-cat-desc">AI · LLM · 前沿</div>
+            </div>
+            <div class="learning-cat-count">—</div>
+          </div>
+        </div>`;
+
+      try {
+        const [webItems, llmItems] = await Promise.all([
+          get('/api/learning?category=web').catch(() => []),
+          get('/api/learning?category=llm').catch(() => [])
+        ]);
+
+        container.innerHTML = `
+          <div class="learning-hub">
+            <a href="/learning.html?category=web" class="learning-cat-card">
+              <div class="learning-cat-icon">🌐</div>
+              <div class="learning-cat-body">
+                <div class="learning-cat-title">网站学习</div>
+                <div class="learning-cat-desc">Web · 开发 · 技术</div>
+              </div>
+              <div class="learning-cat-count">${webItems.length} 篇</div>
+              <span class="learning-cat-arrow">→</span>
+            </a>
+            <a href="/learning.html?category=llm" class="learning-cat-card">
+              <div class="learning-cat-icon">🤖</div>
+              <div class="learning-cat-body">
+                <div class="learning-cat-title">大模型</div>
+                <div class="learning-cat-desc">AI · LLM · 前沿</div>
+              </div>
+              <div class="learning-cat-count">${llmItems.length} 篇</div>
+              <span class="learning-cat-arrow">→</span>
+            </a>
+          </div>`;
+      } catch (e) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-sep">— · —</div>
+            <div class="empty-title">加载失败</div>
+            <div class="empty-desc">请稍后重试</div>
+          </div>`;
+      }
+    }
+
+    async function renderList(container, category) {
+      // 动态标题
+      const header = document.querySelector('.learning-header h1');
+      const sub = document.querySelector('.learning-header p');
+      if (category === 'web') {
+        header.textContent = '网站学习';
+        sub.textContent = 'Web · 开发 · 技术';
+      } else if (category === 'llm') {
+        header.textContent = '大模型';
+        sub.textContent = 'AI · LLM · 前沿';
+      }
+
+      container.innerHTML = `
+        <div class="learning-grid">
           <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
           <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
           <div class="skeleton-card"><div class="skeleton-cover"></div><div class="skeleton-body"><div class="skeleton-line"></div><div class="skeleton-line short"></div></div></div>
         </div>`;
+
       try {
-        const items = await get('/api/learning');
+        const items = await get('/api/learning?category=' + encodeURIComponent(category));
         if (!items.length) {
-          grid.innerHTML = `
-            <div class="empty-state" style="grid-column:1/-1;">
+          container.innerHTML = `
+            <div class="empty-state" style="text-align:center;grid-column:1/-1;">
               <div class="empty-sep">— · —</div>
               <div class="empty-title">暂无资料</div>
-              <div class="empty-desc">学习资料正在整理，敬请期待</div>
+              <div class="empty-desc">该分类下还没有资料</div>
             </div>`;
           return;
         }
-        grid.innerHTML = items.map(item => renderLearningCard(item)).join('');
+        container.innerHTML = '<div class="learning-grid">' + items.map(item => renderLearningCard(item)).join('') + '</div>';
         document.querySelectorAll('.learning-card').forEach(card => {
           card.onclick = () => location.href = '/learning-view.html?id=' + card.dataset.id;
         });
       } catch (err) {
-        grid.innerHTML = `
-          <div class="empty-state" style="grid-column:1/-1;">
+        container.innerHTML = `
+          <div class="empty-state" style="text-align:center;">
             <div class="empty-sep">— · —</div>
             <div class="empty-title">加载失败</div>
             <div class="empty-desc">请稍后重试</div>

@@ -375,7 +375,11 @@
             <div class="philo-timeline">
               ${summaries.map(s => {
                 const date = new Date(s.created_at).toLocaleDateString('zh-CN');
-                const concepts = JSON.parse(s.key_concepts || '[]');
+                let concepts = [];
+                try {
+                  const parsed = JSON.parse(s.key_concepts || '[]');
+                  if (Array.isArray(parsed)) concepts = parsed;
+                } catch {}
                 return `
                   <div class="philo-timeline-item">
                     <div class="philo-timeline-date">${date}</div>

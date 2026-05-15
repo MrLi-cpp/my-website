@@ -19,10 +19,15 @@ const app = express();
 const PORT = 3000;
 
 // 安全相关常量（生产环境请通过环境变量配置）
-const SESSION_SECRET = process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex');
+const SESSION_SECRET = process.env.SESSION_SECRET;
 const ADMIN_USER = process.env.ADMIN_USER;
 const ADMIN_PASS = process.env.ADMIN_PASS;
 
+if (!SESSION_SECRET) {
+  console.error('❌ 错误：请设置 SESSION_SECRET 环境变量');
+  console.error('   示例：SESSION_SECRET=your_random_string node server.js');
+  process.exit(1);
+}
 if (!ADMIN_USER || !ADMIN_PASS) {
   console.error('❌ 错误：请设置 ADMIN_USER 和 ADMIN_PASS 环境变量');
   console.error('   示例：ADMIN_USER=admin ADMIN_PASS=your_strong_password node server.js');
@@ -349,6 +354,38 @@ db.serialize(() => {
   });
 });
 
+// ========== 安全工具函数 ==========
+function isPathSafe(targetPath, allowedBase) {
+  const resolved = path.resolve(targetPath);
+  const baseResolved = path.resolve(allowedBase);
+  return resolved.startsWith(baseResolved + path.sep) || resolved === baseResolved;
+}
+
+function sanitizeFilePath(userPath) {
+  if (!userPath || typeof userPath !== 'string') return null;
+  // 拒绝包含 .. 的路径
+  if (userPath.includes('..')) return null;
+  // 只允许相对路径（以 / 开头）
+  if (!userPath.startsWith('/')) return null;
+  return userPath;
+}
+
+// CSRF Token 生成与校验
+function generateCsrfToken() {
+  return require('crypto').randomBytes(32).toString('hex');
+}
+
+function csrfProtection(req, res, next) {
+  // 只校验 state-changing 方法
+  if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
+    const token = req.headers['x-csrf-token'] || req.body._csrf;
+    if (!token || token !== req.session.csrfToken) {
+      return res.status(403).json({ error: 'CSRF token 无效' });
+    }
+  }
+  next();
+}
+
 // ========== 中间件 ==========
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
@@ -359,10 +396,35 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     maxAge: 7 * 24 * 60 * 60 * 1000,
-    sameSite: 'lax',
-    secure: false
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true
   }
 }));
+// CSRF token 注入：每次请求刷新 token
+app.use((req, res, next) => {
+  if (!req.session.csrfToken) {
+    req.session.csrfToken = generateCsrfToken();
+  }
+  res.locals.csrfToken = req.session.csrfToken;
+  next();
+});
+// CSRF token API
+app.get('/api/csrf-token', (req, res) => {
+  req.session.csrfToken = generateCsrfToken();
+  res.json({ csrfToken: req.session.csrfToken });
+});
+// HSTS + 安全响应头
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
 app.use((req, res, next) => {
   if (req.path.endsWith('.html')) {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -371,6 +433,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+app.use(csrfProtection);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -664,25 +727,50 @@ app.get('/api/users/:id', (req, res) => {
 
 // ========== 点赞/评论 ==========
 
-// 点赞/取消点赞
+// 点赞/取消点赞（原子操作）
 app.post('/api/posts/:id/like', requireLogin, (req, res) => {
   const postId = req.params.id;
   const userId = req.session.userId;
 
-  db.get('SELECT id FROM likes WHERE post_id = ? AND user_id = ?', [postId, userId], (err, existing) => {
-    if (existing) {
-      db.run('DELETE FROM likes WHERE post_id = ? AND user_id = ?', [postId, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        db.run('UPDATE posts SET likes_count = likes_count - 1 WHERE id = ?', [postId]);
-        res.json({ liked: false });
-      });
-    } else {
-      db.run('INSERT INTO likes (post_id, user_id) VALUES (?, ?)', [postId, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        db.run('UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?', [postId]);
-        res.json({ liked: true });
-      });
-    }
+  db.serialize(() => {
+    db.run('BEGIN IMMEDIATE');
+    db.get('SELECT id FROM likes WHERE post_id = ? AND user_id = ?', [postId, userId], (err, existing) => {
+      if (err) {
+        db.run('ROLLBACK');
+        return res.status(500).json({ error: err.message });
+      }
+      if (existing) {
+        db.run('DELETE FROM likes WHERE post_id = ? AND user_id = ?', [postId, userId], function(err) {
+          if (err) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ error: err.message });
+          }
+          db.run('UPDATE posts SET likes_count = MAX(0, likes_count - 1) WHERE id = ?', [postId], function(err2) {
+            if (err2) {
+              db.run('ROLLBACK');
+              return res.status(500).json({ error: err2.message });
+            }
+            db.run('COMMIT');
+            res.json({ liked: false });
+          });
+        });
+      } else {
+        db.run('INSERT INTO likes (post_id, user_id) VALUES (?, ?)', [postId, userId], function(err) {
+          if (err) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ error: err.message });
+          }
+          db.run('UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?', [postId], function(err2) {
+            if (err2) {
+              db.run('ROLLBACK');
+              return res.status(500).json({ error: err2.message });
+            }
+            db.run('COMMIT');
+            res.json({ liked: true });
+          });
+        });
+      }
+    });
   });
 });
 
@@ -713,23 +801,37 @@ app.get('/api/posts/:id/comments', (req, res) => {
   });
 });
 
-// 评论点赞
+// 评论点赞（原子操作）
 app.post('/api/comments/:id/like', requireLogin, (req, res) => {
   const commentId = req.params.id;
   const userId = req.session.userId;
-  db.get('SELECT id FROM comment_likes WHERE comment_id = ? AND user_id = ?', [commentId, userId], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (row) {
-      db.run('DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?', [commentId, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ liked: false });
-      });
-    } else {
-      db.run('INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)', [commentId, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ liked: true });
-      });
-    }
+  db.serialize(() => {
+    db.run('BEGIN IMMEDIATE');
+    db.get('SELECT id FROM comment_likes WHERE comment_id = ? AND user_id = ?', [commentId, userId], (err, row) => {
+      if (err) {
+        db.run('ROLLBACK');
+        return res.status(500).json({ error: err.message });
+      }
+      if (row) {
+        db.run('DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?', [commentId, userId], function(err) {
+          if (err) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ error: err.message });
+          }
+          db.run('COMMIT');
+          res.json({ liked: false });
+        });
+      } else {
+        db.run('INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)', [commentId, userId], function(err) {
+          if (err) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ error: err.message });
+          }
+          db.run('COMMIT');
+          res.json({ liked: true });
+        });
+      }
+    });
   });
 });
 
@@ -881,24 +983,49 @@ app.delete('/api/blogs/:id', requireAdmin, (req, res) => {
   });
 });
 
-// 博客点赞/取消点赞
+// 博客点赞/取消点赞（原子操作）
 app.post('/api/blogs/:id/like', requireLogin, (req, res) => {
   const blogId = req.params.id;
   const userId = req.session.userId;
-  db.get('SELECT id FROM blog_likes WHERE blog_id = ? AND user_id = ?', [blogId, userId], (err, existing) => {
-    if (existing) {
-      db.run('DELETE FROM blog_likes WHERE blog_id = ? AND user_id = ?', [blogId, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        db.run('UPDATE blogs SET likes_count = likes_count - 1 WHERE id = ?', [blogId]);
-        res.json({ liked: false });
-      });
-    } else {
-      db.run('INSERT INTO blog_likes (blog_id, user_id) VALUES (?, ?)', [blogId, userId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        db.run('UPDATE blogs SET likes_count = likes_count + 1 WHERE id = ?', [blogId]);
-        res.json({ liked: true });
-      });
-    }
+  db.serialize(() => {
+    db.run('BEGIN IMMEDIATE');
+    db.get('SELECT id FROM blog_likes WHERE blog_id = ? AND user_id = ?', [blogId, userId], (err, existing) => {
+      if (err) {
+        db.run('ROLLBACK');
+        return res.status(500).json({ error: err.message });
+      }
+      if (existing) {
+        db.run('DELETE FROM blog_likes WHERE blog_id = ? AND user_id = ?', [blogId, userId], function(err) {
+          if (err) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ error: err.message });
+          }
+          db.run('UPDATE blogs SET likes_count = MAX(0, likes_count - 1) WHERE id = ?', [blogId], function(err2) {
+            if (err2) {
+              db.run('ROLLBACK');
+              return res.status(500).json({ error: err2.message });
+            }
+            db.run('COMMIT');
+            res.json({ liked: false });
+          });
+        });
+      } else {
+        db.run('INSERT INTO blog_likes (blog_id, user_id) VALUES (?, ?)', [blogId, userId], function(err) {
+          if (err) {
+            db.run('ROLLBACK');
+            return res.status(500).json({ error: err.message });
+          }
+          db.run('UPDATE blogs SET likes_count = likes_count + 1 WHERE id = ?', [blogId], function(err2) {
+            if (err2) {
+              db.run('ROLLBACK');
+              return res.status(500).json({ error: err2.message });
+            }
+            db.run('COMMIT');
+            res.json({ liked: true });
+          });
+        });
+      }
+    });
   });
 });
 
@@ -1403,32 +1530,36 @@ app.post('/api/learning', learningUpload.fields([
     : null;
 
   db.run(
-    `INSERT INTO learning_items (title, cover_image, html_file, display_date) VALUES (?, ?, ?, ?)`,
-    [title, coverPath, htmlPath, displayDate],
+    `INSERT INTO learning_items (title, cover_image, html_file, display_date, category) VALUES (?, ?, ?, ?, ?)`,
+    [title, coverPath, htmlPath, displayDate, req.body.category || 'other'],
     function(err) {
       if (err) {
         console.error('[LEARNING] 创建失败:', err.message);
         return res.status(500).json({ error: '创建失败' });
       }
-      res.json({ id: this.lastID, title, cover_image: coverPath, html_file: htmlPath });
+      res.json({ id: this.lastID, title, cover_image: coverPath, html_file: htmlPath, category: req.body.category || 'other' });
     }
   );
 });
 
 // 获取学习资料列表
 app.get('/api/learning', (req, res) => {
-  db.all(
-    `SELECT id, title, cover_image, html_file, created_at, display_date
-     FROM learning_items ORDER BY display_date DESC`,
-    [],
-    (err, rows) => {
-      if (err) {
-        console.error('[LEARNING] 查询失败:', err.message);
-        return res.status(500).json({ error: '查询失败' });
-      }
-      res.json(rows || []);
+  const category = req.query.category;
+  let sql = `SELECT id, title, cover_image, html_file, created_at, display_date, category
+     FROM learning_items`;
+  const params = [];
+  if (category && ['web', 'llm', 'other'].includes(category)) {
+    sql += ' WHERE category = ?';
+    params.push(category);
+  }
+  sql += ' ORDER BY display_date DESC';
+  db.all(sql, params, (err, rows) => {
+    if (err) {
+      console.error('[LEARNING] 查询失败:', err.message);
+      return res.status(500).json({ error: '查询失败' });
     }
-  );
+    res.json(rows || []);
+  });
 });
 
 // 获取单个学习资料
@@ -1436,7 +1567,7 @@ app.get('/api/learning/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (!id) return res.status(400).json({ error: '无效 ID' });
   db.get(
-    `SELECT id, title, cover_image, html_file, created_at, display_date
+    `SELECT id, title, cover_image, html_file, created_at, display_date, category
      FROM learning_items WHERE id = ?`,
     [id],
     (err, row) => {
@@ -1465,21 +1596,27 @@ app.put('/api/learning/:id', learningUpload.fields([
     const fs = require('fs');
     // 新封面
     if (req.files && req.files.cover && req.files.cover[0]) {
-      if (item.cover_image) {
-        try { fs.unlinkSync(path.join(__dirname, 'public', item.cover_image)); } catch {}
+      if (item.cover_image && sanitizeFilePath(item.cover_image)) {
+        const delPath = path.join(__dirname, 'public', item.cover_image);
+        if (isPathSafe(delPath, path.join(__dirname, 'public'))) {
+          try { fs.unlinkSync(delPath); } catch {}
+        }
       }
       cover_image = '/uploads/learning/' + req.files.cover[0].filename;
     }
     // 新HTML
     if (req.files && req.files.html && req.files.html[0]) {
-      if (item.html_file) {
-        try { fs.unlinkSync(path.join(__dirname, 'public', item.html_file)); } catch {}
+      if (item.html_file && sanitizeFilePath(item.html_file)) {
+        const delPath = path.join(__dirname, 'public', item.html_file);
+        if (isPathSafe(delPath, path.join(__dirname, 'public'))) {
+          try { fs.unlinkSync(delPath); } catch {}
+        }
       }
       html_file = '/uploads/learning/' + req.files.html[0].filename;
     }
     db.run(
-      'UPDATE learning_items SET title = ?, cover_image = ?, html_file = ?, display_date = ?, location = ? WHERE id = ?',
-      [title || item.title, cover_image, html_file, display_date || item.display_date, location || item.location, id],
+      'UPDATE learning_items SET title = ?, cover_image = ?, html_file = ?, display_date = ?, location = ?, category = ? WHERE id = ?',
+      [title || item.title, cover_image, html_file, display_date || item.display_date, location || item.location, req.body.category || item.category, id],
       function(err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: '资料已更新' });
@@ -1496,9 +1633,11 @@ app.delete('/api/learning/:id', requireAdmin, (req, res) => {
     if (err || !row) return res.status(404).json({ error: '资料不存在' });
     const fs = require('fs');
     [row.html_file, row.cover_image].forEach(f => {
-      if (f) {
+      if (f && sanitizeFilePath(f)) {
         const fp = path.join(__dirname, 'public', f);
-        try { fs.unlinkSync(fp); } catch {}
+        if (isPathSafe(fp, path.join(__dirname, 'public'))) {
+          try { fs.unlinkSync(fp); } catch {}
+        }
       }
     });
     db.run(`DELETE FROM learning_items WHERE id = ?`, [id], function(err2) {
@@ -1891,7 +2030,7 @@ function getOrCreateProfile(userId, callback) {
 
   db.get('SELECT * FROM philosopher_profiles WHERE user_id = ?', [userId], (err, row) => {
     if (err) return callback(err, null);
-    const base = row || { stance: null, preferred_examples: '[]', disliked_styles: '[]', total_messages: 0, last_session_at: null };
+    const base = row || { user_preferences: '{"stance":null,"preferredExamples":[],"dislikedStyles":[],"engagedScholars":[]}', total_messages: 0, last_session_at: null };
 
     db.all('SELECT * FROM philosopher_concepts WHERE user_id = ?', [userId], (err2, concepts) => {
       const conceptMastery = {};
@@ -1908,13 +2047,14 @@ function getOrCreateProfile(userId, callback) {
 
       db.all('SELECT scholar_name, interest_score FROM philosopher_scholars WHERE user_id = ? ORDER BY interest_score DESC', [userId], (err3, scholars) => {
         const engagedScholars = (!err3 && scholars) ? scholars.map(s => s.scholar_name) : [];
+        const userPrefs = JSON.parse(base.user_preferences || '{"stance":null,"preferredExamples":[],"dislikedStyles":[],"engagedScholars":[]}');
         const profile = {
           userId: String(userId),
           conceptMastery,
           userPreferences: {
-            stance: base.stance,
-            preferredExamples: JSON.parse(base.preferred_examples || '[]'),
-            dislikedStyles: JSON.parse(base.disliked_styles || '[]'),
+            stance: userPrefs.stance || null,
+            preferredExamples: userPrefs.preferredExamples || [],
+            dislikedStyles: userPrefs.dislikedStyles || [],
             engagedScholars
           },
           totalMessages: base.total_messages || 0,
@@ -1930,19 +2070,23 @@ function getOrCreateProfile(userId, callback) {
 function saveProfile(userId, profile) {
   invalidateProfileCache(userId);
   const prefs = profile.userPreferences || {};
+  const userPrefsJson = JSON.stringify({
+    stance: prefs.stance || null,
+    preferredExamples: prefs.preferredExamples || [],
+    dislikedStyles: prefs.dislikedStyles || [],
+    engagedScholars: prefs.engagedScholars || []
+  });
 
   // 基础画像
   db.run(
-    `INSERT INTO philosopher_profiles (user_id, stance, preferred_examples, disliked_styles, total_messages, last_session_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    `INSERT INTO philosopher_profiles (user_id, user_preferences, total_messages, last_session_at, updated_at)
+     VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)
      ON CONFLICT(user_id) DO UPDATE SET
-       stance = excluded.stance,
-       preferred_examples = excluded.preferred_examples,
-       disliked_styles = excluded.disliked_styles,
+       user_preferences = excluded.user_preferences,
        total_messages = excluded.total_messages,
        last_session_at = excluded.last_session_at,
        updated_at = CURRENT_TIMESTAMP`,
-    [userId, prefs.stance || null, JSON.stringify(prefs.preferredExamples || []), JSON.stringify(prefs.dislikedStyles || []), profile.totalMessages || 0, profile.lastSessionAt || null]
+    [userId, userPrefsJson, profile.totalMessages || 0, profile.lastSessionAt || null]
   );
 
   // 概念
@@ -2268,7 +2412,6 @@ app.post('/api/philosopher-session/reset', requireLogin, (req, res) => {
     db.run('DELETE FROM philosopher_concepts WHERE user_id = ?', [uid]);
     db.run('DELETE FROM philosopher_scholars WHERE user_id = ?', [uid]);
     db.run('DELETE FROM philosopher_summaries WHERE user_id = ?', [uid]);
-    db.run('DELETE FROM philosopher_profiles WHERE user_id = ?', [uid]);
     db.run('DELETE FROM philosopher_profiles WHERE user_id = ?', [uid]);
   });
   invalidateProfileCache(uid);
