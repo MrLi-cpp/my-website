@@ -1,0 +1,80 @@
+{
+  "philosopher": {
+    "name": "胡塞尔",
+    "name_en": "Edmund Husserl",
+    "name_de": "Edmund Husserl",
+    "lived": "1859年4月8日—1938年4月27日",
+    "birthplace": "奥地利帝国摩拉维亚普罗斯涅茨",
+    "deathplace": "德国弗莱堡",
+    "era": "20世纪",
+    "school": "现象学",
+    "occupation": "哲学家",
+    "summary": "胡塞尔是现象学的创始人，20世纪最重要的哲学家之一。核心思想：回到事物本身、现象学还原、意向性、生活世界。其思想深刻影响了海德格尔、萨特、德里达和整个欧陆哲学传统。",
+    "summary_en": "Husserl is the founder of phenomenology and one of the most important philosophers of the 20th century. Central doctrines include 'zu den Sachen selbst' (back to things themselves), phenomenological reduction, intentionality, and the lifeworld."
+  },
+  "lifeEvents": [
+    {"year": "1859", "event": "出生于摩拉维亚", "details": "犹太裔家庭，后改宗路德宗。"},
+    {"year": "1876", "event": "进入莱比锡大学", "details": "学习数学、物理学和哲学，师从布伦塔诺。"},
+    {"year": "1887", "event": "获得哈雷大学博士学位", "details": "博士论文《论数的概念》，开始发展现象学思想。"},
+    {"year": "1900—1901", "event": "出版《逻辑研究》", "details": "标志着现象学的诞生。"},
+    {"year": "1913", "event": "出版《观念》第一卷", "details": "系统阐述先验现象学。"},
+    {"year": "1916", "event": "任弗莱堡大学教授", "details": "接替李凯尔特，直至退休。"},
+    {"year": "1928", "event": "退休，海德格尔接任", "details": "将讲稿《内时间意识现象学》交给海德格尔整理出版。"},
+    {"year": "1933", "event": "纳粹上台后被禁止授课", "details": "因犹太血统被禁止授课，手稿被转移到布拉格。"},
+    {"year": "1938", "event": "逝世于弗莱堡", "details": "享年79岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "intentionality",
+      "title": "意向性",
+      "title_en": "Intentionality",
+      "category": "现象学 / 心灵哲学",
+      "description": "意向性是现象学的核心概念，源自布伦塔诺。胡塞尔将其发展为现象学的基石。意向性指意识'总是关于某物的意识'——每一个意识行为都指向一个对象。例如，'我思考独角兽'——虽然独角兽不存在，但我的意识行为仍然'指向'独角兽。意向性区分了'意识行为'（noesis / 意向活动）和'意识对象'（noema / 意向对象）。意向性不是因果关系（意识不'产生'对象），而是'指向关系'。这一概念解决了意识如何'触及'外部世界的问题——不是通过因果链条，而是通过意向性结构。",
+      "keyWorks": ["《逻辑研究》", "《观念》第一卷"],
+      "primaryQuotes": [
+        {"chinese": "每一个意识都是关于某物的意识。", "english": "Every consciousness is consciousness of something.", "source": "Ideas Pertaining to a Pure Phenomenology, §84"},
+        {"chinese": "意向性是意识的根本特征。", "english": "Intentionality is the essence of consciousness.", "source": "Logical Investigations, Fifth Investigation"}
+      ]
+    },
+    {
+      "id": "phenomenological-reduction",
+      "title": "现象学还原",
+      "title_en": "Phenomenological Reduction / Epoché",
+      "category": "认识论 / 方法论",
+      "description": "现象学还原（epoché / 悬搁）是胡塞尔现象学的方法论核心。步骤：1）悬搁自然态度——不再预设外部世界的存在，将'世界是否存在'这一判断'悬置'起来；2）还原到意识——关注'意识如何呈现世界'，而非'世界本身是什么'；3）本质直观——在意识现象中直观事物的'本质'（eidos）。现象学还原不是怀疑论（不否认世界的存在），而是方法论的中立——为了研究意识结构，暂时不介入存在论争论。",
+      "keyWorks": ["《观念》第一卷"],
+      "primaryQuotes": [
+        {"chinese": "我们将自然判断悬置起来，不做任何使用。", "english": "We put out of action the general thesis which belongs to the essence of the natural attitude.", "source": "Ideas, §32"}
+      ]
+    },
+    {
+      "id": "lifeworld",
+      "title": "生活世界",
+      "title_en": "Lifeworld / Lebenswelt",
+      "category": "现象学 / 社会哲学",
+      "description": "生活世界是胡塞尔后期哲学的核心概念，在《欧洲科学的危机与先验现象学》中系统阐述。胡塞尔认为，现代科学（尤其是自然科学）忽视了'生活世界'——即我们在日常生活中直接体验的世界。科学将世界抽象为数学结构，但生活世界是所有知识的'基础'和'土壤'。生活世界是'前科学的'、'前理论的'——它是我们科学研究的前提，但本身不被科学所研究。胡塞尔呼吁'回到生活世界'，批判科学的'客观主义'忘记了主观经验的基础。",
+      "keyWorks": ["《欧洲科学的危机与先验现象学》"],
+      "primaryQuotes": [
+        {"chinese": "生活世界是所有客观科学被遗忘的意义基础。", "english": "The lifeworld is the forgotten meaning-fundament of all objective science.", "source": "The Crisis of European Sciences"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《逻辑研究》", "title_de": "Logische Untersuchungen", "year": "1900—1901", "summary": "标志着现象学的诞生，系统分析逻辑和意识结构。"},
+    {"title": "《观念》", "title_de": "Ideen zu einer reinen Phänomenologie", "year": "1913", "summary": "系统阐述先验现象学，提出现象学还原和意向性理论。"},
+    {"title": "《欧洲科学的危机与先验现象学》", "title_de": "Die Krisis der europäischen Wissenschaften", "year": "1936", "summary": "后期代表作，提出生活世界概念，批判科学的客观主义。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "回到事物本身。", "english": "To the things themselves.", "source": "Ideas"},
+    {"chinese": "每一个意识都是关于某物的意识。", "english": "Every consciousness is consciousness of something.", "source": "Ideas"},
+    {"chinese": "生活世界是所有客观科学被遗忘的意义基础。", "english": "The lifeworld is the forgotten meaning-fundament of all objective science.", "source": "The Crisis of European Sciences"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较胡塞尔'意向性'与布伦塔诺'心理现象'概念的关系。",
+      "output": "胡塞尔的意向性直接继承自布伦塔诺的'心理现象'概念，但做了根本性发展。\n\n布伦塔诺的心理现象：\n1）心理现象（如思考、判断、情感）与物理现象（如颜色、声音）的根本区别在于：心理现象'意向地包含一个对象'。\n2）布伦塔诺的意向性是'心灵的'——它是区分心理现象和物理现象的标准。\n\n胡塞尔的意向性：\n1）意向性不是'心灵的属性'，而是'意识的结构'——所有意识行为都包含'意识活动'（noesis）和'意识对象'（noema）。\n2）意向性可以研究'本质'——通过现象学还原，可以直观意向性的普遍结构。\n3）意向性不仅适用于'存在'的对象，也适用于'不存在'的对象（如独角兽）——意向性不预设对象的存在。\n\n根本差异：\n1）布伦塔诺是'描述心理学'的，胡塞尔是'先验现象学'的。\n2）布伦塔诺的意向性是'经验的'，胡塞尔的意向性是'先验的'——它研究的是意识如何构成对象。\n3）胡塞尔将意向性发展为'构成'理论——意识不仅'指向'对象，而且'构成'对象。\n\n影响：胡塞尔的意向性理论成为整个欧陆哲学的基础——海德格尔的'操心'、萨特的'意识'、德里达的' différance '都直接或间接地源于胡塞尔的意向性分析。",
+      "source": "Husserl, Logical Investigations; Ideas; Brentano, Psychology from an Empirical Standpoint; Moran, Introduction to Phenomenology (2000)",
+      "tier": 1
+    }
+  ]
+}

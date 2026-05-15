@@ -1,0 +1,77 @@
+{
+  "philosopher": {
+    "name": "德里达",
+    "name_en": "Jacques Derrida",
+    "name_fr": "Jacques Derrida",
+    "lived": "1930年7月15日—2004年10月9日",
+    "birthplace": "法属阿尔及利亚埃尔比亚尔",
+    "deathplace": "法国巴黎",
+    "era": "20世纪",
+    "school": "解构主义 / 后结构主义",
+    "occupation": "哲学家、文学批评家",
+    "summary": "德里达是解构主义创始人，20世纪最具争议性的法国思想家之一。核心思想：延异（différance）、踪迹（trace）、解构（deconstruction）、在场形而上学的批判。质疑一切'中心'和'起源'的概念。",
+    "summary_en": "Derrida is the founder of deconstruction and one of the most controversial French thinkers of the 20th century. Central doctrines include différance, trace, deconstruction, and the critique of the metaphysics of presence. He questions all concepts of 'center' and 'origin.'"
+  },
+  "lifeEvents": [
+    {"year": "1930", "event": "出生于阿尔及利亚", "details": "犹太裔家庭。"},
+    {"year": "1949", "event": "移居法国", "details": "进入巴黎高等师范学院。"},
+    {"year": "1956—1957", "event": "赴哈佛大学访学", "details": "研究胡塞尔未刊稿。"},
+    {"year": "1967", "event": "出版《语音与现象》《论文字学》《书写与差异》", "details": "三部著作同时出版，标志着解构主义的正式诞生。"},
+    {"year": "1980", "event": "获博士学位", "details": "以《论文字学》为博士论文，获得巴黎第十大学博士学位。"},
+    {"year": "1992", "event": "剑桥大学荣誉博士学位争议", "details": "因学者联名反对而获得罕见的不记名投票，最终通过。"},
+    {"year": "2004", "event": "逝世于巴黎", "details": "享年74岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "différance",
+      "title": "延异",
+      "title_en": "Différance",
+      "category": "语言哲学 / 解构",
+      "description": "延异（différance）是德里达最著名的概念，故意拼写错误（différance而非différence），以文字形式体现其含义。延异有两层含义：1）'差异'（differing）——意义通过差异产生，一个词的意义不在于它'是什么'，而在于它与其他词的'差异'；2）'推迟'（deferring）——意义永远不会'在场'，它总是被'推迟'到下一个差异中。因此，意义不是'中心'或'起源'，而是'无限的延异链条'。德里达以此批判西方哲学的'在场形而上学'（metaphysics of presence）——即认为意义有一个'在场'的中心或起源。",
+      "keyWorks": ["《语音与现象》", "《论文字学》"],
+      "primaryQuotes": [
+        {"chinese": "延异是差异的制造和差异的推迟。", "english": "Différance is the production and deferral of difference.", "source": "Speech and Phenomena"},
+        {"chinese": "意义永远不会在场，它总是被推迟。", "english": "Meaning is never present; it is always deferred.", "source": "Of Grammatology"}
+      ]
+    },
+    {
+      "id": "deconstruction",
+      "title": "解构",
+      "title_en": "Deconstruction",
+      "category": "文学批评 / 哲学方法论",
+      "description": "解构是德里达的阅读/分析方法。不是'摧毁'文本，而是'揭示文本自身的矛盾'——即文本所说的与它所做的之间的矛盾。例如，卢梭在《论语言的起源》中主张'语音高于文字'（语音直接表达思想，文字是堕落的替代品），但卢梭自己的论证却依赖文字。解构揭示：文本的'中心'（如卢梭的'语音中心主义'）恰恰是文本自身无法维持的。解构的目标不是建立新的体系，而是'持续地'质疑一切中心和起源。",
+      "keyWorks": ["《论文字学》", "《书写与差异》"],
+      "primaryQuotes": [
+        {"chinese": "解构不是摧毁，而是揭示文本自身的矛盾。", "english": "Deconstruction is not destruction, but the revelation of the text's own contradictions.", "source": "Of Grammatology"}
+      ]
+    },
+    {
+      "id": "trace",
+      "title": "踪迹",
+      "title_en": "Trace",
+      "category": "语言哲学 / 本体论",
+      "description": "踪迹是德里达对'起源'的解构。传统哲学认为：有一个'起源'（如语音、意识、在场），其他一切都是从这个起源'派生'的。德里达反驳：起源本身就包含'踪迹'——它已经被差异标记了。例如，'语音'被认为是'直接的在场'，但语音本身就是'时间的'（需要持续和重复），因此已经包含了'文字'的踪迹。踪迹不是起源的'痕迹'，而是起源的'不可能性'——起源总是被已经存在的东西所标记，因此起源从未'纯粹'地存在过。",
+      "keyWorks": ["《论文字学》"],
+      "primaryQuotes": [
+        {"chinese": "踪迹不是起源的痕迹，而是起源的不可能性。", "english": "The trace is not the mark of an origin, but the impossibility of origin.", "source": "Of Grammatology"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《论文字学》", "title_fr": "De la grammatologie", "year": "1967", "summary": "解构主义的奠基之作，批判语音中心主义，提出延异概念。"},
+    {"title": "《语音与现象》", "title_fr": "La Voix et le Phénomène", "year": "1967", "summary": "解构胡塞尔现象学，批判在场形而上学。"},
+    {"title": "《书写与差异》", "title_fr": "L'Écriture et la Différence", "year": "1967", "summary": "论文集，运用解构方法分析文学和哲学文本。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "延异是差异的制造和差异的推迟。", "english": "Différance is the production and deferral of difference.", "source": "Speech and Phenomena"},
+    {"chinese": "解构不是摧毁，而是揭示文本自身的矛盾。", "english": "Deconstruction is not destruction, but the revelation of the text's own contradictions.", "source": "Of Grammatology"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释德里达'解构'与福柯'考古学'对文本分析方法的关系。",
+      "output": "德里达的解构与福柯的考古学都是对文本/话语的批判性分析方法，但路径不同。\n\n福柯的考古学：\n1）关注'话语规则'——什么可以被说，什么不能被说。\n2）分析'知识型'（épistémè）——特定时代的认识论底层结构。\n3）考古学是'描述性的'——描述话语如何运作，不评价真假。\n\n德里达的解构：\n1）关注'文本矛盾'——文本所说的与它所做的之间的矛盾。\n2）揭示'中心'的不可能性——任何中心（如语音、意识、起源）都包含自身的解构因素。\n3）解构是'伦理的'——质疑一切权威和等级。\n\n根本差异：\n1）福柯是'历史的'，德里达是'文本的'。\n2）福柯关注'话语的权力'，德里达关注'文本的矛盾'。\n3）福柯的方法是'描述性的'，德里达的方法是'批判性的'。\n\n互补性：两者共同构成了20世纪后结构主义对'文本/话语'的两种批判维度——福柯揭示了话语的政治性，德里达揭示了文本的逻辑矛盾。",
+      "source": "Derrida, Of Grammatology; Foucault, The Archaeology of Knowledge; Norris, Derrida (1987)",
+      "tier": 1
+    }
+  ]
+}

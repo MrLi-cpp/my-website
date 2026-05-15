@@ -1,0 +1,81 @@
+{
+  "philosopher": {
+    "name": "阿多诺",
+    "name_en": "Theodor W. Adorno",
+    "name_de": "Theodor W. Adorno",
+    "lived": "1903年9月11日—1969年8月6日",
+    "birthplace": "德国法兰克福",
+    "deathplace": "瑞士菲斯普",
+    "era": "20世纪",
+    "school": "法兰克福学派 / 批判理论",
+    "occupation": "哲学家、社会学家、音乐学家",
+    "summary": "阿多诺是法兰克福学派核心成员，批判理论最重要的代表。核心思想：文化工业、否定的辩证法、奥斯维辛之后写诗是野蛮的。以否定性思维对抗同一性哲学和极权主义。",
+    "summary_en": "Adorno was a core member of the Frankfurt School and one of the most important representatives of Critical Theory. Central doctrines include the culture industry, negative dialectics, and the dictum that writing poetry after Auschwitz is barbaric."
+  },
+  "lifeEvents": [
+    {"year": "1903", "event": "出生于法兰克福", "details": "父亲为犹太裔酒商。"},
+    {"year": "1924", "event": "获得法兰克福大学博士学位", "details": "博士论文《胡塞尔现象学中事物的先验理论》。"},
+    {"year": "1931", "event": "获得法兰克福大学教职资格", "details": "资格论文《基尔凯郭尔：美学的建构》。"},
+    {"year": "1933", "event": "纳粹上台后被解除教职", "details": "流亡英国，后转美国。"},
+    {"year": "1938—1941", "event": "参与普林斯顿广播研究项目", "details": "开始研究大众文化。"},
+    {"year": "1944", "event": "与霍克海默合著《启蒙辩证法》", "details": "系统批判启蒙理性的自我毁灭。"},
+    {"year": "1949", "event": "返回德国", "details": "重建法兰克福学派社会研究所。"},
+    {"year": "1966", "event": "出版《否定的辩证法》", "details": "系统阐述否定辩证法，批判同一性思维。"},
+    {"year": "1969", "event": "逝世", "details": "因心脏病逝世于瑞士，享年65岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "culture-industry",
+      "title": "文化工业",
+      "title_en": "Culture Industry",
+      "category": "社会理论 / 美学",
+      "description": "文化工业是阿多诺对大众文化的核心批判。传统观点将大众文化视为'人民的娱乐'或'民主的表达'。阿多诺反驳：大众文化不是'文化'，而是'工业'——它是按照标准化、机械化的方式生产的商品，目的是创造利润而非艺术价值。文化工业的核心机制是'伪个性化'（pseudo-individualization）——表面上看每个产品都不同（不同的流行歌曲、不同的电影），但本质上都是同一模式（同样的和弦、同样的叙事结构）的变体。文化工业不仅'娱乐'大众，而且'钝化'大众的批判意识——让人们在娱乐中忘记社会的不公和自身的异化。",
+      "keyWorks": ["《启蒙辩证法》（与霍克海默合著）"],
+      "primaryQuotes": [
+        {"chinese": "文化工业将人类变成了机器。", "english": "The culture industry turns human beings into machines.", "source": "Dialectic of Enlightenment"},
+        {"chinese": "娱乐即解放的否定。", "english": "Amusement is the negation of liberation.", "source": "Dialectic of Enlightenment"}
+      ]
+    },
+    {
+      "id": "negative-dialectics",
+      "title": "否定的辩证法",
+      "title_en": "Negative Dialectics",
+      "category": "认识论 / 形而上学",
+      "description": "否定的辩证法是阿多诺对黑格尔辩证法的修正。黑格尔认为：正题→反题→合题，最终达到'和解'（reconciliation）。阿多诺反驳：和解是虚假的——它将差异'同一化'，消除了'他者'的否定性。否定的辩证法坚持'非同一性'（non-identity）——主体与客体、概念与对象、同一与差异之间永远存在着'裂缝'，不能被'综合'。辩证法的任务不是'综合'矛盾，而是'揭示'矛盾。'辩证法是对非同一性的持续意识'。这一理论既是认识论的（概念永远不能完全把握对象），也是伦理的（对他者的尊重意味着不将他者还原为同一）。",
+      "keyWorks": ["《否定的辩证法》"],
+      "primaryQuotes": [
+        {"chinese": "辩证法是对非同一性的持续意识。", "english": "Dialectics is the consistent consciousness of non-identity.", "source": "Negative Dialectics"},
+        {"chinese": "整体是虚假的。", "english": "The whole is the false.", "source": "Minima Moralia"}
+      ]
+    },
+    {
+      "id": "auschwitz",
+      "title": "奥斯维辛之后",
+      "title_en": "After Auschwitz",
+      "category": "伦理学 / 美学",
+      "description": "'奥斯维辛之后，写诗是野蛮的'是阿多诺最著名的（也是被最多误解的）命题。这不是说文学应该被禁止，而是说：奥斯维辛之后，传统的'美'和'崇高'概念已经失去了合法性——用传统的审美范畴来表现大屠杀，就是对受害者的'第二次暴力'。阿多诺主张：艺术必须'否定'自身——通过形式上的破碎、不和谐和荒诞来拒绝提供'安慰'和'和解'。真正的艺术不是'美化'现实，而是'揭示'现实的残酷。",
+      "keyWorks": ["《否定的辩证法》", "《最低限度的道德》"],
+      "primaryQuotes": [
+        {"chinese": "奥斯维辛之后，写诗是野蛮的。", "english": "To write poetry after Auschwitz is barbaric.", "source": "Cultural Criticism and Society (1951)"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《启蒙辩证法》", "title_de": "Dialektik der Aufklärung", "year": "1944", "summary": "与霍克海默合著，系统批判启蒙理性的自我毁灭。"},
+    {"title": "《否定的辩证法》", "title_de": "Negative Dialektik", "year": "1966", "summary": "系统阐述否定辩证法，批判同一性思维。"},
+    {"title": "《最低限度的道德》", "title_de": "Minima Moralia", "year": "1951", "summary": "格言集，批判战后德国社会的道德堕落。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "奥斯维辛之后，写诗是野蛮的。", "english": "To write poetry after Auschwitz is barbaric.", "source": "Cultural Criticism and Society"},
+    {"chinese": "整体是虚假的。", "english": "The whole is the false.", "source": "Minima Moralia"},
+    {"chinese": "辩证法是对非同一性的持续意识。", "english": "Dialectics is the consistent consciousness of non-identity.", "source": "Negative Dialectics"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较阿多诺'文化工业'与福柯'规训'对现代社会控制的分析。",
+      "output": "阿多诺的文化工业与福柯的规训都是20世纪对现代社会控制机制的批判，但侧重点不同。\n\n阿多诺的文化工业：\n1）控制机制是'文化的'——通过大众文化（电影、音乐、广告）来塑造意识和欲望。\n2）控制方式是'意识形态的'——文化工业让人们相信'现状是合理的'。\n3）被控制者是'消费者'——人们在娱乐中自愿接受控制。\n4）批判方式是'美学的'——通过否定性艺术来抵抗文化工业。\n\n福柯的规训：\n1）控制机制是'身体的'——通过空间安排、时间表、考试来训练身体。\n2）控制方式是'权力的'——权力不是意识形态，而是微观实践。\n3）被控制者是'主体'——人们在规训中成为'有用且驯服'的主体。\n4）批判方式是'谱系学的'——通过历史分析来揭示权力机制。\n\n根本差异：\n1）阿多诺是'宏观的'（文化工业作为整体系统），福柯是'微观的'（规训渗透到每一个角落）。\n2）阿多诺关注'意识'，福柯关注'身体'。\n3）阿多诺是悲观的（文化工业无所不在），福柯是相对乐观的（权力产生抵抗）。\n\n互补性：两者共同构成了20世纪对'现代性控制'的最全面批判——阿多诺揭示了文化层面的控制，福柯揭示了身体层面的控制。",
+      "source": "Adorno, Dialectic of Enlightenment; Foucault, Discipline and Punish; Jay, The Dialectical Imagination (1973)",
+      "tier": 1
+    }
+  ]
+}

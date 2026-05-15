@@ -1,0 +1,75 @@
+{
+  "philosopher": {
+    "name": "蒯因",
+    "name_en": "Willard Van Orman Quine",
+    "lived": "1908年6月25日—2000年12月25日",
+    "birthplace": "美国俄亥俄州阿克伦",
+    "deathplace": "美国马萨诸塞州波士顿",
+    "era": "20世纪",
+    "school": "分析哲学 / 逻辑实用主义",
+    "occupation": "哲学家、逻辑学家",
+    "summary": "蒯因是20世纪后半叶最具影响力的分析哲学家，逻辑实用主义代表人物。核心思想：本体论承诺、整体论、自然化认识论、对分析-综合区分的批判。",
+    "summary_en": "Quine was one of the most influential analytic philosophers of the second half of the 20th century. Central doctrines include ontological commitment, holism, naturalized epistemology, and the critique of the analytic-synthetic distinction."
+  },
+  "lifeEvents": [
+    {"year": "1908", "event": "出生于俄亥俄州", "details": "父亲是实业家，母亲是教师。"},
+    {"year": "1930", "event": "获得哈佛大学博士学位", "details": "博士论文《序列的逻辑》。"},
+    {"year": "1932—1933", "event": "赴欧洲游学", "details": "在维也纳、布拉格、华沙接触逻辑实证主义。"},
+    {"year": "1934", "event": "将卡尔纳普引入哈佛", "details": "邀请卡尔纳普到哈佛讲学，对美国分析哲学产生深远影响。"},
+    {"year": "1951", "event": "发表《经验主义的两个教条》", "details": "批判分析-综合区分和还原论，引发分析哲学重大转向。"},
+    {"year": "1960", "event": "出版《语词和对象》", "details": "系统阐述本体论承诺、翻译不确定性和整体论。"},
+    {"year": "1969", "event": "出版《本体论的相对性及其他论文》", "details": "阐述自然化认识论和本体论相对性。"},
+    {"year": "2000", "event": "逝世", "details": "享年92岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "ontological-commitment",
+      "title": "本体论承诺",
+      "title_en": "Ontological Commitment",
+      "category": "形而上学 / 语言哲学",
+      "description": "本体论承诺是蒯因提出的著名标准：'存在就是成为约束变量的值'（To be is to be the value of a bound variable）。问题是：当我们说'存在一些独角兽'时，我们承诺了独角兽的存在吗？蒯因的答案是：看我们的理论中是否将'独角兽'作为约束变量的值。如果一个理论的量词域包含独角兽，那么这个理论就'承诺'了独角兽的存在。这一标准将本体论问题转化为逻辑问题——通过分析理论的逻辑结构来确定它承诺了什么存在。",
+      "keyWorks": ["《论有什么》", "《语词和对象》"],
+      "primaryQuotes": [
+        {"chinese": "存在就是成为约束变量的值。", "english": "To be is to be the value of a bound variable.", "source": "On What There Is (1948)"}
+      ]
+    },
+    {
+      "id": "two-dogmas",
+      "title": "对分析-综合区分的批判",
+      "title_en": "Critique of the Analytic-Synthetic Distinction",
+      "category": "认识论 / 语言哲学",
+      "description": "《经验主义的两个教条》是蒯因最著名的论文，批判了逻辑实证主义的两大支柱：1）分析-综合区分——分析命题（如'所有单身汉都是未婚的'）与综合命题（如'所有单身汉都是快乐的'）之间的区分；2）还原论——每个有意义的陈述都可以还原为关于直接经验的陈述。蒯因论证：分析性不能独立于'同义性'来定义，但同义性又需要预设分析性——这是循环定义。因此，分析-综合区分是不成立的。这摧毁了逻辑实证主义的基础。",
+      "keyWorks": ["《经验主义的两个教条》"],
+      "primaryQuotes": [
+        {"chinese": "相信分析陈述和综合陈述之间的区分，是经验主义的一个非经验的教条，一个形而上学的信条。", "english": "The belief in a distinction between analytic and synthetic statements is an unempirical dogma of empiricists, a metaphysical article of faith.", "source": "Two Dogmas of Empiricism (1951)"}
+      ]
+    },
+    {
+      "id": "holism",
+      "title": "整体论",
+      "title_en": "Holism",
+      "category": "认识论 / 科学哲学",
+      "description": "整体论是蒯因对科学知识的独特理解。传统观点认为：科学理论由独立的'陈述'组成，每个陈述可以单独被经验证实或证伪。蒯因反驳：科学理论是一个'整体'——单个陈述不能单独被检验，只有整个理论体系才能面对经验。当经验与理论冲突时，我们可以选择修正任何部分（包括逻辑和数学），只要保持整体的融贯性。'任何陈述都可以被坚持为真，只要我们愿意对其他部分做出足够剧烈的调整'。这一理论深刻影响了后来的科学哲学和知识论。",
+      "keyWorks": ["《经验主义的两个教条》"],
+      "primaryQuotes": [
+        {"chinese": "我们关于外部世界的陈述不是单独地面对经验的法庭，而是作为一个整体。", "english": "Our statements about the external world face the tribunal of sense experience not individually but only as a corporate body.", "source": "Two Dogmas of Empiricism"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《经验主义的两个教条》", "title_en": "Two Dogmas of Empiricism", "year": "1951", "summary": "批判分析-综合区分和还原论，引发分析哲学重大转向。"},
+    {"title": "《语词和对象》", "title_en": "Word and Object", "year": "1960", "summary": "系统阐述本体论承诺、翻译不确定性和整体论。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "存在就是成为约束变量的值。", "english": "To be is to be the value of a bound variable.", "source": "On What There Is"},
+    {"chinese": "相信分析陈述和综合陈述之间的区分，是经验主义的一个非经验的教条。", "english": "The belief in a distinction between analytic and synthetic statements is an unempirical dogma.", "source": "Two Dogmas of Empiricism"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较蒯因'整体论'与库恩'范式理论'对科学知识结构的看法。",
+      "output": "蒯因的整体论与库恩的范式理论都是20世纪科学哲学对'科学知识如何构成'的重要理论，但侧重点不同。\n\n蒯因的整体论：\n1）科学知识是一个'融贯的整体'——单个陈述不能单独被检验。\n2）当经验与理论冲突时，我们可以选择修正任何部分（包括逻辑和数学）。\n3）'任何陈述都可以被坚持为真，只要我们愿意对其他部分做出足够剧烈的调整'。\n4）强调的是'逻辑结构'——理论如何面对经验。\n\n库恩的范式理论：\n1）科学发展不是连续的积累，而是'范式转换'（paradigm shift）。\n2）'常规科学'时期：科学家在范式内解决难题。\n3）'危机'时期：范式无法解释异常现象。\n4）'革命'时期：新范式取代旧范式。\n5）强调的是'历史社会学'——科学如何实际发展。\n\n根本差异：\n1）蒯因是'逻辑的'，库恩是'历史的'。\n2）蒯因的整体论允许'渐进修正'，库恩的范式转换是'断裂的'。\n3）蒯因的理论没有'不可通约性'问题，库恩的理论面临'不同范式之间无法比较'的问题。\n\n互补性：蒯因提供了'逻辑框架'，库恩提供了'历史框架'。两者共同构成了20世纪对科学知识结构的全面理解。",
+      "source": "Quine, Two Dogmas of Empiricism; Kuhn, The Structure of Scientific Revolutions; Hylton, Quine (2007)",
+      "tier": 1
+    }
+  ]
+}

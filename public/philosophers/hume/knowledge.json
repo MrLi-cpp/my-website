@@ -1,0 +1,75 @@
+{
+  "philosopher": {
+    "name": "休谟",
+    "name_en": "David Hume",
+    "lived": "1711年4月26日—1776年8月25日",
+    "birthplace": "苏格兰爱丁堡",
+    "deathplace": "苏格兰爱丁堡",
+    "era": "近代",
+    "school": "经验主义 / 怀疑论",
+    "occupation": "哲学家、历史学家、散文家",
+    "summary": "休谟是经验主义传统的集大成者，以其深刻的怀疑论闻名。他将经验主义推向极致，质疑因果必然性、自我同一性和归纳推理的合理性。其思想深刻影响了康德（'休谟将我从独断论的迷梦中唤醒'）和整个分析哲学传统。",
+    "summary_en": "Hume is the culminating figure of British empiricism and one of the most influential skeptics in Western philosophy. He questioned causal necessity, personal identity, and the rationality of inductive reasoning. His thought profoundly influenced Kant and the entire analytic tradition."
+  },
+  "lifeEvents": [
+    {"year": "1711", "event": "出生于爱丁堡", "details": "父亲为律师，家境富裕但早逝。"},
+    {"year": "1734—1737", "event": "在法国拉弗莱什隐居", "details": "撰写了《人性论》的大部分内容，时年23岁。"},
+    {"year": "1739—1740", "event": "出版《人性论》", "details": "初版无人问津，休谟自嘲'它从印刷机诞生起就已经死了'。"},
+    {"year": "1748", "event": "出版《人类理解研究》", "details": "《人性论》的通俗改写版，更受欢迎。"},
+    {"year": "1752", "event": "担任苏格兰律师协会图书馆管理员", "details": "期间撰写《英国史》，获得巨大声誉。"},
+    {"year": "1763—1766", "event": "任英国驻法大使馆秘书", "details": "在法国沙龙中广受欢迎，被称为'好大卫'。"},
+    {"year": "1776", "event": "逝世于爱丁堡", "details": "平静去世，享年65岁。临终前阅读卢梭的《爱弥儿》。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "causation",
+      "title": "因果怀疑论",
+      "title_en": "Skepticism about Causation",
+      "category": "认识论 / 形而上学",
+      "description": "休谟对因果关系的分析是其最著名的贡献。他追问：因果关系的必然性来自何处？当我们观察两个事件的'恒常联结'（constant conjunction）——如A球撞击B球后B球运动——我们观察到的是1）时间上的先后和2）空间上的接近，但我们从未观察到'必然性'。'必然性'不是经验中的印象，而是心灵的习惯性联想。当我们反复观察到A之后总有B，心灵就形成了一种'期待'——这就是因果信念的来源。因此，因果关系的必然性不是客观实在，而是'心灵的投射'。这一论证摧毁了传统形而上学对因果必然性的信心。",
+      "keyWorks": ["《人性论》第一卷", "《人类理解研究》第七、八节"],
+      "primaryQuotes": [
+        {"chinese": "我们永远不可能观察到因果之间的必然联系。", "english": "We never can, by our utmost scrutiny, discover anything but one event following another.", "source": "An Enquiry Concerning Human Understanding, §7"},
+        {"chinese": "习惯是人生的伟大指南。", "english": "Custom is the great guide of human life.", "source": "An Enquiry Concerning Human Understanding, §5"}
+      ]
+    },
+    {
+      "id": "personal-identity",
+      "title": "自我同一性",
+      "title_en": "Personal Identity",
+      "category": "心灵哲学 / 形而上学",
+      "description": "休谟对'自我'（self）的怀疑是其另一个重要贡献。传统哲学（如笛卡尔）认为自我是一个'简单的、不可分的实体'。休谟反驳：当我们内省时，我们发现的只有'知觉的流动'（a bundle of perceptions）——印象、观念、情感、思想。我们找不到一个'不变的'、'简单的'、'持续的'自我。自我不是'实体'，而是'知觉的束'（bundle theory）。今天的我和昨天的我是同一的，不是因为有一个不变的'我'在两者背后，而是因为知觉之间存在着'相似性'和'因果联系'。",
+      "keyWorks": ["《人性论》第一卷第四节"],
+      "primaryQuotes": [
+        {"chinese": "当我最亲切地进入我所谓的自我中时，我总是撞上某种特定的知觉——热或冷、光或暗、爱或恨、痛苦或快乐。", "english": "When I enter most intimately into what I call myself, I always stumble on some particular perception or other, of heat or cold, light or shade, love or hatred, pain or pleasure.", "source": "A Treatise of Human Nature, I.4.6"}
+      ]
+    },
+    {
+      "id": "is-ought",
+      "title": "是-应当问题",
+      "title_en": "Is-Ought Problem",
+      "category": "伦理学 / 元伦理学",
+      "description": "休谟在《人性论》中提出了著名的'是-应当'问题（Hume's Guillotine）：从'是'（事实陈述）不能逻辑地推导出'应当'（价值判断）。例如，从'人天生自私'（是）不能推出'人应当自私'（应当）。这一论证切断了事实与价值的逻辑联系，成为元伦理学的基本命题。道德判断不是基于理性，而是基于'情感'（sentiment）——我们对行为的赞许或谴责源于'同情'（sympathy）——即想象他人感受的能力。",
+      "keyWorks": ["《人性论》第三卷第一节"],
+      "primaryQuotes": [
+        {"chinese": "在我所遇到的每一个道德体系中，作者在某个时刻突然从'是'和'不是'转向'应当'和'不应当'。", "english": "In every system of morality which I have hitherto met with, I have always remark'd, that the author proceeds for some time in the ordinary way of reasoning... when of a sudden I am surpriz'd to find, that instead of the usual copulations of propositions, is, and is not, I meet with no proposition that is not connected with an ought, or an ought not.", "source": "A Treatise of Human Nature, III.1.1"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《人性论》", "title_en": "A Treatise of Human Nature", "year": "1739—1740", "summary": "休谟最重要的哲学著作，系统阐述经验主义认识论和怀疑论。"},
+    {"title": "《人类理解研究》", "title_en": "An Enquiry Concerning Human Understanding", "year": "1748", "summary": "《人性论》的通俗改写版，更受欢迎。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "习惯是人生的伟大指南。", "english": "Custom is the great guide of human life.", "source": "An Enquiry Concerning Human Understanding"},
+    {"chinese": "理性是，并且只应当是，情感的奴隶。", "english": "Reason is, and ought only to be the slave of the passions.", "source": "A Treatise of Human Nature"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释休谟'因果怀疑论'及其对科学哲学的影响。",
+      "output": "休谟的因果怀疑论是西方哲学史上最具影响力的论证之一。\n\n论证结构：\n1）当我们观察到A之后总有B时，我们观察到的是时间先后和空间接近，但从未观察到'必然性'。\n2）'必然性'不是经验中的印象，而是心灵的习惯性联想。\n3）因此，因果关系的必然性不是客观实在，而是心灵的投射。\n\n对科学哲学的影响：\n1）归纳问题：科学的基础是归纳推理（从有限观察推出普遍定律），但休谟证明归纳没有逻辑基础——我们只是基于习惯相信太阳明天会升起。\n2）波普尔的证伪主义：波普尔受休谟启发，提出科学理论不能被证实，只能被证伪。\n3）库恩的范式理论：科学进步不是通过归纳积累，而是通过范式转换。\n\n批评与回应：\n1）康德：休谟忽视了'先天范畴'——因果性不是经验归纳，而是心灵的先天结构。\n2）休谟的'自然主义'回应：虽然归纳没有逻辑基础，但它是人类自然的认知机制——我们不是'理性地'相信归纳，而是'自然地'相信归纳。",
+      "source": "Hume, Treatise; Hume, Enquiry; Popper, The Logic of Scientific Discovery; Kuhn, The Structure of Scientific Revolutions",
+      "tier": 1
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "philosopher": {
+    "name": "詹姆斯",
+    "name_en": "William James",
+    "lived": "1842年1月11日—1910年8月26日",
+    "birthplace": "美国纽约",
+    "deathplace": "美国新罕布什尔州乔科拉",
+    "era": "19世纪末—20世纪初",
+    "school": "实用主义 / 机能心理学",
+    "occupation": "哲学家、心理学家",
+    "summary": "詹姆斯是美国心理学和哲学的奠基人之一，实用主义核心代表。核心思想：实用主义真理观、意识流、宗教经验。既是最伟大的美国心理学家，也是最重要的美国哲学家。",
+    "summary_en": "James was a founding figure of American psychology and philosophy. Central doctrines include pragmatic truth, the stream of consciousness, and religious experience. He was both the greatest American psychologist and one of the most important American philosophers."
+  },
+  "lifeEvents": [
+    {"year": "1842", "event": "出生于纽约", "details": "父亲是神学家老亨利·詹姆斯，弟弟是小说家亨利·詹姆斯。"},
+    {"year": "1864", "event": "进入哈佛大学医学院", "details": "期间赴巴西参加路易斯·阿加西斯的探险。"},
+    {"year": "1867—1868", "event": "赴德国学习", "details": "师从赫尔姆霍茨，接触心理学和生理学。"},
+    {"year": "1872", "event": "任哈佛大学生理学讲师", "details": "后转向心理学和哲学。"},
+    {"year": "1890", "event": "出版《心理学原理》", "details": "被誉为'心理学圣经'，提出'意识流'概念。"},
+    {"year": "1898", "event": "发表《哲学家们所理解的实用主义是什么》", "details": "首次系统阐述实用主义。"},
+    {"year": "1902", "event": "出版《宗教经验之种种》", "details": "研究神秘主义和宗教体验，提出'健康的灵魂'与'病态的灵魂'之分。"},
+    {"year": "1907", "event": "出版《实用主义》", "details": "系统阐述实用主义哲学。"},
+    {"year": "1910", "event": "逝世", "details": "享年68岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "pragmatism",
+      "title": "实用主义",
+      "title_en": "Pragmatism",
+      "category": "认识论 / 真理理论",
+      "description": "实用主义是詹姆斯最著名的哲学贡献。核心命题：'真理就是有用'（truth is what works）——一个观念的真理性不在于它'符合'某个抽象实在，而在于它在实践中'有效'。詹姆斯区分了' tough-minded '（硬心肠 / 唯物论、决定论）和' tender-minded '（软心肠 / 唯心论、自由意志），主张实用主义是两者的调和。实用主义不是'功利主义'——不是说'有用的就是道德的'，而是说'真理的标准是实践效果'。例如，'上帝存在'这个命题的真理性不在于它是否能被证明，而在于'相信上帝存在'是否对人的生活有积极效果。",
+      "keyWorks": ["《实用主义》"],
+      "primaryQuotes": [
+        {"chinese": "真理是观念的一种信贷制度。", "english": "Truth is a credit system.", "source": "Pragmatism"},
+        {"chinese": "一个观念，只要它对我们有用，它就是真的。", "english": "An idea is 'true' so long as to believe it is profitable to our lives.", "source": "Pragmatism"}
+      ]
+    },
+    {
+      "id": "stream-of-consciousness",
+      "title": "意识流",
+      "title_en": "Stream of Consciousness",
+      "category": "心理学 / 心灵哲学",
+      "description": "意识流是詹姆斯在《心理学原理》中提出的概念，对文学和哲学产生了深远影响。传统心理学将意识描述为'观念的连锁'（a chain of ideas），詹姆斯反驳：意识不是'链条'，而是'河流'——它是连续的、流动的、不可分割的。意识有五个特征：1）每个心理状态都是'个人的'；2）意识是'不断变化的'；3）意识是'连续的'；4）意识'总是选择某些对象而忽略其他'；5）意识是'有目的的'。这一概念直接影响了现代主义文学（乔伊斯、伍尔夫、普鲁斯特）。",
+      "keyWorks": ["《心理学原理》"],
+      "primaryQuotes": [
+        {"chinese": "意识不是由观念构成的，而是一条河流。", "english": "Consciousness does not appear to itself chopped up in bits... it is nothing jointed; it flows.", "source": "The Principles of Psychology, Ch. IX"}
+      ]
+    },
+    {
+      "id": "will-to-believe",
+      "title": "信仰意志",
+      "title_en": "The Will to Believe",
+      "category": "宗教哲学 / 认识论",
+      "description": "信仰意志是詹姆斯对宗教哲学的独特贡献。问题是：当证据不足时，我们是否有权选择相信？詹姆斯论证：在某些情况下，'选择相信'是理性的——当1）这是一个'不能推迟的'选择；2）这是一个'有重大意义的'选择；3）证据'客观上'不足以决定时。例如，相信'我有能力成功'——即使证据不足，这种信念本身可能促成成功。因此，'信仰意志'不是盲目的信仰，而是在证据不足时的'理性冒险'。",
+      "keyWorks": ["《信仰意志》"],
+      "primaryQuotes": [
+        {"chinese": "在某些情况下，不做出选择本身就是一种选择。", "english": "In some cases, not to decide is to decide.", "source": "The Will to Believe"},
+        {"chinese": "我们的信仰创造事实。", "english": "Our belief creates the fact.", "source": "The Will to Believe"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《心理学原理》", "title_en": "The Principles of Psychology", "year": "1890", "summary": "心理学奠基之作，提出意识流概念。"},
+    {"title": "《实用主义》", "title_en": "Pragmatism", "year": "1907", "summary": "系统阐述实用主义哲学。"},
+    {"title": "《宗教经验之种种》", "title_en": "The Varieties of Religious Experience", "year": "1902", "summary": "研究神秘主义和宗教体验。"},
+    {"title": "《信仰意志》", "title_en": "The Will to Believe", "year": "1897", "summary": "论述在证据不足时选择相信的合理性。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "意识不是由观念构成的，而是一条河流。", "english": "Consciousness flows.", "source": "The Principles of Psychology"},
+    {"chinese": "一个观念，只要它对我们有用，它就是真的。", "english": "An idea is true so long as to believe it is profitable.", "source": "Pragmatism"},
+    {"chinese": "我们的信仰创造事实。", "english": "Our belief creates the fact.", "source": "The Will to Believe"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较詹姆斯'实用主义'与皮尔士'实用主义'对'真理'概念的不同理解。",
+      "output": "詹姆斯的实用主义与皮尔士的实用主义虽然同名，但对'真理'的理解有重要差异。\n\n皮尔士的实用主义：\n1）真理是'最终会被所有研究者同意的结论'——是'理想共识'的产物。\n2）真理是'客观的'——它不依赖于个人的'有用性'，而是依赖于'探究共同体'的长期收敛。\n3）皮尔士强调'科学方法'——真理是通过严格的科学探究获得的。\n\n詹姆斯的实用主义：\n1）真理是'有用的'——一个观念的真理性在于它在实践中是否有效。\n2）真理是'个人的'——对某个人有用的观念，对他而言就是真的。\n3）詹姆斯强调'生活经验'——真理必须对人的生活有实际帮助。\n\n根本差异：\n1）皮尔士是'科学的'，詹姆斯是'人文的'。\n2）皮尔士的真理是'公共的'（探究共同体的共识），詹姆斯的真理是'个人的'（对个人的有用性）。\n3）皮尔士强调'长期'（in the long run），詹姆斯强调'当下'（here and now）。\n\n影响：皮尔士的实用主义影响了科学哲学和逻辑学；詹姆斯的实用主义影响了心理学、教育学和宗教哲学。杜威的实用主义试图综合两者——既强调科学探究，又强调实践效果。",
+      "source": "James, Pragmatism; The Will to Believe; Peirce, How to Make Our Ideas Clear; Dewey, Reconstruction in Philosophy",
+      "tier": 1
+    }
+  ]
+}

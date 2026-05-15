@@ -1,0 +1,72 @@
+{
+  "philosopher": {
+    "name": "阿奎那",
+    "name_en": "Thomas Aquinas",
+    "lived": "1225年—1274年3月7日",
+    "birthplace": "意大利罗卡塞卡城堡",
+    "deathplace": "意大利福萨诺瓦修道院",
+    "era": "中世纪",
+    "school": "经院哲学 / 托马斯主义",
+    "occupation": "神学家、哲学家、道明会修士",
+    "summary": "阿奎那是中世纪最伟大、最具影响力的神学家和哲学家。成功将亚里士多德哲学与基督教神学融合，创立了'托马斯主义'。核心思想包括：五种证明上帝存在、自然法、信仰与理性的和谐。天主教会的'天使博士'。",
+    "summary_en": "Aquinas is the greatest and most influential theologian and philosopher of the Middle Ages. He successfully integrated Aristotelian philosophy with Christian theology, creating Thomism. Central doctrines include the Five Ways to prove God's existence, natural law, and the harmony of faith and reason."
+  },
+  "lifeEvents": [
+    {"year": "1225", "event": "出生于意大利贵族家庭", "details": "父亲是阿基诺伯爵兰道夫。"},
+    {"year": "1244", "event": "加入道明会", "details": "不顾家族反对，加入乞丐修会道明会，前往巴黎和科隆学习。"},
+    {"year": "1245—1252", "event": "师从大阿尔伯特", "details": "在科隆师从大阿尔伯特，学习亚里士多德哲学。"},
+    {"year": "1256", "event": "获得巴黎大学教职", "details": "开始教授神学。"},
+    {"year": "1265—1274", "event": "撰写《神学大全》", "details": "一生最重要的著作，系统阐述基督教神学体系，但未完成。1273年宣称自己看到了异象，此后停止写作。"},
+    {"year": "1274", "event": "逝世", "details": "前往里昂参加教会会议途中病逝，享年49岁。1323年被封圣。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "five-ways",
+      "title": "五种证明上帝存在",
+      "title_en": "Five Ways / Quinque Viae",
+      "category": "神学 / 自然神学",
+      "description": "五种证明是阿奎那在《神学大全》中提出的最著名的论证，旨在从自然界出发证明上帝存在。第一路：不动的推动者——万物都在运动，运动需要推动者，最终需要一个'不动的推动者'；第二路：第一因——万物都有原因，原因链条必须终止于一个'无因之因'；第三路：必然存在——万物都可能不存在，但如果一切都可能不存在，那么曾经就没有任何东西存在，因此必须有一个'必然存在'；第四路：等级——事物有完美等级，最高完美是上帝；第五路：目的论——万物都有目的，目的需要设计者。",
+      "keyWorks": ["《神学大全》第一部分，问题2"],
+      "primaryQuotes": [
+        {"chinese": "万物之中，有些是被推动的，有些是能推动的。但被推动的，必须被另一物推动。", "english": "In the world, some things are moved, and some things move. But whatever is moved must be moved by another.", "source": "Summa Theologica, Prima Pars, Q.2, A.3"}
+      ]
+    },
+    {
+      "id": "natural-law",
+      "title": "自然法",
+      "title_en": "Natural Law",
+      "category": "伦理学 / 政治哲学",
+      "description": "自然法是阿奎那伦理学的核心。他将法分为四种：1）永恒法（上帝的智慧）；2）自然法（理性生物对永恒法的参与）；3）人定法（人类制定的具体法律）；4）神圣法（圣经启示）。自然法是理性生物通过自然理性认识到的道德法则——如'不要伤害他人'、'保存自己的生命'。自然法是普遍的、不变的，而人定法可以根据具体情况变化。这一理论深刻影响了西方自然权利理论和现代国际法。",
+      "keyWorks": ["《神学大全》第二部分"],
+      "primaryQuotes": [
+        {"chinese": "自然法是理性生物对永恒法的参与。", "english": "Natural law is the participation of the rational creature in the eternal law.", "source": "Summa Theologica, I-II, Q.91, A.2"}
+      ]
+    },
+    {
+      "id": "faith-reason",
+      "title": "信仰与理性",
+      "title_en": "Faith and Reason",
+      "category": "神学 / 认识论",
+      "description": "阿奎那的核心贡献在于调和信仰与理性。他认为：理性和信仰不是对立的，而是互补的——理性可以认识上帝的存在和属性（自然神学），但信仰的奥秘（三位一体、道成肉身、复活）超越理性，需要启示。'恩典不会摧毁自然，而是完善自然'（gratia non tollit naturam, sed perficit）。这一立场与奥古斯丁和安瑟伦的'信仰寻求理解'不同——阿奎那认为理性本身就具有认识上帝的能力。",
+      "keyWorks": ["《神学大全》", "《反异教大全》"],
+      "primaryQuotes": [
+        {"chinese": "恩典不会摧毁自然，而是完善自然。", "english": "Grace does not destroy nature, but perfects it.", "source": "Summa Theologica, I, Q.1, A.8"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《神学大全》", "title_la": "Summa Theologica", "year": "1265—1274", "summary": "阿奎那最重要的著作，系统阐述基督教神学体系，但未完成。"},
+    {"title": "《反异教大全》", "title_la": "Summa Contra Gentiles", "year": "1259—1265", "summary": "为向非基督徒证明基督教真理而写的著作。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "恩典不会摧毁自然，而是完善自然。", "english": "Grace does not destroy nature, but perfects it.", "source": "Summa Theologica"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较阿奎那'五种证明'与安瑟伦'本体论证明'的异同。",
+      "output": "阿奎那的五种证明与安瑟伦的本体论证明都是中世纪证明上帝存在的论证，但方法论完全不同。\n\n安瑟伦的本体论证明（Proslogion 2-3）：\n1）从'上帝'的概念出发——上帝是'无法设想比之更伟大的东西'。\n2）如果这个东西只存在于心中而不存在于现实中，那么就可以设想一个'既存在于心中又存在于现实中'的东西更伟大。\n3）因此，上帝必须既存在于心中又存在于现实中。\n\n阿奎那的五种证明：\n1）从'经验世界'出发——观察运动、因果关系、存在等级等。\n2）不需要预设'上帝'的概念，而是从自然现象推导出一个'第一推动者/第一因/必然存在'。\n3）五种证明是'后天的'（a posteriori / 从经验出发），而非'先天的'（a priori / 从概念出发）。\n\n根本差异：\n1）安瑟伦是'概念分析'，阿奎那是'经验论证'。\n2）安瑟伦的证明如果成立，证明的是'最完美的存在'，阿奎那的证明证明的是'第一推动者/第一因'。\n3）康德后来批评本体论证明混淆了'概念中的存在'和'现实中的存在'，但承认阿奎那的宇宙论证明更难反驳。\n\n影响：阿奎那的五种证明成为天主教自然神学的基础；安瑟伦的本体论证明成为理性主义神学的典范。",
+      "source": "Aquinas, Summa Theologica; Anselm, Proslogion; Kant, Critique of Pure Reason",
+      "tier": 1
+    }
+  ]
+}

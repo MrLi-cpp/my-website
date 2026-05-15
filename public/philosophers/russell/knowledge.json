@@ -1,0 +1,79 @@
+{
+  "philosopher": {
+    "name": "罗素",
+    "name_en": "Bertrand Russell",
+    "lived": "1872年5月18日—1970年2月2日",
+    "birthplace": "英国威尔士特里莱赫",
+    "deathplace": "英国威尔士彭林德德赖思",
+    "era": "20世纪",
+    "school": "分析哲学 / 逻辑原子主义",
+    "occupation": "哲学家、逻辑学家、数学家、社会活动家",
+    "summary": "罗素是20世纪分析哲学的奠基人之一，与弗雷格、维特根斯坦并称。核心思想：逻辑原子主义、摹状词理论、类型论、和平主义政治活动。获1950年诺贝尔文学奖。",
+    "summary_en": "Russell was a founding figure of 20th-century analytic philosophy. Central doctrines include logical atomism, the theory of descriptions, type theory, and pacifist political activism. He received the 1950 Nobel Prize in Literature."
+  },
+  "lifeEvents": [
+    {"year": "1872", "event": "出生于威尔士贵族家庭", "details": "祖父为英国首相约翰·罗素勋爵。4岁丧母，6岁丧父，由祖母抚养长大。"},
+    {"year": "1890", "event": "进入剑桥大学三一学院", "details": "学习数学和哲学，与摩尔、怀特海为同学。"},
+    {"year": "1900", "event": "参加巴黎国际哲学大会", "details": "接触皮亚诺的逻辑符号系统，开始发展逻辑主义。"},
+    {"year": "1903", "event": "出版《数学原则》", "details": "试图将所有数学还原为逻辑。"},
+    {"year": "1910—1913", "event": "与怀特海合著《数学原理》", "details": "三卷巨著，试图从逻辑公理推导出全部数学。"},
+    {"year": "1905", "event": "发表《论指称》", "details": "提出摹状词理论，解决'当今法国国王是秃头'等指称难题。"},
+    {"year": "1918", "event": "因反战被监禁", "details": "因撰写反战文章被监禁六个月，在狱中撰写《数学哲学导论》。"},
+    {"year": "1920", "event": "访问苏联和中国", "details": "会见列宁，在北京大学讲学一年。"},
+    {"year": "1944", "event": "重返剑桥大学", "details": "因二战期间支持对纳粹作战而被解除禁令。"},
+    {"year": "1950", "event": "获诺贝尔文学奖", "details": "表彰其'多样且重要的作品，持续追求人道主义理想和思想自由'。"},
+    {"year": "1961", "event": "因反核示威被监禁", "details": "89岁高龄仍参与反核示威。"},
+    {"year": "1970", "event": "逝世", "details": "享年97岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "theory-of-descriptions",
+      "title": "摹状词理论",
+      "title_en": "Theory of Descriptions",
+      "category": "语言哲学 / 逻辑学",
+      "description": "摹状词理论是罗素最著名的贡献，发表于1905年的《论指称》。问题：如果'当今法国国王是秃头'这句话有意义，那么'当今法国国王'必须指称某个对象。但法国是共和制，没有国王——那么这句话是'假'的还是'无意义'的？罗素的解决方案：将摹状词（definite descriptions）分析为'存在性量化'——'当今法国国王是秃头'被分析为：'存在且仅存在一个x，x是当今法国国王，且x是秃头'。由于不存在'当今法国国王'，所以这个存在性陈述为假，但整个句子仍然有意义（因为它做出了一个存在性断言）。这一理论解决了'空指称'问题，并消除了'非存在对象'的形而上学负担。",
+      "keyWorks": ["《论指称》"],
+      "primaryQuotes": [
+        {"chinese": "每一个含有摹状词的命题都可以被分析为一个不含摹状词的命题。", "english": "Every proposition containing a description can be analysed into a proposition not containing a description.", "source": "On Denoting (1905)"}
+      ]
+    },
+    {
+      "id": "logical-atomism",
+      "title": "逻辑原子主义",
+      "title_en": "Logical Atomism",
+      "category": "形而上学 / 语言哲学",
+      "description": "逻辑原子主义是罗素和维特根斯坦早期共同发展的哲学立场。主张：世界由'原子事实'（atomic facts）构成，语言由'原子命题'（atomic propositions）构成，两者之间存在着'同构'关系。复杂命题可以通过逻辑运算从原子命题构建。罗素的'知识论'也基于这一框架：直接知识（亲知 / acquaintance）是对原子事实的感知，间接知识（描述知识 / knowledge by description）通过摹状词推理获得。",
+      "keyWorks": ["《逻辑原子主义哲学》"],
+      "primaryQuotes": [
+        {"chinese": "我称自己的学说为逻辑原子主义，因为它主张：通过分析可以得到一些逻辑原子。", "english": "I call my doctrine Logical Atomism because it analyses into atoms which are logical in nature.", "source": "The Philosophy of Logical Atomism (1918)"}
+      ]
+    },
+    {
+      "id": "type-theory",
+      "title": "类型论",
+      "title_en": "Theory of Types",
+      "category": "逻辑学 / 数学基础",
+      "description": "类型论是罗素在《数学原理》中提出的，用以解决'罗素悖论'。罗素悖论：考虑'所有不包含自身的集合的集合'——如果它包含自身，那么根据定义它不应该包含自身；如果它不包含自身，那么根据定义它应该包含自身。类型论的解决方案：将集合分层——第0层是'个体'，第1层是'个体的集合'，第2层是'集合的集合'。一个集合只能包含'更低层级'的元素，不能包含同层级或更高层级的元素。因此，'所有不包含自身的集合'不是一个合法的集合，因为它试图在同层级内自我指涉。",
+      "keyWorks": ["《数学原理》"],
+      "primaryQuotes": [
+        {"chinese": "类型论禁止集合包含自身。", "english": "The theory of types forbids a set to be a member of itself.", "source": "Principia Mathematica"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《数学原理》", "title_en": "Principia Mathematica", "year": "1910—1913", "summary": "与怀特海合著的三卷巨著，试图从逻辑公理推导出全部数学。"},
+    {"title": "《论指称》", "title_en": "On Denoting", "year": "1905", "summary": "提出摹状词理论，解决空指称问题。"},
+    {"title": "《西方哲学史》", "title_en": "A History of Western Philosophy", "year": "1945", "summary": "通俗哲学史，获诺贝尔文学奖。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "对爱情的渴望，对知识的追求，对人类苦难不可遏制的同情，这三种纯洁而无比强烈的激情支配着我的一生。", "english": "Three passions, simple but overwhelmingly strong, have governed my life: the longing for love, the search for knowledge, and unbearable pity for the suffering of mankind.", "source": "Autobiography, Prologue"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释罗素'摹状词理论'及其对分析哲学的影响。",
+      "output": "罗素的摹状词理论是20世纪分析哲学的奠基性贡献之一。\n\n核心问题：\n1）'当今法国国王是秃头'——法国没有国王，但这句话似乎有意义（它是假的）。\n2）如果'当今法国国王'不指称任何对象，那么这句话如何能有意义？\n\n罗素的解决方案：\n1）将摹状词分析为'存在性量化'：'存在且仅存在一个x，x是当今法国国王，且x是秃头'。\n2）由于不存在当今法国国王，这个存在性陈述为假，但整个句子有意义。\n3）这消除了'非存在对象'（如'当今法国国王'）的形而上学负担。\n\n对分析哲学的影响：\n1）开创'语言分析'方法：哲学问题可以通过分析语言结构来解决。\n2）影响了维特根斯坦的《逻辑哲学论》和整个逻辑实证主义运动。\n3）蒯因的'本体论承诺'理论直接继承自摹状词理论。\n\n批评：\n1）斯特劳森：罗素混淆了'句子'和'语句的使用'——'当今法国国王是秃头'在特定语境下使用才涉及真假问题。\n2）唐奈兰：摹状词有'指称性使用'和'归属性使用'之分，罗素只分析了归属性使用。",
+      "source": "Russell, On Denoting; Strawson, On Referring; Donnellan, Reference and Definite Descriptions",
+      "tier": 1
+    }
+  ]
+}

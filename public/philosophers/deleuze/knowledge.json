@@ -1,0 +1,83 @@
+{
+  "philosopher": {
+    "name": "德勒兹",
+    "name_en": "Gilles Deleuze",
+    "name_fr": "Gilles Deleuze",
+    "lived": "1925年1月18日—1995年11月4日",
+    "birthplace": "法国巴黎",
+    "deathplace": "法国巴黎",
+    "era": "20世纪",
+    "school": "后结构主义 / 差异哲学",
+    "occupation": "哲学家",
+    "summary": "德勒兹是20世纪法国最具原创性的哲学家之一。核心思想：差异与重复、欲望机器、块茎（rhizome）、生成-女人、反俄狄浦斯。与瓜塔里合著《反俄狄浦斯》和《千高原》。",
+    "summary_en": "Deleuze was one of the most original French philosophers of the 20th century. Central doctrines include difference and repetition, desiring-machines, the rhizome, becoming-woman, and Anti-Oedipus. He co-authored Anti-Oedipus and A Thousand Plateaus with Félix Guattari."
+  },
+  "lifeEvents": [
+    {"year": "1925", "event": "出生于巴黎", "details": "父亲是工程师。"},
+    {"year": "1944", "event": "进入巴黎索邦大学", "details": "学习哲学。"},
+    {"year": "1953", "event": "发表《经验主义与主体性》", "details": "研究休谟。"},
+    {"year": "1962", "event": "出版《尼采与哲学》", "details": "对尼采的'权力意志'和'永恒轮回'进行创造性解读。"},
+    {"year": "1968", "event": "出版《差异与重复》和《斯宾诺莎与表现问题》", "details": "标志着德勒兹哲学的成熟。"},
+    {"year": "1969", "event": "出版《意义的逻辑》", "details": "发展'事件'（event）和'sense'的概念。"},
+    {"year": "1972", "event": "与瓜塔里合著《反俄狄浦斯》", "details": "批判精神分析，提出'欲望机器'和'精神分裂分析'。"},
+    {"year": "1980", "event": "与瓜塔里合著《千高原》", "details": "提出'块茎'（rhizome）概念，批判树状思维。"},
+    {"year": "1988", "event": "出版《褶子：莱布尼茨与巴洛克》", "details": "发展'褶子'（pli / fold）概念。"},
+    {"year": "1995", "event": "自杀", "details": "因长期肺病痛苦，从公寓窗户跳楼自杀，享年70岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "difference-repetition",
+      "title": "差异与重复",
+      "title_en": "Difference and Repetition",
+      "category": "形而上学 / 认识论",
+      "description": "差异与重复是德勒兹哲学的核心。传统哲学（从柏拉图到黑格尔）将'同一'（identity）置于'差异'之上——差异是'同一者的差异'。德勒兹反转了这一等级：差异是'先验的'（transcendental），同一者是差异的'效果'。重复也不是'同一的重复'，而是'差异的重复'——每次重复都产生新的差异。例如，同一段旋律每次演奏都是不同的（不同的演奏者、不同的乐器、不同的听众）。德勒兹以此批判了'表象'（representation）哲学——即认为世界可以被'再现'为固定的概念。",
+      "keyWorks": ["《差异与重复》"],
+      "primaryQuotes": [
+        {"chinese": "差异不是同一的差异，而是差异本身生产了同一。", "english": "Difference is not the difference of identity, but difference produces identity.", "source": "Difference and Repetition"},
+        {"chinese": "重复不是同一的重复，而是差异的重复。", "english": "Repetition is not the repetition of the same, but the repetition of difference.", "source": "Difference and Repetition"}
+      ]
+    },
+    {
+      "id": "rhizome",
+      "title": "块茎",
+      "title_en": "Rhizome",
+      "category": "认识论 / 社会哲学",
+      "description": "块茎是德勒兹和瓜塔里在《千高原》中提出的模型，与'树状'（arborescent）思维相对。树状思维：有一个中心（根）、有层级（树干、树枝、树叶）、有固定的结构。块茎思维：没有中心、没有层级、没有固定的结构——任何一点都可以与其他任何一点连接。互联网是块茎的典范——没有中心服务器，每个节点都是平等的。块茎思维反对'二元对立'（如主体/客体、自然/文化、男/女），主张'多元连接'和'流动生成'。",
+      "keyWorks": ["《千高原》"],
+      "primaryQuotes": [
+        {"chinese": "块茎没有中心，也没有起源。", "english": "A rhizome has no center and no origin.", "source": "A Thousand Plateaus"},
+        {"chinese": "块茎只由线构成：解域的线和结域的线，逃逸的线和层化的线。", "english": "The rhizome is made only of lines: lines of segmentarity and stratification as its dimensions, and the line of flight or deterritorialization as the maximum dimension.", "source": "A Thousand Plateaus"}
+      ]
+    },
+    {
+      "id": "desiring-machines",
+      "title": "欲望机器",
+      "title_en": "Desiring-Machines",
+      "category": "精神分析 / 社会哲学",
+      "description": "欲望机器是德勒兹和瓜塔里在《反俄狄浦斯》中对精神分析的批判。弗洛伊德将欲望理解为'缺乏'（lack / 欲望是对所缺乏对象的追求）。德勒兹反驳：欲望不是缺乏，而是'生产'（production）——欲望生产现实，欲望是'机器'（machine），不断连接和断裂。精神分析的'俄狄浦斯化'（Oedipalization）是将欲望限制在家庭三角（父-母-子）中，这是资本主义对欲望的'编码'。真正的欲望是'精神分裂的'（schizophrenic）——它在社会领域中自由流动，不受任何编码限制。",
+      "keyWorks": ["《反俄狄浦斯》"],
+      "primaryQuotes": [
+        {"chinese": "欲望不是缺乏，而是生产。", "english": "Desire is not lack, but production.", "source": "Anti-Oedipus"},
+        {"chinese": "欲望机器不是隐喻，而是欲望的现实。", "english": "The desiring-machine is not a metaphor, but the reality of desire.", "source": "Anti-Oedipus"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《差异与重复》", "title_fr": "Différence et répétition", "year": "1968", "summary": "德勒兹最重要的哲学著作，系统阐述差异哲学。"},
+    {"title": "《反俄狄浦斯》", "title_fr": "L'Anti-Œdipe", "year": "1972", "summary": "与瓜塔里合著，批判精神分析，提出欲望机器概念。"},
+    {"title": "《千高原》", "title_fr": "Mille plateaux", "year": "1980", "summary": "与瓜塔里合著，提出块茎概念，批判树状思维。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "差异不是同一的差异，而是差异本身生产了同一。", "english": "Difference produces identity.", "source": "Difference and Repetition"},
+    {"chinese": "欲望不是缺乏，而是生产。", "english": "Desire is not lack, but production.", "source": "Anti-Oedipus"},
+    {"chinese": "块茎没有中心，也没有起源。", "english": "A rhizome has no center and no origin.", "source": "A Thousand Plateaus"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较德勒兹'块茎'与福柯'权力/知识'对'中心'概念的批判。",
+      "output": "德勒兹的块茎与福柯的权力/知识都是对'中心'和'层级'的批判，但路径不同。\n\n福柯的权力/知识：\n1）权力不是被'拥有'的，而是被'行使'的——它渗透到学校、医院、监狱等每一个角落。\n2）批判'中心'的方式是'谱系学'——追溯权力的历史起源，揭示中心是如何被建构的。\n3）福柯的方法是'历史的'——通过历史分析来解构中心。\n\n德勒兹的块茎：\n1）块茎是'反中心的'——没有中心、没有层级、没有固定的结构。\n2）批判'中心'的方式是'生成'——不是追溯历史，而是创造新的连接和流动。\n3）德勒兹的方法是'哲学的'——通过概念创造来超越中心。\n\n根本差异：\n1）福柯是'批判性的'，德勒兹是'创造性的'。\n2）福柯关注'权力的微观政治'，德勒兹关注'欲望的微观政治'。\n3）福柯的方法论是'考古学/谱系学'，德勒兹的方法论是'游牧学'（nomadology）。\n\n互补性：两者共同构成了20世纪后结构主义对'中心'的两种批判——福柯揭示了中心的权力机制，德勒兹超越了中心的思维结构。",
+      "source": "Deleuze, A Thousand Plateaus; Foucault, Discipline and Punish; Patton, Deleuze and the Political (2000)",
+      "tier": 1
+    }
+  ]
+}

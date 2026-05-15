@@ -1,0 +1,88 @@
+{
+  "philosopher": {
+    "name": "莱布尼茨",
+    "name_en": "Gottfried Wilhelm Leibniz",
+    "lived": "1646年7月1日—1716年11月14日",
+    "birthplace": "神圣罗马帝国莱比锡",
+    "deathplace": "汉诺威",
+    "era": "近代",
+    "school": "理性主义 / 德国观念论先驱",
+    "occupation": "哲学家、数学家、外交官",
+    "summary": "莱布尼茨是17世纪最博学多才的思想家之一，与牛顿同时独立发明微积分。核心思想：单子论（万物由不可分的单子构成）、先定和谐、充足理由律、可能世界理论。"新体系"的提出者。",
+    "summary_en": "Leibniz was one of the most versatile thinkers of the 17th century, co-inventing calculus independently of Newton. Central doctrines include monadology, pre-established harmony, the principle of sufficient reason, and the theory of possible worlds."
+  },
+  "lifeEvents": [
+    {"year": "1646", "event": "出生于莱比锡", "details": "父亲是莱比锡大学道德哲学教授，12岁可阅读拉丁文著作。"},
+    {"year": "1666", "event": "获得阿尔特多夫大学法学博士学位", "details": "因太年轻被拒教授职位。"},
+    {"year": "1672—1676", "event": "驻巴黎外交官", "details": "期间与惠更斯、阿尔诺等学者交流，发展微积分思想。"},
+    {"year": "1684", "event": "发表微积分论文", "details": "比牛顿早三年公开发表，引发优先权之争。"},
+    {"year": "1686", "event": "撰写《形而上学论》", "details": "系统阐述单子论和先定和谐。"},
+    {"year": "1710", "event": "出版《神义论》", "details": "回应'恶的问题'，提出'所有可能世界中最好的世界'。"},
+    {"year": "1714", "event": "撰写《单子论》", "details": "用拉丁文写就的哲学遗嘱，系统阐述单子论。"},
+    {"year": "1716", "event": "逝世于汉诺威", "details": "享年70岁。去世时几乎无人知晓，只有秘书参加了葬礼。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "monadology",
+      "title": "单子论",
+      "title_en": "Monadology",
+      "category": "形而上学",
+      "description": "单子论是莱布尼茨形而上学的核心。单子（monad）是'没有窗户的'（windowless）、不可分的、不可摧毁的简单实体。每个单子都是一个'小宇宙'，反映整个宇宙。单子没有广延（不像原子），只有'知觉'（perception）和'欲望'（appetite）。单子分为三类：1）裸单子（bare monads / 石头、物质）——只有模糊的知觉；2）灵魂（souls / 动物）——有记忆和感觉；3）理性灵魂（rational souls / 人）——有自我意识。单子之间没有因果作用——每个单子按照自己的'内在法则'发展，上帝在创造世界时就预定了所有单子的和谐。",
+      "keyWorks": ["《单子论》"],
+      "primaryQuotes": [
+        {"chinese": "单子是简单的实体。", "english": "The monad, of which we shall here speak, is nothing but a simple substance.", "source": "Monadology, §1"},
+        {"chinese": "单子没有窗户，任何东西都不能进入或离开。", "english": "Monads have no windows, through which anything could come in or go out.", "source": "Monadology, §7"}
+      ]
+    },
+    {
+      "id": "pre-established-harmony",
+      "title": "先定和谐",
+      "title_en": "Pre-established Harmony",
+      "category": "形而上学 / 心灵哲学",
+      "description": "先定和谐是莱布尼茨对心身问题的解决方案。笛卡尔认为心灵和身体是两种独立的实体，通过'松果腺'互动。莱布尼茨反驳：如果心灵和身体是独立的，它们如何互动？他的解决方案是：上帝在创造世界时就预定了所有单子的和谐——心灵和身体的发展像两个独立运行的钟表，但因为上帝已经将它们调校好了，所以它们永远同步。这不是'因果互动'，而是'平行论'——两个平行的序列在上帝的预定下完美同步。",
+      "keyWorks": ["《形而上学论》", "《单子论》"],
+      "primaryQuotes": [
+        {"chinese": "上帝从一开始就将每个实体创造得如此完美，以至于它只遵循自己的法则，同时与所有其他实体完美和谐。", "english": "God has from the beginning created each substance so perfect that it follows only its own laws, and yet harmonizes perfectly with all others.", "source": "Discourse on Metaphysics, §14"}
+      ]
+    },
+    {
+      "id": "sufficient-reason",
+      "title": "充足理由律",
+      "title_en": "Principle of Sufficient Reason",
+      "category": "逻辑学 / 形而上学",
+      "description": "充足理由律是莱布尼茨逻辑学的核心原则：'没有任何事情会没有理由地发生，也没有任何事情会没有'为什么它是这样而非那样'的理由'。这一原则与矛盾律互补：矛盾律告诉我们什么是不可能的（自相矛盾的东西），充足理由律告诉我们什么是必然的（有充足理由的东西）。莱布尼茨用充足理由律证明了上帝的存在：既然世界存在，就必须有一个'充足的理由'来解释为什么世界存在而不是不存在——这个理由就是上帝。",
+      "keyWorks": ["《形而上学论》", "《单子论》"],
+      "primaryQuotes": [
+        {"chinese": "我们的推理建立在两大原则上：矛盾律和充足理由律。", "english": "Our reasoning is based on two great principles: the principle of contradiction and the principle of sufficient reason.", "source": "Monadology, §31-32"}
+      ]
+    },
+    {
+      "id": "best-world",
+      "title": "所有可能世界中最好的世界",
+      "title_en": "Best of All Possible Worlds",
+      "category": "神学 / 伦理学",
+      "description": "莱布尼茨在《神义论》中回应了'恶的问题'：如果上帝是全知、全能、全善的，为什么世界上存在恶？莱布尼茨的答案是：上帝创造了一个'所有可能世界中最好的世界'——这个世界虽然有恶，但恶的总量是最小的，善的总量是最大的。恶不是上帝创造的，而是'有限性'的必然结果——如果上帝要创造有限的存在，那么有限性必然带来不完善。这一理论被伏尔泰在《老实人》中讽刺为'乐天主义'（optimism），但莱布尼茨的本意更复杂：他不是说这个世界'完美'，而是说在逻辑上可能的世界中，这个世界是最优的。",
+      "keyWorks": ["《神义论》"],
+      "primaryQuotes": [
+        {"chinese": "既然上帝选择了一切可能世界中最好的世界，那么这个世界上存在的恶就必然服务于更大的善。", "english": "Since God has chosen the best of all possible worlds, the evils that exist in this world must serve a greater good.", "source": "Theodicy"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《单子论》", "title_la": "Monadologie", "year": "1714", "summary": "莱布尼茨最重要的哲学著作，系统阐述单子论。"},
+    {"title": "《神义论》", "title_la": "Essais de Théodicée", "year": "1710", "summary": "回应恶的问题，提出所有可能世界中最好的世界。"},
+    {"title": "《形而上学论》", "title_la": "Discours de métaphysique", "year": "1686", "summary": "系统阐述单子论和先定和谐。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "单子没有窗户。", "english": "Monads have no windows.", "source": "Monadology, §7"},
+    {"chinese": "我们的推理建立在两大原则上。", "english": "Our reasoning is based on two great principles.", "source": "Monadology, §31"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较莱布尼茨'先定和谐'与斯宾诺莎'实体一元论'对心身问题的解决方案。",
+      "output": "莱布尼茨的先定和谐与斯宾诺莎的实体一元论都是对笛卡尔心身二元论困境的回应，但路径截然不同。\n\n斯宾诺莎的解决方案：\n1）心身不是两个实体，而是同一实体的两种属性（思维和广延）。\n2）每一个心理事件都有对应的物理事件，但它们不是'因果互动'，而是'同一事件的两面'。\n3）优点：避免了'因果互动'的神秘性；缺点：仍然需要解释为什么两种属性永远同步。\n\n莱布尼茨的解决方案：\n1）心身是两个独立的单子。\n2）它们之间没有因果互动，但通过'先定和谐'永远同步。\n3）优点：保留了心灵的独立性和身体的独立性；缺点：需要预设一个'调校'所有单子的上帝。\n\n根本差异：\n1）斯宾诺莎是'一元论'的（只有一个实体），莱布尼茨是'多元论'的（无数单子）。\n2）斯宾诺莎不需要上帝持续干预（上帝创造世界后不再干预），莱布尼茨的和谐是'先定的'——上帝在创世时就调校好了，但也不需要持续干预。\n3）斯宾诺莎更接近'唯物论'（身体是更基本的），莱布尼茨更接近'唯心论'（单子是精神的）。\n\n当代影响：莱布尼茨的'可能世界'理论成为现代模态逻辑和语义学的基础；斯宾诺莎的属性论启发了现代心灵哲学的'双面论'（dual-aspect theory）。",
+      "source": "Leibniz, Monadology; Spinoza, Ethics; Descartes, Meditations; Bennett, A Study of Spinoza's Ethics (1984)",
+      "tier": 1
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "philosopher": {
+    "name": "爱比克泰德",
+    "name_en": "Epictetus",
+    "name_gr": "Ἐπίκτητος",
+    "lived": "约公元50年—约公元135年",
+    "birthplace": "希拉波利斯（今土耳其帕穆卡莱）",
+    "deathplace": "希腊尼科波利斯",
+    "era": "罗马帝国",
+    "school": "斯多葛学派",
+    "occupation": "哲学家、奴隶（后获释）",
+    "summary": "爱比克泰德是罗马时期最重要的斯多葛哲学家之一，曾是奴隶，后获得自由。核心思想：区分可控与不可控之事、内在自由、顺应自然。其《手册》是斯多葛哲学的入门经典。",
+    "summary_en": "Epictetus was one of the most important Stoic philosophers of the Roman period. A former slave who gained his freedom, his central doctrines include the dichotomy of control, inner freedom, and conformity to nature. His Enchiridion is a classic introduction to Stoicism."
+  },
+  "lifeEvents": [
+    {"year": "约公元50年", "event": "出生于弗里吉亚", "details": "天生奴隶，主人为尼禄皇帝的秘书埃帕弗洛狄图斯。"},
+    {"year": "约公元68—89年", "event": "师从穆索尼乌斯·鲁弗斯", "details": "在罗马学习斯多葛哲学。"},
+    {"year": "约公元89年", "event": "被驱逐出罗马", "details": "与所有哲学家一起被多米提安皇帝驱逐。"},
+    {"year": "约公元95年", "event": "在尼科波利斯建立学园", "details": "在希腊西部小城尼科波利斯讲学，吸引了大批学生。"},
+    {"year": "约公元135年", "event": "逝世", "details": "生平不详，无确切死亡记录。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "dichotomy-of-control",
+      "title": "可控与不可控",
+      "title_en": "Dichotomy of Control",
+      "category": "伦理学 / 心理学",
+      "description": "可控与不可控之分是爱比克泰德最著名的教义。他将所有事物分为两类：1）'在我的控制之中'（eph' hēmin / up to me）——我的判断、冲动、欲望和厌恶（简言之，所有属于我自己的事物）；2）'不在我的控制之中'（ouk eph' hēmin / not up to me）——我的身体、财产、名誉、职位（简言之，所有不属于我自己的事物）。'在我控制之中的事物'本质上是'自由的'、'不受阻碍的'、'不受限制的'；'不在我控制之中的事物'本质上是'奴役的'、'可阻碍的'、'受他人支配的'。斯多葛的核心修行就是：只关注可控之事，对不可控之事保持'漠不关心'（apatheia）。",
+      "keyWorks": ["《手册》第一章"],
+      "primaryQuotes": [
+        {"chinese": "有些事情在我们的控制之中，有些不在。", "english": "Of things some are in our power, and others are not.", "source": "Enchiridion, Ch. 1"},
+        {"chinese": "在我控制之中的事物，本质上是自由的；不在我控制之中的事物，本质上是奴役的。", "english": "In the power of the will are things that are free; not in the power of the will are things that are servile.", "source": "Enchiridion, Ch. 1"}
+      ]
+    },
+    {
+      "id": "inner-freedom",
+      "title": "内在自由",
+      "title_en": "Inner Freedom",
+      "category": "伦理学",
+      "description": "爱比克泰德的自由概念是'内在的'——不是'身体自由'（不被监禁），而是'灵魂自由'（不被欲望和恐惧奴役）。即使被锁链束缚的奴隶也可以是自由的——只要他不对锁链感到愤怒，不渴望自由。'没有人能够伤害我，因为我除了自己的判断外什么也不在意'。这一自由概念与康德的'自律'（autonomy）有深层联系——都是通过理性控制欲望来实现自由。",
+      "keyWorks": ["《手册》", "《论说集》"],
+      "primaryQuotes": [
+        {"chinese": "如果任何人能够伤害我，那就是我自己；如果任何人能够羞辱我，那就是我自己。", "english": "If any man is able to harm me, it is myself; if any man is able to disgrace me, it is myself.", "source": "Discourses"}
+      ]
+    },
+    {
+      "id": "conformity-to-nature",
+      "title": "顺应自然",
+      "title_en": "Conformity to Nature",
+      "category": "伦理学 / 宇宙论",
+      "description": "顺应自然是斯多葛学派的核心教义。'自然'（physis）不是'自然界'（如山川河流），而是'宇宙的理性秩序'（logos）。顺应自然意味着：接受发生的事情，因为它们是宇宙理性秩序的一部分。'不要要求事情按照你的意愿发生，而要让你的意愿按照事情的方式发生'。这不是宿命论——爱比克泰德鼓励人们尽自己所能（可控之事），然后对结果保持平静（不可控之事）。",
+      "keyWorks": ["《手册》", "《论说集》"],
+      "primaryQuotes": [
+        {"chinese": "不要要求事情按照你的意愿发生，而要让你的意愿按照事情的方式发生。", "english": "Do not seek to have events happen as you wish, but wish them to happen as they do, and you will go well.", "source": "Enchiridion, Ch. 8"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《手册》", "title_gr": "Ἐγχειρίδιον", "title_en": "Enchiridion", "summary": "斯多葛哲学入门经典，格言体，共53章。"},
+    {"title": "《论说集》", "title_gr": "Διατριβαί", "title_en": "Discourses", "summary": "由学生阿里安记录的四卷讲义，系统阐述斯多葛伦理学。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "有些事情在我们的控制之中，有些不在。", "english": "Of things some are in our power, and others are not.", "source": "Enchiridion, Ch. 1"},
+    {"chinese": "不要要求事情按照你的意愿发生。", "english": "Do not seek to have events happen as you wish.", "source": "Enchiridion, Ch. 8"},
+    {"chinese": "没有人能伤害我，因为我除了自己的判断外什么也不在意。", "english": "No man can harm me, for I care for nothing but my own judgment.", "source": "Discourses"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较爱比克泰德'可控与不可控'之分与斯多葛学派其他代表（塞内卡、马可·奥勒留）的异同。",
+      "output": "爱比克泰德、塞内卡和马可·奥勒留是罗马斯多葛学派的三位核心代表，他们对'可控与不可控'之分的理解有共通之处，也有各自侧重。\n\n共通之处：\n1）都区分可控（判断、欲望）与不可控（身体、财产、他人行为）。\n2）都主张：对可控之事尽己所能，对不可控之事保持平静。\n3）都认为：真正的自由是内在自由——不被欲望和恐惧奴役。\n\n各自侧重：\n1）爱比克泰德：作为前奴隶，特别强调'内在自由'——即使身体被束缚，灵魂也可以是自由的。\n2）塞内卡：作为政治家和富人，强调'财富的无关紧要'——真正的富有不是拥有很多，而是需要很少。\n3）马可·奥勒留：作为皇帝，强调'公共责任'——统治者应该为公共利益服务，而非追求个人荣耀。\n\n互补性：三位代表覆盖了斯多葛伦理学的三个维度——个人修养（爱比克泰德）、财富管理（塞内卡）、政治责任（马可·奥勒留）。他们共同构成了罗马斯多葛学派的完整图景。",
+      "source": "Epictetus, Enchiridion; Seneca, Letters; Marcus Aurelius, Meditations; Long, Epictetus: A Stoic and Socratic Guide to Life (2002)",
+      "tier": 1
+    }
+  ]
+}

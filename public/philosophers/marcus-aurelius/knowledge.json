@@ -1,0 +1,78 @@
+{
+  "philosopher": {
+    "name": "马可·奥勒留",
+    "name_en": "Marcus Aurelius",
+    "name_la": "Marcus Aurelius Antoninus Augustus",
+    "lived": "121年4月26日—180年3月17日",
+    "birthplace": "罗马",
+    "deathplace": "维也纳（今奥地利）",
+    "era": "罗马帝国",
+    "school": "斯多葛学派",
+    "occupation": "罗马皇帝（161—180年在位）、哲学家",
+    "summary": "马可·奥勒留是'五贤帝'时代的最后一位皇帝，被称为'哲人王'。《沉思录》的作者，唯一一位留下哲学著作的罗马皇帝。核心思想：顺应自然、公共责任、宇宙理性。",
+    "summary_en": "Marcus Aurelius was the last emperor of the Five Good Emperors, known as the 'philosopher-king.' Author of the Meditations, the only Roman emperor to leave behind philosophical writings. Central doctrines include conformity to nature, public duty, and cosmic reason."
+  },
+  "lifeEvents": [
+    {"year": "121", "event": "出生于罗马", "details": "父亲为罗马贵族，早逝。由祖父抚养长大。"},
+    {"year": "138", "event": "被哈德良皇帝指定为安敦尼努斯的养子", "details": "哈德良为马可指定了三位导师：修辞学家、法学家和哲学家。"},
+    {"year": "161", "event": "即皇帝位", "details": "与卢修斯·维鲁斯共治，后独揽大权。"},
+    {"year": "161—166", "event": "帕提亚战争", "details": "与帕提亚帝国作战，维鲁斯死于瘟疫。"},
+    {"year": "167—175", "event": "马克曼尼战争", "details": "在多瑙河前线与蛮族作战，期间撰写《沉思录》。"},
+    {"year": "170—180", "event": "撰写《沉思录》", "details": "在军营中以希腊语撰写的私人笔记，死后被发现。"},
+    {"year": "180", "event": "逝世于维也纳", "details": "死于瘟疫或疾病，享年58岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "meditations",
+      "title": "沉思录",
+      "title_en": "Meditations / Ta eis heauton",
+      "category": "伦理学 / 实践哲学",
+      "description": "《沉思录》（希腊语：Ta eis heauton / 致自己）是马可·奥勒留的私人笔记，用希腊语写成，共12卷。这不是为公众写的哲学著作，而是皇帝对自己的告诫和反思。内容涵盖：顺应自然、死亡观、公共责任、宇宙理性、对他人的宽容。马可以'第一人称'与自己对话——'你今天做了什么？你是否按照自己的本性行事？'这种自我对话的方式直接影响了后来的基督教灵修传统。",
+      "keyWorks": ["《沉思录》"],
+      "primaryQuotes": [
+        {"chinese": "你今天早上不愿起床吗？但你还必须起来，去完成人性的工作。", "english": "At dawn, when you have trouble getting out of bed, tell yourself: 'I have to go to work — as a human being.'", "source": "Meditations, Book V"},
+        {"chinese": "宇宙是流变，生活是对观点的选择。", "english": "The universe is change; our life is what our thoughts make it.", "source": "Meditations, Book IV"}
+      ]
+    },
+    {
+      "id": "cosmic-reason",
+      "title": "宇宙理性",
+      "title_en": "Cosmic Reason / Logos",
+      "category": "形而上学 / 伦理学",
+      "description": "宇宙理性（logos / 道）是斯多葛学派的核心概念，马可·奥勒留将其发展为政治哲学。宇宙是一个'活的'、'理性的'整体，每个个体都是这个整体的一部分。因此，伤害他人就是伤害自己——因为'我们都是同一身体的成员'。皇帝的责任不是追求个人荣耀，而是服务于这个理性整体——'如果你已经找到了人生的道路，就要快乐地沿着它走'。这一思想将斯多葛的个人伦理扩展为政治伦理。",
+      "keyWorks": ["《沉思录》"],
+      "primaryQuotes": [
+        {"chinese": "我们都是同一宇宙的成员，都是同一身体的部分。", "english": "We are all members of the same body, parts of the same organism.", "source": "Meditations, Book VII"},
+        {"chinese": "宇宙的本性就是像你现在所做的那样行动。", "english": "The nature of the Universe is to do the very thing you are now doing.", "source": "Meditations, Book IV"}
+      ]
+    },
+    {
+      "id": "death-acceptance",
+      "title": "接受死亡",
+      "title_en": "Acceptance of Death",
+      "category": "伦理学 / 死亡哲学",
+      "description": "马可·奥勒留对死亡的思考是斯多葛学派中最深刻、最诗意的。他反复提醒自己：生命是短暂的，死亡是自然的一部分。'你可能是皇帝，但你也是凡人——你会死，就像所有人一样'。死亡不是'终结'，而是'回归'——回归到宇宙理性（logos）的怀抱。'人是一缕轻烟、一团火焰、一束光'——生命是短暂的，但在宇宙理性的框架中，死亡不是悲剧，而是'转换'。",
+      "keyWorks": ["《沉思录》"],
+      "primaryQuotes": [
+        {"chinese": "不要像你将活一万年那样行事。死亡悬在每个人头上。趁你还活着、还来得及，做一个好人。", "english": "Do not act as if you were going to live ten thousand years. Death hangs over you. While you live, while it is in your power, be good.", "source": "Meditations, Book IV"},
+        {"chinese": "人是一缕轻烟、一团火焰、一束光。", "english": "Man is a puff of smoke, a flame, a ray of light.", "source": "Meditations, Book IV"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《沉思录》", "title_gr": "Τὰ εἰς ἑαυτόν", "title_en": "Meditations", "summary": "马可·奥勒留的私人笔记，12卷，用希腊语写成。是斯多葛哲学最可读、最感人的文本。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "你今天早上不愿起床吗？但你还必须起来，去完成人性的工作。", "english": "At dawn, when you have trouble getting out of bed, tell yourself: 'I have to go to work.'", "source": "Meditations, Book V"},
+    {"chinese": "宇宙是流变，生活是对观点的选择。", "english": "The universe is change; our life is what our thoughts make it.", "source": "Meditations, Book IV"},
+    {"chinese": "不要像你将活一万年那样行事。", "english": "Do not act as if you were going to live ten thousand years.", "source": "Meditations, Book IV"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较马可·奥勒留《沉思录》与庄子'逍遥'对'死亡'的不同态度。",
+      "output": "马可·奥勒留与庄子对死亡的态度既有相似之处，也有根本差异。\n\n相似之处：\n1）都认为死亡是自然的一部分——不应恐惧，而应接受。\n2）都超越了个人生死的执着——马可说'人是一缕轻烟'，庄子说'天地与我并生'。\n3）都强调'当下'的重要性——马可说'趁你还活着，做一个好人'，庄子说'逍遥乎寝卧其下'。\n\n根本差异：\n1）马可是'理性的'——死亡是宇宙理性（logos）的一部分，接受死亡是理性的选择。\n2）庄子是'诗意的'——死亡是'物化'（transformation）的一部分，是蝴蝶与庄周之间的转换。\n3）马可是'伦理的'——死亡提醒我们要尽责任；庄子是'审美的'——死亡是自然之美的组成部分。\n4）马可是'政治家的'——即使在死亡面前，皇帝仍有公共责任；庄子是'隐士的'——死亡是摆脱政治束缚的解脱。\n\n互补性：两者共同构成了东西方对死亡的两种最深刻态度——西方理性主义的庄严接受与东方诗意主义的自然融合。",
+      "source": "Marcus Aurelius, Meditations; Zhuangzi, Chapters 2, 6; Hadot, The Inner Citadel (1992); Graham, Chuang-tzu (1981)",
+      "tier": 1
+    }
+  ]
+}

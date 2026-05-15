@@ -1,0 +1,61 @@
+{
+  "philosopher": {
+    "name": "伊壁鸠鲁",
+    "name_en": "Epicurus",
+    "name_gr": "Ἐπίκουρος",
+    "lived": "公元前341年—公元前270年",
+    "birthplace": "希腊萨摩斯岛",
+    "deathplace": "雅典",
+    "era": "古希腊",
+    "school": "伊壁鸠鲁学派 / 快乐主义",
+    "occupation": "哲学家",
+    "summary": "伊壁鸠鲁是古希腊快乐主义哲学的创始人。核心思想：快乐是人生的最高善，但快乐不是纵欲，而是'身体无痛苦，灵魂无纷扰'（ataraxia）。提出原子论和神不干预人间事务的观点。",
+    "summary_en": "Epicurus was the founder of ancient Greek hedonism. Central doctrines include pleasure as the highest good, but pleasure is not indulgence — it is ataraxia (freedom from bodily pain and mental disturbance). He proposed atomism and the view that gods do not intervene in human affairs."
+  },
+  "lifeEvents": [
+    {"year": "公元前341年", "event": "出生于萨摩斯岛", "details": "父亲为雅典殖民者。"},
+    {"year": "公元前307年", "event": "在雅典建立'花园'学派", "details": "接纳女性和奴隶入学，这在当时是前所未有的。"},
+    {"year": "公元前270年", "event": "逝世于雅典", "details": "享年71岁，临终前对朋友说：'记住我的学说，你们就拥有了我。'"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "ataraxia",
+      "title": "不动心",
+      "title_en": "Ataraxia / Tranquility",
+      "category": "伦理学",
+      "description": "不动心（ataraxia）是伊壁鸠鲁伦理学的核心目标。伊壁鸠鲁区分了两种快乐：1）动态快乐（kinetic pleasure / 如进食、饮酒、性爱）——是'运动中的'快乐，需要持续刺激；2）静态快乐（katastematic pleasure / 如无痛苦、无纷扰）——是'状态性的'快乐，不需要持续刺激。伊壁鸠鲁认为：静态快乐高于动态快乐。人生的最高目标是'身体无痛苦，灵魂无纷扰'（ataraxia / aponia）——不是'最大化快乐'，而是'最小化痛苦'。",
+      "keyWorks": ["《致美诺寇的信》", "《基本要道》"],
+      "primaryQuotes": [
+        {"chinese": "当我们说快乐是人生的最终目的时，我们指的是身体无痛苦、灵魂无纷扰。", "english": "When we say that pleasure is the goal, we mean the absence of pain in the body and disturbance in the soul.", "source": "Letter to Menoeceus"}
+      ]
+    },
+    {
+      "id": "epicurean-gods",
+      "title": "神不干预",
+      "title_en": "Gods Do Not Intervene",
+      "category": "神学 / 形而上学",
+      "description": "伊壁鸠鲁的宗教观在当时极为激进。他认为：神存在，但神不关心人间事务。神生活在'原子间的空间'（intermundia）中，享受着不动心的幸福，不会干预人类世界。因此，宗教仪式和祈祷是没有意义的——神不会因为祈祷而改变任何事情。这一观点同时否定了有神论（神干预世界）和无神论（神不存在），是一种独特的'非干预论'。",
+      "keyWorks": ["《致希罗多德的信》"],
+      "primaryQuotes": [
+        {"chinese": "神存在，但他们不关心人类事务。", "english": "The gods exist, but they do not concern themselves with human affairs.", "source": "Letter to Herodotus"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《致美诺寇的信》", "title_la": "Epistula ad Menoeceum", "summary": "伦理学纲要，阐述快乐主义和不动心。"},
+    {"title": "《致希罗多德的信》", "title_la": "Epistula ad Herodotum", "summary": "自然哲学纲要，阐述原子论和宇宙论。"},
+    {"title": "《基本要道》", "title_la": "Kyriai Doxai", "summary": "40条格言，概括伊壁鸠鲁学派的核心教义。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "死亡与我们无关。", "english": "Death is nothing to us.", "source": "Letter to Menoeceus"},
+    {"chinese": "身体无痛苦，灵魂无纷扰。", "english": "Freedom from bodily pain and mental disturbance.", "source": "Letter to Menoeceus"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较伊壁鸠鲁'快乐主义'与斯多葛学派'德性论'的伦理学差异。",
+      "output": "伊壁鸠鲁的快乐主义与斯多葛学派的德性论是古希腊两种最重要的伦理学传统，但目标和方法截然不同。\n\n伊壁鸠鲁的快乐主义：\n1）最高善是快乐——但快乐不是纵欲，而是'不动心'（ataraxia）。\n2）区分动态快乐（需要持续刺激）和静态快乐（状态性的无痛苦）。\n3）静态快乐高于动态快乐——'身体无痛苦，灵魂无纷扰'。\n4）友谊是获得快乐的重要手段。\n\n斯多葛学派的德性论：\n1）最高善是德性（virtue / aretē）——遵循理性生活。\n2）快乐不是善，而是'无关紧要'（adiaphora）——有德性的人不需要快乐。\n3）不动心（apatheia）是通过'消除'激情来实现的，而非通过追求快乐。\n4）友谊是有德性的人之间的自然联结。\n\n根本差异：\n1）伊壁鸠鲁以'快乐'为核心，斯多葛学派以'德性'为核心。\n2）伊壁鸠鲁的'不动心'是'无痛苦'，斯多葛学派的'不动心'是'无激情'。\n3）伊壁鸠鲁承认外部善（如健康、财富）有一定价值，斯多葛学派认为外部善完全无关紧要。\n\n互补性：两种伦理学都追求'不动心'，但路径不同——伊壁鸠鲁通过'减少欲望'来实现，斯多葛学派通过'改变对欲望的态度'来实现。",
+      "source": "Epicurus, Letter to Menoeceus; Diogenes Laërtius, Lives of the Philosophers X; Long, Hellenistic Philosophy (1986)",
+      "tier": 1
+    }
+  ]
+}

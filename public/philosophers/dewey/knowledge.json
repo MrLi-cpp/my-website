@@ -1,0 +1,82 @@
+{
+  "philosopher": {
+    "name": "杜威",
+    "name_en": "John Dewey",
+    "lived": "1859年10月20日—1952年6月1日",
+    "birthplace": "美国佛蒙特州伯灵顿",
+    "deathplace": "美国纽约",
+    "era": "19世纪末—20世纪中叶",
+    "school": "实用主义 / 进步教育",
+    "occupation": "哲学家、教育家、社会活动家",
+    "summary": "杜威是美国实用主义的集大成者，也是20世纪最重要的教育家之一。核心思想：教育即生长、做中学、民主即生活方式。其教育思想深刻影响了全球现代教育制度。",
+    "summary_en": "Dewey was the culminating figure of American pragmatism and one of the most important educators of the 20th century. Central doctrines include education as growth, learning by doing, and democracy as a way of life."
+  },
+  "lifeEvents": [
+    {"year": "1859", "event": "出生于佛蒙特州", "details": "父亲是杂货商。"},
+    {"year": "1884", "event": "获得约翰·霍普金斯大学博士学位", "details": "博士论文《康德心理学》。"},
+    {"year": "1894—1904", "event": "任芝加哥大学教授", "details": "创办芝加哥大学附属实验学校，实践进步教育理念。"},
+    {"year": "1904—1930", "event": "任哥伦比亚大学教授", "details": "在哥大教师学院发展教育哲学。"},
+    {"year": "1916", "event": "出版《民主与教育》", "details": "教育哲学的经典之作。"},
+    {"year": "1919—1921", "event": "访问中国和日本", "details": "在中国讲学两年，影响了陶行知等中国教育家。"},
+    {"year": "1925", "event": "出版《经验与自然》", "details": "系统阐述自然主义经验论。"},
+    {"year": "1929", "event": "出版《确定性的寻求》", "details": "分析传统哲学对'确定性'的追求及其替代方案。"},
+    {"year": "1934", "event": "出版《艺术即经验》", "details": "美学代表作，提出'一个经验'概念。"},
+    {"year": "1952", "event": "逝世于纽约", "details": "享年92岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "education-as-growth",
+      "title": "教育即生长",
+      "title_en": "Education as Growth",
+      "category": "教育哲学",
+      "description": "教育即生长是杜威教育哲学的核心。传统教育将教育视为'准备'——学生为未来的成人生活做准备。杜威反驳：教育本身就是'生长'（growth）——它不是通往某个终点的手段，而是'不断重新组织、重新建构和重新改造经验'的过程。'教育没有目的'——生长的目的就是生长本身。这一理论彻底颠覆了传统教育的'目标导向'范式。",
+      "keyWorks": ["《民主与教育》"],
+      "primaryQuotes": [
+        {"chinese": "教育即生长，生长的目的就是更多的生长。", "english": "Education is growth, and the aim of growth is more growth.", "source": "Democracy and Education"},
+        {"chinese": "教育不是为生活做准备，教育就是生活本身。", "english": "Education is not preparation for life; education is life itself.", "source": "Democracy and Education"}
+      ]
+    },
+    {
+      "id": "learning-by-doing",
+      "title": "做中学",
+      "title_en": "Learning by Doing",
+      "category": "教育哲学 / 认识论",
+      "description": "做中学是杜威教育方法的核心理念。传统教育将知识视为'传递'——教师将知识'倒入'学生的头脑。杜威反驳：知识不是被动接受的，而是'主动建构'的——学生通过'做'（doing / 实验、项目、问题解决）来学习。'做'不是'盲目活动'，而是'反思性实践'（reflective practice）——在做中思考，在思考中做。教师的角色不是'知识传授者'，而是'学习环境的组织者'——提供问题和资源，让学生自己探索。",
+      "keyWorks": ["《民主与教育》", "《我们如何思维》"],
+      "primaryQuotes": [
+        {"chinese": "从做中学。", "english": "Learn by doing.", "source": "Democracy and Education"},
+        {"chinese": "思维起源于怀疑和困惑。", "english": "Thought originates in doubt and perplexity.", "source": "How We Think"}
+      ]
+    },
+    {
+      "id": "democracy-as-way-of-life",
+      "title": "民主即生活方式",
+      "title_en": "Democracy as a Way of Life",
+      "category": "政治哲学 / 教育哲学",
+      "description": "民主即生活方式是杜威政治哲学的核心。杜威认为，民主不仅是一种'政治制度'（投票、选举），更是一种'生活方式'——即人们在日常生活中'共同参与、共同决策、共同承担责任'。学校应该是'民主社会的缩影'——学生在其中学习如何合作、如何讨论、如何解决冲突。民主的教育不是'教给学生民主知识'，而是'让学生在民主环境中生活'。",
+      "keyWorks": ["《民主与教育》"],
+      "primaryQuotes": [
+        {"chinese": "民主不仅是一种政治形式，它是一种共同生活的方式。", "english": "Democracy is not merely a form of government, but a mode of associated living.", "source": "Democracy and Education"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《民主与教育》", "title_en": "Democracy and Education", "year": "1916", "summary": "教育哲学的经典之作，阐述教育即生长和民主即生活方式。"},
+    {"title": "《经验与自然》", "title_en": "Experience and Nature", "year": "1925", "summary": "系统阐述自然主义经验论。"},
+    {"title": "《艺术即经验》", "title_en": "Art as Experience", "year": "1934", "summary": "美学代表作，提出'一个经验'概念。"},
+    {"title": "《我们如何思维》", "title_en": "How We Think", "year": "1910", "summary": "阐述反思性思维的过程。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "教育即生长。", "english": "Education is growth.", "source": "Democracy and Education"},
+    {"chinese": "从做中学。", "english": "Learn by doing.", "source": "Democracy and Education"},
+    {"chinese": "民主不仅是一种政治形式，它是一种共同生活的方式。", "english": "Democracy is a mode of associated living.", "source": "Democracy and Education"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较杜威'教育即生长'与卢梭'自然教育'对'儿童天性'的不同理解。",
+      "output": "杜威的教育即生长与卢梭的自然教育都强调'尊重儿童天性'，但路径截然不同。\n\n卢梭的自然教育：\n1）儿童天性是'善的'——教育应该'保护'儿童免受社会腐败。\n2）教育应该'消极'——教师不应主动教导，而应让儿童自然发展。\n3）'消极教育'在前12年最为重要——这段时间儿童应该只'感受'，不'思考'。\n4）卢梭的教育目标是'自然人'——不受社会偏见束缚的自由人。\n\n杜威的教育即生长：\n1）儿童天性不是'固定的善'，而是'可塑的'——教育应该'引导'儿童向积极方向发展。\n2）教育应该'积极'——教师应提供'问题'和'环境'，让儿童主动探索。\n3）'做中学'——儿童通过实验和项目学习，而非被动接受。\n4）杜威的教育目标是'民主公民'——能够参与社会合作和决策的公民。\n\n根本差异：\n1）卢梭是'浪漫主义的'，杜威是'进步主义的'。\n2）卢梭信任'自然'，杜威信任'经验'——但经验需要精心设计的'问题情境'。\n3）卢梭将社会视为'腐败的根源'，杜威将社会视为'教育的资源'。\n\n互补性：两者共同构成了现代教育理论的两大支柱——卢梭提醒我们尊重儿童天性，杜威提醒我们教育需要精心设计的引导。",
+      "source": "Dewey, Democracy and Education; Rousseau, Émile; Ryan, John Dewey and the High Tide of American Liberalism (1995)",
+      "tier": 1
+    }
+  ]
+}

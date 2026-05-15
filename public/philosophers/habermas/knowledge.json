@@ -1,0 +1,78 @@
+{
+  "philosopher": {
+    "name": "哈贝马斯",
+    "name_en": "Jürgen Habermas",
+    "name_de": "Jürgen Habermas",
+    "lived": "1929年6月18日—",
+    "birthplace": "德国杜塞尔多夫",
+    "era": "20世纪—21世纪",
+    "school": "法兰克福学派 / 交往行为理论",
+    "occupation": "哲学家、社会学家",
+    "summary": "哈贝马斯是法兰克福学派第二代核心人物，当代最重要的社会理论家之一。核心思想：交往行为理论、公共领域、商谈伦理学、系统对生活世界的殖民。试图在批判理论与自由主义民主之间寻找第三条道路。",
+    "summary_en": "Habermas is the most important figure of the second generation of the Frankfurt School. Central doctrines include the theory of communicative action, the public sphere, discourse ethics, and the colonization of the lifeworld by systems."
+  },
+  "lifeEvents": [
+    {"year": "1929", "event": "出生于杜塞尔多夫", "details": "父亲是商人，后纳粹时期积极反思德国知识分子的责任。"},
+    {"year": "1954", "event": "获得波恩大学博士学位", "details": "博士论文《绝对性与历史》。"},
+    {"year": "1956—1959", "event": "任法兰克福社会研究所助理", "details": "师从阿多诺和霍克海默。"},
+    {"year": "1962", "event": "出版《公共领域的结构转型》", "details": "博士论文改写，分析资产阶级公共领域的兴衰。"},
+    {"year": "1968", "event": "出版《认识与兴趣》", "details": "系统阐述认识论与解放兴趣的关系。"},
+    {"year": "1981", "event": "出版《交往行为理论》", "details": "两卷巨著，系统阐述交往理性与系统理性的对立。"},
+    {"year": "1983", "event": "任法兰克福大学教授", "details": "后转任马克斯·普朗克社会研究所。"},
+    {"year": "1992", "event": "出版《事实与规范》", "details": "系统阐述商谈民主和法律理论。"},
+    {"year": "2001", "event": "发表《后民族格局》", "details": "分析全球化时代的民主转型。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "communicative-action",
+      "title": "交往行为",
+      "title_en": "Communicative Action",
+      "category": "社会理论 / 语言哲学",
+      "description": "交往行为是哈贝马斯社会理论的核心概念。他将人类行为分为四类：1）目的行为（instrumental action / 追求特定目标，如生产）；2）规范行为（norm-regulated action / 遵循社会规范，如礼仪）；3）戏剧行为（dramaturgical action / 自我表达，如表演）；4）交往行为（communicative action / 通过语言达成共识）。交往行为的独特之处在于：它不是'策略性的'（操纵他人），而是'真诚性的'——说话者承诺其言语是真实的（truth）、正当的（rightness）和真诚的（truthfulness）。交往理性是不同于工具理性的另一种理性——它不是'计算'最优手段，而是'理解'彼此并达成共识。",
+      "keyWorks": ["《交往行为理论》"],
+      "primaryQuotes": [
+        {"chinese": "交往行为指向相互理解，而非策略性操纵。", "english": "Communicative action is oriented toward mutual understanding, not strategic manipulation.", "source": "The Theory of Communicative Action, Vol. I"},
+        {"chinese": "理性的核心不是工具性的计算能力，而是交往性的理解能力。", "english": "The core of reason is not instrumental calculation, but communicative understanding.", "source": "The Theory of Communicative Action"}
+      ]
+    },
+    {
+      "id": "discourse-ethics",
+      "title": "商谈伦理学",
+      "title_en": "Discourse Ethics",
+      "category": "伦理学 / 政治哲学",
+      "description": "商谈伦理学是哈贝马斯对康德义务论的修正。康德认为：道德法则是理性的先天结构。哈贝马斯反驳：道德法则不是'独白式'的（一个人思考什么是正确的），而是'对话式'的（所有受影响的人在理想的对话条件下达成共识）。商谈伦理学的基本原则（U原则）：'一个规范只有在其普遍遵循对所有受影响者的利益都产生可接受的结果时，才是有效的'。这一原则不是'先天'的，而是'程序性的'——它规定了道德判断的程序（理想对话），而非道德判断的内容。",
+      "keyWorks": ["《道德意识与交往行为》", "《商谈伦理学》"],
+      "primaryQuotes": [
+        {"chinese": "只有所有可能受影响的人作为理性商谈参与者所能同意的规范，才是有效的。", "english": "Only those norms can claim validity that meet with the approval of all affected in their capacity as participants in a practical discourse.", "source": "Moral Consciousness and Communicative Action"}
+      ]
+    },
+    {
+      "id": "lifeworld-colonization",
+      "title": "生活世界的殖民化",
+      "title_en": "Colonization of the Lifeworld",
+      "category": "社会理论 / 批判理论",
+      "description": "生活世界的殖民化是哈贝马斯对现代社会的核心诊断。哈贝马斯区分了'系统'（system / 市场和国家官僚机构，遵循工具理性）和'生活世界'（lifeworld / 家庭、友谊、文化，遵循交往理性）。现代社会的问题在于：系统（金钱和权力）正在'殖民'生活世界——家庭关系被经济利益侵蚀（如婚姻变成财产契约），教育被考试和排名控制（如应试教育），医疗被保险制度支配（如医生被迫考虑经济效益而非病人需求）。解决之道不是废除系统（这是不可能的），而是'保护'生活世界——通过强化公共领域和民主参与来限制系统的扩张。",
+      "keyWorks": ["《交往行为理论》第二卷"],
+      "primaryQuotes": [
+        {"chinese": "系统对生活世界的殖民化是现代社会的根本病理。", "english": "The colonization of the lifeworld by systems is the fundamental pathology of modern society.", "source": "The Theory of Communicative Action, Vol. II"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《公共领域的结构转型》", "title_de": "Strukturwandel der Öffentlichkeit", "year": "1962", "summary": "分析资产阶级公共领域的兴衰，是现代传播学的奠基之作。"},
+    {"title": "《交往行为理论》", "title_de": "Theorie des kommunikativen Handelns", "year": "1981", "summary": "两卷巨著，系统阐述交往理性与系统理性的对立。"},
+    {"title": "《商谈伦理学》", "title_de": "Erläuterungen zur Diskursethik", "year": "1991", "summary": "系统阐述商谈伦理学的程序和原则。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "理性的核心不是工具性的计算能力，而是交往性的理解能力。", "english": "The core of reason is communicative understanding.", "source": "The Theory of Communicative Action"},
+    {"chinese": "系统对生活世界的殖民化是现代社会的根本病理。", "english": "The colonization of the lifeworld is the fundamental pathology of modern society.", "source": "The Theory of Communicative Action, Vol. II"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较哈贝马斯'交往行为理论'与阿多诺'工具理性批判'对现代理性的看法。",
+      "output": "哈贝马斯的交往行为理论与阿多诺的工具理性批判都是法兰克福学派对现代理性的分析，但得出不同结论。\n\n阿多诺的工具理性批判：\n1）启蒙理性已经变成了'工具理性'——理性只关心'如何达到目的'，不关心'目的是否正确'。\n2）工具理性导致了'同一性思维'——将万物还原为可计算的量。\n3）工具理性的结果是'奥斯维辛'——现代极权主义是工具理性的必然产物。\n4）阿多诺是悲观的——启蒙理性无法自我拯救。\n\n哈贝马斯的交往行为理论：\n1）理性不是单一的——工具理性只是理性的一种形式，还有交往理性（通过对话达成共识）。\n2）交往理性是'未被扭曲的'——它存在于理想的对话条件中。\n3）现代社会的病理不是'理性本身'，而是'系统的殖民化'——交往理性被工具理性压制。\n4）哈贝马斯是乐观的——通过强化公共领域和民主参与，可以恢复交往理性。\n\n根本差异：\n1）阿多诺是'悲观的'，哈贝马斯是'乐观的'。\n2）阿多诺否定'同一性'，哈贝马斯寻求'共识'。\n3）阿多诺的方法论是'否定辩证法'，哈贝马斯的方法论是'商谈伦理学'。\n\n互补性：两者共同构成了法兰克福学派对现代性的两种批判——阿多诺揭示了现代性的黑暗面，哈贝马斯指出了现代性的救赎可能。",
+      "source": "Habermas, The Theory of Communicative Action; Adorno, Dialectic of Enlightenment; Negative Dialectics; McCarthy, The Critical Theory of Jürgen Habermas (1978)",
+      "tier": 1
+    }
+  ]
+}
