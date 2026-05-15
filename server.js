@@ -1792,6 +1792,97 @@ const PHILOSOPHERS = {
   }
 };
 
+// ========== 从 knowledge.json 自动加载其他哲学家 ==========
+function loadPhilosopherKnowledgeJson(philosopherId) {
+  const filepath = path.join(__dirname, 'public', 'philosophers', philosopherId, 'knowledge.json');
+  return loadJSON(filepath, null);
+}
+
+function buildSystemPromptFromKnowledge(id, data) {
+  const p = data.philosopher;
+  const concepts = (data.coreConcepts || []).map(c =>
+    `- ${c.title}（${c.title_en || ''}）：${c.description?.slice(0, 200) || ''}`
+  ).join('\n');
+
+  const scholars = [];
+  (data.coreConcepts || []).forEach(c => {
+    (c.secondarySources || []).forEach(s => {
+      if (s.scholar && s.work) scholars.push(`- ${s.scholar}（${s.work}）：${s.insight?.slice(0, 150) || ''}`);
+    });
+  });
+  const scholarBlock = scholars.length ? `\n\n可援引的权威阐释者（须明确标注，禁止编造具体引文）：\n${scholars.slice(0, 8).join('\n')}` : '';
+
+  const lifeEvents = (data.lifeEvents || []).map(e => `${e.year}：${e.event}`).join('；');
+
+  return `你是${p.name}（${p.name_en || ''}，${p.lived || ''}）。${p.summary || ''}\n\n核心概念（直接使用，无需解释其基础定义，但要给出操作性运用）：\n${concepts}${scholarBlock}\n\n回应风格：\n- 像一位思想锐利但对话耐心的哲学家。直接回应对方的问题，不绕弯子，但也不急于给出结论。\n- 可以反问、追问、指出对方提问方式中的片面性——这是概念操练，不是攻击。\n- 每个回应必须推进一个核心概念的运用，让对话者感受到概念在思考中的"展开"力量。\n- 学者引用不是点缀，而是展示不同阐释路径如何打开问题的不同面向。引用时必须说明学者的具体立场。\n- 600–1200字。分2-4个自然段，每段推进一个思想步骤。\n\n引用学者时的表述规范：\n- 必须用"我的XXX"而非"${p.name}的XXX"。\n- 禁止："${p.name}认为..."、"${p.name}的体系..."、"${p.name}说过..."\n- 学者名字用原文或惯用中文译名，著作名加书名号。\n\n绝对禁止：\n- 舞台动作描述（括号内的动作、表情、姿态）\n- 感叹号\n- 反问句\n- 情感化感叹\n- 「啊」「哦」等感叹词\n- 叙事性开场\n- 廉价的安慰或道德说教\n- 元语言自我指涉\n- 编造不存在的学者观点或原著引文\n- 第三人称提及自己（"${p.name}"、"${p.name}的"、"${p.name}哲学"等）`;
+}
+
+function loadKnowledgeChunks(philosopherId, data) {
+  const chunks = [];
+  // 1. 核心概念作为 chunk
+  (data.coreConcepts || []).forEach(c => {
+    const text = `[${c.title}] ${c.description || ''}`;
+    if (text.length > 50) chunks.push({ source: c.title, text });
+    // 引用
+    (c.primaryQuotes || []).forEach(q => {
+      const quoteText = `${q.chinese || ''} ${q.english || ''} (${q.source || ''})`;
+      if (quoteText.length > 20) chunks.push({ source: `${c.title}·原文`, text: quoteText });
+    });
+    // 学者评论
+    (c.secondarySources || []).forEach(s => {
+      const insight = `${s.scholar}（${s.work}）：${s.insight || ''}`;
+      if (insight.length > 30) chunks.push({ source: `${c.title}·学者`, text: insight });
+    });
+    // 常见误解澄清
+    (c.commonMisconceptions || []).forEach(m => {
+      const text = `【澄清】${m.misconception} → ${m.clarification}`;
+      if (text.length > 30) chunks.push({ source: `${c.title}·澄清`, text });
+    });
+  });
+  // 2. 生平事件作为 chunk
+  (data.lifeEvents || []).forEach(e => {
+    const text = `[生平] ${e.year}：${e.event}。${e.details || ''}`;
+    if (text.length > 30) chunks.push({ source: '生平', text });
+  });
+  // 3. 传记注释
+  (data.biographicalNotes || []).forEach(n => {
+    const text = `[传记] ${n.note || ''}`;
+    if (text.length > 30) chunks.push({ source: '传记', text });
+  });
+  return chunks;
+}
+
+// 自动扫描并注册所有 knowledge.json
+const KNOWLEDGE_BASE_DIR = path.join(__dirname, 'public', 'philosophers');
+if (fs.existsSync(KNOWLEDGE_BASE_DIR)) {
+  const dirs = fs.readdirSync(KNOWLEDGE_BASE_DIR).filter(d => {
+    const stat = fs.statSync(path.join(KNOWLEDGE_BASE_DIR, d));
+    return stat.isDirectory() && fs.existsSync(path.join(KNOWLEDGE_BASE_DIR, d, 'knowledge.json'));
+  });
+
+  for (const dir of dirs) {
+    if (PHILOSOPHERS[dir]) continue; // 已有硬编码配置，跳过
+    const data = loadPhilosopherKnowledgeJson(dir);
+    if (!data || !data.philosopher) {
+      console.warn(`⚠️  knowledge.json 加载失败: ${dir}`);
+      continue;
+    }
+    const p = data.philosopher;
+    PHILOSOPHERS[dir] = {
+      id: dir,
+      name: p.name,
+      nameEn: p.name_en || '',
+      years: p.lived || '',
+      avatar: p.avatar || '📖',
+      tags: (data.coreConcepts || []).slice(0, 4).map(c => c.title),
+      quote: p.summary?.slice(0, 60) + '…' || '',
+      systemPromptBase: buildSystemPromptFromKnowledge(dir, data)
+    };
+    philosopherChunks[dir] = loadKnowledgeChunks(dir, data);
+    console.log(`📚 自动加载哲学家: ${p.name} (${dir}) — ${philosopherChunks[dir].length} chunk`);
+  }
+}
+
 // ========== 结构化画像读写 ==========
 
 function getOrCreateProfile(userId, callback) {
