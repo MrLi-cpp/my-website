@@ -133,7 +133,7 @@ app.use(express.static('public'));
 // ===== 数据库初始化 =====
 const db = new sqlite3.Database('./database.sqlite');
 
-db.serialize(() => {
+db.serialize(() =&gt; {
   db.run(`
     CREATE TABLE IF NOT EXISTS posts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -146,11 +146,11 @@ db.serialize(() => {
 
 // ===== 路由 =====
 // 获取所有动态（按时间倒序）
-app.get('/api/posts', (req, res) => {
+app.get('/api/posts', (req, res) =&gt; {
   db.all(
     'SELECT * FROM posts ORDER BY created_at DESC',
     [],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -160,7 +160,7 @@ app.get('/api/posts', (req, res) => {
 });
 
 // 发表动态
-app.post('/api/posts', (req, res) => {
+app.post('/api/posts', (req, res) =&gt; {
   const { content, author } = req.body;
   
   if (!content || content.trim() === '') {
@@ -186,7 +186,7 @@ app.post('/api/posts', (req, res) => {
 
 // ===== 启动 =====
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, () =&gt; {
   console.log(`服务器已启动！访问 http://localhost:${PORT}`);
 });
 </code></pre>
@@ -275,15 +275,15 @@ app.listen(PORT, () => {
 
 <h3>4.5.1 创建 moments.html</h3>
 
-<pre><code><!-- 文件位置：my-website/public/moments.html -->
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>朋友圈 - 霁光</title>
-  <link rel="stylesheet" href="/style.css">
-  <style>
+<pre><code>&lt;!-- 文件位置：my-website/public/moments.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;朋友圈 - 霁光&lt;/title&gt;
+  &lt;link rel="stylesheet" href="/style.css"&gt;
+  &lt;style&gt;
     .moments-container {
       max-width: 600px;
       margin: 0 auto;
@@ -345,37 +345,37 @@ app.listen(PORT, () => {
       color: var(--text-muted);
       font-size: 12px;
     }
-  </style>
-</head>
-<body>
-  <div class="moments-container">
-    <h1 style="color: var(--accent-gold); margin-bottom: 24px;">朋友圈</h1>
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="moments-container"&gt;
+    &lt;h1 style="color: var(--accent-gold); margin-bottom: 24px;"&gt;朋友圈&lt;/h1&gt;
     
-    <!-- 发表表单 -->
-    <div class="moment-form">
-      <textarea id="content" placeholder="分享你的瞬间..."></textarea>
-      <input type="text" id="author" placeholder="你的名字（可选）" 
-             style="margin-top: 8px; width: 200px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;">
-      <button onclick="postMoment()">发表</button>
-    </div>
+    &lt;!-- 发表表单 --&gt;
+    &lt;div class="moment-form"&gt;
+      &lt;textarea id="content" placeholder="分享你的瞬间..."&gt;&lt;/textarea&gt;
+      &lt;input type="text" id="author" placeholder="你的名字（可选）" 
+             style="margin-top: 8px; width: 200px; background: transparent; border: 1px solid var(--border); color: var(--text-primary); padding: 8px 12px; border-radius: 6px;"&gt;
+      &lt;button onclick="postMoment()"&gt;发表&lt;/button&gt;
+    &lt;/div&gt;
     
-    <!-- 动态列表 -->
-    <div id="moments-list"></div>
-  </div>
+    &lt;!-- 动态列表 --&gt;
+    &lt;div id="moments-list"&gt;&lt;/div&gt;
+  &lt;/div&gt;
   
-  <script>
+  &lt;script&gt;
     // 页面加载时获取所有动态
     async function loadMoments() {
       const res = await fetch('/api/posts');
       const posts = await res.json();
       
       const container = document.getElementById('moments-list');
-      container.innerHTML = posts.map(post => `
-        <div class="moment-card">
-          <div class="moment-author">${escapeHtml(post.author)}</div>
-          <div class="moment-content">${escapeHtml(post.content)}</div>
-          <div class="moment-time">${new Date(post.created_at).toLocaleString('zh-CN')}</div>
-        </div>
+      container.innerHTML = posts.map(post =&gt; `
+        &lt;div class="moment-card"&gt;
+          &lt;div class="moment-author"&gt;${escapeHtml(post.author)}&lt;/div&gt;
+          &lt;div class="moment-content"&gt;${escapeHtml(post.content)}&lt;/div&gt;
+          &lt;div class="moment-time"&gt;${new Date(post.created_at).toLocaleString('zh-CN')}&lt;/div&gt;
+        &lt;/div&gt;
       `).join('');
     }
     
@@ -411,9 +411,9 @@ app.listen(PORT, () => {
     
     // 页面加载时执行
     loadMoments();
-  </script>
-</body>
-</html>
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
 
 <h2>4.6 XSS 攻击——为什么需要 escapeHtml？</h2>

@@ -257,7 +257,7 @@ npm install bcryptjs</code></pre>
 
 <pre><code>const bcrypt = require('bcryptjs');
 
-app.post('/api/register', async (req, res) => {
+app.post('/api/register', async (req, res) =&gt; {
   const { username, password } = req.body;
   
   // 验证输入
@@ -265,11 +265,11 @@ app.post('/api/register', async (req, res) => {
     return res.status(400).json({ error: '用户名和密码不能为空' });
   }
   
-  if (username.length < 3 || username.length > 20) {
+  if (username.length &lt; 3 || username.length &gt; 20) {
     return res.status(400).json({ error: '用户名长度 3-20 个字符' });
   }
   
-  if (password.length < 6) {
+  if (password.length &lt; 6) {
     return res.status(400).json({ error: '密码至少 6 位' });
   }
   
@@ -317,7 +317,7 @@ app.post('/api/register', async (req, res) => {
 
 <h3>5.5.3 登录接口</h3>
 
-<pre><code>app.post('/api/login', (req, res) => {
+<pre><code>app.post('/api/login', (req, res) =&gt; {
   const { username, password } = req.body;
   
   if (!username || !password) {
@@ -327,7 +327,7 @@ app.post('/api/register', async (req, res) => {
   db.get(
     'SELECT * FROM users WHERE username = ?',
     [username],
-    async (err, user) => {
+    async (err, user) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -429,7 +429,7 @@ app.use(session({
 
 <h3>5.5.5 获取当前用户接口</h3>
 
-<pre><code>app.get('/api/me', (req, res) => {
+<pre><code>app.get('/api/me', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '未登录' });
   }
@@ -444,7 +444,7 @@ app.use(session({
 
 <h3>5.5.6 退出登录</h3>
 
-<pre><code>app.post('/api/logout', (req, res) => {
+<pre><code>app.post('/api/logout', (req, res) =&gt; {
   req.session.destroy();
   res.json({ message: '已退出登录' });
 });</code></pre>

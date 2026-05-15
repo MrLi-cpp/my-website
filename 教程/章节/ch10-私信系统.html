@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS messages (
 
 <h3>10.3.1 获取或创建对话</h3>
 
-<pre><code>app.post('/api/conversations', (req, res) => {
+<pre><code>app.post('/api/conversations', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -115,13 +115,13 @@ CREATE TABLE IF NOT EXISTS messages (
   const { targetUserId } = req.body;
   const userId = req.session.userId;
   
-  // 确保 user1_id < user2_id，避免重复
-  const [u1, u2] = userId < targetUserId ? [userId, targetUserId] : [targetUserId, userId];
+  // 确保 user1_id &lt; user2_id，避免重复
+  const [u1, u2] = userId &lt; targetUserId ? [userId, targetUserId] : [targetUserId, userId];
   
   db.get(
     'SELECT * FROM conversations WHERE user1_id = ? AND user2_id = ?',
     [u1, u2],
-    (err, conv) => {
+    (err, conv) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       
       if (conv) {
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS messages (
 
 <h3>10.3.2 发送消息</h3>
 
-<pre><code>app.post('/api/conversations/:id/messages', (req, res) => {
+<pre><code>app.post('/api/conversations/:id/messages', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS messages (
 
 <h3>10.3.3 获取消息</h3>
 
-<pre><code>app.get('/api/conversations/:id/messages', (req, res) => {
+<pre><code>app.get('/api/conversations/:id/messages', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -183,7 +183,7 @@ CREATE TABLE IF NOT EXISTS messages (
   db.all(
     'SELECT * FROM messages WHERE conversation_id = ? ORDER BY created_at ASC',
     [req.params.id],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     }
@@ -193,7 +193,7 @@ CREATE TABLE IF NOT EXISTS messages (
 
 <h3>10.3.4 获取对话列表</h3>
 
-<pre><code>app.get('/api/conversations', (req, res) => {
+<pre><code>app.get('/api/conversations', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS messages (
     WHERE c.user1_id = ? OR c.user2_id = ?
     ORDER BY c.created_at DESC`,
     [userId, userId, userId, userId],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     }
@@ -268,7 +268,7 @@ function startPolling(conversationId) {
   loadMessages(conversationId);
   
   // 然后每 3 秒轮询
-  pollInterval = setInterval(() => {
+  pollInterval = setInterval(() =&gt; {
     loadMessages(conversationId);
   }, 3000);
 }

@@ -137,7 +137,7 @@ strong { color: #1a5276; }
 
 <h3>7.4.1 发布文章</h3>
 
-<pre><code>app.post('/api/blogs', (req, res) => {
+<pre><code>app.post('/api/blogs', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -165,7 +165,7 @@ strong { color: #1a5276; }
 
 <h3>7.4.2 获取文章列表</h3>
 
-<pre><code>app.get('/api/blogs', (req, res) => {
+<pre><code>app.get('/api/blogs', (req, res) =&gt; {
   db.all(
     `SELECT 
       blogs.id,
@@ -179,7 +179,7 @@ strong { color: #1a5276; }
     JOIN users ON blogs.user_id = users.id
     ORDER BY blogs.created_at DESC`,
     [],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -190,7 +190,7 @@ strong { color: #1a5276; }
 
 <h3>7.4.3 获取单篇文章</h3>
 
-<pre><code>app.get('/api/blogs/:id', (req, res) => {
+<pre><code>app.get('/api/blogs/:id', (req, res) =&gt; {
   const blogId = req.params.id;
   
   // 先获取文章
@@ -200,7 +200,7 @@ strong { color: #1a5276; }
      JOIN users ON blogs.user_id = users.id
      WHERE blogs.id = ?`,
     [blogId],
-    (err, blog) => {
+    (err, blog) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -226,7 +226,7 @@ strong { color: #1a5276; }
 
 <h3>7.4.4 更新文章</h3>
 
-<pre><code>app.put('/api/blogs/:id', (req, res) => {
+<pre><code>app.put('/api/blogs/:id', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -238,7 +238,7 @@ strong { color: #1a5276; }
   db.get(
     'SELECT user_id FROM blogs WHERE id = ?',
     [blogId],
-    (err, blog) => {
+    (err, blog) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       if (!blog) return res.status(404).json({ error: '文章不存在' });
       if (blog.user_id !== req.session.userId) {
@@ -504,7 +504,7 @@ async function init() {
     document.getElementById('tags').value = blog.tags;
     
     // 修改表单提交逻辑为 PUT
-    document.getElementById('form').onsubmit = () => updateBlog(editId);
+    document.getElementById('form').onsubmit = () =&gt; updateBlog(editId);
   }
 }</code></pre>
 

@@ -108,7 +108,7 @@ strong { color: #1a5276; }
   db.get(
     'SELECT is_admin FROM users WHERE id = ?',
     [req.session.userId],
-    (err, user) => {
+    (err, user) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -126,11 +126,11 @@ strong { color: #1a5276; }
 
 <p>使用方式：</p>
 
-<pre><code>app.get('/api/admin/stats', requireAdmin, (req, res) => {
+<pre><code>app.get('/api/admin/stats', requireAdmin, (req, res) =&gt; {
   // 只有管理员能执行到这里
-  db.get('SELECT COUNT(*) as user_count FROM users', [], (err, userCount) => {
-    db.get('SELECT COUNT(*) as post_count FROM posts', [], (err2, postCount) => {
-      db.get('SELECT COUNT(*) as blog_count FROM blogs', [], (err3, blogCount) => {
+  db.get('SELECT COUNT(*) as user_count FROM users', [], (err, userCount) =&gt; {
+    db.get('SELECT COUNT(*) as post_count FROM posts', [], (err2, postCount) =&gt; {
+      db.get('SELECT COUNT(*) as blog_count FROM blogs', [], (err3, blogCount) =&gt; {
         res.json({
           users: userCount.user_count,
           posts: postCount.post_count,
@@ -150,7 +150,7 @@ Express 的路由支持多个中间件：app.get('/path', middleware1, middlewar
 
 <h3>9.4.1 获取所有文章（管理员可删任意文章）</h3>
 
-<pre><code>app.get('/api/admin/blogs', requireAdmin, (req, res) => {
+<pre><code>app.get('/api/admin/blogs', requireAdmin, (req, res) =&gt; {
   db.all(
     `SELECT blogs.*, users.username
      FROM blogs
@@ -158,7 +158,7 @@ Express 的路由支持多个中间件：app.get('/path', middleware1, middlewar
      ORDER BY blogs.created_at DESC
      LIMIT 50`,
     [],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     }
@@ -167,7 +167,7 @@ Express 的路由支持多个中间件：app.get('/path', middleware1, middlewar
 
 <h3>9.4.2 管理员删除任意文章</h3>
 
-<pre><code>app.delete('/api/admin/blogs/:id', requireAdmin, (req, res) => {
+<pre><code>app.delete('/api/admin/blogs/:id', requireAdmin, (req, res) =&gt; {
   db.run(
     'DELETE FROM blogs WHERE id = ?',
     [req.params.id],
@@ -182,7 +182,7 @@ Express 的路由支持多个中间件：app.get('/path', middleware1, middlewar
 
 <h3>9.4.3 获取所有动态</h3>
 
-<pre><code>app.get('/api/admin/posts', requireAdmin, (req, res) => {
+<pre><code>app.get('/api/admin/posts', requireAdmin, (req, res) =&gt; {
   db.all(
     `SELECT posts.*, users.username
      FROM posts
@@ -190,7 +190,7 @@ Express 的路由支持多个中间件：app.get('/path', middleware1, middlewar
      ORDER BY posts.created_at DESC
      LIMIT 50`,
     [],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     }
@@ -199,13 +199,13 @@ Express 的路由支持多个中间件：app.get('/path', middleware1, middlewar
 
 <h3>9.4.4 获取所有用户</h3>
 
-<pre><code>app.get('/api/admin/users', requireAdmin, (req, res) => {
+<pre><code>app.get('/api/admin/users', requireAdmin, (req, res) =&gt; {
   db.all(
     `SELECT id, username, is_admin, created_at 
      FROM users 
      ORDER BY created_at DESC`,
     [],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     }

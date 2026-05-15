@@ -263,7 +263,7 @@ GROUP BY posts.id;
 
 <h3>6.4.1 获取动态（带用户名）</h3>
 
-<pre><code>app.get('/api/posts', (req, res) => {
+<pre><code>app.get('/api/posts', (req, res) =&gt; {
   db.all(
     `SELECT 
       posts.id,
@@ -275,7 +275,7 @@ GROUP BY posts.id;
     JOIN users ON posts.user_id = users.id
     ORDER BY posts.created_at DESC`,
     [],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -289,7 +289,7 @@ GROUP BY posts.id;
 
 <h3>6.4.2 发表动态（需要登录）</h3>
 
-<pre><code>app.post('/api/posts', (req, res) => {
+<pre><code>app.post('/api/posts', (req, res) =&gt; {
   // 检查登录状态
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
@@ -323,7 +323,7 @@ GROUP BY posts.id;
 
 <h3>6.4.3 删除自己的动态</h3>
 
-<pre><code>app.delete('/api/posts/:id', (req, res) => {
+<pre><code>app.delete('/api/posts/:id', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -334,7 +334,7 @@ GROUP BY posts.id;
   db.get(
     'SELECT user_id FROM posts WHERE id = ?',
     [postId],
-    (err, post) => {
+    (err, post) =&gt; {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
@@ -401,13 +401,13 @@ GROUP BY posts.id;
 
 <p>SQLite 中默认每条 SQL 语句都是一个事务（自动提交模式）。但我们也可以手动控制：</p>
 
-<pre><code>db.serialize(() => {
+<pre><code>db.serialize(() =&gt; {
   db.run('BEGIN TRANSACTION');
   
   db.run('UPDATE accounts SET balance = balance - 100 WHERE id = 1');
   db.run('UPDATE accounts SET balance = balance + 100 WHERE id = 2');
   
-  db.run('COMMIT', (err) => {
+  db.run('COMMIT', (err) =&gt; {
     if (err) {
       db.run('ROLLBACK');  // 出错时回滚
     }

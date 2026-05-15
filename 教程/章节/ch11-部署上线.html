@@ -155,11 +155,11 @@ const SESSION_SECRET = process.env.SESSION_SECRET || 'fallback-secret';
 <div class="tip">
 <strong>⚠️ 安全警告</strong><br/>
 .env 文件包含敏感信息，必须加入 .gitignore：
-<pre><code>echo ".env" >> .gitignore
-echo "node_modules/" >> .gitignore
-echo "database.sqlite" >> .gitignore
-echo "sessions/" >> .gitignore
-echo "uploads/" >> .gitignore</code></pre>
+<pre><code>echo ".env" &gt;&gt; .gitignore
+echo "node_modules/" &gt;&gt; .gitignore
+echo "database.sqlite" &gt;&gt; .gitignore
+echo "sessions/" &gt;&gt; .gitignore
+echo "uploads/" &gt;&gt; .gitignore</code></pre>
 </div>
 
 <h2>11.4 进程守护——PM2</h2>

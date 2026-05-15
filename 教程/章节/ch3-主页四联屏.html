@@ -174,64 +174,64 @@ strong { color: #1a5276; }
 
 <h3>3.4.1 HTML 结构</h3>
 
-<pre><code><!-- 文件位置：my-website/public/index.html -->
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>霁光 · 个人网站</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-  <!-- 整个页面是一个滚动容器 -->
-  <div class="scroll-container">
+<pre><code>&lt;!-- 文件位置：my-website/public/index.html --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="zh-CN"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;霁光 · 个人网站&lt;/title&gt;
+  &lt;link rel="stylesheet" href="/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- 整个页面是一个滚动容器 --&gt;
+  &lt;div class="scroll-container"&gt;
     
-    <!-- ===== 第一屏：主页 ===== -->
-    <section class="screen home-screen">
-      <div class="home-wrap">
-        <h1 class="home-title">霁光</h1>
-        <p class="home-desc">记录生活 · 沉淀思考 · 分享成长</p>
-        <div class="scroll-hint">
-          <span>向下滚动</span>
-          <div class="scroll-arrow">↓</div>
-        </div>
-      </div>
-    </section>
+    &lt;!-- ===== 第一屏：主页 ===== --&gt;
+    &lt;section class="screen home-screen"&gt;
+      &lt;div class="home-wrap"&gt;
+        &lt;h1 class="home-title"&gt;霁光&lt;/h1&gt;
+        &lt;p class="home-desc"&gt;记录生活 · 沉淀思考 · 分享成长&lt;/p&gt;
+        &lt;div class="scroll-hint"&gt;
+          &lt;span&gt;向下滚动&lt;/span&gt;
+          &lt;div class="scroll-arrow"&gt;↓&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
     
-    <!-- ===== 第二屏：朋友圈 ===== -->
-    <section class="screen moments-screen">
-      <div class="screen-content">
-        <div class="screen-icon">📸</div>
-        <h2 class="screen-title">朋友圈</h2>
-        <p class="screen-desc">记录生活中的点滴瞬间</p>
-        <button class="screen-btn" onclick="location.href='/moments.html'">进入朋友圈</button>
-      </div>
-    </section>
+    &lt;!-- ===== 第二屏：朋友圈 ===== --&gt;
+    &lt;section class="screen moments-screen"&gt;
+      &lt;div class="screen-content"&gt;
+        &lt;div class="screen-icon"&gt;📸&lt;/div&gt;
+        &lt;h2 class="screen-title"&gt;朋友圈&lt;/h2&gt;
+        &lt;p class="screen-desc"&gt;记录生活中的点滴瞬间&lt;/p&gt;
+        &lt;button class="screen-btn" onclick="location.href='/moments.html'"&gt;进入朋友圈&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
     
-    <!-- ===== 第三屏：博客 ===== -->
-    <section class="screen blog-screen">
-      <div class="screen-content">
-        <div class="screen-icon">✍️</div>
-        <h2 class="screen-title">博客</h2>
-        <p class="screen-desc">沉淀深度思考与技术分析</p>
-        <button class="screen-btn" onclick="location.href='/blog-hub.html'">进入博客</button>
-      </div>
-    </section>
+    &lt;!-- ===== 第三屏：博客 ===== --&gt;
+    &lt;section class="screen blog-screen"&gt;
+      &lt;div class="screen-content"&gt;
+        &lt;div class="screen-icon"&gt;✍️&lt;/div&gt;
+        &lt;h2 class="screen-title"&gt;博客&lt;/h2&gt;
+        &lt;p class="screen-desc"&gt;沉淀深度思考与技术分析&lt;/p&gt;
+        &lt;button class="screen-btn" onclick="location.href='/blog-hub.html'"&gt;进入博客&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
     
-    <!-- ===== 第四屏：关于我 ===== -->
-    <section class="screen about-screen">
-      <div class="screen-content">
-        <div class="screen-icon">⛩️</div>
-        <h2 class="screen-title">关于我</h2>
-        <p class="screen-desc">一个热爱技术与人文的创作者</p>
-        <button class="screen-btn" onclick="location.href='/about.html'">了解更多</button>
-      </div>
-    </section>
+    &lt;!-- ===== 第四屏：关于我 ===== --&gt;
+    &lt;section class="screen about-screen"&gt;
+      &lt;div class="screen-content"&gt;
+        &lt;div class="screen-icon"&gt;⛩️&lt;/div&gt;
+        &lt;h2 class="screen-title"&gt;关于我&lt;/h2&gt;
+        &lt;p class="screen-desc"&gt;一个热爱技术与人文的创作者&lt;/p&gt;
+        &lt;button class="screen-btn" onclick="location.href='/about.html'"&gt;了解更多&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/section&gt;
     
-  </div>
-</body>
-</html></code></pre>
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
 
 <p><strong>结构解析：</strong></p>
 

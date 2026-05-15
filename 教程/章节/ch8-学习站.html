@@ -127,7 +127,7 @@ strong { color: #1a5276; }
 
 <h3>8.3.1 获取学习列表（Read）</h3>
 
-<pre><code>app.get('/api/learning', (req, res) => {
+<pre><code>app.get('/api/learning', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -135,7 +135,7 @@ strong { color: #1a5276; }
   db.all(
     'SELECT * FROM learning_items WHERE user_id = ? ORDER BY created_at DESC',
     [req.session.userId],
-    (err, rows) => {
+    (err, rows) =&gt; {
       if (err) return res.status(500).json({ error: err.message });
       res.json(rows);
     }
@@ -144,7 +144,7 @@ strong { color: #1a5276; }
 
 <h3>8.3.2 添加学习项目（Create）</h3>
 
-<pre><code>app.post('/api/learning', (req, res) => {
+<pre><code>app.post('/api/learning', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -167,7 +167,7 @@ strong { color: #1a5276; }
 
 <h3>8.3.3 更新进度（Update）</h3>
 
-<pre><code>app.put('/api/learning/:id', (req, res) => {
+<pre><code>app.put('/api/learning/:id', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -176,7 +176,7 @@ strong { color: #1a5276; }
   const itemId = req.params.id;
   
   // 验证 progress 范围
-  if (progress !== undefined && (progress < 0 || progress > 100)) {
+  if (progress !== undefined &amp;&amp; (progress &lt; 0 || progress &gt; 100)) {
     return res.status(400).json({ error: '进度必须在 0-100 之间' });
   }
   
@@ -197,7 +197,7 @@ strong { color: #1a5276; }
 
 <h3>8.3.4 删除（Delete）</h3>
 
-<pre><code>app.delete('/api/learning/:id', (req, res) => {
+<pre><code>app.delete('/api/learning/:id', (req, res) =&gt; {
   if (!req.session.userId) {
     return res.status(401).json({ error: '请先登录' });
   }
@@ -246,10 +246,10 @@ strong { color: #1a5276; }
 
 <pre><code>function renderProgress(percent) {
   return `
-    <div class="progress-bar">
-      <div class="progress-fill" style="width: ${percent}%"></div>
-    </div>
-    <span class="progress-text">${percent}%</span>
+    &lt;div class="progress-bar"&gt;
+      &lt;div class="progress-fill" style="width: ${percent}%"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    &lt;span class="progress-text"&gt;${percent}%&lt;/span&gt;
   `;
 }</code></pre>
 
