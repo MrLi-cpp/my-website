@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>哲学家分类索引 · 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    .cat-page {
+      background: var(--bg-primary);
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+
+    .cat-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 32px;
+    }
+
+    .cat-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .cat-header h1 {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      color: var(--accent-gold);
+      letter-spacing: 6px;
+      margin-bottom: 10px;
+    }
+    .cat-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* ===== 搜索栏 ===== */
+    .search-bar {
+      max-width: 500px;
+      margin: 0 auto 36px;
+      position: relative;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 12px 44px 12px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      letter-spacing: 1px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .search-bar input:focus {
+      border-color: rgba(201,169,110,0.4);
+    }
+    .search-bar input::placeholder { color: var(--text-muted); }
+    .search-bar .search-icon {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+
+    /* ===== 分类标签导航 ===== */
+    .cat-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cat-tab {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+    .cat-tab:hover {
+      border-color: rgba(201,169,110,0.3);
+      color: var(--text-secondary);
+    }
+    .cat-tab.active {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      background: rgba(201,169,110,0.08);
+    }
+
+    /* ===== 时代/学派分组 ===== */
+    .cat-section {
+      margin-bottom: 44px;
+    }
+    .cat-section-title {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      color: var(--accent-gold);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .cat-section-title .cat-badge {
+      font-size: 11px;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 2px 10px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+    }
+    .cat-section-title .cat-count {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ===== 哲学家卡片网格 ===== */
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .cat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .cat-card:hover {
+      border-color: rgba(201,169,110,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .cat-card:hover::before {
+      opacity: 0.6;
+    }
+
+    .cat-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .cat-card-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      background: rgba(201,169,110,0.06);
+      border: 1px solid rgba(201,169,110,0.15);
+      flex-shrink: 0;
+    }
+    .cat-card-title {
+      flex: 1;
+      min-width: 0;
+    }
+    .cat-card-name {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      color: var(--text-primary);
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+    .cat-card-en {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .cat-card-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cat-card-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .cat-card-tag {
+      font-size: 10px;
+      color: var(--accent-gold);
+      border: 1px solid rgba(201,169,110,0.15);
+      padding: 2px 8px;
+      border-radius: 8px;
+      background: rgba(201,169,110,0.04);
+    }
+
+    /* 地域标识 */
+    .region-mark {
+      position: absolute;
+      top: 12px; right: 12px;
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 1px;
+    }
+    .region-mark.west {
+      color: var(--accent-warm);
+      border: 1px solid rgba(212,165,116,0.2);
+      background: rgba(212,165,116,0.04);
+    }
+    .region-mark.east {
+      color: #7fb3d5;
+      border: 1px solid rgba(127,179,213,0.2);
+      background: rgba(127,179,213,0.04);
+    }
+
+    /* 隐藏分组 */
+    .cat-section.hidden { display: none; }
+    .cat-card.hidden { display: none; }
+
+    /* 回到选择页入口 */
+    .back-to-select {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+    }
+    .back-to-select a {
+      color: var(--accent-gold);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 2px;
+      padding: 10px 28px;
+      border: 1px solid rgba(201,169,110,0.3);
+      border-radius: 6px;
+      transition: all 0.3s;
+      display: inline-block;
+    }
+    .back-to-select a:hover {
+      background: rgba(201,169,110,0.1);
+      border-color: var(--accent-gold);
+    }
+
+    @media (max-width: 768px) {
+      .cat-container { padding: 24px 16px; }
+      .cat-grid { grid-template-columns: 1fr; }
+      .cat-header h1 { font-size: 22px; }
+      .cat-tabs { gap: 6px; }
+      .cat-tab { padding: 6px 12px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body class="cat-page">
+
+  <nav class="top-nav">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <a class="top-nav-brand" href="/index.html" style="text-decoration:none;color:var(--accent-gold);">霁光</a>
+      <span style="font-size:12px;color:var(--text-muted);letter-spacing:2px;">哲学家分类索引</span>
+    </div>
+    <div class="top-nav-login" id="topNavLogin">
+      <span class="top-nav-user" id="navUserName" style="display:none;"></span>
+      <a class="nav-profile-btn" href="/profile.html" id="navProfileBtn" style="display:none;">个人中心</a>
+      <a class="nav-login-btn" href="/login.html" id="navLoginBtn">登录</a>
+      <button class="nav-logout-btn" id="navLogoutBtn" style="display:none;" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <div class="cat-container">
+    <div class="cat-header">
+      <h1>哲学家分类索引</h1>
+      <p>37 位思想家 · 9 大时代 · 跨越三千年的思想锋利</p>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="搜索哲学家、学派、概念…" oninput="doSearch()">
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" onclick="filterCategory('all')">全部 · 37</button>
+      <button class="cat-tab" onclick="filterCategory('ancient')">古希腊 · 6</button>
+      <button class="cat-tab" onclick="filterCategory('chinese')">中国哲学 · 4</button>
+      <button class="cat-tab" onclick="filterCategory('medieval')">中世纪 · 2</button>
+      <button class="cat-tab" onclick="filterCategory('modern')">近代 · 5</button>
+      <button class="cat-tab" onclick="filterCategory('german')">德国古典 · 3</button>
+      <button class="cat-tab" onclick="filterCategory('nineteenth')">19世纪 · 3</button>
+      <button class="cat-tab" onclick="filterCategory('analytic')">分析哲学 · 3</button>
+      <button class="cat-tab" onclick="filterCategory('continental')">欧陆哲学 · 9</button>
+      <button class="cat-tab" onclick="filterCategory('pragmatism')">实用主义 · 2</button>
+    </div>
+
+    <!-- 古希腊 -->
+    <div class="cat-section" data-category="ancient">
+      <div class="cat-section-title">
+        古希腊哲学
+        <span class="cat-badge">公元前470年 — 公元180年</span>
+        <span class="cat-count">6 位</span>
+      </div>
+      <div class="cat-grid" id="ancientGrid"></div>
+    </div>
+
+    <!-- 中国哲学 -->
+    <div class="cat-section" data-category="chinese">
+      <div class="cat-section-title">
+        中国哲学
+        <span class="cat-badge">先秦 → 宋明</span>
+        <span class="cat-count">4 位</span>
+      </div>
+      <div class="cat-grid" id="chineseGrid"></div>
+    </div>
+
+    <!-- 中世纪 -->
+    <div class="cat-section" data-category="medieval">
+      <div class="cat-section-title">
+        中世纪哲学
+        <span class="cat-badge">教父哲学 → 经院哲学</span>
+        <span class="cat-count">2 位</span>
+      </div>
+      <div class="cat-grid" id="medievalGrid"></div>
+    </div>
+
+    <!-- 近代 -->
+    <div class="cat-section" data-category="modern">
+      <div class="cat-section-title">
+        近代哲学
+        <span class="cat-badge">理性主义 vs 经验主义</span>
+        <span class="cat-count">5 位</span>
+      </div>
+      <div class="cat-grid" id="modernGrid"></div>
+    </div>
+
+    <!-- 德国古典 -->
+    <div class="cat-section" data-category="german">
+      <div class="cat-section-title">
+        德国古典哲学
+        <span class="cat-badge">康德 → 黑格尔 → 叔本华</span>
+        <span class="cat-count">3 位</span>
+      </div>
+      <div class="cat-grid" id="germanGrid"></div>
+    </div>
+
+    <!-- 19世纪 -->
+    <div class="cat-section" data-category="nineteenth">
+      <div class="cat-section-title">
+        十九世纪哲学
+        <span class="cat-badge">克尔凯郭尔 → 马克思 → 尼采</span>
+        <span class="cat-count">3 位</span>
+      </div>
+      <div class="cat-grid" id="nineteenthGrid"></div>
+    </div>
+
+    <!-- 分析哲学 -->
+    <div class="cat-section" data-category="analytic">
+      <div class="cat-section-title">
+        分析哲学
+        <span class="cat-badge">罗素 → 维特根斯坦 → 蒯因</span>
+        <span class="cat-count">3 位</span>
+      </div>
+      <div class="cat-grid" id="analyticGrid"></div>
+    </div>
+
+    <!-- 欧陆哲学 -->
+    <div class="cat-section" data-category="continental">
+      <div class="cat-section-title">
+        欧陆哲学
+        <span class="cat-badge">现象学 · 存在主义 · 后现代 · 批判理论</span>
+        <span class="cat-count">9 位</span>
+      </div>
+      <div class="cat-grid" id="continentalGrid"></div>
+    </div>
+
+    <!-- 实用主义 -->
+    <div class="cat-section" data-category="pragmatism">
+      <div class="cat-section-title">
+        实用主义
+        <span class="cat-badge">詹姆斯 → 杜威</span>
+        <span class="cat-count">2 位</span>
+      </div>
+      <div class="cat-grid" id="pragmatismGrid"></div>
+    </div>
+
+    <div class="back-to-select">
+      <a href="/philosopher-select.html">→ 进入哲学家选择页面</a>
+    </div>
+  </div>
+
+  <script>
+    const PHILOSOPHERS = {
+      ancient: [
+        { id: 'socrates', avatar: '⚖️', name: '苏格拉底', nameEn: 'Socrates', years: '470–399 BCE', desc: '西方哲学源头。诘问法、认识你自己、德性即知识。无著作，思想通过柏拉图对话录流传。', tags: ['诘问法', '德性', '助产术'], region: 'west' },
+        { id: 'plato', avatar: '🏛️', name: '柏拉图', nameEn: 'Plato', years: '427–347 BCE', desc: '理念论创始人。洞穴寓言、回忆说、哲人王。西方形而上学的奠基者。', tags: ['理念论', '洞穴寓言', '理想国'], region: 'west' },
+        { id: 'aristotle', avatar: '🦉', name: '亚里士多德', nameEn: 'Aristotle', years: '384–322 BCE', desc: '百科全书式的哲学家。实体、四因说、中庸之道、三段论。逻辑学与科学方法的奠基者。', tags: ['实体', '四因说', '中庸'], region: 'west' },
+        { id: 'epicurus', avatar: '🍇', name: '伊壁鸠鲁', nameEn: 'Epicurus', years: '341–270 BCE', desc: '快乐主义哲学家。原子论、不动心、友谊。希腊化三大学派之一。', tags: ['快乐主义', '原子论', '不动心'], region: 'west' },
+        { id: 'epictetus', avatar: '⛓️', name: '爱比克泰德', nameEn: 'Epictetus', years: '~50–135', desc: '斯多葛学派代表。控制二分法：有些事在我们的权能之内，有些事不在。', tags: ['斯多葛', '控制二分法', '内在自由'], region: 'west' },
+        { id: 'marcus-aurelius', avatar: '🦅', name: '马可·奥勒留', nameEn: 'Marcus Aurelius', years: '121–180', desc: '罗马皇帝哲学家。《沉思录》作者。实践斯多葛哲学的最高典范。', tags: ['斯多葛', '沉思录', '哲人王'], region: 'west' },
+      ],
+      chinese: [
+        { id: 'laozi', avatar: '☯️', name: '老子', nameEn: 'Laozi', years: '~6th c. BCE', desc: '道家创始人。道、无为、自然、反者道之动。《道德经》五千言，中国哲学最深邃的文本。', tags: ['道', '无为', '自然'], region: 'east' },
+        { id: 'confucius', avatar: '📜', name: '孔子', nameEn: 'Confucius', years: '551–479 BCE', desc: '儒家创始人。仁、礼、中庸、正名。中国两千年文明的精神奠基者。', tags: ['仁', '礼', '中庸'], region: 'east' },
+        { id: 'zhuangzi', avatar: '🦋', name: '庄子', nameEn: 'Zhuangzi', years: '~369–286 BCE', desc: '道家巅峰。逍遥、齐物、蝴蝶梦、无用之用。中国哲学中最自由、最诗意的灵魂。', tags: ['逍遥', '齐物', '蝴蝶梦'], region: 'east' },
+        { id: 'wang-yangming', avatar: '☀️', name: '王阳明', nameEn: 'Wang Yangming', years: '1472–1529', desc: '心学集大成。心即理、知行合一、致良知。明代最富创造力的思想家，影响波及日本。', tags: ['心即理', '知行合一', '致良知'], region: 'east' },
+      ],
+      medieval: [
+        { id: 'augustine', avatar: '⛪', name: '奥古斯丁', nameEn: 'Augustine', years: '354–430', desc: '教父哲学最高代表。上帝之城、原罪、时间主观性、自由意志。连接古代与中世纪的关键人物。', tags: ['原罪', '上帝之城', '时间'], region: 'west' },
+        { id: 'aquinas', avatar: '✝️', name: '托马斯·阿奎那', nameEn: 'Aquinas', years: '1225–1274', desc: '经院哲学集大成。五路证明、自然法、存在与本质。亚里士多德与基督教的综合者。', tags: ['五路证明', '自然法', '存在'], region: 'west' },
+      ],
+      modern: [
+        { id: 'descartes', avatar: '💭', name: '笛卡尔', nameEn: 'Descartes', years: '1596–1650', desc: '近代哲学之父。我思故我在、心身二元、普遍怀疑。理性主义的开创者。', tags: ['我思故我在', '心身二元', '怀疑'], region: 'west' },
+        { id: 'spinoza', avatar: '🕸️', name: '斯宾诺莎', nameEn: 'Spinoza', years: '1632–1677', desc: '实体一元论。神即自然、情感伦理学。被黑格尔称为"近代哲学最高峰"。', tags: ['实体一元', '神即自然', '情感'], region: 'west' },
+        { id: 'locke', avatar: '📝', name: '洛克', nameEn: 'Locke', years: '1632–1704', desc: '经验主义奠基者。白板说、自然权利、财产权。自由主义政治哲学的源头。', tags: ['白板说', '自然权利', '经验主义'], region: 'west' },
+        { id: 'hume', avatar: '🪶', name: '休谟', nameEn: 'Hume', years: '1711–1776', desc: '怀疑论巅峰。因果问题、归纳问题、情感主义伦理。康德说他"从独断论的睡梦中唤醒"。', tags: ['因果问题', '怀疑论', '归纳'], region: 'west' },
+        { id: 'leibniz', avatar: '🔢', name: '莱布尼茨', nameEn: 'Leibniz', years: '1646–1716', desc: '单子论、前定和谐、充足理由律。与牛顿同时发明微积分，最博学的近代哲学家之一。', tags: ['单子论', '前定和谐', '充足理由'], region: 'west' },
+      ],
+      german: [
+        { id: 'immanuel-kant', avatar: '🔷', name: '康德', nameEn: 'Kant', years: '1724–1804', desc: '批判哲学创始人。哥白尼革命、先验唯心论、定言命令。近代与现代哲学的分水岭。', tags: ['哥白尼革命', '定言命令', '现象本体'], region: 'west' },
+        { id: 'hegel', avatar: '🜲', name: '黑格尔', nameEn: 'Hegel', years: '1770–1831', desc: '绝对精神、辩证法、主奴辩证法。观念论的集大成者，马克思的直接来源。', tags: ['绝对精神', '辩证法', '主奴'], region: 'west' },
+        { id: 'schopenhauer', avatar: '🌑', name: '叔本华', nameEn: 'Schopenhauer', years: '1788–1860', desc: '意志与表象、悲观主义、东方哲学。康德之后第一位真正原创的德国哲学家，尼采的精神父亲。', tags: ['意志', '悲观主义', '表象'], region: 'west' },
+      ],
+      nineteenth: [
+        { id: 'kierkegaard', avatar: '🎭', name: '克尔凯郭尔', nameEn: 'Kierkegaard', years: '1813–1855', desc: '存在主义先驱。焦虑、信仰飞跃、人生三阶段。第一位将"个体"置于哲学中心的思想家。', tags: ['焦虑', '信仰飞跃', '存在'], region: 'west' },
+        { id: 'marx', avatar: '⚒️', name: '马克思', nameEn: 'Marx', years: '1818–1883', desc: '历史唯物主义、阶级斗争、异化、剩余价值。改变了现代世界面貌的哲学家。', tags: ['历史唯物', '异化', '阶级斗争'], region: 'west' },
+        { id: 'nietzsche', avatar: '⚡', name: '尼采', nameEn: 'Nietzsche', years: '1844–1900', desc: '权力意志、超人、永恒轮回、主奴道德。对西方价值体系的系统性批判与重估。', tags: ['权力意志', '超人', '永恒轮回'], region: 'west' },
+      ],
+      analytic: [
+        { id: 'russell', avatar: '🔣', name: '罗素', nameEn: 'Russell', years: '1872–1970', desc: '分析哲学奠基者。摹状词理论、逻辑原子主义。20世纪最有影响力的公共知识分子。', tags: ['摹状词', '逻辑原子', '分析'], region: 'west' },
+        { id: 'wittgenstein', avatar: '🎲', name: '维特根斯坦', nameEn: 'Wittgenstein', years: '1889–1951', desc: '语言游戏、私人语言论证、不可说。分析哲学的巅峰，前后两期思想截然不同。', tags: ['语言游戏', '不可说', '私人语言'], region: 'west' },
+        { id: 'quine', avatar: '📐', name: '蒯因', nameEn: 'Quine', years: '1908–2000', desc: '整体论、自然化认识论、本体论承诺。20世纪下半叶最有影响力的美国哲学家。', tags: ['整体论', '自然化', '本体论'], region: 'west' },
+      ],
+      continental: [
+        { id: 'husserl', avatar: '🔍', name: '胡塞尔', nameEn: 'Husserl', years: '1859–1938', desc: '现象学奠基者。先验还原、意向性、生活世界。20世纪欧陆哲学的方法论源头。', tags: ['现象学', '意向性', '还原'], region: 'west' },
+        { id: 'heidegger', avatar: '🌲', name: '海德格尔', nameEn: 'Heidegger', years: '1889–1976', desc: '存在与时间、此在、向死而生、座架。20世纪最有原创力的哲学家，影响遍及人文社科。', tags: ['存在', '此在', '向死而生'], region: 'west' },
+        { id: 'sartre', avatar: '☕', name: '萨特', nameEn: 'Sartre', years: '1905–1980', desc: '存在先于本质、自由、虚无、他人即地狱。法国存在主义代表，最"出圈"的哲学家。', tags: ['存在先于本质', '自由', '虚无'], region: 'west' },
+        { id: 'camus', avatar: '🌊', name: '加缪', nameEn: 'Camus', years: '1913–1960', desc: '荒诞、反抗、西西弗斯神话。诺贝尔文学奖得主，荒诞哲学的代言人。', tags: ['荒诞', '反抗', '西西弗斯'], region: 'west' },
+        { id: 'foucault', avatar: '🔗', name: '福柯', nameEn: 'Foucault', years: '1926–1984', desc: '权力/知识、规训、生命政治、谱系学。后现代思想的旗手，对当代人文社科影响最深。', tags: ['权力/知识', '规训', '谱系学'], region: 'west' },
+        { id: 'derrida', avatar: '〰️', name: '德里达', nameEn: 'Derrida', years: '1930–2004', desc: '解构、延异、逻各斯中心主义批判。解构主义的创始人，最具争议的当代哲学家之一。', tags: ['解构', '延异', '逻各斯'], region: 'west' },
+        { id: 'deleuze', avatar: '🌿', name: '德勒兹', nameEn: 'Deleuze', years: '1925–1995', desc: '差异与重复、欲望机器、块茎。尼采最忠实的继承者，后现代左翼哲学的核心。', tags: ['差异', '欲望机器', '块茎'], region: 'west' },
+        { id: 'adorno', avatar: '⚡', name: '阿多诺', nameEn: 'Adorno', years: '1903–1969', desc: '否定的辩证法、文化工业、奥斯维辛之后。法兰克福学派核心，最"难读"的哲学家之一。', tags: ['否定', '文化工业', '批判'], region: 'west' },
+        { id: 'habermas', avatar: '🗣️', name: '哈贝马斯', nameEn: 'Habermas', years: '1929–', desc: '交往行为理论、公共领域、商谈伦理。法兰克福学派第三代，试图重建启蒙理性的当代哲学家。', tags: ['交往行为', '公共领域', '商谈'], region: 'west' },
+      ],
+      pragmatism: [
+        { id: 'james', avatar: '🌊', name: '威廉·詹姆斯', nameEn: 'James', years: '1842–1910', desc: '实用主义、意识流、宗教经验。美国哲学之父，心理学与哲学的跨界巨人。', tags: ['实用主义', '意识流', '宗教'], region: 'west' },
+        { id: 'dewey', avatar: '🌱', name: '杜威', nameEn: 'Dewey', years: '1859–1952', desc: '工具主义、民主与教育、经验自然主义。美国教育改革的核心人物，影响中国现代教育。', tags: ['工具主义', '民主', '教育'], region: 'west' },
+      ],
+    };
+
+    function renderAll() {
+      for (const [category, list] of Object.entries(PHILOSOPHERS)) {
+        const grid = document.getElementById(category + 'Grid');
+        if (!grid) continue;
+        grid.innerHTML = list.map(p => renderCard(p)).join('');
+      }
+    }
+
+    function renderCard(p) {
+      const regionClass = p.region === 'east' ? 'east' : 'west';
+      const regionText = p.region === 'east' ? '东方' : '西方';
+      return `
+        <div class="cat-card" onclick="enterChat('${p.id}')" data-name="${p.name} ${p.nameEn} ${p.tags.join(' ')}">
+          <span class="region-mark ${regionClass}">${regionText}</span>
+          <div class="cat-card-header">
+            <div class="cat-card-avatar">${p.avatar}</div>
+            <div class="cat-card-title">
+              <div class="cat-card-name">${p.name}</div>
+              <div class="cat-card-en">${p.nameEn} · ${p.years}</div>
+            </div>
+          </div>
+          <div class="cat-card-desc">${p.desc}</div>
+          <div class="cat-card-meta">
+            ${p.tags.map(t => `<span class="cat-card-tag">${t}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function filterCategory(cat) {
+      // 更新标签状态
+      document.querySelectorAll('.cat-tab').forEach(tab => tab.classList.remove('active'));
+      event.target.classList.add('active');
+
+      // 显示/隐藏分组
+      document.querySelectorAll('.cat-section').forEach(sec => {
+        if (cat === 'all' || sec.dataset.category === cat) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+
+      // 清除搜索
+      document.getElementById('searchInput').value = '';
+    }
+
+    function doSearch() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      if (!q) {
+        // 恢复全部显示
+        document.querySelectorAll('.cat-section').forEach(sec => sec.classList.remove('hidden'));
+        document.querySelectorAll('.cat-card').forEach(card => card.classList.remove('hidden'));
+        return;
+      }
+
+      // 搜索模式：显示所有分组，只隐藏不匹配卡片
+      document.querySelectorAll('.cat-section').forEach(sec => sec.classList.remove('hidden'));
+      document.querySelectorAll('.cat-card').forEach(card => {
+        const text = card.dataset.name.toLowerCase();
+        if (text.includes(q)) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // 隐藏空分组
+      document.querySelectorAll('.cat-section').forEach(sec => {
+        const visible = sec.querySelectorAll('.cat-card:not(.hidden)');
+        if (visible.length === 0) sec.classList.add('hidden');
+      });
+
+      // 清除标签高亮
+      document.querySelectorAll('.cat-tab').forEach(tab => tab.classList.remove('active'));
+    }
+
+    function enterChat(id) {
+      window.location.href = '/philosopher.html?id=' + encodeURIComponent(id);
+    }
+
+    // 导航栏用户状态
+    async function initNav() {
+      try {
+        const res = await fetch('/api/profile');
+        const data = await res.json();
+        if (data.success && data.user) {
+          document.getElementById('navUserName').textContent = data.user.nickname || data.user.username;
+          document.getElementById('navUserName').style.display = '';
+          document.getElementById('navProfileBtn').style.display = '';
+          document.getElementById('navLoginBtn').style.display = 'none';
+          document.getElementById('navLogoutBtn').style.display = '';
+        }
+      } catch {}
+    }
+
+    function logout() {
+      fetch('/api/logout', { method: 'POST' }).then(() => window.location.reload());
+    }
+
+    renderAll();
+    initNav();
+  </script>
+</body>
+</html>
