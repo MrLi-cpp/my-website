@@ -124,6 +124,13 @@
       renderParagraphs();
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      const d = document.createElement('div');
+      d.textContent = str;
+      return d.innerHTML;
+    }
+
     function renderParagraphs() {
       const c = document.getElementById('paragraphsContainer');
       c.innerHTML = paragraphs.map((text, i) => `

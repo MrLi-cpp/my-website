@@ -20,8 +20,14 @@ const PORT = 3000;
 
 // 安全相关常量（生产环境请通过环境变量配置）
 const SESSION_SECRET = process.env.SESSION_SECRET || require('crypto').randomBytes(32).toString('hex');
-const ADMIN_USER = process.env.ADMIN_USER || 'lijiguang';
-const ADMIN_PASS = process.env.ADMIN_PASS || 'ljgljg2006';
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS = process.env.ADMIN_PASS;
+
+if (!ADMIN_USER || !ADMIN_PASS) {
+  console.error('❌ 错误：请设置 ADMIN_USER 和 ADMIN_PASS 环境变量');
+  console.error('   示例：ADMIN_USER=admin ADMIN_PASS=your_strong_password node server.js');
+  process.exit(1);
+}
 
 // ========== 数据库 ==========
 const dbPath = path.join(__dirname, 'database.sqlite');
