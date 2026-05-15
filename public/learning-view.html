@@ -9,8 +9,8 @@
     html, body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
     .view-page {
       min-height: 100vh;
-      padding: 80px 20px 60px;
-      max-width: 900px;
+      padding: 80px 24px 60px;
+      max-width: 1200px;
       margin: 0 auto;
     }
     .view-header {
@@ -32,24 +32,26 @@
       margin-top: 8px;
     }
     .view-frame-wrap {
-      background: var(--bg-card);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
-      min-height: 60vh;
+      min-height: 70vh;
+      padding: 20px;
     }
     .view-frame-wrap iframe {
       width: 100%;
-      min-height: 60vh;
+      min-height: 70vh;
       border: none;
       display: block;
-      background: #fff;
+      background: #ffffff;
+      border-radius: 8px;
     }
     .view-html-content {
       background: #fff;
       color: #333;
-      padding: 40px;
-      min-height: 60vh;
+      padding: 48px 56px;
+      min-height: 70vh;
       font-size: 15px;
       line-height: 1.8;
     }
@@ -97,7 +99,17 @@
         document.getElementById('viewMeta').textContent = '📅 ' + formatDate(item.display_date || item.created_at);
         const contentWrap = document.getElementById('viewContent');
         if (item.html_file) {
-          contentWrap.innerHTML = `<iframe src="${item.html_file}" sandbox="allow-scripts allow-same-origin"></iframe>`;
+          try {
+            const htmlRes = await fetch(item.html_file);
+            const htmlText = await htmlRes.text();
+            const wrappedHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>html,body{margin:0;padding:48px 56px;background:#ffffff !important;color:#333;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;}</style></head><body>${htmlText}</body></html>`;
+            const blob = new Blob([wrappedHtml], { type: 'text/html' });
+            const blobUrl = URL.createObjectURL(blob);
+            contentWrap.innerHTML = `<iframe src="${blobUrl}" sandbox="allow-scripts allow-same-origin allow-popups" style="width:100%;min-height:70vh;border:none;display:block;background:#fff;border-radius:8px;"></iframe>`;
+          } catch (e) {
+            // fallback: 直接加载原文件
+            contentWrap.innerHTML = `<iframe src="${item.html_file}" sandbox="allow-scripts allow-same-origin" style="width:100%;min-height:70vh;border:none;display:block;background:#fff;border-radius:8px;"></iframe>`;
+          }
         } else {
           contentWrap.innerHTML = '<div class="view-error"><div class="empty-title">暂无内容</div><p>该资料暂无可预览内容</p></div>';
         }

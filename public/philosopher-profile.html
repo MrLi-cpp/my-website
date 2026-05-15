@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>我的哲学档案 · 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    .philo-profile-page {
+      background: var(--bg-primary);
+      min-height: 100vh;
+      padding-top: 56px;
+    }
+
+    .philo-profile-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .philo-profile-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .philo-profile-header h1 {
+      font-family: var(--font-serif);
+      font-size: 28px; color: var(--accent-gold);
+      letter-spacing: 6px; margin-bottom: 8px;
+    }
+    .philo-profile-header p {
+      font-size: 13px; color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    /* 统计卡片 */
+    .philo-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .philo-stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .philo-stat-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-2px);
+    }
+    .philo-stat-number {
+      font-size: 32px; font-weight: 600;
+      color: var(--accent-gold); letter-spacing: 2px;
+    }
+    .philo-stat-label {
+      font-size: 12px; color: var(--text-muted);
+      margin-top: 8px; letter-spacing: 1px;
+    }
+
+    /* 概念掌握度 */
+    .philo-section {
+      margin-bottom: 40px;
+    }
+    .philo-section-title {
+      font-family: var(--font-serif);
+      font-size: 18px; color: var(--text-primary);
+      letter-spacing: 3px;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .philo-section-title::after {
+      content: ''; flex: 1; height: 1px;
+      background: var(--border);
+    }
+
+    .philo-concepts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .philo-concept-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      transition: all 0.3s;
+    }
+    .philo-concept-card:hover {
+      border-color: var(--border-gold);
+    }
+
+    .philo-concept-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .philo-concept-badge {
+      font-size: 10px; padding: 3px 10px;
+      border-radius: 10px; font-weight: 500;
+    }
+    .badge-mastered {
+      background: rgba(39,174,96,0.1); color: #27ae60;
+      border: 1px solid rgba(39,174,96,0.2);
+    }
+    .badge-familiar {
+      background: rgba(201,169,110,0.08); color: var(--accent-gold);
+      border: 1px solid rgba(201,169,110,0.15);
+    }
+    .badge-novice {
+      background: rgba(150,150,150,0.06); color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .philo-concept-name {
+      font-size: 15px; color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .philo-concept-meta {
+      font-size: 11px; color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .philo-concept-meta span {
+      margin-right: 12px;
+    }
+
+    /* 学者兴趣 */
+    .philo-scholars-list {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .philo-scholar-tag {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 12px; color: var(--text-secondary);
+      background: var(--bg-secondary);
+      transition: all 0.3s;
+    }
+    .philo-scholar-tag:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+    .philo-scholar-tag .score {
+      color: var(--accent-gold); margin-left: 6px;
+      font-size: 11px;
+    }
+
+    /* 思维倾向 */
+    .philo-stance-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .philo-stance-box strong {
+      color: var(--accent-gold); font-weight: 500;
+    }
+
+    /* 摘要时间线 */
+    .philo-timeline {
+      position: relative;
+      padding-left: 20px;
+    }
+    .philo-timeline::before {
+      content: ''; position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px; background: var(--border);
+    }
+    .philo-timeline-item {
+      position: relative;
+      padding-bottom: 20px;
+    }
+    .philo-timeline-item::before {
+      content: ''; position: absolute;
+      left: -24px; top: 4px;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      border: 2px solid var(--bg-primary);
+    }
+    .philo-timeline-date {
+      font-size: 11px; color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .philo-timeline-text {
+      font-size: 13px; color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .philo-timeline-concepts {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 6px;
+    }
+    .philo-timeline-concepts span {
+      font-size: 10px; padding: 2px 8px;
+      border-radius: 8px;
+      background: rgba(201,169,110,0.06);
+      color: var(--accent-gold);
+      border: 1px solid rgba(201,169,110,0.1);
+    }
+
+    /* 偏好例证 */
+    .philo-examples-list {
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .philo-example-tag {
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 12px; color: var(--text-secondary);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+    }
+
+    /* 加载/空态 */
+    .philo-loading {
+      text-align: center; padding: 60px 0;
+      color: var(--text-muted); font-size: 13px;
+    }
+    .philo-empty {
+      text-align: center; padding: 40px 0;
+      color: var(--text-muted); font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .philo-stats { grid-template-columns: repeat(2, 1fr); }
+      .philo-concepts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="philo-profile-page">
+
+  <nav class="top-nav">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <a class="top-nav-brand" href="/index.html" style="text-decoration:none;color:var(--accent-gold);">霁光</a>
+      <a class="nav-philosopher-btn" href="/philosopher.html">哲学家对话Beta</a>
+      <span class="nav-philosopher-btn" style="opacity:1;border-color:var(--accent-gold);background:rgba(201,169,110,0.08);">哲学档案</span>
+    </div>
+    <div class="top-nav-login" id="topNavLogin">
+      <span class="top-nav-user" id="navUserName" style="display:none;"></span>
+      <a class="nav-profile-btn" href="/profile.html" id="navProfileBtn" style="display:none;">个人中心</a>
+      <a class="nav-login-btn" href="/login.html" id="navLoginBtn">登录</a>
+      <button class="nav-logout-btn" id="navLogoutBtn" style="display:none;" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <div class="philo-profile-container" id="profileContainer">
+    <div class="philo-loading">加载中...</div>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const container = document.getElementById('profileContainer');
+      try {
+        const res = await fetch('/api/philosopher-profile');
+        if (!res.ok) {
+          if (res.status === 401) {
+            container.innerHTML = '<div class="philo-empty">请先登录后查看哲学档案</div>';
+            return;
+          }
+          throw new Error('加载失败');
+        }
+        const data = await res.json();
+        renderProfile(data);
+      } catch (err) {
+        container.innerHTML = '<div class="philo-empty">加载失败：' + err.message + '</div>';
+      }
+    }
+
+    function renderProfile(data) {
+      const concepts = Object.entries(data.conceptMastery || {});
+      const mastered = concepts.filter(([_, v]) => v.level === 'mastered');
+      const familiar = concepts.filter(([_, v]) => v.level === 'familiar');
+      const novice = concepts.filter(([_, v]) => v.level === 'novice');
+      const summaries = data.sessionSummaries || [];
+      const scholars = data.userPreferences?.engagedScholars || [];
+      const examples = data.userPreferences?.preferredExamples || [];
+      const stance = data.userPreferences?.stance;
+
+      let html = `
+        <div class="philo-profile-header">
+          <h1>我的哲学档案</h1>
+          <p>记录你与哲学家的每一次对话，沉淀你的思想成长</p>
+        </div>
+
+        <div class="philo-stats">
+          <div class="philo-stat-card">
+            <div class="philo-stat-number">${mastered.length}</div>
+            <div class="philo-stat-label">已深入掌握</div>
+          </div>
+          <div class="philo-stat-card">
+            <div class="philo-stat-number">${familiar.length}</div>
+            <div class="philo-stat-label">已初步了解</div>
+          </div>
+          <div class="philo-stat-card">
+            <div class="philo-stat-number">${concepts.length}</div>
+            <div class="philo-stat-label">累计接触概念</div>
+          </div>
+          <div class="philo-stat-card">
+            <div class="philo-stat-number">${data.totalMessages || 0}</div>
+            <div class="philo-stat-label">累计对话轮数</div>
+          </div>
+        </div>
+      `;
+
+      // 思维倾向
+      if (stance) {
+        html += `
+          <div class="philo-section">
+            <div class="philo-section-title">思维倾向</div>
+            <div class="philo-stance-box">
+              <strong>${stance}</strong><br>
+              哲学家会根据你的思维倾向调整回应角度，从这个方向展开分析。
+            </div>
+          </div>
+        `;
+      }
+
+      // 偏好例证
+      if (examples.length) {
+        html += `
+          <div class="philo-section">
+            <div class="philo-section-title">偏好例证</div>
+            <div class="philo-examples-list">
+              ${examples.map(e => `<span class="philo-example-tag">${e}</span>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // 概念掌握度
+      if (concepts.length) {
+        html += `
+          <div class="philo-section">
+            <div class="philo-section-title">概念掌握度</div>
+            <div class="philo-concepts-grid">
+              ${mastered.map(([name, d]) => conceptCard(name, d, 'mastered')).join('')}
+              ${familiar.map(([name, d]) => conceptCard(name, d, 'familiar')).join('')}
+              ${novice.map(([name, d]) => conceptCard(name, d, 'novice')).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="philo-section">
+            <div class="philo-section-title">概念掌握度</div>
+            <div class="philo-empty">还没有积累任何概念掌握记录。去和哲学家对话吧。</div>
+          </div>
+        `;
+      }
+
+      // 学者兴趣
+      if (scholars.length) {
+        html += `
+          <div class="philo-section">
+            <div class="philo-section-title">感兴趣的学者</div>
+            <div class="philo-scholars-list">
+              ${scholars.map(s => `<span class="philo-scholar-tag">${s}</span>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // 会话摘要时间线
+      if (summaries.length) {
+        html += `
+          <div class="philo-section">
+            <div class="philo-section-title">对话足迹</div>
+            <div class="philo-timeline">
+              ${summaries.map(s => {
+                const date = new Date(s.created_at).toLocaleDateString('zh-CN');
+                const concepts = JSON.parse(s.key_concepts || '[]');
+                return `
+                  <div class="philo-timeline-item">
+                    <div class="philo-timeline-date">${date}</div>
+                    <div class="philo-timeline-text">${s.summary}</div>
+                    ${concepts.length ? `<div class="philo-timeline-concepts">${concepts.map(c => `<span>${c}</span>`).join('')}</div>` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      document.getElementById('profileContainer').innerHTML = html;
+    }
+
+    function conceptCard(name, data, level) {
+      const badgeClass = level === 'mastered' ? 'badge-mastered' : level === 'familiar' ? 'badge-familiar' : 'badge-novice';
+      const badgeText = level === 'mastered' ? '已掌握' : level === 'familiar' ? '已了解' : '接触过';
+      const depthText = data.depth === 'advanced' ? '高级' : data.depth === 'intermediate' ? '中级' : '基础';
+      const lastDate = data.lastDiscussed ? new Date(data.lastDiscussed).toLocaleDateString('zh-CN') : '未知';
+      return `
+        <div class="philo-concept-card">
+          <div class="philo-concept-header">
+            <span class="philo-concept-badge ${badgeClass}">${badgeText}</span>
+            <span class="philo-concept-name">${name}</span>
+          </div>
+          <div class="philo-concept-meta">
+            <span>深度：${depthText}</span>
+            <span>讨论${data.discussCount || 1}次</span>
+            <span>最近：${lastDate}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    async function checkNavLogin() {
+      try {
+        const res = await fetch('/api/me');
+        const user = await res.json();
+        if (user && user.id) {
+          document.getElementById('navUserName').textContent = user.username;
+          document.getElementById('navUserName').style.display = 'inline';
+          document.getElementById('navProfileBtn').style.display = 'inline-block';
+          document.getElementById('navLoginBtn').style.display = 'none';
+          document.getElementById('navLogoutBtn').style.display = 'inline-block';
+          loadProfile();
+        } else {
+          document.getElementById('navLoginBtn').style.display = 'inline-block';
+          document.getElementById('profileContainer').innerHTML = '<div class="philo-empty">请先登录后查看哲学档案</div>';
+        }
+      } catch {
+        document.getElementById('navLoginBtn').style.display = 'inline-block';
+        document.getElementById('profileContainer').innerHTML = '<div class="philo-empty">请先登录后查看哲学档案</div>';
+      }
+    }
+
+    async function logout() {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/index.html';
+    }
+
+    checkNavLogin();
+  </script>
+</body>
+</html>

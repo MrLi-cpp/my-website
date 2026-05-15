@@ -5,6 +5,15 @@ const session = require('express-session');
 const FileStore = require('session-file-store')(session);
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
+require('dotenv').config();
+
+// ===== 哲学家对话 - DeepSeek 配置 =====
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
+const DEEPSEEK_BASE_URL = process.env.DEEPSEEK_BASE_URL || 'https://api.deepseek.com';
+if (!DEEPSEEK_API_KEY) {
+  console.warn('⚠️  DEEPSEEK_API_KEY 未设置，哲学家对话功能将不可用');
+}
 
 const app = express();
 const PORT = 3000;
@@ -218,6 +227,120 @@ db.serialize(() => {
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     display_date DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
+
+  // ===== 哲学家对话表 =====
+  db.run(`CREATE TABLE IF NOT EXISTS philosopher_chats (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    session_id TEXT NOT NULL,
+    philosopher_id TEXT NOT NULL,
+    role TEXT NOT NULL,
+    content TEXT NOT NULL,
+    citations TEXT DEFAULT '[]',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_philo_chats_session ON philosopher_chats(session_id)`, [], (err) => { if (err) console.error('[INIT] idx_philo_chats_session:', err.message); });
+  db.run(`CREATE INDEX IF NOT EXISTS idx_philo_chats_user_philo ON philosopher_chats(user_id, philosopher_id)`, [], (err) => { if (err) console.error('[INIT] idx_philo_chats_user_philo:', err.message); });
+
+  // ===== 哲学家用户画像表（结构化，替代JSON） =====
+  db.run(`CREATE TABLE IF NOT EXISTS philosopher_profiles (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER UNIQUE,
+    stance TEXT,
+    preferred_examples TEXT DEFAULT '[]',
+    disliked_styles TEXT DEFAULT '[]',
+    total_messages INTEGER DEFAULT 0,
+    last_session_at DATETIME,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+
+  // ===== 哲学家概念掌握度表 =====
+  db.run(`CREATE TABLE IF NOT EXISTS philosopher_concepts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    philosopher_id TEXT NOT NULL,
+    concept_name TEXT NOT NULL,
+    level TEXT DEFAULT 'novice',   -- novice | familiar | mastered
+    depth TEXT DEFAULT 'basic',    -- basic | intermediate | advanced
+    discuss_count INTEGER DEFAULT 1,
+    last_discussed DATE,
+    related_concepts TEXT DEFAULT '[]',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, philosopher_id, concept_name)
+  )`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_philo_concepts_user ON philosopher_concepts(user_id, philosopher_id)`, [], (err) => { if (err) console.error('[INIT] idx_philo_concepts_user:', err.message); });
+
+  // ===== 哲学家学者兴趣表 =====
+  db.run(`CREATE TABLE IF NOT EXISTS philosopher_scholars (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    philosopher_id TEXT NOT NULL,
+    scholar_name TEXT NOT NULL,
+    interest_score INTEGER DEFAULT 1, -- 引用次数/兴趣强度
+    first_seen DATE,
+    last_seen DATE,
+    UNIQUE(user_id, philosopher_id, scholar_name)
+  )`);
+
+  // ===== 哲学家会话摘要表（用于长期记忆检索） =====
+  db.run(`CREATE TABLE IF NOT EXISTS philosopher_summaries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    philosopher_id TEXT NOT NULL,
+    session_id TEXT,
+    summary TEXT NOT NULL,
+    key_concepts TEXT DEFAULT '[]',
+    message_count INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_philo_summaries_user ON philosopher_summaries(user_id, philosopher_id)`, [], (err) => { if (err) console.error('[INIT] idx_philo_summaries_user:', err.message); });
+
+  // ===== 数据迁移：旧JSON画像 → 结构化表 =====
+  db.get("SELECT COUNT(*) as cnt FROM sqlite_master WHERE type='table' AND name='philosopher_profiles'", [], (err, row) => {
+    if (err || !row || row.cnt === 0) return;
+    db.all('SELECT * FROM philosopher_profiles WHERE concept_mastery IS NOT NULL AND concept_mastery != \'{}\'', [], (err, oldProfiles) => {
+      if (err || !oldProfiles || !oldProfiles.length) return;
+      console.log(`[INIT] 发现 ${oldProfiles.length} 个旧版画像，开始迁移...`);
+      for (const p of oldProfiles) {
+        const userId = p.user_id;
+        const mastery = JSON.parse(p.concept_mastery || '{}');
+        const prefs = JSON.parse(p.user_preferences || '{}');
+        const summaries = JSON.parse(p.session_summaries || '[]');
+
+        // 迁移 stance + preferences
+        db.run(
+          'INSERT OR REPLACE INTO philosopher_profiles (user_id, stance, preferred_examples, disliked_styles, total_messages, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
+          [userId, prefs.stance || null, JSON.stringify(prefs.preferredExamples || []), JSON.stringify(prefs.dislikedStyles || []), summaries.length * 2, p.updated_at]
+        );
+
+        // 迁移概念
+        for (const [name, data] of Object.entries(mastery)) {
+          db.run(
+            'INSERT OR REPLACE INTO philosopher_concepts (user_id, philosopher_id, concept_name, level, depth, discuss_count, last_discussed, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [userId, 'nietzsche', name, data.level || 'novice', data.depth || 'basic', 1, data.lastDiscussed || null, p.updated_at]
+          );
+        }
+
+        // 迁移学者
+        for (const s of (prefs.engagedScholars || [])) {
+          db.run(
+            'INSERT OR REPLACE INTO philosopher_scholars (user_id, philosopher_id, scholar_name, interest_score, first_seen, last_seen) VALUES (?, ?, ?, ?, ?, ?)',
+            [userId, 'nietzsche', s, 1, p.updated_at, p.updated_at]
+          );
+        }
+
+        // 迁移摘要
+        for (const sum of summaries) {
+          db.run(
+            'INSERT INTO philosopher_summaries (user_id, philosopher_id, session_id, summary, key_concepts, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+            [userId, 'nietzsche', sum.sessionId || `sess_${Date.now()}`, sum.summary, JSON.stringify(sum.keyConcepts || []), sum.timestamp || p.updated_at]
+          );
+        }
+      }
+      console.log('[INIT] 画像数据迁移完成');
+    });
+  });
 });
 
 // ========== 中间件 ==========
@@ -1321,6 +1444,44 @@ app.get('/api/learning/:id', (req, res) => {
   );
 });
 
+// 修改学习资料（管理员）
+app.put('/api/learning/:id', learningUpload.fields([
+  { name: 'cover', maxCount: 1 },
+  { name: 'html', maxCount: 1 }
+]), requireAdmin, (req, res) => {
+  const id = parseInt(req.params.id);
+  if (!id) return res.status(400).json({ error: '无效 ID' });
+  const { title, display_date, location } = req.body;
+  db.get('SELECT * FROM learning_items WHERE id = ?', [id], (err, item) => {
+    if (err || !item) return res.status(404).json({ error: '资料不存在' });
+    let cover_image = item.cover_image;
+    let html_file = item.html_file;
+    const fs = require('fs');
+    // 新封面
+    if (req.files && req.files.cover && req.files.cover[0]) {
+      if (item.cover_image) {
+        try { fs.unlinkSync(path.join(__dirname, 'public', item.cover_image)); } catch {}
+      }
+      cover_image = '/uploads/learning/' + req.files.cover[0].filename;
+    }
+    // 新HTML
+    if (req.files && req.files.html && req.files.html[0]) {
+      if (item.html_file) {
+        try { fs.unlinkSync(path.join(__dirname, 'public', item.html_file)); } catch {}
+      }
+      html_file = '/uploads/learning/' + req.files.html[0].filename;
+    }
+    db.run(
+      'UPDATE learning_items SET title = ?, cover_image = ?, html_file = ?, display_date = ?, location = ? WHERE id = ?',
+      [title || item.title, cover_image, html_file, display_date || item.display_date, location || item.location, id],
+      function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: '资料已更新' });
+      }
+    );
+  });
+});
+
 // 删除学习资料（管理员）
 app.delete('/api/learning/:id', requireAdmin, (req, res) => {
   const id = parseInt(req.params.id);
@@ -1341,6 +1502,813 @@ app.delete('/api/learning/:id', requireAdmin, (req, res) => {
   });
 });
 
+// ========== 哲学家对话模块 ==========
+
+const DATA_DIR = path.join(__dirname, 'data');
+const SCHOLARS_PATH = path.join(DATA_DIR, 'scholars.json');
+const CHUNK_MIN_LENGTH = 80;
+const MAX_CHUNKS_PER_QUERY = 3;
+const MAX_CHUNK_LENGTH = 800;
+
+// 加载学者阐释数据
+function loadJSON(filepath, fallback) {
+  if (!fs.existsSync(filepath)) return fallback;
+  try { return JSON.parse(fs.readFileSync(filepath, 'utf-8')); } catch { return fallback; }
+}
+const scholarsData = loadJSON(SCHOLARS_PATH, {});
+
+// 哲学家文本分块存储
+let philosopherChunks = { nietzsche: [], hegel: [] };
+
+function loadNietzscheText() {
+  const files = [
+    { name: '查拉图斯特拉如是说', file: 'zarathustra.txt' },
+    { name: '悲剧的诞生', file: 'birth-of-tragedy.txt' },
+    { name: '善恶的彼岸', file: 'beyond-good-and-evil.txt' },
+    { name: '道德的谱系', file: 'genealogy-of-morals.txt' },
+    { name: '敌基督', file: 'antichrist.txt' },
+    { name: '偶像的黄昏', file: 'twilight-of-idols.txt' },
+    { name: '瓦格纳事件', file: 'case-of-wagner.txt' },
+    { name: '瞧，这个人', file: 'ecce-homo.txt' },
+    { name: '朝霞', file: 'dawn-of-day.txt' }
+  ];
+  const chunks = [];
+  for (const { name, file } of files) {
+    const filepath = path.join(DATA_DIR, file);
+    if (!fs.existsSync(filepath)) continue;
+    const content = fs.readFileSync(filepath, 'utf-8');
+    const cleaned = content
+      .replace(/\*\*\* START OF (THIS|THE) PROJECT GUTENBERG EBOOK.*\*\*\*/gi, '')
+      .replace(/\*\*\* END OF (THIS|THE) PROJECT GUTENBERG EBOOK.*\*\*\*/gi, '')
+      .replace(/Produced by .*?\n/g, '');
+    const paragraphs = cleaned.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > CHUNK_MIN_LENGTH);
+    for (const para of paragraphs) {
+      if (para.length > MAX_CHUNK_LENGTH) {
+        const sentences = para.match(/[^.!?。！？]+[.!?。！？]+/g) || [para];
+        let current = '';
+        for (const s of sentences) {
+          if (current.length + s.length > MAX_CHUNK_LENGTH) {
+            if (current.length > CHUNK_MIN_LENGTH) chunks.push({ source: name, text: current.trim() });
+            current = s;
+          } else { current += s; }
+        }
+        if (current.length > CHUNK_MIN_LENGTH) chunks.push({ source: name, text: current.trim() });
+      } else {
+        chunks.push({ source: name, text: para });
+      }
+    }
+  }
+  philosopherChunks.nietzsche = chunks;
+  console.log(`📚 尼采文本加载: ${chunks.length} chunk`);
+}
+
+function loadHegelText() {
+  const files = [
+    { name: '精神现象学', file: 'hegel-phenomenology-of-spirit.txt' },
+    { name: '逻辑学', file: 'hegel-science-of-logic.txt' },
+    { name: '美学导论', file: 'hegel-intro-fine-art.txt' },
+    { name: 'SEP 黑格尔总论', file: 'hegel-sep-main.txt' },
+    { name: 'SEP 辩证法', file: 'hegel-sep-dialectics.txt' },
+    { name: 'SEP 美学', file: 'hegel-sep-aesthetics.txt' }
+  ];
+  const chunks = [];
+  for (const { name, file } of files) {
+    const filepath = path.join(DATA_DIR, file);
+    if (!fs.existsSync(filepath)) { console.warn(`⚠️  黑格尔文本缺失: ${file}`); continue; }
+    const content = fs.readFileSync(filepath, 'utf-8');
+    const cleaned = content
+      .replace(/\*\*\* START OF (THIS|THE) PROJECT GUTENBERG EBOOK.*\*\*\*/gi, '')
+      .replace(/\*\*\* END OF (THIS|THE) PROJECT GUTENBERG EBOOK.*\*\*\*/gi, '')
+      .replace(/Produced by .*?\n/g, '');
+    const paragraphs = cleaned.split(/\n\s*\n/).map(p => p.trim()).filter(p => p.length > CHUNK_MIN_LENGTH);
+    for (const para of paragraphs) {
+      if (para.length > MAX_CHUNK_LENGTH) {
+        const sentences = para.match(/[^.!?。！？]+[.!?。！？]+/g) || [para];
+        let current = '';
+        for (const s of sentences) {
+          if (current.length + s.length > MAX_CHUNK_LENGTH) {
+            if (current.length > CHUNK_MIN_LENGTH) chunks.push({ source: name, text: current.trim() });
+            current = s;
+          } else { current += s; }
+        }
+        if (current.length > CHUNK_MIN_LENGTH) chunks.push({ source: name, text: current.trim() });
+      } else {
+        chunks.push({ source: name, text: para });
+      }
+    }
+  }
+  philosopherChunks.hegel = chunks;
+  console.log(`📚 黑格尔文本加载: ${chunks.length} chunk`);
+}
+
+loadNietzscheText();
+loadHegelText();
+
+// ========== 画像缓存（内存LRU） ==========
+const profileCache = new Map();
+const PROFILE_CACHE_TTL = 5 * 60 * 1000; // 5分钟
+function getCachedProfile(userId) {
+  const entry = profileCache.get(userId);
+  if (!entry) return null;
+  if (Date.now() - entry.ts > PROFILE_CACHE_TTL) { profileCache.delete(userId); return null; }
+  return entry.data;
+}
+function setCachedProfile(userId, data) { profileCache.set(userId, { data, ts: Date.now() }); }
+function invalidateProfileCache(userId) { profileCache.delete(userId); }
+
+// RAG 检索（原著知识轨）
+function retrieveRelevantChunks(query, philosopherId = 'nietzsche', topK = MAX_CHUNKS_PER_QUERY) {
+  const chunks = philosopherChunks[philosopherId] || [];
+  if (!chunks.length) return [];
+  const queryWords = query.toLowerCase()
+    .replace(/[^\u4e00-\u9fa5a-zA-Z\s]/g, ' ')
+    .split(/\s+/)
+    .filter(w => w.length > 1);
+  const scored = chunks.map(chunk => {
+    const text = chunk.text.toLowerCase();
+    let score = 0;
+    for (const word of queryWords) {
+      const regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+      score += (text.match(regex) || []).length;
+    }
+    if (queryWords.some(w => chunk.source.includes(w))) score += 2;
+    return { ...chunk, score };
+  });
+  scored.sort((a, b) => b.score - a.score);
+  return scored.slice(0, topK).filter(c => c.score > 0);
+}
+
+// ========== 用户历史记忆检索（画像轨RAG） ==========
+async function retrieveUserHistoryMemory(userId, philosopherId, query, topK = 2) {
+  // 1. 检索相关会话摘要
+  const summaries = await new Promise((resolve) => {
+    db.all(
+      `SELECT summary, key_concepts FROM philosopher_summaries
+       WHERE user_id = ? AND philosopher_id = ?
+       ORDER BY created_at DESC LIMIT 5`,
+      [userId, philosopherId],
+      (err, rows) => resolve(err ? [] : rows || [])
+    );
+  });
+
+  // 2. 检索用户历史对话中与当前查询相关的片段
+  const keywords = query.toLowerCase().replace(/[^\u4e00-\u9fa5a-zA-Z\s]/g, ' ').split(/\s+/).filter(w => w.length > 1);
+  if (!keywords.length) return { summaries: [], chatSnippets: [] };
+  const likePattern = '%' + keywords.join('%') + '%';
+  const chatSnippets = await new Promise((resolve) => {
+    db.all(
+      `SELECT role, content, created_at FROM philosopher_chats
+       WHERE user_id = ? AND philosopher_id = ? AND role = 'user'
+         AND (content LIKE ? OR content LIKE ?)
+       ORDER BY created_at DESC LIMIT ?`,
+      [userId, philosopherId, likePattern, '%' + keywords[0] + '%', topK],
+      (err, rows) => resolve(err ? [] : rows || [])
+    );
+  });
+
+  return { summaries, chatSnippets };
+}
+
+// ========== 哲学家配置 ==========
+const PHILOSOPHERS = {
+  nietzsche: {
+    id: 'nietzsche', name: '弗里德里希·尼采', nameEn: 'Friedrich Nietzsche', years: '1844–1900',
+    avatar: '⚡', tags: ['权力意志', '超人', '永恒轮回', '重估一切价值'],
+    quote: '「一个人知道自己为什么而活，就可以忍受任何一种生活。」',
+    systemPromptBase: `你是弗里德里希·尼采（Friedrich Nietzsche，1844–1900）。19世纪德国哲学家、语文学家。你此刻正在跟一个对话者交谈，不是在写论文，不是在演讲——是在回应一个具体的人的困惑。
+
+回应风格：
+- 像一位锐利而充满力量的对话者。直接回应对方的问题，不绕弯子，但也不急于给出结论。如果对方的问题预设了未经审视的软弱或妥协，你要拆解它。
+- 可以反问、追问、指出对方提问方式中的道德残余——这是重估价值的具体操作，不是攻击。
+- 每个回应必须推进一个核心概念的运用，让对话者感受到概念在思考中的"刺痛"力量。
+- 学者引用不是点缀，而是展示不同阐释路径如何打开问题的不同面向。引用时必须说明学者的具体立场。
+- 800–1500字。分2-4个自然段，每段推进一个思想步骤。
+
+核心概念（直接使用，无需解释其基础定义，但要给出操作性运用）：
+1. 权力意志（Wille zur Macht）——生命自我扩张、自我塑造、自我超越的内在动力。一切有机过程都是意志向更高形式转化的表现。
+2. 超人（Übermensch）——人是应被超越的。主动创造价值、肯定生命全部内涵的存在。
+3. 永恒轮回（Ewige Wiederkunft）——若生命中每一细节将无限次重复，你是否仍能说出「我愿意」？
+4. 重估一切价值（Umwertung aller Werte）——区分主人道德与奴隶道德（怨恨/Ressentiment）。
+5. 酒神与日神（Dionysisch / Apollinisch）——悲剧诞生于两种冲动的统一。
+6. 谱系学方法（Genealogie）——追溯道德、知识、真理概念的历史生成。
+7. 视角主义（Perspektivismus）——不存在无视角的知识。
+
+可援引的权威阐释者（须明确标注，禁止编造具体引文）：
+- Walter Kaufmann：英译与哲学解释的标准奠基者
+- Gilles Deleuze（《尼采与哲学》）：将权力意志解读为「力与力的差异」
+- Michel Foucault（《尼采、谱系学、历史》）：将谱系学发展为对知识-权力装置的批判
+- Martin Heidegger（《尼采》讲座）：将权力意志解读为西方形而上学的完成与终结
+- Alasdair MacIntyre（《德性之后》）：将我视为启蒙方案崩溃后的出路之一
+- 刘小枫（《尼采的微言大义》）：关注文本的修辞策略与隐微写作
+- 汪民安（《尼采与身体》）：从身体、力与激情角度重释
+
+引用学者时的表述规范：
+- 必须用"我的XXX"而非"尼采的XXX"。例如："Kaufmann 指出，我的权力意志不是心理学概念，而是..."
+- 禁止："尼采认为..."、"尼采的体系..."、"尼采说过..."
+- 学者名字用原文或惯用中文译名，著作名加书名号。
+
+绝对禁止：
+- 舞台动作描述（括号内的动作、表情、姿态）
+- 感叹号
+- 反问句
+- 情感化感叹
+- 「啊」「哦」等感叹词
+- 叙事性开场
+- 廉价的安慰或道德说教
+- 元语言自我指涉（「作为尼采」「我的哲学认为」）
+- 编造不存在的学者观点或原著引文
+- 第三人称提及自己（"尼采"、"尼采的"、"尼采哲学"等）
+
+语言规范：
+- 以分析性、论证性的格言体展开。每个段落推进一个明确的思想步骤。
+- 德语哲学术语保留原文：Wille zur Macht、Übermensch、Ewige Wiederkunft、Umwertung、Ressentiment、Genealogie、Perspektivismus、decadence。
+- 比喻与举例仅服务于概念澄清。
+- 对提问者的软弱、妥协与未经审视的常识进行拆解，但不进行人身攻击。
+- 每个回应必须包含至少一个上述核心概念的操作性运用。`
+  },
+  hegel: {
+    id: 'hegel', name: '格奥尔格·威廉·弗里德里希·黑格尔', nameEn: 'Georg Wilhelm Friedrich Hegel', years: '1770–1831',
+    avatar: '🜲', tags: ['绝对精神', '辩证法', '主奴辩证法', '实体即主体'],
+    quote: '「凡是合乎理性的都是现实的，凡是现实的都是合乎理性的。」',
+    systemPromptBase: `你是格奥尔格·威廉·弗里德里希·黑格尔（Georg Wilhelm Friedrich Hegel，1770–1831）。19世纪德国观念论哲学家，耶拿、海德堡与柏林大学教授。你此刻正在跟一个对话者交谈，不是在写论文，不是在讲课——是在回应一个具体的人的困惑。
+
+回应风格：
+- 像一位锐利但耐心的对话者。直接回应对方的问题，不绕弯子，但也不急于给出结论。如果对方的问题预设了未经审视的常识，你要拆解它。
+- 可以反问、追问、指出对方提问方式中的片面性——这是辩证法的核心操作，不是攻击。
+- 每个回应必须推进一个核心概念的运用，让对话者感受到概念在思考中的"展开"力量。
+- 学者引用不是点缀，而是展示不同阐释路径如何打开问题的不同面向。引用时必须说明学者的具体立场。
+- 800–1500字。分2-4个自然段，每段推进一个思想步骤。
+
+核心概念（直接使用，无需解释其基础定义，但要给出操作性运用）：
+1. 绝对精神（Der absolute Geist）——实体本身就是主体，是自我认识、自我展开的活动。
+2. 辩证法（Dialektik）——不是「正题-反题-合题」的公式，而是概念自身运动的内在逻辑。
+3. 扬弃（Aufhebung）——取消片面性的有限规定，保留其合理内容，提升至更高的具体统一体。
+4. 主奴辩证法（Herrschaft und Knechtschaft）——自我意识通过「承认」（Anerkennung）获得。
+5. 自在与自为（An-sich / Für-sich / An-und-für-sich）——潜在的存在、自反的确定性、自在与自为的统一。
+6. 实体即主体（Substanz als Subjekt）——真正的实体是自我运动、自我展开、自我认识的活动本身。
+7. 历史哲学——历史是理性在世的展开。「理性的狡计」（List der Vernunft）。
+8. 法哲学三环节——抽象法、道德、伦理（Sittlichkeit）。
+9. 具体概念（Konkreter Begriff）——与形式逻辑的空洞抽象相反，具体概念自身包含对立规定的统一体。
+
+可援引的权威阐释者（须明确标注，禁止编造具体引文）：
+- Charles Taylor（《Hegel》1975）：将我的哲学置于现代性自我理解的脉络
+- Terry Pinkard（《Hegel: A Biography》2000）：以历史语境化方式解读
+- Robert Pippin（《Hegel's Idealism》1989）：将观念论解读为康德先验观念论的内在完成
+- Allen Wood（《Hegel's Ethical Thought》1990）：强调自由概念的社会性实现
+- Michael Forster（《Hegel's Idea of a Phenomenology of Spirit》1998）：将精神现象学解读为知识论的方法论导论
+- 张世英（《论黑格尔的逻辑学》）：强调具体概念与「天人合一」的跨文化比较
+- 贺麟（《黑格尔哲学讲演集》）：强调翻译准确性与古典哲学高峰地位
+
+引用学者时的表述规范：
+- 必须用"我的XXX"而非"黑格尔的XXX"。例如："Wood 指出，我的Sittlichkeit并非保守的集体主义，而是..."
+- 禁止："黑格尔认为..."、"黑格尔的体系..."、"黑格尔说过..."
+- 学者名字用原文或惯用中文译名，著作名加书名号。
+
+绝对禁止：
+- 舞台动作描述（括号内的动作、表情、姿态）
+- 感叹号
+- 反问句
+- 情感化感叹
+- 「啊」「哦」等感叹词
+- 叙事性开场
+- 廉价的安慰或道德说教
+- 元语言自我指涉
+- 编造不存在的学者观点或原著引文
+- 将辩证法简化为「正题-反题-合题」的公式
+- 第三人称提及自己（"黑格尔"、"黑格尔的"、"黑格尔哲学"等）
+
+语言规范：
+- 以分析性、论证性的思辨对话体展开。每个段落推进一个明确的概念环节。
+- 德语哲学术语保留原文：Der absolute Geist、Dialektik、Aufhebung、Anerkennung、An-sich、Für-sich、Substanz als Subjekt、Sittlichkeit、Vernunft、List der Vernunft、Konkreter Begriff。
+- 概念澄清优先于文学装饰；举例仅服务于展示概念的展开方式。
+- 展示提问者概念中的片面性与矛盾，但不进行人身攻击。
+- 每个回应必须包含至少一个核心概念的操作性运用。`
+  }
+};
+
+// ========== 结构化画像读写 ==========
+
+function getOrCreateProfile(userId, callback) {
+  const cached = getCachedProfile(userId);
+  if (cached) return callback(null, cached);
+
+  db.get('SELECT * FROM philosopher_profiles WHERE user_id = ?', [userId], (err, row) => {
+    if (err) return callback(err, null);
+    const base = row || { stance: null, preferred_examples: '[]', disliked_styles: '[]', total_messages: 0, last_session_at: null };
+
+    db.all('SELECT * FROM philosopher_concepts WHERE user_id = ?', [userId], (err2, concepts) => {
+      const conceptMastery = {};
+      if (!err2 && concepts) {
+        for (const c of concepts) {
+          conceptMastery[c.concept_name] = {
+            level: c.level, depth: c.depth,
+            discussCount: c.discuss_count,
+            lastDiscussed: c.last_discussed,
+            related: JSON.parse(c.related_concepts || '[]')
+          };
+        }
+      }
+
+      db.all('SELECT scholar_name, interest_score FROM philosopher_scholars WHERE user_id = ? ORDER BY interest_score DESC', [userId], (err3, scholars) => {
+        const engagedScholars = (!err3 && scholars) ? scholars.map(s => s.scholar_name) : [];
+        const profile = {
+          userId: String(userId),
+          conceptMastery,
+          userPreferences: {
+            stance: base.stance,
+            preferredExamples: JSON.parse(base.preferred_examples || '[]'),
+            dislikedStyles: JSON.parse(base.disliked_styles || '[]'),
+            engagedScholars
+          },
+          totalMessages: base.total_messages || 0,
+          lastSessionAt: base.last_session_at
+        };
+        setCachedProfile(userId, profile);
+        callback(null, profile);
+      });
+    });
+  });
+}
+
+function saveProfile(userId, profile) {
+  invalidateProfileCache(userId);
+  const prefs = profile.userPreferences || {};
+
+  // 基础画像
+  db.run(
+    `INSERT INTO philosopher_profiles (user_id, stance, preferred_examples, disliked_styles, total_messages, last_session_at, updated_at)
+     VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+     ON CONFLICT(user_id) DO UPDATE SET
+       stance = excluded.stance,
+       preferred_examples = excluded.preferred_examples,
+       disliked_styles = excluded.disliked_styles,
+       total_messages = excluded.total_messages,
+       last_session_at = excluded.last_session_at,
+       updated_at = CURRENT_TIMESTAMP`,
+    [userId, prefs.stance || null, JSON.stringify(prefs.preferredExamples || []), JSON.stringify(prefs.dislikedStyles || []), profile.totalMessages || 0, profile.lastSessionAt || null]
+  );
+
+  // 概念
+  for (const [name, data] of Object.entries(profile.conceptMastery || {})) {
+    db.run(
+      `INSERT INTO philosopher_concepts (user_id, philosopher_id, concept_name, level, depth, discuss_count, last_discussed, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+       ON CONFLICT(user_id, philosopher_id, concept_name) DO UPDATE SET
+         level = excluded.level,
+         depth = excluded.depth,
+         discuss_count = excluded.discuss_count,
+         last_discussed = excluded.last_discussed,
+         updated_at = CURRENT_TIMESTAMP`,
+      [userId, 'nietzsche', name, data.level || 'novice', data.depth || 'basic', data.discussCount || 1, data.lastDiscussed || new Date().toISOString().split('T')[0]]
+    );
+  }
+
+  // 学者
+  for (const s of (prefs.engagedScholars || [])) {
+    db.run(
+      `INSERT INTO philosopher_scholars (user_id, philosopher_id, scholar_name, interest_score, first_seen, last_seen)
+       VALUES (?, ?, ?, 1, CURRENT_DATE, CURRENT_DATE)
+       ON CONFLICT(user_id, philosopher_id, scholar_name) DO UPDATE SET
+         interest_score = interest_score + 1,
+         last_seen = CURRENT_DATE`,
+      [userId, 'nietzsche', s]
+    );
+  }
+}
+
+// ========== 分层画像注入 ==========
+function buildProfileInjection(profile) {
+  const concepts = profile.conceptMastery || {};
+  const prefs = profile.userPreferences || {};
+  const today = new Date().toISOString().split('T')[0];
+
+  // 遗忘曲线：超过30天未讨论的概念降级
+  const decayed = [];
+  for (const [name, data] of Object.entries(concepts)) {
+    if (data.lastDiscussed) {
+      const days = Math.floor((new Date(today) - new Date(data.lastDiscussed)) / (86400000));
+      if (days > 30 && data.level === 'mastered') { decayed.push(name); data.level = 'familiar'; }
+      else if (days > 60 && data.level === 'familiar') { decayed.push(name); data.level = 'novice'; }
+    }
+  }
+
+  const mastered = Object.entries(concepts).filter(([_, v]) => v.level === 'mastered').map(([k, _]) => k);
+  const familiar = Object.entries(concepts).filter(([_, v]) => v.level === 'familiar').map(([k, _]) => k);
+  const novice = Object.entries(concepts).filter(([_, v]) => v.level === 'novice').map(([k, _]) => k);
+  const engaged = prefs.engagedScholars || [];
+  const examples = prefs.preferredExamples || [];
+  const stance = prefs.stance;
+
+  const lines = ['\n\n【用户知识状态】'];
+  if (mastered.length) lines.push(`已深入掌握：${mastered.join('、')}`);
+  if (familiar.length) lines.push(`已初步了解：${familiar.join('、')}`);
+  if (novice.length) lines.push(`接触过但未深入：${novice.join('、')}`);
+  if (stance) lines.push(`用户思维倾向：${stance}`);
+  if (examples.length) lines.push(`偏好例证：${examples.join('、')}`);
+  if (engaged.length) lines.push(`权威学者兴趣：${engaged.join('、')}`);
+  if (decayed.length) lines.push(`【注意】以下概念因长期未讨论已降级：${decayed.join('、')}`);
+
+  lines.push('\n【回应策略】');
+  if (mastered.length) {
+    lines.push(`- 对已掌握概念（${mastered.join('、')}）：直接跳过基础定义，进入高级分析、批判性展开或与其他概念的关联运用。不要重复解释这些概念的基础含义。`);
+  }
+  if (familiar.length) {
+    lines.push(`- 对已了解概念（${familiar.join('、')}）：用1句话简要回顾核心定义，然后立即进入深入分析或具体运用。`);
+  }
+  if (novice.length) {
+    lines.push(`- 对接触但未深入的概念（${novice.join('、')}）：给出操作性界定 + 具体例证解释，帮助用户建立理解。`);
+  }
+  lines.push(`- 对全新概念：给出操作性界定 + ${examples[0] || '具体例证'}解释。`);
+  if (engaged.length) {
+    lines.push(`- 援引学者时优先使用用户感兴趣的学者：${engaged.slice(0, 3).join('、')}。`);
+  }
+  if (stance) {
+    lines.push(`- 回应时顺应用户的思维倾向「${stance}」，从这个角度展开分析。`);
+  }
+  return lines.join('\n');
+}
+
+// ========== 异步画像更新（升级版） ==========
+async function updateUserProfile(dialogueHistory, philosopherName, userId, philosopherId) {
+  if (!DEEPSEEK_API_KEY || dialogueHistory.length < 2) return;
+  const recent = dialogueHistory.slice(-6);
+  const transcript = recent.map(m => `${m.role}: ${m.content.substring(0, 400)}`).join('\n');
+
+  const analysisPrompt = `分析以下哲学对话，提取结构化画像信息。对话中一方是用户，一方是${philosopherName}。
+
+对话记录：
+${transcript}
+
+请输出严格JSON（不要任何其他文字，不要markdown代码块）：
+{
+  "newConcepts": ["概念名1", "概念名2"],
+  "updatedConcepts": [
+    {"name": "概念名", "level": "novice|familiar|mastered", "depth": "basic|intermediate|advanced", "related": ["相关概念"]}
+  ],
+  "userStance": "用户思维倾向关键词（如：存在主义倾向、分析哲学倾向、怀疑论者、建构主义者等）",
+  "examplePreference": "历史事件/制度演变/文学/个人/其他/无",
+  "engagedScholars": ["学者名"],
+  "sessionSummary": "用一句话总结本轮对话核心内容，突出用户关心的具体问题"
+}
+
+【等级判定规则】（严格遵循）：
+- novice（新手）：用户首次接触该概念，表现出陌生感，需要基础解释
+- familiar（熟悉）：用户能复述概念定义，或能举出简单例子，但尚未进行批判性分析
+- mastered（掌握）：用户能批判性分析该概念，能关联其他概念，能提出反驳或深化问题
+
+【深度判定规则】：
+- basic：仅了解概念的基本定义
+- intermediate：能运用概念分析具体问题
+- advanced：能批判性审视概念的局限性和边界条件
+
+【升级规则】：
+- 同一概念被讨论3次以上 → 自动从familiar升级到mastered
+- 用户能主动关联该概念与其他概念 → 可升级到mastered
+
+只返回纯JSON，不要任何解释。`;
+
+  try {
+    const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: analysisPrompt }], temperature: 0.3, max_tokens: 1000 })
+    });
+    if (!response.ok) return;
+    const data = await response.json();
+    const raw = data.choices?.[0]?.message?.content || '';
+    let analysis;
+    try {
+      const cleaned = raw.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+      analysis = JSON.parse(cleaned);
+    } catch { console.warn('Profile update parse failed:', raw.substring(0, 200)); return; }
+
+    getOrCreateProfile(userId, (err, profile) => {
+      if (err || !profile) return;
+
+      // 合并新/更新概念，应用升级规则
+      const allUpdates = [...(analysis.updatedConcepts || []), ...(analysis.newConcepts || []).map(n => ({ name: n, level: 'novice', depth: 'basic' }))];
+      for (const c of allUpdates) {
+        const existing = profile.conceptMastery[c.name];
+        const levels = { novice: 1, familiar: 2, mastered: 3 };
+        let newLevel = levels[c.level] || 1;
+        let newDepth = c.depth || 'basic';
+
+        if (existing) {
+          // 重复讨论升级：累计3次熟悉→掌握
+          const newCount = (existing.discussCount || 1) + 1;
+          if (newCount >= 3 && existing.level === 'familiar') {
+            newLevel = 3; // mastered
+            newDepth = 'advanced';
+          }
+          // 取最高等级
+          const oldLevel = levels[existing.level] || 0;
+          if (newLevel < oldLevel) newLevel = oldLevel;
+          if (newDepth === 'basic' && existing.depth === 'intermediate') newDepth = 'intermediate';
+          if (newDepth === 'basic' && existing.depth === 'advanced') newDepth = 'advanced';
+
+          profile.conceptMastery[c.name] = {
+            level: Object.keys(levels).find(k => levels[k] === newLevel),
+            depth: newDepth,
+            discussCount: newCount,
+            lastDiscussed: new Date().toISOString().split('T')[0],
+            related: c.related || existing.related || []
+          };
+        } else {
+          profile.conceptMastery[c.name] = {
+            level: c.level || 'novice',
+            depth: newDepth,
+            discussCount: 1,
+            lastDiscussed: new Date().toISOString().split('T')[0],
+            related: c.related || []
+          };
+        }
+      }
+
+      // 偏好更新
+      if (analysis.userStance) profile.userPreferences.stance = analysis.userStance;
+      if (analysis.examplePreference && analysis.examplePreference !== '无') {
+        const prefs = profile.userPreferences.preferredExamples;
+        if (!prefs.includes(analysis.examplePreference)) prefs.push(analysis.examplePreference);
+      }
+      for (const s of (analysis.engagedScholars || [])) {
+        const list = profile.userPreferences.engagedScholars;
+        if (!list.includes(s)) list.push(s);
+      }
+
+      // 会话摘要
+      if (analysis.sessionSummary) {
+        db.run(
+          'INSERT INTO philosopher_summaries (user_id, philosopher_id, session_id, summary, key_concepts, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+          [userId, philosopherId, `sess_${Date.now()}`, analysis.sessionSummary, JSON.stringify([...(analysis.newConcepts || []), ...(analysis.updatedConcepts || []).map(c => c.name)]), new Date().toISOString()]
+        );
+      }
+
+      profile.totalMessages = (profile.totalMessages || 0) + recent.length;
+      profile.lastSessionAt = new Date().toISOString();
+      saveProfile(userId, profile);
+      console.log(`🧠 画像已更新 | user=${userId} | 掌握概念=${Object.keys(profile.conceptMastery).length} | stance=${profile.userPreferences.stance || '无'}`);
+
+      // 定期压缩：摘要超过50条时合并
+      compressOldSummaries(userId, philosopherId);
+    });
+  } catch (err) { console.error('Profile update error:', err.message); }
+}
+
+// ========== 会话摘要压缩 ==========
+async function compressOldSummaries(userId, philosopherId) {
+  db.get('SELECT COUNT(*) as cnt FROM philosopher_summaries WHERE user_id = ? AND philosopher_id = ?', [userId, philosopherId], async (err, row) => {
+    if (err || !row || row.cnt < 50) return;
+    if (!DEEPSEEK_API_KEY) return;
+
+    // 取最早的20条摘要合并
+    db.all('SELECT * FROM philosopher_summaries WHERE user_id = ? AND philosopher_id = ? ORDER BY created_at ASC LIMIT 20', [userId, philosopherId], async (err2, oldSums) => {
+      if (err2 || !oldSums || oldSums.length < 20) return;
+      const texts = oldSums.map(s => s.summary).join('\n---\n');
+      const compressPrompt = `将以下哲学对话摘要合并为3-5条更精炼的长期记忆要点。每条要点包含：一个概念/主题 + 用户对此的理解程度 + 任何特别的思维倾向。只输出要点列表，不要其他内容。\n\n${texts}`;
+
+      try {
+        const res = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+          body: JSON.stringify({ model: 'deepseek-chat', messages: [{ role: 'user', content: compressPrompt }], temperature: 0.3, max_tokens: 800 })
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const compressed = data.choices?.[0]?.message?.content || '';
+
+        // 删除旧摘要，插入压缩摘要
+        const ids = oldSums.map(s => s.id);
+        const placeholders = ids.map(() => '?').join(',');
+        db.run(`DELETE FROM philosopher_summaries WHERE id IN (${placeholders})`, ids, function(err3) {
+          if (err3) return;
+          db.run(
+            'INSERT INTO philosopher_summaries (user_id, philosopher_id, session_id, summary, key_concepts, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+            [userId, philosopherId, 'compressed_' + Date.now(), compressed, JSON.stringify([]), new Date().toISOString()]
+          );
+          console.log(`🗜️  摘要已压缩 | user=${userId} | 合并${oldSums.length}条 → 1条`);
+        });
+      } catch (e) { console.error('Compress error:', e.message); }
+    });
+  });
+}
+
+// 哲学家列表
+app.get('/api/philosophers', (req, res) => {
+  const list = Object.values(PHILOSOPHERS).map(p => ({
+    id: p.id, name: p.name, nameEn: p.nameEn, years: p.years,
+    avatar: p.avatar, tags: p.tags, quote: p.quote
+  }));
+  res.json(list);
+});
+
+// 获取用户完整画像（新API）
+app.get('/api/philosopher-profile', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  getOrCreateProfile(uid, (err, profile) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    // 同时查询会话摘要
+    db.all('SELECT summary, key_concepts, created_at FROM philosopher_summaries WHERE user_id = ? ORDER BY created_at DESC LIMIT 20', [uid], (err2, summaries) => {
+      const result = {
+        ...profile,
+        sessionSummaries: summaries || [],
+        conceptCount: Object.keys(profile.conceptMastery || {}).length,
+        masteredCount: Object.entries(profile.conceptMastery || {}).filter(([_, v]) => v.level === 'mastered').length,
+        familiarCount: Object.entries(profile.conceptMastery || {}).filter(([_, v]) => v.level === 'familiar').length
+      };
+      res.json(result);
+    });
+  });
+});
+
+// 获取概念掌握列表
+app.get('/api/philosopher-profile/concepts', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  getOrCreateProfile(uid, (err, profile) => {
+    if (err) return res.status(500).json({ error: err.message });
+    const concepts = Object.entries(profile.conceptMastery || {}).map(([name, data]) => ({
+      name, ...data,
+      status: data.level === 'mastered' ? '✓ 已掌握' : data.level === 'familiar' ? '~ 已了解' : '? 接触过'
+    }));
+    res.json(concepts);
+  });
+});
+
+// 获取用户历史摘要（用于前端档案页）
+app.get('/api/philosopher-profile/summaries', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  const pid = req.query.philosopher || 'nietzsche';
+  db.all(
+    'SELECT summary, key_concepts, created_at FROM philosopher_summaries WHERE user_id = ? AND philosopher_id = ? ORDER BY created_at DESC LIMIT 30',
+    [uid, pid],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows || []);
+    }
+  );
+});
+
+// 学者数据
+app.get('/api/philosopher-scholars', (req, res) => {
+  res.json(scholarsData);
+});
+
+// 清空会话（保留画像）
+app.post('/api/philosopher-session/clear', requireLogin, (req, res) => {
+  const sid = req.session.philosopherSession || `sess_${req.session.userId}_${Date.now()}`;
+  db.run('DELETE FROM philosopher_chats WHERE session_id = ?', [sid], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ success: true, message: '对话历史已清空，画像与概念掌握度保留' });
+  });
+});
+
+// 完全重置
+app.post('/api/philosopher-session/reset', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  const sid = req.session.philosopherSession || `sess_${uid}_${Date.now()}`;
+  db.serialize(() => {
+    db.run('DELETE FROM philosopher_chats WHERE session_id = ?', [sid]);
+    db.run('DELETE FROM philosopher_concepts WHERE user_id = ?', [uid]);
+    db.run('DELETE FROM philosopher_scholars WHERE user_id = ?', [uid]);
+    db.run('DELETE FROM philosopher_summaries WHERE user_id = ?', [uid]);
+    db.run('DELETE FROM philosopher_profiles WHERE user_id = ?', [uid]);
+    db.run('DELETE FROM philosopher_profiles WHERE user_id = ?', [uid]);
+  });
+  invalidateProfileCache(uid);
+  res.json({ success: true, message: '完全重置：对话历史、画像、概念追踪全部清空' });
+});
+
+// 获取对话历史
+app.get('/api/philosopher-chat/history', requireLogin, (req, res) => {
+  const philosopherId = req.query.philosopher || 'nietzsche';
+  const sid = req.session.philosopherSession || `sess_${req.session.userId}_${Date.now()}`;
+  if (!req.session.philosopherSession) req.session.philosopherSession = sid;
+  db.all(
+    'SELECT role, content, citations, created_at FROM philosopher_chats WHERE session_id = ? AND philosopher_id = ? ORDER BY created_at ASC',
+    [sid, philosopherId],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      const msgs = rows.map(r => ({
+        role: r.role,
+        content: r.content,
+        citations: JSON.parse(r.citations || '[]')
+      }));
+      res.json(msgs);
+    }
+  );
+});
+
+// 核心对话 API（双轨RAG + 结构化画像）
+app.post('/api/philosopher-chat', requireLogin, async (req, res) => {
+  const { message, philosopherId = 'nietzsche', history = [] } = req.body;
+  const uid = req.session.userId;
+  if (!DEEPSEEK_API_KEY) {
+    return res.status(500).json({ error: 'DEEPSEEK_API_KEY 未配置' });
+  }
+  const philosopher = PHILOSOPHERS[philosopherId];
+  if (!philosopher) return res.status(400).json({ error: '未知的哲学家' });
+
+  const sid = req.session.philosopherSession || `sess_${uid}_${Date.now()}`;
+  if (!req.session.philosopherSession) req.session.philosopherSession = sid;
+
+  // ========== 双轨RAG检索 ==========
+  // 轨1：哲学原著
+  const relevantChunks = retrieveRelevantChunks(message, philosopherId);
+  const contextText = relevantChunks.length > 0
+    ? '\n\n以下是你著作中的相关段落，可作为回应的参考（自然融入，不要逐条引用）：\n' +
+      relevantChunks.map(c => `[${c.source}] ${c.text}`).join('\n\n')
+    : '';
+
+  // 轨2：用户历史记忆
+  const userMemory = await retrieveUserHistoryMemory(uid, philosopherId, message);
+  const memoryText = (userMemory.chatSnippets.length > 0 || userMemory.summaries.length > 0)
+    ? '\n\n【用户此前相关讨论】\n' +
+      (userMemory.summaries.length > 0
+        ? '历史会话要点：\n' + userMemory.summaries.slice(0, 2).map(s => `- ${s.summary}`).join('\n') + '\n'
+        : '') +
+      (userMemory.chatSnippets.length > 0
+        ? '此前提问片段：\n' + userMemory.chatSnippets.slice(0, 2).map(s => `- ${s.content.substring(0, 120)}...`).join('\n')
+        : '') +
+      '\n注意：回应时考虑用户此前的理解基础，避免重复已充分讨论过的内容。'
+    : '';
+
+  // 获取画像
+  const profile = await new Promise((resolve, reject) => {
+    getOrCreateProfile(uid, (err, p) => { if (err) reject(err); else resolve(p); });
+  }).catch(() => null);
+
+  const profileInjection = profile ? buildProfileInjection(profile) : '';
+
+  // 学者引用提示
+  let scholarHint = '';
+  const engaged = profile?.userPreferences?.engagedScholars || [];
+  if (engaged.length > 0) {
+    const relevant = engaged.filter(name => scholarsData[name]).map(name => {
+      const s = scholarsData[name];
+      return `- ${name}（${s.work}）：${s.keyIdea}`;
+    }).join('\n');
+    if (relevant) scholarHint = '\n\n【可援引的阐释者】\n' + relevant + '\n援引时须明确标注学者姓名与出处方向，禁止编造具体引文。';
+  }
+
+  const systemPrompt = philosopher.systemPromptBase + contextText + memoryText + profileInjection + scholarHint;
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...history.slice(-6),
+    { role: 'user', content: message }
+  ];
+
+  try {
+    const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat', messages, temperature: 0.6, max_tokens: 2500, stream: false
+      })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('DeepSeek API error:', errorText);
+      return res.status(response.status).json({ error: '模型调用失败', detail: errorText });
+    }
+
+    const data = await response.json();
+    const reply = data.choices?.[0]?.message?.content || '...（沉默）';
+    const citations = relevantChunks.map(c => ({ source: c.source, text: c.text.substring(0, 120) + '...' }));
+
+    const profileSnapshot = profile ? {
+      masteredConcepts: Object.entries(profile.conceptMastery || {})
+        .filter(([_, v]) => v.level === 'mastered').map(([k, _]) => k),
+      familiarConcepts: Object.entries(profile.conceptMastery || {})
+        .filter(([_, v]) => v.level === 'familiar').map(([k, _]) => k)
+    } : { masteredConcepts: [], familiarConcepts: [] };
+
+    // 保存到数据库
+    db.run(
+      'INSERT INTO philosopher_chats (user_id, session_id, philosopher_id, role, content, citations) VALUES (?, ?, ?, ?, ?, ?)',
+      [uid, sid, philosopherId, 'user', message, '[]'],
+      function(err) { if (err) console.error('[PHILO] save user msg:', err.message); }
+    );
+    db.run(
+      'INSERT INTO philosopher_chats (user_id, session_id, philosopher_id, role, content, citations) VALUES (?, ?, ?, ?, ?, ?)',
+      [uid, sid, philosopherId, 'assistant', reply, JSON.stringify(citations)],
+      function(err) { if (err) console.error('[PHILO] save assistant msg:', err.message); }
+    );
+
+    res.json({ reply, citations, philosopher: philosopher.name, profileSnapshot });
+
+    // 异步更新画像（不阻塞响应）
+    setImmediate(() => {
+      const fullHistory = [...history, { role: 'user', content: message }, { role: 'assistant', content: reply }];
+      updateUserProfile(fullHistory, philosopher.name, uid, philosopherId).catch(() => {});
+    });
+
+  } catch (err) {
+    console.error('Chat error:', err);
+    res.status(500).json({ error: '服务器错误', detail: err.message });
+  }
+});
 // ========== 启动 ==========
 // Graceful shutdown
 process.on('SIGTERM', () => {

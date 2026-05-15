@@ -98,6 +98,28 @@ body.index-page {
   transform: scale(1.05);
 }
 
+.nav-philosopher-btn {
+  padding: 5px 14px;
+  border: 1px solid rgba(201,169,110,0.25);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent-gold);
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  opacity: 0.85;
+}
+.nav-philosopher-btn:hover {
+  background: rgba(201,169,110,0.12);
+  border-color: var(--accent-gold);
+  opacity: 1;
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(201,169,110,0.15);
+}
+
 /* ===== 标准按钮样式 ===== */
 .btn-standard {
   padding: 6px 16px;

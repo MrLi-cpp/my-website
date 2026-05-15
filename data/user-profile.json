@@ -1,0 +1,66 @@
+{
+  "userId": "default",
+  "conceptMastery": {
+    "辩证法": {
+      "level": "mastered",
+      "depth": "advanced",
+      "lastDiscussed": "2026-05-14",
+      "related": []
+    },
+    "主奴关系": {
+      "level": "novice",
+      "depth": "basic",
+      "lastDiscussed": "2026-05-14",
+      "related": []
+    }
+  },
+  "userPreferences": {
+    "preferredExamples": [
+      "哲学文本"
+    ],
+    "dislikedStyles": [],
+    "engagedScholars": [
+      "黑格尔",
+      "格奥尔格·威廉·弗里德里希·黑格尔"
+    ],
+    "stance": "质疑简化公式，追求内在机制"
+  },
+  "sessionSummaries": [
+    {
+      "sessionId": "sess_1778778163517",
+      "summary": "尼采纠正用户对辩证法的简化理解，强调其作为概念自我运动的内在否定性，并以主奴关系为例说明。",
+      "timestamp": "2026-05-14T17:02:43.517Z",
+      "keyConcepts": [
+        "概念自身的自我运动",
+        "内在的否定性",
+        "扬弃",
+        "具体统一",
+        "自在",
+        "自为",
+        "辩证法",
+        "主奴关系"
+      ]
+    },
+    {
+      "sessionId": "sess_1778779149465",
+      "summary": "黑格尔区分其辩证法与机械的正反合模板，强调概念自身的内在运动，并以感性确定性为例说明自我展开中的矛盾。",
+      "timestamp": "2026-05-14T17:19:09.465Z",
+      "keyConcepts": [
+        "感性确定性",
+        "精神现象学",
+        "辩证法"
+      ]
+    },
+    {
+      "sessionId": "sess_1778779193301",
+      "summary": "黑格尔澄清其辩证法不是外在的正反合程序，而是概念自身的内在运动，并以《精神现象学》中“感性确定性”为例说明概念自我否定的过程。",
+      "timestamp": "2026-05-14T17:19:53.301Z",
+      "keyConcepts": [
+        "感性确定性",
+        "这一个",
+        "知性思维",
+        "辩证法"
+      ]
+    }
+  ]
+}

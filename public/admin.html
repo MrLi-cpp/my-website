@@ -461,6 +461,7 @@
     <div class="tab-bar">
       <button class="tab-btn active" onclick="switchTab('posts')">内容管理</button>
       <button class="tab-btn" onclick="switchTab('blogs')">博客管理</button>
+      <button class="tab-btn" onclick="switchTab('learning')">学习站管理</button>
       <button class="tab-btn" onclick="switchTab('chats')">💬 私信</button>
     </div>
 
@@ -477,6 +478,14 @@
       <div class="panel-card">
         <h3>✍️ 博客文章</h3>
         <div id="blogList"><div class="list-empty">加载中...</div></div>
+      </div>
+    </div>
+
+    <!-- 学习站管理 -->
+    <div class="tab-panel" id="tab-learning">
+      <div class="panel-card">
+        <h3>📤 学习资料</h3>
+        <div id="learningList"><div class="list-empty">加载中...</div></div>
       </div>
     </div>
 
@@ -508,7 +517,15 @@
         <div id="editCoverPreview"></div>
         <div class="edit-upload-btn" onclick="document.getElementById('editCoverInput').click()" style="padding:12px;">
           <input type="file" id="editCoverInput" accept="image/*" onchange="handleEditCover(this)">
-          <span>+ 替换封面</span>
+          <span id="editCoverBtnLabel">+ 替换封面</span>
+        </div>
+      </div>
+      <div class="edit-field" id="editHtmlField" style="display:none;">
+        <label>HTML文件</label>
+        <div id="editHtmlPreview"></div>
+        <div class="edit-upload-btn" onclick="document.getElementById('editHtmlInput').click()" style="padding:12px;">
+          <input type="file" id="editHtmlInput" accept=".html" onchange="handleEditHtml(this)">
+          <span>+ 替换HTML文件</span>
         </div>
       </div>
       <div class="edit-field">
@@ -539,10 +556,13 @@
     let editingKind = null;
     let editingImages = [];      // 当前编辑的图片列表
     let editingCover = null;     // 当前编辑的博客封面
+    let editingHtml = null;      // 当前编辑的学习站HTML文件
     let editingNewImages = [];   // 新上传的图片文件
     let editingNewCover = null;  // 新上传的封面文件
+    let editingNewHtml = null;   // 新上传的HTML文件
     let postDataCache = {};      // 朋友圈数据缓存 {id: post}
     let blogDataCache = {};      // 博客数据缓存 {id: blog}
+    let learningDataCache = {};  // 学习站数据缓存 {id: learning}
 
     function switchTab(name) {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -551,17 +571,21 @@
       document.getElementById('tab-' + name).classList.add('active');
       if (name === 'posts') loadPostList();
       if (name === 'blogs') loadBlogList();
+      if (name === 'learning') loadLearningList();
       if (name === 'chats') loadChatList();
     }
 
     async function initAdmin() {
       loadPostList();
       loadBlogList();
+      loadLearningList();
       loadStats();
       // 根据 URL hash 切换 tab
       const hash = location.hash.replace('#', '');
       if (hash === 'chats') {
         switchTab('chats');
+      } else if (hash === 'learning') {
+        switchTab('learning');
       }
     }
 
@@ -569,11 +593,23 @@
       try {
         const posts = await get('/api/posts');
         const blogs = await get('/api/blogs');
+        const learning = await get('/api/learning');
         document.getElementById('statPosts').textContent = posts.filter(p => p.type === 'moment').length;
         document.getElementById('statDiaries').textContent = posts.filter(p => p.type === 'diary').length;
         document.getElementById('statBlogs').textContent = blogs.length;
         const totalLikes = posts.reduce((sum, p) => sum + (p.likes_count || 0), 0) + blogs.reduce((sum, b) => sum + (b.likes_count || 0), 0);
         document.getElementById('statLikes').textContent = totalLikes;
+        // 学习站统计（添加到统计卡片）
+        const statRow = document.getElementById('statsRow');
+        let learningStat = document.getElementById('statLearning');
+        if (!learningStat) {
+          const card = document.createElement('div');
+          card.className = 'stat-card';
+          card.innerHTML = '<div class="num" id="statLearning">—</div><div class="label">学习资料</div>';
+          statRow.appendChild(card);
+          learningStat = document.getElementById('statLearning');
+        }
+        learningStat.textContent = learning.length;
       } catch (e) {}
     }
 
@@ -637,18 +673,52 @@
       }
     }
 
-    // ===== 编辑弹窗 =====
+    async function loadLearningList() {
+      const list = document.getElementById('learningList');
+      try {
+        const items = await get('/api/learning');
+        learningDataCache = {};
+        items.forEach(i => learningDataCache[i.id] = i);
+        if (!items.length) { list.innerHTML = '<div class="list-empty">还没有学习资料</div>'; return; }
+        list.innerHTML = items.map(item => `
+          <div class="list-item">
+            <div class="list-thumb" style="display:flex;align-items:center;justify-content:center;font-size:24px;">📄</div>
+            <div class="list-body">
+              <span class="list-type blog">学习资料</span>
+              <div class="list-content">${escapeHtml(item.title)}</div>
+              <div class="list-meta">
+                ${formatDate(item.display_date || item.created_at)}
+                ${item.html_file ? ' · HTML文件' : ''}
+              </div>
+            </div>
+            <div class="list-actions">
+              <button class="btn btn-secondary btn-sm" onclick="openEdit('learning', ${item.id})">编辑</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteLearning(${item.id})">删除</button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) {
+        list.innerHTML = '<div class="list-empty">加载失败</div>';
+      }
+    }
+
+    async function deleteLearning(id) {
+      if (!confirm('确定删除这份学习资料？不可恢复。')) return;
+      try { await del('/api/learning/' + id); loadLearningList(); loadStats(); } catch (e) { alert(e.message); }
+    }
     function openEdit(kind, id) {
       editingId = id;
       editingKind = kind;
       editingNewImages = [];
       editingNewCover = null;
+      editingNewHtml = null;
 
       if (kind === 'post') {
         const post = postDataCache[id];
         if (!post) { alert('数据未加载'); return; }
         editingImages = post.images || [];
         editingCover = null;
+        editingHtml = null;
 
         document.getElementById('editModalTitle').textContent = '编辑朋友圈/日记';
         document.getElementById('editContent').value = post.content;
@@ -658,12 +728,14 @@
         document.getElementById('editType').value = post.type || 'moment';
         document.getElementById('editImageField').style.display = 'block';
         document.getElementById('editCoverField').style.display = 'none';
+        document.getElementById('editHtmlField').style.display = 'none';
         renderEditImages();
-      } else {
+      } else if (kind === 'blog') {
         const blog = blogDataCache[id];
         if (!blog) { alert('数据未加载'); return; }
         editingImages = [];
         editingCover = blog.cover_image || null;
+        editingHtml = null;
 
         document.getElementById('editModalTitle').textContent = '编辑博客';
         document.getElementById('editContent').value = blog.title;
@@ -672,7 +744,25 @@
         document.getElementById('editTypeField').style.display = 'none';
         document.getElementById('editImageField').style.display = 'none';
         document.getElementById('editCoverField').style.display = 'block';
+        document.getElementById('editHtmlField').style.display = 'none';
         renderEditCover();
+      } else if (kind === 'learning') {
+        const item = learningDataCache[id];
+        if (!item) { alert('数据未加载'); return; }
+        editingImages = [];
+        editingCover = item.cover_image || null;
+        editingHtml = item.html_file || null;
+
+        document.getElementById('editModalTitle').textContent = '编辑学习资料';
+        document.getElementById('editContent').value = item.title;
+        document.getElementById('editDate').value = (item.display_date || item.created_at).slice(0, 16);
+        document.getElementById('editLocation').value = item.location || '';
+        document.getElementById('editTypeField').style.display = 'none';
+        document.getElementById('editImageField').style.display = 'none';
+        document.getElementById('editCoverField').style.display = 'block';
+        document.getElementById('editHtmlField').style.display = 'block';
+        renderEditCover();
+        renderEditHtml();
       }
 
       document.getElementById('editModal').classList.add('active');
@@ -691,7 +781,13 @@
 
     function renderEditCover() {
       const wrap = document.getElementById('editCoverPreview');
-      if (!editingCover) { wrap.innerHTML = ''; return; }
+      const btnLabel = document.getElementById('editCoverBtnLabel');
+      if (!editingCover) {
+        wrap.innerHTML = '<div style="padding:32px 20px;text-align:center;color:var(--text-muted);font-size:13px;letter-spacing:1px;">暂无封面</div>';
+        if (btnLabel) btnLabel.textContent = '+ 添加封面';
+        return;
+      }
+      if (btnLabel) btnLabel.textContent = '+ 替换封面';
       wrap.innerHTML = `
         <div class="edit-img-del" style="margin-bottom:8px;">
           <img src="${editingCover}" alt="" style="aspect-ratio:21/9;object-fit:cover;width:100%;border-radius:8px;">
@@ -738,7 +834,6 @@
       if (!file) return;
       editingNewCover = file;
       input.value = '';
-      // 预览新封面
       const wrap = document.getElementById('editCoverPreview');
       wrap.innerHTML = `
         <div class="edit-img-del" style="margin-bottom:8px;" id="editNewCoverWrap">
@@ -746,14 +841,57 @@
           <button class="del-x" onclick="removeEditNewCover()">×</button>
         </div>
       `;
+      const btnLabel = document.getElementById('editCoverBtnLabel');
+      if (btnLabel) btnLabel.textContent = '+ 替换封面';
     }
     function removeEditCover() {
       editingCover = null;
-      document.getElementById('editCoverPreview').innerHTML = '';
+      renderEditCover();
     }
     function removeEditNewCover() {
       editingNewCover = null;
-      document.getElementById('editNewCoverWrap')?.remove();
+      renderEditCover();
+    }
+
+    // ===== 学习站HTML文件编辑 =====
+    function renderEditHtml() {
+      const wrap = document.getElementById('editHtmlPreview');
+      if (!editingHtml) { wrap.innerHTML = ''; return; }
+      wrap.innerHTML = `
+        <div class="edit-img-del" style="margin-bottom:8px;display:flex;align-items:center;gap:8px;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+          <span style="font-size:24px;">📄</span>
+          <div style="flex:1;overflow:hidden;">
+            <div style="font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${editingHtml.split('/').pop()}</div>
+            <div style="font-size:11px;color:var(--text-muted);">当前HTML文件</div>
+          </div>
+          <button class="del-x" onclick="removeEditHtml()">×</button>
+        </div>
+      `;
+    }
+    function handleEditHtml(input) {
+      const file = input.files[0];
+      if (!file) return;
+      editingNewHtml = file;
+      input.value = '';
+      const wrap = document.getElementById('editHtmlPreview');
+      wrap.innerHTML = `
+        <div class="edit-img-del" id="editNewHtmlWrap" style="margin-bottom:8px;display:flex;align-items:center;gap:8px;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+          <span style="font-size:24px;">📄</span>
+          <div style="flex:1;overflow:hidden;">
+            <div style="font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${file.name}</div>
+            <div style="font-size:11px;color:var(--text-muted);">新HTML文件（待上传）</div>
+          </div>
+          <button class="del-x" onclick="removeEditNewHtml()">×</button>
+        </div>
+      `;
+    }
+    function removeEditHtml() {
+      editingHtml = null;
+      document.getElementById('editHtmlPreview').innerHTML = '';
+    }
+    function removeEditNewHtml() {
+      editingNewHtml = null;
+      document.getElementById('editNewHtmlWrap')?.remove();
     }
 
     function hideEditModal() {
@@ -762,10 +900,13 @@
       editingKind = null;
       editingImages = [];
       editingCover = null;
+      editingHtml = null;
       editingNewImages = [];
       editingNewCover = null;
+      editingNewHtml = null;
       document.getElementById('editImagesGrid').innerHTML = '';
       document.getElementById('editCoverPreview').innerHTML = '';
+      document.getElementById('editHtmlPreview').innerHTML = '';
     }
 
     function closeEditModal(e) {
@@ -793,7 +934,7 @@
           const json = await res.json();
           if (!res.ok) throw new Error(json.error);
           loadPostList();
-        } else {
+        } else if (editingKind === 'blog') {
           const data = new FormData();
           data.append('title', content);
           data.append('content', '');
@@ -805,6 +946,17 @@
           const json = await res.json();
           if (!res.ok) throw new Error(json.error);
           loadBlogList();
+        } else if (editingKind === 'learning') {
+          const data = new FormData();
+          data.append('title', content);
+          data.append('display_date', date);
+          data.append('location', location);
+          if (editingNewCover) data.append('cover', editingNewCover);
+          if (editingNewHtml) data.append('html', editingNewHtml);
+          const res = await fetch('/api/learning/' + editingId, { method: 'PUT', body: data, credentials: 'same-origin' });
+          const json = await res.json();
+          if (!res.ok) throw new Error(json.error);
+          loadLearningList();
         }
         hideEditModal();
         loadStats();
