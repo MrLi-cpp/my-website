@@ -352,6 +352,28 @@ db.serialize(() => {
       console.log('[INIT] 画像数据迁移完成');
     });
   });
+
+  // ===== 群聊圆桌数据表 =====
+  db.run(`CREATE TABLE IF NOT EXISTS group_chat_sessions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    title TEXT DEFAULT '哲思圆桌',
+    current_topic TEXT DEFAULT '',
+    round_count INTEGER DEFAULT 0,
+    message_count INTEGER DEFAULT 0,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ended_at DATETIME DEFAULT NULL
+  )`);
+  db.run(`CREATE TABLE IF NOT EXISTS group_chat_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id INTEGER NOT NULL,
+    speaker_type TEXT CHECK(speaker_type IN ('user', 'philosopher')) NOT NULL,
+    speaker_id TEXT,
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )`);
+  db.run(`CREATE INDEX IF NOT EXISTS idx_group_msgs_session ON group_chat_messages(session_id)`, [], (err) => { if (err) console.error('[INIT] idx_group_msgs_session:', err.message); });
 });
 
 // ========== 安全工具函数 ==========
@@ -2009,11 +2031,12 @@ if (fs.existsSync(KNOWLEDGE_BASE_DIR)) {
       continue;
     }
     const p = data.philosopher;
+    const displayName = p.name_zh || p.name || (p.name_en || '');
     PHILOSOPHERS[dir] = {
       id: dir,
-      name: p.name,
-      nameEn: p.name_en || '',
-      years: p.lived || '',
+      name: displayName,
+      nameEn: p.name_en || p.name || '',
+      years: p.lifetime || p.lifespan || p.lived || p.years || '',
       avatar: p.avatar || '📖',
       tags: (data.coreConcepts || []).slice(0, 4).map(c => c.title),
       quote: p.summary?.slice(0, 60) + '…' || '',
@@ -2551,6 +2574,437 @@ app.post('/api/philosopher-chat', requireLogin, async (req, res) => {
     res.status(500).json({ error: '服务器错误', detail: err.message });
   }
 });
+
+// ========== 哲思圆桌（群聊）API ==========
+
+// 启动群聊会话
+app.post('/api/group-chat/start', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  db.run(
+    'INSERT INTO group_chat_sessions (user_id, title, ended_at) VALUES (?, ?, ?)',
+    [uid, '哲思圆桌', null],
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ sessionId: this.lastID, message: '群聊会话已开启' });
+    }
+  );
+});
+
+// 清空/归档群聊会话：把当前session标记为已结束，创建新session
+app.post('/api/group-chat/clear', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  // 先归档当前所有未结束的session
+  db.run(
+    'UPDATE group_chat_sessions SET ended_at = CURRENT_TIMESTAMP, message_count = (SELECT COUNT(*) FROM group_chat_messages WHERE session_id = group_chat_sessions.id) WHERE user_id = ? AND ended_at IS NULL',
+    [uid],
+    function(err) {
+      if (err) console.error('[GROUP] archive error:', err.message);
+      // 创建新的空session
+      db.run(
+        'INSERT INTO group_chat_sessions (user_id, title, ended_at) VALUES (?, ?, ?)',
+        [uid, '哲思圆桌', null],
+        function(err2) {
+          if (err2) return res.status(500).json({ error: err2.message });
+          res.json({ sessionId: this.lastID, message: '已归档上轮对话，开启新轮次' });
+        }
+      );
+    }
+  );
+});
+
+// 获取历史session列表（已归档的轮次）
+app.get('/api/group-chat/sessions', requireLogin, (req, res) => {
+  const uid = req.session.userId;
+  const showActive = req.query.active === 'true';
+  
+  let whereClause = showActive 
+    ? 'user_id = ?' 
+    : 'user_id = ? AND ended_at IS NOT NULL';
+  let orderBy = showActive 
+    ? 'ORDER BY id DESC' 
+    : 'ORDER BY ended_at DESC';
+  
+  db.all(
+    `SELECT id, title, current_topic, round_count, message_count,
+            created_at, updated_at, ended_at,
+            (SELECT COUNT(*) FROM group_chat_messages WHERE session_id = group_chat_sessions.id) as msg_count
+     FROM group_chat_sessions
+     WHERE ${whereClause}
+     ${orderBy}`,
+    [uid],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ sessions: rows });
+    }
+  );
+});
+
+// 获取群聊历史（单条消息）
+app.get('/api/group-chat/history', requireLogin, (req, res) => {
+  const sid = req.query.sessionId;
+  if (!sid) return res.status(400).json({ error: '缺少 sessionId' });
+  db.all(
+    'SELECT speaker_type, speaker_id, content, created_at FROM group_chat_messages WHERE session_id = ? ORDER BY id ASC',
+    [sid],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ messages: rows });
+    }
+  );
+});
+
+// ========== 哲思圆桌（群聊）核心 v2 ==========
+
+// Step 1: 本地候选池生成（关键词+标签匹配，无LLM调用）
+function filterCandidatesByTopic(userMessage, philosophers) {
+  const msg = userMessage.toLowerCase();
+  const candidates = [];
+
+  for (const [id, p] of Object.entries(philosophers)) {
+    if (!p.systemPromptBase || p.systemPromptBase.length < 50) continue;
+
+    let score = 0;
+    const tags = (p.tags || []).join('').toLowerCase();
+    const name = (p.name || '').toLowerCase();
+
+    // 名字被直接提到 → 强制入选且高分
+    if (msg.includes(name) || msg.includes(p.id)) score += 10;
+
+    // 标签匹配
+    for (const tag of (p.tags || [])) {
+      if (msg.includes(tag.toLowerCase())) score += 3;
+    }
+
+    // 通用哲学关键词
+    const philoKeywords = ['哲学', '存在', '意识', '道德', '伦理', '真理', '知识', '自由', '正义', '美学', '逻辑', '形而上学', '认识论', '价值观', '人生', '意义', '死亡', '灵魂', '理性', '感性', '经验', '先验', '辩证法', '怀疑', '信仰', '幸福', '痛苦', '欲望', '权力', '法律', '政治', '社会', '个体', '集体', '自然', '科学', '宗教', '艺术', '语言', '历史', '时间', '空间', '因果', '物质', '精神', '主体', '客体', '实践', '理论', '批判', '反思', '超越', '虚无', '荒诞', '异化', '解构', '建构', '现象', '本质', '形式', '内容', '普遍', '特殊', '抽象', '具体', '绝对', '相对', '无限', '有限', '必然', '偶然', '一元', '多元', '唯物', '唯心', '主观', '客观', '内在', '外在'];
+    for (const kw of philoKeywords) {
+      if (msg.includes(kw)) score += 0.5;
+    }
+
+    // 保底分：所有哲学家至少得 2 分，确保不会全军覆没
+    score = Math.max(score, 2);
+    candidates.push({ id, score, philosopher: p });
+  }
+
+  candidates.sort((a, b) => b.score - a.score);
+  // 取前 15 名进入 LLM 意愿评估，确保候选池足够大
+  return candidates.slice(0, 15);
+}
+
+// Step 2: LLM评估发言意愿
+async function evaluateSpeakingWill(userMessage, candidates, previousSpeakers) {
+  if (candidates.length === 0) return [];
+
+  const list = candidates.map(c => {
+    const p = c.philosopher;
+    return `- ${p.name}（${c.id}）：${p.tags?.join('、') || '哲学家'}。代表观点：${p.quote?.substring(0, 50) || ''}`;
+  }).join('\n');
+
+  const prevSpeakerText = previousSpeakers.length > 0
+    ? `已在本轮发言的哲学家：${previousSpeakers.map(s => PHILOSOPHERS[s]?.name || s).join('、')}`
+    : '本轮尚无哲学家发言';
+
+  const prompt = `你是哲学圆桌的主持人。用户提问："${userMessage}"
+
+${prevSpeakerText}
+
+以下哲学家与话题相关。请为每位评估"发言意愿"（0-9分，整数）：
+- 9分：强烈想发言，核心观点与此直接相关
+- 7分：有相关见解，愿意参与讨论
+- 5分：勉强能谈，兴趣一般
+- 3分：关系较远，不太想说
+- 0分：完全不想说
+
+候选哲学家：
+${list}
+
+请返回JSON对象（不要markdown代码块，纯JSON）：
+{"evaluations": [{"philosopherId": "id", "will": 7, "reason": "简短理由"}]}
+
+规则：
+1. 大部分哲学家应该愿意参与（6分以上），只有少数完全无关的才给低分
+2. 前面已有观点冲突者发言 → 对手分数提高
+3. 返回所有候选者的评估`;
+
+  try {
+    const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat', messages: [{ role: 'user', content: prompt }], temperature: 0.3, max_tokens: 800, stream: false
+      })
+    });
+    if (!response.ok) throw new Error('意愿评估失败');
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content || '{"evaluations":[]}';
+    const clean = text.replace(/```json\s*|\s*```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    return Array.isArray(parsed.evaluations) ? parsed.evaluations : [];
+  } catch (err) {
+    console.error('[GROUP] will evaluation error:', err.message);
+    return candidates.map((c, i) => ({
+      philosopherId: c.id,
+      will: Math.max(5, 8 - i * 0.5),  // 保底5分，递减
+      reason: '默认排序（评估失败）'
+    }));
+  }
+}
+
+// 归一化 philosopherId：处理大小写、中文名回退
+function normalizePhilosopherId(rawId) {
+  if (!rawId) return null;
+  const id = rawId.toString().toLowerCase().trim();
+  // 直接匹配
+  let matched = Object.keys(PHILOSOPHERS).find(k => k.toLowerCase() === id);
+  if (matched) return matched;
+  // 中文名匹配
+  matched = Object.entries(PHILOSOPHERS).find(([k, p]) =>
+    (p.name || '').toLowerCase() === id ||
+    (p.nameEn || '').toLowerCase() === id
+  )?.[0];
+  return matched || id;
+}
+
+// Step 3+4: 随机门控 + 截断排序（人数概率控制）
+function applyRandomGateAndTruncate(evaluations, silenceRate = 0.12) {
+  // 意愿 >= 4 的才算愿意发言
+  const willing = evaluations.filter(e => e.will >= 4);
+  if (willing.length === 0) return { speakers: [], silenced: [], all: [] };
+
+  // 随机门控：意愿高的不容易被沉默
+  const gated = willing.map(e => {
+    // 意愿 9 → 沉默概率 5%；意愿 4 → 沉默概率 25%
+    const silenceProb = Math.max(0.05, Math.min(0.30, silenceRate + (9 - e.will) * 0.03));
+    const silenced = Math.random() < silenceProb;
+    return { ...e, silenced, status: silenced ? 'silenced' : 'selected' };
+  });
+
+  const speakers = gated.filter(e => !e.silenced).sort((a, b) => b.will - a.will);
+  const silenced = gated.filter(e => e.silenced);
+
+  // 人数概率分布：3人 60%，2人 25%，1人 15%保底
+  const r = Math.random();
+  let targetCount;
+  if (r < 0.60) {
+    targetCount = 3;
+  } else if (r < 0.85) {
+    targetCount = 2;
+  } else {
+    targetCount = 1;
+  }
+
+  targetCount = Math.min(targetCount, speakers.length, 3);
+  if (targetCount === 0 && speakers.length > 0) {
+    targetCount = 1;
+  }
+
+  const finalSpeakers = speakers.slice(0, targetCount);
+
+  // 保底：至少1人
+  if (finalSpeakers.length === 0 && willing.length > 0) {
+    const forced = willing.sort((a, b) => b.will - a.will)[0];
+    finalSpeakers.push({ ...forced, silenced: false, status: 'forced', reason: (forced.reason || '') + '（保底发言）' });
+  }
+
+  return { speakers: finalSpeakers, silenced, all: [...finalSpeakers, ...silenced] };
+}
+
+// 构建群聊专用system prompt（含引用指令）
+function buildGroupSystemPrompt(philosopher, previousReplies) {
+  const base = philosopher.systemPromptBase || `你是${philosopher.name}，用第一人称回应。`;
+
+  let contextPrompt = '';
+  if (previousReplies.length > 0) {
+    const others = previousReplies.map(r => {
+      const p = PHILOSOPHERS[r.philosopherId];
+      return `- ${p ? p.name : r.philosopherId}：「${r.reply.substring(0, 200)}${r.reply.length > 200 ? '...' : ''}」`;
+    }).join('\n');
+
+    contextPrompt = `\n\n【圆桌上下文】\n你正在参与一场哲学圆桌讨论。前面已有${previousReplies.length}位哲学家发表了观点：\n${others}\n\n【回应要求】\n1. 仔细阅读前面哲学家的发言\n2. 选择你的回应策略之一：\n   - 同意并深化：「我同意XX的观点，但想补充……」\n   - 不同意并反驳：「XX说……，但我认为这是错误的，因为……」\n   - 侧面切入：「XX从A角度说了……，我想从B角度补充……」\n   - 沉默：如果你认为已说透，可以说「关于这个问题，我暂无更多补充。」\n3. 必须引用或回应至少一位前面发言者的观点\n4. 保持你的人格特征和语言风格\n5. 简洁有力，200-400字`;
+  } else {
+    contextPrompt = `\n\n【圆桌上下文】\n你是本场讨论的第一位发言者。请直接回应用户的哲学问题，提出你的核心观点。\n保持你的人格特征，简洁有力，200-400字。`;
+  }
+
+  return base + contextPrompt + '\n\n【绝对禁止】\n- 第三人称提及自己（"尼采"、"尼采的哲学"）\n- 舞台动作描述\n- 感叹号和情感化表达\n- 编造不存在的学者观点';
+}
+
+// SSE辅助
+function sendSSE(res, event, data) {
+  res.write(`event: ${event}\n`);
+  res.write(`data: ${JSON.stringify(data)}\n\n`);
+}
+
+// 核心群聊消息API —— SSE流式顺序发言
+app.post('/api/group-chat/message', requireLogin, async (req, res) => {
+  const { message, sessionId: bodySid, history = [] } = req.body;
+  const uid = req.session.userId;
+
+  if (!DEEPSEEK_API_KEY || DEEPSEEK_API_KEY === 'your_deepseek_api_key_here') {
+    return res.status(503).json({ error: 'DeepSeek API Key 未配置或无效' });
+  }
+
+  // SSE头
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no');
+
+  // 确保会话（必须是未归档的active session）
+  let sid = bodySid;
+  if (!sid) {
+    const row = await new Promise((resolve) => {
+      db.get('SELECT id, ended_at FROM group_chat_sessions WHERE user_id = ? AND ended_at IS NULL ORDER BY id DESC LIMIT 1', [uid], (err, r) => resolve(r));
+    });
+    if (row && !row.ended_at) sid = row.id;
+    else {
+      const newId = await new Promise((resolve) => {
+        db.run('INSERT INTO group_chat_sessions (user_id, title, ended_at) VALUES (?, ?, ?)', [uid, '哲思圆桌', null], function(err) {
+          resolve(err ? null : this.lastID);
+        });
+      });
+      sid = newId;
+    }
+  } else {
+    // 检查session是否已归档
+    const sessionInfo = await new Promise((resolve) => {
+      db.get('SELECT ended_at FROM group_chat_sessions WHERE id = ? AND user_id = ?', [sid, uid], (err, r) => resolve(r));
+    });
+    if (!sessionInfo) {
+      sendSSE(res, 'error', { error: '会话不存在' });
+      return res.end();
+    }
+    if (sessionInfo.ended_at) {
+      sendSSE(res, 'error', { error: '该轮对话已归档，无法发送消息。请点击「历史」查看。' });
+      return res.end();
+    }
+  }
+  if (!sid) {
+    sendSSE(res, 'error', { error: '无法创建会话' });
+    return res.end();
+  }
+
+  // 保存用户消息
+  await new Promise((resolve) => {
+    db.run('INSERT INTO group_chat_messages (session_id, speaker_type, speaker_id, content) VALUES (?, ?, ?, ?)',
+      [sid, 'user', 'user', message], resolve);
+  });
+
+  // 更新轮次
+  await new Promise((resolve) => {
+    db.run('UPDATE group_chat_sessions SET round_count = round_count + 1, updated_at = CURRENT_TIMESTAMP, current_topic = ? WHERE id = ?',
+      [message.substring(0, 100), sid], resolve);
+  });
+
+  try {
+    // Step 1: 候选池
+    const candidates = filterCandidatesByTopic(message, PHILOSOPHERS);
+    console.log(`[GROUP] 候选池: ${candidates.length}人`);
+
+    if (candidates.length === 0) {
+      sendSSE(res, 'system', { content: '似乎没有哲学家对这个问题有强烈见解……', type: 'empty' });
+      sendSSE(res, 'done', { sessionId: sid });
+      return res.end();
+    }
+
+    // Step 2: 意愿评估
+    const previousSpeakers = history.filter(m => m.role === 'assistant').map(m => m.philosopherId);
+    const rawEvaluations = await evaluateSpeakingWill(message, candidates, previousSpeakers);
+
+    // 归一化 philosopherId（处理LLM返回的大小写/中文名）
+    const evaluations = rawEvaluations.map(e => ({
+      ...e,
+      philosopherId: normalizePhilosopherId(e.philosopherId) || e.philosopherId
+    })).filter(e => PHILOSOPHERS[e.philosopherId]); // 过滤掉无效的
+    console.log(`[GROUP] 意愿评估: ${evaluations.length}人`);
+
+    // Step 3+4: 门控+截断
+    const { speakers, silenced } = applyRandomGateAndTruncate(evaluations);
+    console.log(`[GROUP] 最终发言: ${speakers.length}人, 沉默: ${silenced.length}人`);
+
+    // 推送选择结果
+    sendSSE(res, 'selection', {
+      sessionId: sid,
+      speakers: speakers.map(s => ({
+        philosopherId: s.philosopherId,
+        name: PHILOSOPHERS[s.philosopherId]?.name,
+        will: s.will,
+        reason: s.reason
+      })),
+      silenced: silenced.map(s => ({
+        philosopherId: s.philosopherId,
+        name: PHILOSOPHERS[s.philosopherId]?.name,
+        will: s.will
+      }))
+    });
+
+    // ===== 顺序发言 =====
+    const previousReplies = [];
+
+    for (const speaker of speakers) {
+      const p = PHILOSOPHERS[speaker.philosopherId];
+      if (!p) continue;
+
+      sendSSE(res, 'speaker_start', {
+        philosopherId: speaker.philosopherId,
+        philosopherName: p.name,
+        avatar: p.avatar || '📖'
+      });
+
+      const systemPrompt = buildGroupSystemPrompt(p, previousReplies);
+      const messages = [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `用户的问题是：「${message}」。请作为${p.name}回应。` }
+      ];
+
+      try {
+        const response = await fetch(`${DEEPSEEK_BASE_URL}/chat/completions`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${DEEPSEEK_API_KEY}` },
+          body: JSON.stringify({
+            model: 'deepseek-chat', messages, temperature: 0.6, max_tokens: 1200, stream: false
+          })
+        });
+
+        if (!response.ok) {
+          sendSSE(res, 'error', { philosopherId: speaker.philosopherId, error: '生成失败' });
+          continue;
+        }
+
+        const data = await response.json();
+        const reply = data.choices?.[0]?.message?.content?.trim();
+
+        if (reply) {
+          await new Promise((resolve) => {
+            db.run('INSERT INTO group_chat_messages (session_id, speaker_type, speaker_id, content) VALUES (?, ?, ?, ?)',
+              [sid, 'philosopher', speaker.philosopherId, reply], resolve);
+          });
+
+          previousReplies.push({ philosopherId: speaker.philosopherId, reply });
+
+          sendSSE(res, 'reply', {
+            philosopherId: speaker.philosopherId,
+            philosopherName: p.name,
+            avatar: p.avatar || '📖',
+            reply,
+            reason: speaker.reason
+          });
+        }
+      } catch (e) {
+        console.error('[GROUP] generate error for', speaker.philosopherId, e.message);
+        sendSSE(res, 'error', { philosopherId: speaker.philosopherId, error: e.message });
+      }
+    }
+
+    sendSSE(res, 'done', { sessionId: sid, speakerCount: speakers.length, silencedCount: silenced.length });
+
+  } catch (err) {
+    console.error('[GROUP] 致命错误:', err);
+    sendSSE(res, 'error', { error: err.message });
+  }
+
+  res.end();
+});
+
 // ========== 启动 ==========
 // Graceful shutdown
 process.on('SIGTERM', () => {

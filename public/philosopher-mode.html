@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>哲学家对话 · 霁光</title>
+  <link rel="stylesheet" href="/style.css?v=2">
+  <style>
+    .mode-page {
+      background: var(--bg-primary);
+      min-height: 100vh;
+      padding-top: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mode-container {
+      max-width: 800px;
+      width: 100%;
+      padding: 48px 32px;
+      text-align: center;
+    }
+
+    .mode-header {
+      margin-bottom: 56px;
+    }
+    .mode-header h1 {
+      font-family: var(--font-serif);
+      font-size: 28px;
+      color: var(--accent-gold);
+      letter-spacing: 6px;
+      margin-bottom: 12px;
+    }
+    .mode-header p {
+      font-size: 13px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+    }
+
+    .mode-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    .mode-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+    }
+    .mode-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .mode-card:hover {
+      border-color: rgba(201,169,110,0.3);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .mode-card:hover::before {
+      opacity: 0.8;
+    }
+
+    .mode-card-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .mode-card-title {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      color: var(--text-primary);
+      letter-spacing: 3px;
+      margin-bottom: 12px;
+    }
+    .mode-card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .mode-card-hint {
+      font-size: 11px;
+      color: var(--accent-gold);
+      border: 1px solid rgba(201,169,110,0.2);
+      padding: 6px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+    .mode-card:hover .mode-card-hint {
+      background: rgba(201,169,110,0.08);
+    }
+
+    /* 群聊卡片特殊装饰 */
+    .mode-card.group::after {
+      content: '';
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(201,169,110,0.06), transparent 70%);
+      border-radius: 50%;
+    }
+
+    .mode-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 10px;
+      color: var(--accent-gold);
+      border: 1px solid rgba(201,169,110,0.25);
+      padding: 3px 10px;
+      border-radius: 10px;
+      background: rgba(201,169,110,0.06);
+      letter-spacing: 1px;
+    }
+
+    .mode-footer {
+      margin-top: 32px;
+    }
+    .mode-footer .btn-back {
+      display: inline-block;
+    }
+
+    @media (max-width: 640px) {
+      .mode-cards {
+        grid-template-columns: 1fr;
+      }
+      .mode-header h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="mode-page">
+    <div class="mode-container">
+      <div class="mode-header">
+        <h1>哲学家对话</h1>
+        <p>选择对话模式，开启思想之旅</p>
+      </div>
+
+      <div class="mode-cards">
+        <!-- 单独对话 -->
+        <a href="/philosopher-select.html" class="mode-card">
+          <span class="mode-card-icon">🧘</span>
+          <div class="mode-card-title">单独对话</div>
+          <div class="mode-card-desc">
+            与一位哲学家深度交流<br>
+            一对一的哲学探讨，专注而深入
+          </div>
+          <span class="mode-card-hint">选择哲学家 →</span>
+        </a>
+
+        <!-- 群聊圆桌 -->
+        <a href="/philosopher-group.html" class="mode-card group">
+          <span class="mode-badge">Beta</span>
+          <span class="mode-card-icon">⚔️</span>
+          <div class="mode-card-title">群聊圆桌</div>
+          <div class="mode-card-desc">
+            多位哲学家同时在线<br>
+            围绕话题自由辩论，碰撞思想火花
+          </div>
+          <span class="mode-card-hint">进入圆桌 →</span>
+        </a>
+      </div>
+
+      <div class="mode-footer">
+        <a href="/index.html" class="btn-back">返回主页</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 检查登录状态
+    fetch('/api/me')
+      .then(r => r.json())
+      .then(data => {
+        if (!data.id) {
+          // 未登录时显示提示
+          document.querySelectorAll('.mode-card').forEach(card => {
+            card.addEventListener('click', e => {
+              e.preventDefault();
+              if (window.showLoginModal) {
+                window.showLoginModal();
+              } else {
+                alert('请先登录');
+              }
+            });
+          });
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>
