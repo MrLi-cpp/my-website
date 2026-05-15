@@ -1,0 +1,91 @@
+{
+  "philosopher": {
+    "name": "洛克",
+    "name_en": "John Locke",
+    "lived": "1632年8月29日—1704年10月28日",
+    "birthplace": "英国萨默塞特郡威灵顿",
+    "deathplace": "英国埃塞克斯郡奥茨",
+    "era": "近代早期",
+    "school": "经验主义",
+    "occupation": "哲学家、医生、政治理论家",
+    "summary": "洛克是经验主义奠基者、自由主义政治哲学的源头。核心思想包括：白板说（心灵生来如白纸）、自然权利（生命、自由、财产）、政府权力的同意基础。其思想深刻影响了美国独立宣言和法国大革命。",
+    "summary_en": "Locke is the founder of British empiricism and a foundational figure in liberal political philosophy. Central doctrines include the tabula rasa theory of mind, natural rights to life, liberty, and property, and the consent-based theory of government."
+  },
+  "lifeEvents": [
+    {"year": "1632", "event": "出生于英国", "details": "父亲是律师，清教徒家庭。"},
+    {"year": "1647", "event": "进入威斯敏斯特学校", "details": "后进入牛津大学基督教会学院，学习哲学、医学。"},
+    {"year": "1666", "event": "结识沙夫茨伯里伯爵", "details": "成为伯爵的私人医生和顾问，开始参与政治活动。"},
+    {"year": "1683", "event": "流亡荷兰", "details": "因参与反对斯图亚特王朝的政治活动，被迫流亡荷兰。期间撰写了《政府论》和《人类理解论》。"},
+    {"year": "1689", "event": "光荣革命后返回英国", "details": "威廉三世即位后返回英国，同年出版《政府论》和《人类理解论》。"},
+    {"year": "1690", "event": "出版《政府论》", "details": "系统阐述自然权利、同意论和革命权，为光荣革命提供理论辩护。"},
+    {"year": "1704", "event": "逝世", "details": "享年72岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "tabula-rasa",
+      "title": "白板说",
+      "title_en": "Tabula Rasa / Blank Slate",
+      "category": "认识论",
+      "description": "洛克在《人类理解论》中提出'白板说'（tabula rasa）：心灵生来如同一张白纸（blank slate / white paper），没有任何先天观念（innate ideas）。一切知识来自经验——外部感觉（sensation）提供关于外部世界的观念，内部反省（reflection）提供关于心灵活动的观念。观念分为简单观念（由感觉直接给予的，如红、甜、硬）和复杂观念（由简单观念组合而成的，如美、人、因果）。这一理论直接反对笛卡尔的天赋观念论。",
+      "keyWorks": ["《人类理解论》"],
+      "primaryQuotes": [
+        {"chinese": "让我们假定心灵生来如同一张白纸，没有任何字符、没有任何观念——它是如何获得观念的呢？……对此我只用一个词来回答：经验。", "english": "Let us then suppose the mind to be, as we say, white paper, void of all characters, without any ideas — how comes it to be furnished?... To this I answer, in one word, from experience.", "source": "An Essay Concerning Human Understanding, Book II, Chapter 1"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "白板说意味着人出生时完全一样。", "clarification": "洛克不是说所有人完全一样，而是说心灵的内容来自经验。天赋的能力差异（如记忆力、理解力）是存在的，但这些是'能力'而非'观念'。"}
+      ]
+    },
+    {
+      "id": "natural-rights",
+      "title": "自然权利",
+      "title_en": "Natural Rights",
+      "category": "政治哲学",
+      "description": "洛克在《政府论》下篇中系统阐述了自然权利理论。自然状态（state of nature）不是战争状态（如霍布斯所言），而是一种'自由、平等、理性'的状态。在这种状态下，每个人都有自然权利：生命（life）、自由（liberty）、财产（property）。当政府侵犯这些权利时，人民有权反抗。这一理论直接影响了美国独立宣言（'生命、自由和追求幸福的权利'）和法国大革命。",
+      "keyWorks": ["《政府论》下篇"],
+      "primaryQuotes": [
+        {"chinese": "每个人都拥有处置自己的人身和财产的自然自由，不受任何他人意志的支配。", "english": "Every man has a property in his own person. This nobody has any right to but himself.", "source": "Second Treatise, Chapter 5"},
+        {"chinese": "当立法者侵犯人民的财产时，人民就处于战争状态，有权反抗。", "english": "When the legislative authority transgresses the bounds of the property of the people, they are in a state of war.", "source": "Second Treatise, Chapter 19"}
+      ]
+    },
+    {
+      "id": "property-labor",
+      "title": "财产权与劳动",
+      "title_en": "Property and Labor",
+      "category": "政治哲学 / 经济学",
+      "description": "洛克提出了著名的劳动价值论：财产权的基础是劳动。上帝给予人类共同的世界，但每个人对自己的人身拥有所有权，因此对自己人身的劳动及其成果也拥有所有权。'只要他使任何东西脱离自然所提供的和那个东西所处的状态，他就已经掺进他的劳动，在这上面掺加他自己所有的某些东西，因而使它成为他的财产'（《政府论》下篇第五章）。",
+      "keyWorks": ["《政府论》下篇第五章"],
+      "primaryQuotes": [
+        {"chinese": "每个人对自己的人身享有一种所有权，除他以外任何人都没有这种权利。他的身体所从事的劳动和他的双手所进行的工作，我们可以说，是正当地属于他的。", "english": "Though the earth and all inferior creatures be common to all men, yet every man has a property in his own person: this nobody has any right to but himself. The labour of his body, and the work of his hands, we may say, are properly his.", "source": "Second Treatise, Chapter 5"}
+      ]
+    },
+    {
+      "id": "consent",
+      "title": "同意论",
+      "title_en": "Consent Theory of Government",
+      "category": "政治哲学",
+      "description": "洛克的同意论主张：政府的合法性来源于被统治者的同意（consent）。不是'君权神授'，而是'人民同意'。同意分为'明示同意'（express consent，如签署契约）和'默示同意'（tacit consent，如享受政府保护的利益）。当政府违反契约时，人民有权推翻它。这一理论为现代民主制度提供了最早的哲学基础。",
+      "keyWorks": ["《政府论》下篇"],
+      "primaryQuotes": [
+        {"chinese": "政府的正当权力来自被统治者的同意。", "english": "The consent of the governed is the only legitimate foundation of government.", "source": "Second Treatise, Chapter 8"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《人类理解论》", "title_en": "An Essay Concerning Human Understanding", "year": "1689", "summary": "系统阐述经验主义认识论，提出白板说、观念的起源、知识的性质和范围。"},
+    {"title": "《政府论》", "title_en": "Two Treatises of Government", "year": "1690", "summary": "上篇反驳菲尔默的君权神授论；下篇系统阐述自然权利、同意论和革命权。"},
+    {"title": "《论宗教宽容》", "title_en": "A Letter Concerning Toleration", "year": "1689", "summary": "主张宗教宽容，区分教会与国家。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "心灵生来如同一张白纸。", "english": "The mind is a blank slate.", "source": "Essay Concerning Human Understanding"},
+    {"chinese": "政府的正当权力来自被统治者的同意。", "english": "The consent of the governed is the only legitimate foundation of government.", "source": "Second Treatise"},
+    {"chinese": "每个人都拥有处置自己的人身和财产的自然自由。", "english": "Every man has a property in his own person.", "source": "Second Treatise"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较洛克'自然权利'理论与霍布斯'自然状态'理论的异同。",
+      "output": "洛克与霍布斯都以'自然状态'为起点，但得出了截然不同的政治哲学结论。\n\n霍布斯：\n1）自然状态是'万人之战'（bellum omnium contra omnes）——每个人对每个人的战争。\n2）为了逃避战争，人们通过社会契约放弃一切自然权利，将权力交给主权者（利维坦）。\n3）主权者是绝对的、不可反抗的。\n\n洛克：\n1）自然状态是'自由、平等、理性'的状态——不是战争状态，而是缺乏公正裁判者的状态。\n2）人们通过社会契约建立政府，但只交出部分权利（裁判权），保留生命、自由和财产的自然权利。\n3）政府是信托（trust）关系——如果政府侵犯人民的权利，人民有权反抗。\n\n根本差异：\n1）对人性看法：霍布斯悲观（人天然是自私的），洛克乐观（人有理性能力）。\n2）对政府权力：霍布斯主张绝对主权，洛克主张有限政府。\n3）对革命权：霍布斯否认革命权，洛克承认革命权。\n\n历史影响：洛克理论直接影响了美国独立宣言和法国大革命；霍布斯理论影响了现代主权国家概念。",
+      "source": "Locke, Second Treatise; Hobbes, Leviathan; Tuck, Hobbes (1989); Dunn, The Political Thought of John Locke (1969)",
+      "tier": 1
+    }
+  ]
+}

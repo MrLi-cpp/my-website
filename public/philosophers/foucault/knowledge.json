@@ -1,0 +1,83 @@
+{
+  "philosopher": {
+    "name": "福柯",
+    "name_en": "Michel Foucault",
+    "name_fr": "Michel Foucault",
+    "lived": "1926年10月15日—1984年6月25日",
+    "birthplace": "法国普瓦捷",
+    "deathplace": "法国巴黎",
+    "era": "20世纪",
+    "school": "后结构主义 / 知识考古学",
+    "occupation": "哲学家、历史学家、社会理论家",
+    "summary": "福柯是20世纪最具影响力的法国思想家之一。核心思想：权力/知识、规训与惩罚、性史、话语分析、疯癫与文明。将哲学与历史社会学结合，揭示权力如何渗透日常生活的每一个角落。",
+    "summary_en": "Foucault was one of the most influential French thinkers of the 20th century. Central doctrines include power/knowledge, discipline and punishment, the history of sexuality, discourse analysis, and madness and civilization."
+  },
+  "lifeEvents": [
+    {"year": "1926", "event": "出生于普瓦捷", "details": "父亲为外科医生，家境优渥。"},
+    {"year": "1946", "event": "进入巴黎高等师范学院", "details": "与德里达、阿尔都塞等同学。师从梅洛-庞蒂和依波利特。"},
+    {"year": "1954", "event": "出版《精神疾病与心理学》", "details": "第一部著作。"},
+    {"year": "1961", "event": "出版《疯癫与文明》", "details": "博士论文，分析疯癫如何被理性排斥。"},
+    {"year": "1966", "event": "出版《词与物》", "details": "提出'知识型'（épistémè）概念，分析不同时代的认识论结构。"},
+    {"year": "1969", "event": "出版《知识考古学》", "details": "系统阐述话语分析方法。"},
+    {"year": "1975", "event": "出版《规训与惩罚》", "details": "分析现代权力如何通过规训（discipline）渗透到身体。"},
+    {"year": "1976", "event": "出版《性史》第一卷", "details": "提出'权力/知识'概念，分析性话语如何被权力生产。"},
+    {"year": "1984", "event": "逝世", "details": "死于艾滋病，享年57岁。临终前完成了《性史》第二、三卷。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "power-knowledge",
+      "title": "权力/知识",
+      "title_en": "Power/Knowledge",
+      "category": "社会理论 / 认识论",
+      "description": "权力/知识（pouvoir/savoir）是福柯最核心的概念。传统观点认为：知识是客观的、中立的，权力是外在的、压迫性的。福柯反驳：知识和权力不可分割——'不存在没有知识关系的权力关系，也不存在没有权力关系的知识关系'。例如，精神病学知识不仅'描述'了疯癫，而且'建构'了疯癫——它定义了什么是'正常'、什么是'疯狂'，从而赋予医生权力来监禁和治疗'疯子'。权力不是某个人的财产，而是一种'关系网络'——它渗透到学校、医院、监狱、家庭等每一个角落。",
+      "keyWorks": ["《规训与惩罚》", "《性史》第一卷"],
+      "primaryQuotes": [
+        {"chinese": "不存在没有知识关系的权力关系，也不存在没有权力关系的知识关系。", "english": "There is no power relation without the correlative constitution of a field of knowledge, nor any knowledge that does not presuppose and constitute at the same time power relations.", "source": "Discipline and Punish"},
+        {"chinese": "权力不是被拥有的，而是被行使的。", "english": "Power is not something that is acquired, seized, or shared; power is exercised.", "source": "The History of Sexuality, Vol. I"}
+      ]
+    },
+    {
+      "id": "discipline",
+      "title": "规训",
+      "title_en": "Discipline",
+      "category": "社会理论 / 政治哲学",
+      "description": "规训是福柯对现代权力的核心分析。传统权力（如君主制）通过'惩罚'（断头台、酷刑）来展示权力。现代权力通过'规训'（discipline）来生产'有用'和'驯服'的身体。规训的三种技术：1）层级监视（hierarchical observation / 如教室的座位安排、工厂的流水线）；2）规范化评判（normalizing judgment / 如考试、体检、绩效考核）；3）检查（examination / 将监视和评判结合起来，如学校考试、医院诊断）。全景敞视监狱（panopticon）是规训的完美模型——囚犯永远不知道自己是否被监视，因此学会了自我监视。",
+      "keyWorks": ["《规训与惩罚》"],
+      "primaryQuotes": [
+        {"chinese": "规训是一种权力技术，它使个体变得有用和驯服。", "english": "Discipline is a technique of power that makes individuals both useful and docile.", "source": "Discipline and Punish"},
+        {"chinese": "全景敞视监狱是一种权力机器，它自动而持续地运作。", "english": "The Panopticon is a machine for power that operates automatically and continuously.", "source": "Discipline and Punish"}
+      ]
+    },
+    {
+      "id": "episteme",
+      "title": "知识型",
+      "title_en": "Epistémè",
+      "category": "认识论 / 历史哲学",
+      "description": "知识型（épistémè）是福柯在《词与物》中提出的概念，指某个时代的'认识论底层结构'——即那个时代的人们'如何'认识世界，而非'认识什么'。福柯区分了三种知识型：1）文艺复兴知识型（16世纪）——以'相似性'（resemblance）为核心，世界是一张巨大的象征网络；2）古典知识型（17—18世纪）——以'表征'（representation）为核心，知识是'表象'的秩序（如林奈的分类学）；3）现代知识型（19世纪至今）——以'历史'和'人'为核心，知识是'发展'的过程（如进化论、马克思主义）。知识型的转换是'断裂'的——不是渐进的发展，而是突然的范式转换。",
+      "keyWorks": ["《词与物》"],
+      "primaryQuotes": [
+        {"chinese": "每个时代都有其知识型——那个时代的认识论底层结构。", "english": "Each epoch has its épistémè — the underlying structure of its knowledge.", "source": "The Order of Things"},
+        {"chinese": "人是一个近期的发明。", "english": "Man is a recent invention.", "source": "The Order of Things"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《疯癫与文明》", "title_fr": "Histoire de la folie à l'âge classique", "year": "1961", "summary": "分析疯癫如何被理性排斥，成为'他者'。"},
+    {"title": "《词与物》", "title_fr": "Les Mots et les Choses", "year": "1966", "summary": "提出知识型概念，分析不同时代的认识论结构。"},
+    {"title": "《规训与惩罚》", "title_fr": "Surveiller et punir", "year": "1975", "summary": "分析现代权力如何通过规训渗透到身体。"},
+    {"title": "《性史》", "title_fr": "Histoire de la sexualité", "year": "1976—1984", "summary": "三卷本，分析性话语如何被权力生产和调控。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "不存在没有知识关系的权力关系。", "english": "There is no power relation without the correlative constitution of a field of knowledge.", "source": "Discipline and Punish"},
+    {"chinese": "规训使个体变得有用和驯服。", "english": "Discipline makes individuals both useful and docile.", "source": "Discipline and Punish"},
+    {"chinese": "人是一个近期的发明。", "english": "Man is a recent invention.", "source": "The Order of Things"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较福柯'权力/知识'与马克思'意识形态'概念的异同。",
+      "output": "福柯的权力/知识与马克思的意识形态都是对'知识如何服务于权力'的分析，但方法论和侧重点不同。\n\n马克思的意识形态：\n1）意识形态是'虚假意识'——统治阶级通过文化、宗教、教育来掩盖真实的阶级关系。\n2）意识形态是'上层建筑'——由经济基础（生产关系）决定。\n3）意识形态的克服需要'阶级斗争'——推翻统治阶级，建立无产阶级专政。\n\n福柯的权力/知识：\n1）权力/知识不是'虚假'的——它不是掩盖真理，而是'生产'真理。例如，精神病学不仅'错误地'描述了疯癫，而且'建构'了疯癫这一概念。\n2）权力/知识不是'上层建筑'——它渗透到学校、医院、监狱、家庭等每一个角落，不是由某个中心（如国家或统治阶级）控制的。\n3）权力/知识的抵抗不是'革命'，而是'局部的、分散的'抵抗——在每一个权力节点上寻找突破口。\n\n根本差异：\n1）马克思是'宏观的'（阶级、国家、革命），福柯是'微观的'（身体、话语、规训）。\n2）马克思相信'真理'可以被揭示（通过阶级斗争），福柯认为'真理'本身就是权力产物。\n3）马克思是乐观的（共产主义会消除异化），福柯是悲观的（权力无处不在，抵抗也是权力的一部分）。\n\n互补性：马克思提供了'结构性'的分析，福柯提供了'微观政治'的分析。两者共同构成了20世纪对'权力与知识'的最深刻批判。",
+      "source": "Foucault, Discipline and Punish; The History of Sexuality; Marx, The German Ideology; Althusser, Ideology and Ideological State Apparatuses",
+      "tier": 1
+    }
+  ]
+}

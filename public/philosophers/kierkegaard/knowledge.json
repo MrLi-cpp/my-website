@@ -1,0 +1,91 @@
+{
+  "philosopher": {
+    "name": "克尔凯郭尔",
+    "name_en": "Søren Kierkegaard",
+    "name_da": "Søren Aabye Kierkegaard",
+    "lived": "1813年5月5日—1855年11月11日",
+    "birthplace": "丹麦哥本哈根",
+    "deathplace": "丹麦哥本哈根",
+    "era": "19世纪",
+    "school": "存在主义 / 基督教哲学",
+    "occupation": "哲学家、神学家、作家",
+    "summary": "克尔凯郭尔是存在主义先驱，第一位将'个体'置于哲学中心的思想家。以假名写作，反对黑格尔的体系化。核心思想：焦虑、信仰飞跃、人生三阶段（审美、伦理、宗教）。其写作风格独特，融合哲学、文学、心理学和神学。",
+    "summary_en": "Kierkegaard is the pioneer of existentialism and the first thinker to place the 'individual' at the center of philosophy. He wrote under pseudonyms, opposed Hegelian systematization. Core ideas: anxiety, leap of faith, the three stages of life (aesthetic, ethical, religious)."
+  },
+  "lifeEvents": [
+    {"year": "1813", "event": "出生于哥本哈根", "details": "父亲迈克尔·克尔凯郭尔为富商，母亲为家中女仆（后成为第二任妻子）。父亲对宗教有偏执式的虔诚，对克尔凯郭尔影响深远。"},
+    {"year": "1830", "event": "进入哥本哈根大学", "details": "学习神学，同时广泛阅读哲学、文学和戏剧。"},
+    {"year": "1840", "event": "与雷吉娜·奥尔森订婚", "details": "与17岁的雷吉娜·奥尔森订婚，但一年后解除婚约。此事成为克尔凯郭尔一生的创伤和写作动力。"},
+    {"year": "1843", "event": "出版《非此即彼》", "details": "以假名'维克多·埃雷米塔'出版，标志着'假名写作时期'的开始。此后几乎所有著作都以假名发表。"},
+    {"year": "1846", "event": "《结语》中宣布结束假名写作", "details": "在《非科学的结语》中声明将以真实身份写作，但此后仍继续使用假名。"},
+    {"year": "1855", "event": "逝世", "details": "在街头摔倒后病逝，享年42岁。临终前拒绝了牧师的圣餐。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "anxiety",
+      "title": "焦虑",
+      "title_en": "Anxiety / Dread (Angst)",
+      "category": "心理学 / 存在论",
+      "description": "克尔凯郭尔在《焦虑的概念》中将焦虑定义为'自由的眩晕'（dizziness of freedom）。焦虑不是对某个具体事物的恐惧（fear），而是对'可能性'本身的眩晕——面对无限可能性时，人既感到兴奋又感到眩晕。焦虑是'自由的附随现象'：正是因为人是自由的，所以人会焦虑。焦虑不是病态，而是健康的标志——它表明人意识到了自己的自由。动物不会焦虑，因为它们没有选择。焦虑的对立面不是平静，而是'昏睡'（spiritlessness）——没有意识到自由的麻木状态。",
+      "keyWorks": ["《焦虑的概念》"],
+      "primaryQuotes": [
+        {"chinese": "焦虑是自由的眩晕，当自由俯视其自身的可能性时，它就感到眩晕。", "english": "Anxiety is the dizziness of freedom, which emerges when the spirit wants to posit the synthesis and freedom looks down into its own possibility.", "source": "The Concept of Anxiety"}
+      ]
+    },
+    {
+      "id": "leap-of-faith",
+      "title": "信仰飞跃",
+      "title_en": "Leap of Faith",
+      "category": "神学 / 存在论",
+      "description": "信仰飞跃是克尔凯郭尔宗教哲学的核心概念。理性无法证明上帝存在，也无法理解基督教的核心教义（如道成肉身、复活）。因此，信仰必须是一种'飞跃'——从理性的'理解'飞跃到非理性的'信仰'。这一飞跃不是盲目的跳跃，而是'激情'（passion）的最高表达。克尔凯郭尔以亚伯拉罕献祭以撒为例：亚伯拉罕知道杀子是错误的（伦理层面），但他仍然服从上帝的命令（宗教层面）——这是一个'伦理悬置'（teleological suspension of the ethical），只有通过信仰才能理解。",
+      "keyWorks": ["《恐惧与颤栗》"],
+      "primaryQuotes": [
+        {"chinese": "信仰是一种激情，是理性的悖论。", "english": "Faith is a passion, and in passion every individual reaches as high as he can reach.", "source": "Fear and Trembling"},
+        {"chinese": "信仰飞跃不是从理解到不理解，而是从不理解到理解。", "english": "The leap of faith is not from understanding to non-understanding, but from non-understanding to understanding.", "source": "Fear and Trembling"}
+      ]
+    },
+    {
+      "id": "three-stages",
+      "title": "人生三阶段",
+      "title_en": "Three Stages on Life's Way",
+      "category": "伦理学 / 存在论",
+      "description": "克尔凯郭尔将人生分为三个阶段（或'存在领域'）：1）审美阶段——追求快乐、美、刺激，以《非此即彼》中的'审美者A'为代表。审美者生活在'当下'，拒绝承诺，逃避选择，最终陷入'无聊'（ennui）。2）伦理阶段——接受道德责任和普遍法则，以婚姻、职业和社会义务为生活基础。伦理者认识到选择的重要性，但仍然停留在'普遍性'中。3）宗教阶段——超越伦理普遍性，进入与上帝的直接关系。宗教个体（如亚伯拉罕）可能做出伦理上不可理解的行为，但这是由于与绝对者的直接关系。三个阶段不是线性发展的，而是'存在抉择'——每个人必须自己选择处于哪个阶段。",
+      "keyWorks": ["《非此即彼》", "《恐惧与颤栗》", "《人生道路的阶段》"],
+      "primaryQuotes": [
+        {"chinese": "要么你选择善，要么你选择恶。但你不选择——这就是你的选择。", "english": "Either/or: either you choose the good, or you choose evil. But not to choose is also a choice.", "source": "Either/Or"}
+      ]
+    },
+    {
+      "id": "individual",
+      "title": "个体",
+      "title_en": "The Individual",
+      "category": "政治哲学 / 存在论",
+      "description": "克尔凯郭尔是第一个将'个体'（the single individual / den Enkelte）置于哲学中心的思想家。他反对黑格尔将个体淹没在'普遍精神'中的体系。对克尔凯郭尔而言，真理不是抽象的、普遍的体系，而是'主观的'——即对个体生命有意义的真理。'真理即主体性'（Truth is Subjectivity）——重要的不是'客观上正确'，而是'主观上真实'。这一思想直接影响了后世的存在主义（萨特、加缪、海德格尔）和后现代主义。",
+      "keyWorks": ["《结语》", "《致死的疾病》"],
+      "primaryQuotes": [
+        {"chinese": "群众是虚妄。", "english": "The crowd is untruth.", "source": "The Point of View"},
+        {"chinese": "真理即主体性。", "english": "Truth is subjectivity.", "source": "Concluding Unscientific Postscript"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《非此即彼》", "title_da": "Enten-Eller", "year": "1843", "summary": "假名著作，对比审美生活与伦理生活，以'审美者A'和'伦理者B'的对话形式呈现。"},
+    {"title": "《恐惧与颤栗》", "title_da": "Frygt og Bæven", "year": "1843", "summary": "以亚伯拉罕献祭以撒为例，探讨信仰飞跃和伦理悬置。"},
+    {"title": "《焦虑的概念》", "title_da": "Begrebet Angest", "year": "1844", "summary": "将焦虑定义为'自由的眩晕'，分析焦虑与罪的关系。"},
+    {"title": "《致死的疾病》", "title_da": "Sygdommen til Døden", "year": "1849", "summary": "探讨'绝望'作为'致死的疾病'——即不愿成为自己或想要成为他人。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "群众是虚妄。", "english": "The crowd is untruth.", "source": "The Point of View"},
+    {"chinese": "真理即主体性。", "english": "Truth is subjectivity.", "source": "Concluding Unscientific Postscript"},
+    {"chinese": "焦虑是自由的眩晕。", "english": "Anxiety is the dizziness of freedom.", "source": "The Concept of Anxiety"},
+    {"chinese": "信仰是一种激情。", "english": "Faith is a passion.", "source": "Fear and Trembling"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释克尔凯郭尔'人生三阶段'理论及其与黑格尔辩证法的关系。",
+      "output": "克尔凯郭尔的'人生三阶段'（审美、伦理、宗教）常被与黑格尔的辩证法比较，但两者有根本差异。\n\n黑格尔辩证法：\n1）正题→反题→合题，是一种逻辑必然的发展。\n2）个体被淹没在'绝对精神'的辩证运动中。\n3）真理是客观的、普遍的体系。\n\n克尔凯郭尔三阶段：\n1）不是逻辑必然，而是'存在抉择'（existential choice）——每个人必须自己选择处于哪个阶段。\n2）个体不能被还原为普遍——'群众是虚妄'。\n3）真理是主观的——对个体生命有意义的才是真理。\n\n关键区别：\n1）黑格尔是'体系'哲学家，克尔凯郭尔是'反体系'哲学家。\n2）黑格尔相信历史朝着理性目的前进，克尔凯郭尔认为历史是'重复'（repetition）——个体不断在相同的选择面前做出抉择。\n3）黑格尔的合题是'和解'，克尔凯郭尔的宗教阶段是'悖论'——永远无法被理性理解的。\n\n影响：克尔凯郭尔的'存在抉择'概念直接影响了海德格尔的'本真性'（Eigentlichkeit）和萨特的'选择'概念。",
+      "source": "Kierkegaard, Either/Or; Fear and Trembling; Concluding Unscientific Postscript; Hegel, Phenomenology of Spirit",
+      "tier": 1
+    }
+  ]
+}

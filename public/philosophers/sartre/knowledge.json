@@ -1,0 +1,96 @@
+{
+  "philosopher": {
+    "name": "萨特",
+    "name_en": "Jean-Paul Sartre",
+    "name_fr": "Jean-Paul Sartre",
+    "lived": "1905年6月21日—1980年4月15日",
+    "birthplace": "法国巴黎",
+    "deathplace": "法国巴黎",
+    "era": "20世纪",
+    "school": "存在主义 / 现象学",
+    "occupation": "哲学家、作家、剧作家、政治活动家",
+    "summary": "萨特是20世纪最著名的法国哲学家和公共知识分子。核心思想：存在先于本质、自由是存在的重负、自欺（mauvaise foi）、他人的凝视。拒绝诺贝尔奖，终生参与左翼政治活动。",
+    "summary_en": "Sartre was the most famous French philosopher and public intellectual of the 20th century. Central doctrines include 'existence precedes essence,' freedom as the burden of being, bad faith (mauvaise foi), and the gaze of the Other. He declined the Nobel Prize and was politically active throughout his life."
+  },
+  "lifeEvents": [
+    {"year": "1905", "event": "出生于巴黎", "details": "父亲为海军军官，早逝。由外祖父抚养长大。"},
+    {"year": "1924", "event": "进入巴黎高等师范学院", "details": "与西蒙娜·德·波伏娃相识，两人终生相伴但从未结婚。"},
+    {"year": "1933", "event": "赴柏林学习现象学", "details": "师从胡塞尔和海德格尔，深受现象学和存在主义影响。"},
+    {"year": "1936", "event": "出版《想象》", "details": "第一部哲学著作。"},
+    {"year": "1943", "event": "出版《存在与虚无》", "details": "系统阐述存在主义哲学，提出'存在先于本质'、'自欺'、'他人的凝视'等核心概念。"},
+    {"year": "1945", "event": "发表演讲《存在主义是一种人道主义》", "details": "将存在主义介绍给大众，引发巨大争议。"},
+    {"year": "1952", "event": "转向马克思主义", "details": "发表《辩证理性批判》，试图将存在主义与马克思主义结合。"},
+    {"year": "1964", "event": "拒绝诺贝尔文学奖", "details": "以'作家不应被制度化'为由拒绝接受诺贝尔奖。"},
+    {"year": "1968", "event": "支持五月风暴", "details": "虽然对具体政治策略有保留，但支持学生运动。"},
+    {"year": "1980", "event": "逝世于巴黎", "details": "享年74岁。葬礼吸引数万民众，为法国历史上规模最大的知识分子葬礼之一。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "existence-precedes-essence",
+      "title": "存在先于本质",
+      "title_en": "Existence Precedes Essence",
+      "category": "存在论 / 伦理学",
+      "description": "存在先于本质是萨特最著名的命题，也是对传统形而上学的根本颠覆。传统哲学（尤其是亚里士多德和基督教）认为：每个事物都有一个'本质'（essence / 定义其是什么的属性），'存在'（existence）是本质的实例化。例如，'人'的本质是'理性动物'，每个具体的人的存在是这一本质的实现。萨特反驳：对于人（此在 / Dasein）而言，存在先于本质——人首先'存在'（被抛入世界），然后通过自己的选择创造自己的'本质'。人没有预设的本质、没有预设的命运、没有预设的道德法则。因此，人是'被判定为自由'的（condemned to be free）——自由不是祝福，而是重负。",
+      "keyWorks": ["《存在与虚无》", "《存在主义是一种人道主义》"],
+      "primaryQuotes": [
+        {"chinese": "存在先于本质。", "english": "Existence precedes essence.", "source": "Existentialism Is a Humanism"},
+        {"chinese": "人被判定为自由，因为一旦被抛入世界，他就要为自己所做的一切负责。", "english": "Man is condemned to be free; because once thrown into the world, he is responsible for everything he does.", "source": "Existentialism Is a Humanism"}
+      ]
+    },
+    {
+      "id": "bad-faith",
+      "title": "自欺",
+      "title_en": "Bad Faith / Mauvaise Foi",
+      "category": "伦理学 / 心理学",
+      "description": "自欺（mauvaise foi / bad faith）是萨特伦理学的核心概念。自欺不是'欺骗他人'，而是'欺骗自己'——假装自己不是自由的，假装自己的选择和行动是由外部因素决定的。自欺有两种形式：1）将自己'物化'——'我就是这样的人，没办法改变'（如咖啡馆侍者机械地扮演侍者角色）；2）将自己'神圣化'——'我的行为是出于高尚的动机'（如声称'我参军是为了报效祖国'，而实际上是害怕被指责为懦夫）。自欺的根源是'畏'（angoisse / anxiety）——面对自由的重负时，人宁愿欺骗自己以逃避责任。",
+      "keyWorks": ["《存在与虚无》第一部分第二章"],
+      "primaryQuotes": [
+        {"chinese": "自欺不是将自己作为对象来欺骗，而是将自己作为主体来欺骗。", "english": "Bad faith is not a matter of deceiving oneself as an object, but as a subject.", "source": "Being and Nothingness, Part I, Ch. 2"},
+        {"chinese": "自欺是一种意识，它想要不成为它所是的东西，或者是它所不是的东西。", "english": "Bad faith is a consciousness that wants to be what it is not, or not be what it is.", "source": "Being and Nothingness"}
+      ]
+    },
+    {
+      "id": "the-look",
+      "title": "他人的凝视",
+      "title_en": "The Look / The Gaze",
+      "category": "社会哲学 / 存在论",
+      "description": "他人的凝视是萨特对'自我与他者'关系的独特分析。当他人注视我时，我不再是'自为的存在'（自由的主体），而变成了'为他的存在'（被客体化的对象）。'他人即地狱'（L'enfer, c'est les Autres）——不是因为他人的恶意，而是因为他人的'凝视'将我变成了'对象'，夺走了我的自由。但这一关系是相互的：我也通过凝视将他人变成对象。因此，自我与他者的关系本质上是'冲突'的——每个人都试图将对方变成对象以保全自己的主体性。",
+      "keyWorks": ["《存在与虚无》第四部分"],
+      "primaryQuotes": [
+        {"chinese": "他人即地狱。", "english": "Hell is other people.", "source": "No Exit (Huis Clos)"},
+        {"chinese": "在他人的凝视下，我变成了对象。", "english": "Under the Other's look, I become an object.", "source": "Being and Nothingness, Part IV"}
+      ]
+    },
+    {
+      "id": "sartre-freedom",
+      "title": "自由",
+      "title_en": "Freedom",
+      "category": "伦理学",
+      "description": "萨特的自由概念是其哲学的核心。人是'被判定为自由'的——自由不是人的'属性'，而是人的'存在方式'。即使在最极端的压迫中（如集中营），人仍然是自由的——因为'如何选择面对压迫'仍然是一个选择。萨特区分了'处境中的自由'和'无条件的自由'：前者是在具体历史和社会条件下的自由，后者是意识本身的自由（意识总是能够'否定'——对现状说'不'）。但自由伴随着'责任'——既然人是自由的，人就必须为自己的选择负责，不能将责任推卸给'环境'、'命运'或'他人'。",
+      "keyWorks": ["《存在与虚无》", "《存在主义是一种人道主义》"],
+      "primaryQuotes": [
+        {"chinese": "人被判定为自由。", "english": "Man is condemned to be free.", "source": "Existentialism Is a Humanism"},
+        {"chinese": "我们是完全自由的，因此必须完全负责。", "english": "We are entirely free, and therefore entirely responsible.", "source": "Being and Nothingness"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《存在与虚无》", "title_fr": "L'Être et le Néant", "year": "1943", "summary": "系统阐述存在主义哲学，提出存在先于本质、自欺、他人的凝视等核心概念。"},
+    {"title": "《存在主义是一种人道主义》", "title_fr": "L'Existentialisme est un humanisme", "year": "1946", "summary": "演讲稿，将存在主义介绍给大众。"},
+    {"title": "《辩证理性批判》", "title_fr": "Critique de la raison dialectique", "year": "1960", "summary": "试图将存在主义与马克思主义结合。"},
+    {"title": "《禁闭》", "title_fr": "Huis Clos", "year": "1944", "summary": "戏剧，'他人即地狱'的出处。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "存在先于本质。", "english": "Existence precedes essence.", "source": "Existentialism Is a Humanism"},
+    {"chinese": "他人即地狱。", "english": "Hell is other people.", "source": "No Exit"},
+    {"chinese": "人被判定为自由。", "english": "Man is condemned to be free.", "source": "Existentialism Is a Humanism"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较萨特'自欺'与海德格尔'常人'概念的异同。",
+      "output": "萨特的'自欺'（mauvaise foi）与海德格尔的'常人'（Das Man）都是20世纪存在主义对'非本真存在'的分析，但侧重点不同。\n\n海德格尔的常人：\n1）'常人'是匿名的大众——'人们这样说'、'人们这样做'。\n2）常人的统治方式是'闲谈'、'好奇'和'两可'。\n3）常人的统治是'结构性的'——它不是某个人的阴谋，而是此在在日常生活中的存在方式。\n4）克服常人的方式是'向死而在'——通过面对死亡的不可逾越性来选择本真存在。\n\n萨特的自欺：\n1）'自欺'是个人的自我欺骗——'我就是这样的人，没办法改变'。\n2）自欺的动机是逃避'畏'——面对自由的重负时，人宁愿欺骗自己。\n3）自欺是'意识的'——意识可以同时'是'和'不是'某物，这是自欺的可能性条件。\n4）克服自欺的方式是'承担责任'——承认自己是自由的，为自己的选择负责。\n\n根本差异：\n1）海德格尔是'存在论的'，萨特是'伦理学的'。\n2）海德格尔强调'结构'，萨特强调'选择'。\n3）海德格尔的非本真是'匿名的'，萨特的自欺是'个人的'。\n\n互补性：两者共同构成了20世纪对'自我欺骗'的最深刻分析——海德格尔揭示了社会层面的匿名统治，萨特揭示了个体层面的自我欺骗。",
+      "source": "Sartre, Being and Nothingness; Heidegger, Being and Time; Flynn, Sartre and Marxist Existentialism (1984)",
+      "tier": 1
+    }
+  ]
+}

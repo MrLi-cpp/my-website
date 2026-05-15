@@ -1,0 +1,93 @@
+{
+  "philosopher": {
+    "name": "斯宾诺莎",
+    "name_en": "Baruch Spinoza",
+    "name_la": "Benedictus de Spinoza",
+    "lived": "1632年11月24日—1677年2月21日",
+    "birthplace": "阿姆斯特丹",
+    "deathplace": "海牙",
+    "era": "近代早期",
+    "school": "理性主义",
+    "occupation": "哲学家、磨镜片匠",
+    "summary": "斯宾诺莎是近代哲学中最具原创性的形而上学家之一。因异端思想被犹太教会驱逐，以磨镜片为生，写下了几何学形式的《伦理学》。核心思想包括：实体一元论（唯一实体，无限属性）、神即自然（Deus sive Natura）、情感伦理学、自由即认识必然性。被黑格尔称为'近代哲学最高峰'。",
+    "summary_en": "Spinoza is one of the most original metaphysicians in modern philosophy. Excommunicated by the Jewish community for heresy, he made a living grinding lenses while writing the Ethics in geometrical form. Central doctrines include substance monism, Deus sive Natura (God or Nature), and the intellectual love of God."
+  },
+  "lifeEvents": [
+    {"year": "1632", "event": "出生于阿姆斯特丹", "details": "葡萄牙犹太移民家庭，原名巴鲁赫（Baruch），拉丁化为本尼迪克图斯（Benedictus）。"},
+    {"year": "1654", "event": "父亲去世", "details": "接管家族进出口生意，但因对商业不感兴趣而逐渐放弃。"},
+    {"year": "1656", "event": "被犹太教会开除教籍", "details": "因质疑摩西五经的神圣性和灵魂不朽，被阿姆斯特丹犹太教会永久逐出。此后以磨镜片为生，过着简朴的隐居生活。"},
+    {"year": "1661—1675", "event": "撰写《伦理学》", "details": "以几何学形式（定义→公理→命题→证明）撰写《依几何学方式证明的伦理学》。因担心宗教迫害，生前未出版。"},
+    {"year": "1670", "event": "匿名出版《神学政治论》", "details": "主张圣经应该像其他书籍一样用历史方法研究，引发巨大争议。"},
+    {"year": "1677", "event": "逝世于海牙", "details": "因长期吸入镜片研磨粉尘导致肺部疾病去世，享年44岁。朋友们将其遗稿整理出版，包括《伦理学》。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "substance-monism",
+      "title": "实体一元论",
+      "title_en": "Substance Monism",
+      "category": "形而上学",
+      "description": "斯宾诺莎的实体一元论是其形而上学的核心。他严格定义'实体'为'在自身之中并通过自身而被认识的东西'——即不依赖于任何其他事物的独立存在。根据这个定义，只能存在一个实体（因为如果存在两个实体，它们必须彼此区分，而区分需要依赖第三属性，这就违反了实体的独立性）。这个唯一的实体就是上帝/自然，具有无限多的属性（attribute），人类只能认识其中的两种：思维（thought）和广延（extension）。万物都是这个唯一实体的'样式'（mode / 变形）。",
+      "keyWorks": ["《伦理学》第一部分"],
+      "primaryQuotes": [
+        {"chinese": "实体，我理解为在自身之中并通过自身而被认识的东西。", "english": "By substance I understand what is in itself and is conceived through itself.", "source": "Ethics I, Def. 3"},
+        {"chinese": "除了上帝之外，不能存在任何实体，也不能被设想任何实体。", "english": "Except God, no substance can be or be conceived.", "source": "Ethics I, Prop. 14"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "斯宾诺莎是无神论者。", "clarification": "恰恰相反。斯宾诺莎的'上帝'不是人格化的神，而是无限的、必然的、唯一的实体。他的确否认了传统的犹太-基督教上帝观（人格神、造物主、审判者），但他不是无神论者——他是'泛神论者'或'自然神论者'。"}
+      ]
+    },
+    {
+      "id": "deus-sive-natura",
+      "title": "神即自然",
+      "title_en": "Deus sive Natura / God or Nature",
+      "category": "形而上学 / 神学",
+      "description": "Deus sive Natura（神即自然）是斯宾诺莎最著名的命题。它有两种读法：1）'神就是自然'——上帝不是超自然的创造者，而是自然本身；2）'神或自然'——两者是同一实体的两种名称。斯宾诺莎区分了'natura naturans'（能产的自然 / 作为原因的上帝）和'natura naturata'（被产的自然 / 作为结果的万物）。前者是无限的、必然的；后者是有限的、派生的。这一命题消除了自然与超自然之间的对立，也消除了自由意志的可能性——万物都遵循必然性。",
+      "keyWorks": ["《伦理学》第一部分"],
+      "primaryQuotes": [
+        {"chinese": "神即自然。", "english": "God or Nature.", "source": "Ethics IV, Preface"},
+        {"chinese": "万物都必然地依照神的本质从神而出。", "english": "All things follow from the necessity of the divine nature.", "source": "Ethics I, Prop. 16"}
+      ]
+    },
+    {
+      "id": "affect-ethics",
+      "title": "情感伦理学",
+      "title_en": "Ethics of Affects",
+      "category": "伦理学",
+      "description": "斯宾诺莎的情感理论是其伦理学的基础。他将情感（affectus）定义为'身体的感触（affectiones）的观念'，即对身体状态变化的意识。情感分为被动情感（passiones / 被外部原因决定的情感，如恐惧、仇恨）和主动情感（actiones / 被自身理性决定的情感，如理性之爱、勇气）。伦理学的目标是：通过理性的理解，将被动情感转化为主动情感——即'对上帝的爱'（amor Dei intellectualis）。通过理解情感的必然性（理解我们为什么愤怒），我们不再被愤怒奴役。自由不是为所欲为，而是按照理性认识必然性。",
+      "keyWorks": ["《伦理学》第三部分、第四部分、第五部分"],
+      "primaryQuotes": [
+        {"chinese": "情感不是理性的对立面，而是理性的不充分形式。", "english": "The affections of the mind are not contrary to reason, but can exist and arise from the same causes as reason.", "source": "Ethics III, Prop. 2, Schol."},
+        {"chinese": "对上帝的爱是对上帝之认识的永恒结果。", "english": "The intellectual love of God is a love that arises from the very nature of the mind.", "source": "Ethics V, Prop. 33"}
+      ]
+    },
+    {
+      "id": "spinoza-freedom",
+      "title": "自由",
+      "title_en": "Freedom",
+      "category": "伦理学",
+      "description": "斯宾诺莎的自由概念是其伦理学中最具争议的。他否定'自由意志'（liberum arbitrium / 任意选择），认为万物都遵循必然性。但他区分了两种必然性：1）外在的强制（如被推倒的石块）；2）内在的必然性（如按照自身本性行动的实体）。真正的自由是按照自身理性本性行动——不是'没有原因'，而是'原因在自己之中'。'自由的人最少想到死，他的智慧不是关于死的沉思，而是关于生的沉思'（《伦理学》第四部分命题67）。通过理性理解情感的必然性，人将被动情感转化为主动情感，从而获得自由。",
+      "keyWorks": ["《伦理学》第四部分"],
+      "primaryQuotes": [
+        {"chinese": "自由的人最少想到死，他的智慧不是关于死的沉思，而是关于生的沉思。", "english": "A free man thinks of nothing less than of death, and his wisdom is a meditation not on death but on life.", "source": "Ethics IV, Prop. 67"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《伦理学》", "title_la": "Ethica Ordine Geometrico Demonstrata", "year": "1677", "summary": "斯宾诺莎最重要的著作，以几何学形式（定义→公理→命题→证明）系统阐述实体一元论、情感伦理学和自由理论。"},
+    {"title": "《神学政治论》", "title_la": "Tractatus Theologico-Politicus", "year": "1670", "summary": "主张圣经应该用历史方法研究，提出宗教宽容和政治自由的观点。"},
+    {"title": "《知性改进论》", "title_la": "Tractatus de Intellectus Emendatione", "summary": "探讨认识论方法，提出'真观念'作为知识的最高标准。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "神即自然。", "english": "God or Nature.", "source": "Ethics IV, Preface"},
+    {"chinese": "自由的人最少想到死。", "english": "A free man thinks of nothing less than of death.", "source": "Ethics IV, Prop. 67"},
+    {"chinese": "对上帝的爱是对上帝之认识的永恒结果。", "english": "The intellectual love of God arises from the very nature of the mind.", "source": "Ethics V, Prop. 33"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较斯宾诺莎'情感伦理学'与斯多葛学派的'不动心'。",
+      "output": "斯宾诺莎的情感伦理学与斯多葛学派的不动心（apatheia）既有相似之处，也有根本差异。\n\n相似之处：\n1）都追求从被动情感中解脱：斯多葛学派通过'区分可控与不可控'来消除激情；斯宾诺莎通过'理性理解情感的必然性'来转化情感。\n2）都强调理性对情感的统治。\n\n根本差异：\n1）斯多葛学派主张'消除'情感（激情是理性的疾病），斯宾诺莎主张'转化'情感（将被动情感转化为主动情感）。斯宾诺莎不认为情感本身是坏的——只有'被动的'情感才是需要克服的。\n2）斯多葛学派的最终目标是'不动心'（内心平静），斯宾诺莎的最终目标是'对上帝的爱'（amor Dei intellectualis）——一种积极的、理性的、充满喜悦的情感状态。\n3）斯多葛学派的理性是'实践智慧'（知道什么是好的），斯宾诺莎的理性是'直观知识'（从永恒视角理解万物的必然性）。\n\n互补性：斯宾诺莎的情感伦理学比斯多葛学派更'积极'——它不消除情感，而是提升情感的'质量'。这为现代积极心理学和情感神经科学提供了哲学基础。",
+      "source": "Spinoza, Ethics III-V; Seneca, Letters; Nussbaum, Upheavals of Thought (2001)",
+      "tier": 1
+    }
+  ]
+}

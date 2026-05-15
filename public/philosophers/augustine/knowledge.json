@@ -1,0 +1,101 @@
+{
+  "philosopher": {
+    "name": "奥古斯丁",
+    "name_en": "Augustine of Hippo",
+    "name_la": "Aurelius Augustinus Hipponensis",
+    "lived": "354年11月13日—430年8月28日",
+    "birthplace": "罗马阿非利加行省塔加斯特（今阿尔及利亚苏格艾赫拉斯）",
+    "deathplace": "希波（今阿尔及利亚安纳巴）",
+    "era": "晚期古典 / 教父哲学",
+    "school": "基督教柏拉图主义",
+    "occupation": "神学家、哲学家、主教",
+    "summary": "奥古斯丁是西方基督教神学和中世纪哲学的奠基人，教父哲学最高代表。从摩尼教徒到基督教主教，《忏悔录》的作者。核心思想包括：上帝之城、原罪、时间主观性、自由意志。连接古代哲学与中世纪神学的关键人物。",
+    "summary_en": "Augustine is one of the most influential theologians and philosophers in Western history. His Confessions pioneered the genre of spiritual autobiography. Central doctrines include the City of God, original sin, the subjective nature of time, and free will."
+  },
+  "lifeEvents": [
+    {"year": "354", "event": "出生于北非塔加斯特", "details": "父亲帕特里修斯（Patricius）为异教徒，母亲莫尼卡（Monica）为虔诚基督徒。"},
+    {"year": "370—374", "event": "在迦太基求学", "details": "学习修辞学，陷入情欲和摩尼教信仰。"},
+    {"year": "383", "event": "前往罗马", "details": "离开迦太基到罗马任教，后转赴米兰。"},
+    {"year": "386", "event": "米兰花园皈依", "details": "在安布罗斯主教影响下，放弃摩尼教，转向基督教。在花园中听到'拿起，读！'的声音，随即阅读罗马书13:13-14，决心皈依。"},
+    {"year": "387", "event": "受洗", "details": "由安布罗斯主教施洗，与母亲莫尼卡共同受洗。"},
+    {"year": "391", "event": "被任命为希波神父", "details": "回到北非，在希波被强行任命为神父（当时他还是平信徒）。"},
+    {"year": "396", "event": "被任命为希波主教", "details": "继任希波主教，直至去世。"},
+    {"year": "397—401", "event": "撰写《忏悔录》", "details": "以自传体形式向上帝忏悔，开创西方精神自传传统。"},
+    {"year": "410", "event": "罗马陷落", "details": "西哥特人洗劫罗马，引发异教徒对基督教的攻击。奥古斯丁开始撰写《上帝之城》。"},
+    {"year": "413—426", "event": "撰写《上帝之城》", "details": "共22卷，回应罗马陷落后对基督教的指责，提出'两城论'——上帝之城与地上之城。"},
+    {"year": "430", "event": "逝世于希波", "details": "汪达尔人围困希波期间病逝，享年75岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "original-sin",
+      "title": "原罪",
+      "title_en": "Original Sin",
+      "category": "神学 / 伦理学",
+      "description": "奥古斯丁的原罪教义是其神学体系的核心。根据奥古斯丁，亚当和夏娃的堕落不仅影响了他们自己，还通过'遗传'影响了全人类。每一代人出生时都带有原罪——不是因为个人犯罪，而是因为继承了亚当堕落的'本质'。原罪的后果是：人的意志被'奴役'（libido dominandi / 统治欲），人无法凭自己的力量选择善。因此，救赎只能来自上帝的恩典（gratia），而非人的自由意志。这一教义深刻影响了西方基督教传统，尤其是天主教和新教的救赎论。",
+      "keyWorks": ["《忏悔录》", "《论意志的自由选择》", "《反佩拉纠派著作》"],
+      "primaryQuotes": [
+        {"chinese": "我年幼时就已经犯罪了，我的上帝，不是违背父母或教师，而是违背你。", "english": "I have sinned even as a child, my God, not against parents or teachers, but against you.", "source": "Confessions I.19.30"},
+        {"chinese": "人的意志不是中立的——它被罪所奴役，除非上帝的恩典释放它。", "english": "The human will is not neutral — it is enslaved by sin unless liberated by the grace of God.", "source": "On the Grace of Christ and on Original Sin, 33"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "原罪意味着婴儿出生时就有道德责任。", "clarification": "奥古斯丁的原罪不是指个人罪行，而是指'堕落的本性'。婴儿虽然带有原罪，但不是因为婴儿'做了什么错事'，而是因为继承了亚当的堕落状态。"}
+      ]
+    },
+    {
+      "id": "city-of-god",
+      "title": "上帝之城",
+      "title_en": "City of God",
+      "category": "政治哲学 / 历史神学",
+      "description": "《上帝之城》是奥古斯丁最重要的政治哲学著作，回应410年罗马陷落后异教徒的指责。奥古斯丁提出'两城论'：上帝之城（civitas Dei）由爱上帝、追求永恒的人组成；地上之城（civitas terrena）由爱自己、追求世俗权力的人组成。两城在历史中交织，但终将分离——上帝之城将在末日完全实现。奥古斯丁否定了罗马帝国的神圣性，认为国家只是'必要之恶'，用于遏制人类的堕落本性。",
+      "keyWorks": ["《上帝之城》"],
+      "primaryQuotes": [
+        {"chinese": "两座城由两种爱造成：地上之城由爱自己、甚至蔑视上帝的爱造成；上帝之城由爱上帝、甚至蔑视自己的爱造成。", "english": "Two cities have been formed by two loves: the earthly by the love of self, even to the contempt of God; the heavenly by the love of God, even to the contempt of self.", "source": "City of God XIV.28"}
+      ],
+      "commonMisconceptions": [
+        {"misconception": "奥古斯丁认为教会就是上帝之城。", "clarification": "奥古斯丁明确否认教会等同于上帝之城。两城在历史中交织，教会中也有属于地上之城的人，世俗社会中也有属于上帝之城的人。"}
+      ]
+    },
+    {
+      "id": "time-subjectivity",
+      "title": "时间主观性",
+      "title_en": "Subjective Nature of Time",
+      "category": "形而上学 / 时间哲学",
+      "description": "奥古斯丁在《忏悔录》第十一卷中对时间进行了深刻反思，被誉为西方时间哲学的奠基文本。奥古斯丁质疑：'时间是什么？如果没有人问我，我知道它是什么；如果要我向询问者解释，我就不知道了。'他否定了时间的客观流逝，认为时间存在于灵魂之中——过去存在于记忆中，现在存在于注意力中，未来存在于期待中。时间的'流逝'实际上是灵魂三种能力的活动：期待（expectatio）、注意力（attentio）和记忆（memoria）。这一理论预示了后来的现象学和存在主义时间观。",
+      "keyWorks": ["《忏悔录》第十一卷"],
+      "primaryQuotes": [
+        {"chinese": "时间是什么？如果没有人问我，我知道它是什么；如果要我向询问者解释，我就不知道了。", "english": "What then is time? If no one asks me, I know; if I wish to explain it to one that asks, I do not know.", "source": "Confessions XI.14.17"},
+        {"chinese": "时间的流逝实际上是灵魂的三种活动：期待、注意和记忆。", "english": "It is in you, my mind, that I measure times... I measure times by some impression they make on me.", "source": "Confessions XI.27.36"}
+      ]
+    },
+    {
+      "id": "free-will",
+      "title": "自由意志",
+      "title_en": "Free Will",
+      "category": "神学 / 伦理学",
+      "description": "奥古斯丁对自由意志的论述经历了从早期到后期的转变。早期（《论意志的自由选择》）他主张：上帝赋予人自由意志，人通过自由意志选择善恶。恶不是来自上帝，而是来自人对善的'缺乏'（privatio boni）。后期（反佩拉纠派著作）他修正了这一立场：由于原罪，人的意志已被奴役，无法凭自己向善。真正的自由不是'选择善恶的能力'，而是'只能向善的能力'——这是通过上帝的恩典才能实现的。",
+      "keyWorks": ["《论意志的自由选择》", "《反佩拉纠派著作》"],
+      "primaryQuotes": [
+        {"chinese": "恶不是实体，而是善的缺乏。", "english": "Evil is not a substance, but a privation of good.", "source": "Confessions VII.12.18"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《忏悔录》", "title_la": "Confessiones", "year": "397—401", "summary": "西方第一部精神自传，以向上帝祈祷的形式回顾一生，开创自传文学传统。"},
+    {"title": "《上帝之城》", "title_la": "De Civitate Dei", "year": "413—426", "summary": "22卷巨著，回应罗马陷落，提出两城论，奠定基督教政治哲学基础。"},
+    {"title": "《论三位一体》", "title_la": "De Trinitate", "summary": "系统阐述三位一体教义，运用心理学类比（记忆、理解、意志）。"},
+    {"title": "《论意志的自由选择》", "title_la": "De Libero Arbitrio", "summary": "早期代表作，论证自由意志是恶的根源，但上帝赋予人自由意志是善。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "主啊，你造我们是为了你，我们的心如不安息在你怀中，便不会安宁。", "english": "You have made us for yourself, O Lord, and our heart is restless until it rests in you.", "source": "Confessions I.1.1"},
+    {"chinese": "时间是什么？如果没有人问我，我知道它是什么。", "english": "What then is time? If no one asks me, I know.", "source": "Confessions XI.14.17"},
+    {"chinese": "两座城由两种爱造成。", "english": "Two cities have been formed by two loves.", "source": "City of God XIV.28"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释奥古斯丁'时间主观性'理论及其哲学意义。",
+      "output": "奥古斯丁在《忏悔录》第十一卷中提出了西方哲学史上最具原创性的时间理论之一。\n\n核心论点：\n1）否定时间的客观存在：奥古斯丁质疑'过去、现在、未来'如何同时存在。过去已不存在，未来尚未存在，现在只是一瞬间——所以时间似乎不存在。\n2）时间的三种灵魂活动：时间的'流逝'实际上是灵魂的三种能力的活动——期待（future）、注意力（present）、记忆（past）。\n3）时间的'度量'：我们度量时间不是度量客观流逝，而是度量记忆中的印象。\n\n哲学意义：\n1）预示了现象学：胡塞尔的时间意识分析直接受奥古斯丁启发；海德格尔的'此在的时间性'也与奥古斯丁有深层联系。\n2）解决了古希腊芝诺悖论的'飞矢不动'：如果时间是主观的，那么'瞬间'的概念不需要预设客观的'现在'。\n3）神学意义：上帝不在时间中，而是永恒的——上帝'同时'看见过去、现在和未来。\n\n批评：现代物理学（爱因斯坦相对论）表明时间确实具有客观维度（时空结构），奥古斯丁的主观主义需要与物理主义调和。",
+      "source": "Augustine, Confessions XI; Husserl, Lectures on the Internal Consciousness of Time",
+      "tier": 1
+    }
+  ]
+}

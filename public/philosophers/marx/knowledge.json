@@ -1,0 +1,97 @@
+{
+  "philosopher": {
+    "name": "马克思",
+    "name_en": "Karl Marx",
+    "name_de": "Karl Marx",
+    "lived": "1818年5月5日—1883年3月14日",
+    "birthplace": "普鲁士特里尔",
+    "deathplace": "英国伦敦",
+    "era": "19世纪",
+    "school": "历史唯物主义 / 马克思主义",
+    "occupation": "哲学家、经济学家、社会学家、革命家",
+    "summary": "马克思是改变了现代世界面貌的思想家。核心思想包括：历史唯物主义、阶级斗争、异化、剩余价值、意识形态批判。他不是坐在书斋里的思想家，而是致力于改变世界的革命家。",
+    "summary_en": "Marx is one of the most influential thinkers in modern history. Central doctrines include historical materialism, class struggle, alienation, surplus value, and ideology critique. He was not merely a philosopher but a revolutionary committed to changing the world."
+  },
+  "lifeEvents": [
+    {"year": "1818", "event": "出生于特里尔", "details": "父亲亨利希·马克思为律师，后改宗基督教。"},
+    {"year": "1835", "event": "进入波恩大学", "details": "后转入柏林大学，攻读法律和哲学，深受黑格尔影响。"},
+    {"year": "1841", "event": "获得耶拿大学博士学位", "details": "博士论文《德谟克利特的自然哲学和伊壁鸠鲁的自然哲学的差别》。"},
+    {"year": "1842—1843", "event": "担任《莱茵报》编辑", "details": "因激进立场被普鲁士政府查封。"},
+    {"year": "1843", "event": "与燕妮·冯·威斯特法伦结婚", "details": "妻子是特里尔贵族，两人终生相伴。"},
+    {"year": "1844", "event": "撰写《1844年经济学哲学手稿》", "details": "首次系统阐述'异化劳动'概念。"},
+    {"year": "1845", "event": "撰写《德意志意识形态》", "details": "与恩格斯合著，系统阐述历史唯物主义。"},
+    {"year": "1848", "event": "发表《共产党宣言》", "details": "与恩格斯合著，标志着马克思主义的公开诞生。"},
+    {"year": "1849", "event": "流亡伦敦", "details": "此后终生居住伦敦，在大英博物馆进行研究。"},
+    {"year": "1867", "event": "出版《资本论》第一卷", "details": "系统分析资本主义生产方式，提出剩余价值理论。"},
+    {"year": "1883", "event": "逝世于伦敦", "details": "葬于海格特公墓，享年64岁。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "historical-materialism",
+      "title": "历史唯物主义",
+      "title_en": "Historical Materialism",
+      "category": "历史哲学 / 社会理论",
+      "description": "历史唯物主义是马克思对黑格尔唯心史观的根本修正。马克思主张：不是'意识决定生活'，而是'生活决定意识'。社会发展的基础是'生产力'（生产技术、劳动工具、科学知识）和'生产关系'（财产关系、阶级结构）之间的矛盾。当生产关系阻碍生产力发展时，社会革命就会发生。历史因此不是'观念的历史'，而是'物质生产的历史'。马克思在《政治经济学批判序言》中给出了经典表述：'人们在自己生活的社会生产中发生一定的、必然的、不以他们的意志为转移的关系，即同他们的物质生产力的一定发展阶段相适合的生产关系。'",
+      "keyWorks": ["《德意志意识形态》", "《政治经济学批判序言》"],
+      "primaryQuotes": [
+        {"chinese": "不是人们的意识决定人们的存在，相反，是人们的社会存在决定人们的意识。", "english": "It is not the consciousness of men that determines their being, but, on the contrary, their social being that determines their consciousness.", "source": "A Contribution to the Critique of Political Economy, Preface"},
+        {"chinese": "哲学家们只是用不同的方式解释世界，而问题在于改变世界。", "english": "The philosophers have only interpreted the world, in various ways; the point, however, is to change it.", "source": "Theses on Feuerbach, XI"}
+      ]
+    },
+    {
+      "id": "alienation",
+      "title": "异化",
+      "title_en": "Alienation / Entfremdung",
+      "category": "社会哲学 / 经济学",
+      "description": "异化（Entfremdung）是马克思早期哲学的核心概念，在《1844年经济学哲学手稿》中系统阐述。马克思区分了四种异化：1）劳动者与劳动产品的异化——产品不属于劳动者，而属于资本家；2）劳动者与劳动活动的异化——劳动不是自我实现的手段，而是被迫的、外在的、痛苦的；3）人的类本质的异化——人作为'类存在'（能够自由创造的存在）的本能在资本主义中被压抑；4）人与人的异化——劳动者与资本家、劳动者与劳动者之间的关系变成敌对关系。异化的根源是私有制和商品经济。",
+      "keyWorks": ["《1844年经济学哲学手稿》"],
+      "primaryQuotes": [
+        {"chinese": "工人在劳动中不是肯定自己，而是否定自己；不是感到幸福，而是感到不幸。", "english": "The worker does not confirm himself in his work, but denies himself... His labour is therefore not voluntary but coerced; it is forced labour.", "source": "Economic and Philosophic Manuscripts of 1844"}
+      ]
+    },
+    {
+      "id": "class-struggle",
+      "title": "阶级斗争",
+      "title_en": "Class Struggle",
+      "category": "政治哲学 / 历史理论",
+      "description": "阶级斗争是历史唯物主义的核心机制。马克思认为，至今一切社会的历史都是阶级斗争的历史——自由民与奴隶、贵族与平民、领主与农奴、资产阶级与无产阶级。阶级斗争的根源是生产资料（土地、工厂、资本）的不平等分配。在资本主义社会中，阶级对立简化为资产阶级（占有生产资料）和无产阶级（只能靠出卖劳动力为生）之间的对立。阶级斗争的最终结果是：无产阶级通过革命夺取政权，建立无阶级的共产主义社会。",
+      "keyWorks": ["《共产党宣言》"],
+      "primaryQuotes": [
+        {"chinese": "至今一切社会的历史都是阶级斗争的历史。", "english": "The history of all hitherto existing society is the history of class struggles.", "source": "The Communist Manifesto"},
+        {"chinese": "无产阶级失去的只是锁链，他们获得的将是整个世界。", "english": "The proletarians have nothing to lose but their chains. They have a world to win.", "source": "The Communist Manifesto"}
+      ]
+    },
+    {
+      "id": "ideology",
+      "title": "意识形态",
+      "title_en": "Ideology",
+      "category": "社会理论 / 认识论",
+      "description": "意识形态（Ideologie）是马克思社会理论的核心概念。马克思认为，统治阶级的思想在每一时代都是占统治地位的思想。意识形态不是'虚假意识'（false consciousness）的简单欺骗，而是社会存在在观念层面的反映——但它是一种'颠倒的'反映：它将特定阶级的利益呈现为普遍利益，将历史偶然呈现为自然必然。马克思在《德意志意识形态》中批判了青年黑格尔派：他们将观念当成历史的动力，而实际上观念只是物质利益的'意识形态外衣'。意识形态批判的任务是揭示'物质利益'如何转化为'普遍真理'。",
+      "keyWorks": ["《德意志意识形态》"],
+      "primaryQuotes": [
+        {"chinese": "统治阶级的思想在每一时代都是占统治地位的思想。", "english": "The ideas of the ruling class are in every epoch the ruling ideas.", "source": "The German Ideology"},
+        {"chinese": "在每一时代，统治阶级的思想都是占统治地位的思想，这就是说，一个阶级是社会上占统治地位的物质力量，同时也是社会上占统治地位的精神力量。", "english": "The class which is the ruling material force of society is at the same time its ruling intellectual force.", "source": "The German Ideology"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《共产党宣言》", "title_de": "Manifest der Kommunistischen Partei", "year": "1848", "summary": "与恩格斯合著，标志着马克思主义的公开诞生。"},
+    {"title": "《资本论》", "title_de": "Das Kapital", "year": "1867—1894", "summary": "系统分析资本主义生产方式，提出剩余价值理论。"},
+    {"title": "《1844年经济学哲学手稿》", "summary": "早期代表作，系统阐述异化劳动概念。"},
+    {"title": "《德意志意识形态》", "title_de": "Die Deutsche Ideologie", "year": "1845—1846", "summary": "与恩格斯合著，系统阐述历史唯物主义。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "哲学家们只是用不同的方式解释世界，而问题在于改变世界。", "english": "The philosophers have only interpreted the world; the point is to change it.", "source": "Theses on Feuerbach, XI"},
+    {"chinese": "至今一切社会的历史都是阶级斗争的历史。", "english": "The history of all hitherto existing society is the history of class struggles.", "source": "The Communist Manifesto"},
+    {"chinese": "无产阶级失去的只是锁链。", "english": "The proletarians have nothing to lose but their chains.", "source": "The Communist Manifesto"},
+    {"chinese": "不是意识决定生活，而是生活决定意识。", "english": "It is not the consciousness of men that determines their being, but their social being that determines their consciousness.", "source": "Critique of Political Economy, Preface"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较马克思'异化'概念与黑格尔'异化'概念的关系。",
+      "output": "马克思的异化概念直接继承自黑格尔，但做了根本性的改造。\n\n黑格尔的异化（Entäußerung / externalization）：\n1）异化是精神（Geist）实现自身的必要环节——精神必须'外化'为自然和社会，然后通过否定之否定回到自身。\n2）异化是'积极的'——它是精神发展的动力。\n3）黑格尔主要关注'意识的异化'（主奴辩证法中的自我意识的异化）。\n\n马克思的异化（Entfremdung / alienation）：\n1）异化是资本主义生产方式的病理现象，不是人类发展的必要环节。\n2）异化是'消极的'——它压抑了人的本质力量，需要通过革命来消除。\n3）马克思主要关注'劳动的异化'——劳动者与产品、劳动活动、类本质和他人之间的四重异化。\n\n根本差异：\n1）黑格尔的异化是'意识的'，马克思的异化是'物质的'。\n2）黑格尔通过'理解'异化来克服异化（精神回到自身），马克思通过'革命'来消除异化（废除私有制）。\n3）黑格尔是乐观的（异化最终会被扬弃），马克思也是乐观的（共产主义会消除异化），但路径完全不同。\n\n影响：马克思的异化概念被卢卡奇（《历史与阶级意识》中的'物化'）、法兰克福学派（马尔库塞、阿多诺）和当代批判理论广泛继承和发展。",
+      "source": "Marx, Economic and Philosophic Manuscripts; Hegel, Phenomenology of Spirit; Lukács, History and Class Consciousness",
+      "tier": 1
+    }
+  ]
+}

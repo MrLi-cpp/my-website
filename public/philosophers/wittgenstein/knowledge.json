@@ -1,0 +1,91 @@
+{
+  "philosopher": {
+    "name": "维特根斯坦",
+    "name_en": "Ludwig Wittgenstein",
+    "lived": "1889年4月26日—1951年4月29日",
+    "birthplace": "奥地利维也纳",
+    "deathplace": "英国剑桥",
+    "era": "20世纪",
+    "school": "分析哲学",
+    "occupation": "哲学家、逻辑学家",
+    "summary": "维特根斯坦是分析哲学的巅峰人物，前后两期思想截然不同。早期《逻辑哲学论》试图划定语言的界限；后期《哲学研究》发现语言是无数重叠的语言游戏。富家子弟放弃巨额遗产，曾当乡村教师、修道院园丁，后回归剑桥。",
+    "summary_en": "Wittgenstein is one of the most important philosophers of the 20th century. His early work Tractatus Logico-Philosophicus sought to draw the limits of language; his later Philosophical Investigations discovered language as overlapping language games."
+  },
+  "lifeEvents": [
+    {"year": "1889", "event": "出生于维也纳钢铁大亨家庭", "details": "父亲是钢铁大亨卡尔·维特根斯坦，家中排行最末。"},
+    {"year": "1908", "event": "前往英国", "details": "先学航空工程，后转向数学基础问题。"},
+    {"year": "1911", "event": "师从罗素", "details": "在剑桥师从罗素和摩尔，解决数学基础问题。"},
+    {"year": "1914—1918", "event": "参加第一次世界大战", "details": "在奥地利军队服役，期间完成《逻辑哲学论》。"},
+    {"year": "1921", "event": "出版《逻辑哲学论》", "details": "认为已解决所有哲学问题，此后放弃哲学，先后当乡村教师和修道院园丁。"},
+    {"year": "1929", "event": "重返剑桥", "details": "发现自己早期思想有误，开始发展后期哲学。"},
+    {"year": "1936—1945", "event": "撰写《哲学研究》", "details": "发展语言游戏理论、家族相似、私人语言论证等核心思想。"},
+    {"year": "1939", "event": "接替摩尔成为剑桥教授", "details": "后辞职投身二战，在伦敦医院做勤杂工。"},
+    {"year": "1951", "event": "逝世于剑桥", "details": "临终遗言：'告诉他们，我度过了美好的一生。'"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "language-games",
+      "title": "语言游戏",
+      "title_en": "Language Games",
+      "category": "语言哲学",
+      "description": "语言游戏是维特根斯坦后期哲学的核心概念。语言不是固定的逻辑结构（如早期《逻辑哲学论》所主张），而是无数重叠的'语言游戏'——每种语言游戏有自己的规则、目的和使用情境。例如，'给我拿一块砖头！'是命令的语言游戏；'2+2=4'是数学的语言游戏；'我爱你'是表达的语言游戏。语言的意义不在于'对应'外部实在，而在于'使用'（meaning is use）。因此，哲学问题常常源于对语言游戏的'误用'——将一个语言游戏的规则套用到另一个语言游戏上。",
+      "keyWorks": ["《哲学研究》"],
+      "primaryQuotes": [
+        {"chinese": "一个词的意义就是它在语言中的使用。", "english": "For a large class of cases — though not for all — in which we employ the word 'meaning' it can be defined thus: the meaning of a word is its use in the language.", "source": "Philosophical Investigations §43"},
+        {"chinese": "想象一种语言，就是想象一种生活方式。", "english": "To imagine a language means to imagine a form of life.", "source": "Philosophical Investigations §19"}
+      ]
+    },
+    {
+      "id": "private-language",
+      "title": "私人语言论证",
+      "title_en": "Private Language Argument",
+      "category": "语言哲学 / 心灵哲学",
+      "description": "私人语言论证是维特根斯坦最著名的论证之一。问题是：能否存在一种'私人语言'——即只有说话者自己能理解的、关于内在经验的语言？维特根斯坦论证：不可能。理由如下：1）语言需要'规则'，而规则需要'公共检验'——如果只有一个人能判断规则是否被正确遵守，那么就没有'正确'与'错误'的区别（任何东西都可以被认为是正确的）；2）内在经验（如疼痛）没有'标准'——我们无法将当下的疼痛与过去的疼痛比较，因为记忆可能出错；3）'疼痛'等词汇的意义不在于指向私人感觉，而在于表达痛苦的外在行为（哭泣、呻吟）。因此，语言本质上是公共的——不存在私人语言。",
+      "keyWorks": ["《哲学研究》§243—§315"],
+      "primaryQuotes": [
+        {"chinese": "'遵守规则'是一种实践。以为自己遵守规则和实际遵守规则，并不相同。", "english": "'Obeying a rule' is a practice. And to think one is obeying a rule is not to obey a rule.", "source": "Philosophical Investigations §202"},
+        {"chinese": "如果狮子会说话，我们也无法理解它。", "english": "If a lion could talk, we could not understand him.", "source": "Philosophical Investigations II, xi"}
+      ]
+    },
+    {
+      "id": "family-resemblance",
+      "title": "家族相似",
+      "title_en": "Family Resemblance",
+      "category": "语言哲学",
+      "description": "家族相似是维特根斯坦用来解释概念统一性的概念。传统哲学（尤其是柏拉图）假设每个概念都有一个'本质'（所有实例共享的共同属性）。维特根斯坦反驳：许多概念（如'游戏'）没有共同的本质——棋盘游戏、纸牌游戏、球类游戏、奥林匹克游戏之间没有共同属性，但存在'家族相似'——就像家族成员之间可能存在相似的鼻子、相似的眼睛、相似的步态，但没有哪个特征是所有成员共有的。概念的边界是'模糊的'——有些活动明显是游戏，有些活动是边界案例。",
+      "keyWorks": ["《哲学研究》§65—§71"],
+      "primaryQuotes": [
+        {"chinese": "我没有指出所有游戏的共同点，而是指出它们的相似之处、亲缘关系。", "english": "I can characterize my standpoint no better than by saying: it is the antithesis of that which Plato brings to bear in his works against the Sophists.", "source": "Philosophical Investigations §65-67"}
+      ]
+    },
+    {
+      "id": "unsayable",
+      "title": "不可说",
+      "title_en": "The Unsayable",
+      "category": "语言哲学 / 形而上学",
+      "description": "'对于不可说的东西，我们必须保持沉默'（《逻辑哲学论》命题7）是维特根斯坦早期哲学的结语。早期维特根斯坦认为：语言只能'描述'世界中的事实（'原子事实'），而伦理、美、宗教和生活的意义超越了语言的范围——它们属于'不可说'的领域。因此，哲学不能'说出'真理，只能'显示'真理——通过澄清语言的逻辑结构，让不可说的东西'显示'出来。后期维特根斯坦放弃了这一立场：语言不是固定的逻辑结构，而是无数语言游戏；因此，'不可说'的东西可以通过不同的语言游戏来表达。",
+      "keyWorks": ["《逻辑哲学论》", "《哲学研究》"],
+      "primaryQuotes": [
+        {"chinese": "对于不可说的东西，我们必须保持沉默。", "english": "Whereof one cannot speak, thereof one must be silent.", "source": "Tractatus Logico-Philosophicus, Proposition 7"},
+        {"chinese": "哲学的目的是思想的逻辑澄清。", "english": "The object of philosophy is the logical clarification of thoughts.", "source": "Tractatus, 4.112"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《逻辑哲学论》", "title_de": "Tractatus Logico-Philosophicus", "year": "1921", "summary": "早期代表作，以命题编号形式阐述语言、世界和逻辑的界限。"},
+    {"title": "《哲学研究》", "title_de": "Philosophische Untersuchungen", "year": "1953", "summary": "后期代表作，发展语言游戏、家族相似、私人语言论证等核心概念。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "对于不可说的东西，我们必须保持沉默。", "english": "Whereof one cannot speak, thereof one must be silent.", "source": "Tractatus, 7"},
+    {"chinese": "一个词的意义就是它在语言中的使用。", "english": "The meaning of a word is its use in the language.", "source": "Philosophical Investigations §43"},
+    {"chinese": "告诉他们，我度过了美好的一生。", "english": "Tell them I've had a wonderful life.", "source": "Last words"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释维特根斯坦'私人语言论证'及其对心灵哲学的影响。",
+      "output": "维特根斯坦的私人语言论证是20世纪哲学最具影响力的论证之一。\n\n论证结构：\n1）假设有一种'私人语言'——只有说话者自己能理解的、关于内在经验的语言。\n2）语言需要规则，规则需要公共检验——如果只有一个人能判断规则是否被遵守，就没有'正确'与'错误'的区别。\n3）内在经验没有标准——我们无法将当下的疼痛与过去的疼痛比较。\n4）因此，'疼痛'等词汇的意义不在于指向私人感觉，而在于表达痛苦的外在行为。\n\n对心灵哲学的影响：\n1）反对笛卡尔式的心灵实体：如果语言本质上是公共的，那么'私人心灵'的概念就有问题。\n2）催生了'行为主义'和'功能主义'：心灵状态不是内在的实体，而是外在的行为或功能角色。\n3）影响了'外在主义'（externalism）：心灵内容依赖于外部环境，而非仅仅依赖于大脑状态。\n\n批评：\n1）'感受质'（qualia）问题：即使疼痛词汇的意义在于行为，我们是否仍然拥有'私人的'感受？\n2）'弱私人语言'的可能性：也许存在一种'弱'私人语言，不违反维特根斯坦的论证。",
+      "source": "Wittgenstein, Philosophical Investigations §243-315; Kripke, Wittgenstein on Rules and Private Language (1982)",
+      "tier": 1
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+{
+  "philosopher": {
+    "name": "海德格尔",
+    "name_en": "Martin Heidegger",
+    "name_de": "Martin Heidegger",
+    "lived": "1889年9月26日—1976年5月26日",
+    "birthplace": "德国巴登-符腾堡州梅斯基希",
+    "deathplace": "德国弗莱堡",
+    "era": "20世纪",
+    "school": "存在主义 / 现象学",
+    "occupation": "哲学家",
+    "summary": "海德格尔是20世纪最具影响力的哲学家之一，《存在与时间》的作者。核心思想：此在（Dasein）、在世存在（Being-in-the-world）、向死而在（Being-toward-death）、畏（Angst）、被抛状态、常人（Das Man）。后期转向'存在之思'，批判技术时代'存在的遗忘'。",
+    "summary_en": "Heidegger is one of the most influential philosophers of the 20th century. Central doctrines include Dasein, Being-in-the-world, Being-toward-death, anxiety (Angst), thrownness, and the they-self (Das Man). His later work critiqued the 'forgetting of Being' in the age of technology."
+  },
+  "lifeEvents": [
+    {"year": "1889", "event": "出生于梅斯基希", "details": "父亲为教堂司事，天主教家庭。"},
+    {"year": "1909", "event": "进入弗莱堡大学", "details": "先学神学，后转哲学。"},
+    {"year": "1913", "event": "获得博士学位", "details": "博士论文《心理主义中的判断理论》。"},
+    {"year": "1916—1928", "event": "师从胡塞尔", "details": "在胡塞尔指导下进行现象学研究，后接替胡塞尔任弗莱堡大学教授。"},
+    {"year": "1927", "event": "出版《存在与时间》", "details": "系统阐述此在分析，被誉为20世纪最重要的哲学著作之一。"},
+    {"year": "1933—1934", "event": "任弗莱堡大学校长", "details": "加入纳粹党，发表校长就职演说。此事成为其一生污点。"},
+    {"year": "1946", "event": "被盟军禁止授课", "details": "因纳粹牵连被禁止授课至1951年。"},
+    {"year": "1953", "event": "发表《技术的追问》", "details": "系统批判技术时代'存在的遗忘'，提出'座驾'（Gestell）概念。"},
+    {"year": "1976", "event": "逝世于弗莱堡", "details": "享年86岁。葬于梅斯基希。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "dasein",
+      "title": "此在",
+      "title_en": "Dasein / Being-there",
+      "category": "存在论",
+      "description": "此在（Dasein）是海德格尔对'人'的独特称谓，字面意思是'存在-于-那里'。海德格尔拒绝使用'人'（Mensch）、'主体'（Subjekt）或'灵魂'（Seele）等概念，因为这些概念预设了传统形而上学的实体观。此在的独特之处在于：它是唯一一种'关心自身存在'的存在者——它不仅存在，而且追问自身的存在。此在的本质在于'去存在'（Zu-sein / to be），而非'是什么'（Was-sein / whatness）。因此，此在不能被定义为一个固定的'本质'，而必须被'存在论地'分析。",
+      "keyWorks": ["《存在与时间》"],
+      "primaryQuotes": [
+        {"chinese": "此在的本质在于它的生存。", "english": "The essence of Dasein lies in its existence.", "source": "Being and Time, §9"},
+        {"chinese": "我们是这样一种存在者，它的存在就是理解存在。", "english": "We are such entities as to be, in our very Being, that Being for which its own Being is an issue.", "source": "Being and Time, §4"}
+      ]
+    },
+    {
+      "id": "being-in-the-world",
+      "title": "在世存在",
+      "title_en": "Being-in-the-world",
+      "category": "存在论 / 现象学",
+      "description": "在世存在（In-der-Welt-sein）是海德格尔对此在基本结构的分析。传统哲学将'人'理解为'主体'，将'世界'理解为'客体'，然后追问两者如何'连接'。海德格尔认为，这种'主客二分'本身就是误解。此在从来不是孤立的'主体'，而是'总是已经在世界之中'——我们不是在'内心'中看世界，而是'在世界中'活动。世界不是'对象的总和'，而是'意义关联的整体'（context of significance）——锤子只有在'钉钉子'的实践中才有意义，脱离实践，锤子只是'一块木头和铁'。",
+      "keyWorks": ["《存在与时间》第一章"],
+      "primaryQuotes": [
+        {"chinese": "此在的基本结构是在世存在。", "english": "The basic state of Dasein is Being-in-the-world.", "source": "Being and Time, §12"},
+        {"chinese": "世界不是存在者的总和，而是意义关联的整体。", "english": "The world is not the sum of things, but the totality of significance.", "source": "Being and Time, §18"}
+      ]
+    },
+    {
+      "id": "being-toward-death",
+      "title": "向死而在",
+      "title_en": "Being-toward-death",
+      "category": "存在论 / 死亡哲学",
+      "description": "向死而在是海德格尔此在分析的高潮。死亡不是'一个事件'（在某一天发生），而是此在的'最本己的可能性'——死亡是最'属我'的，没有人能替我死；死亡是最'不可逾越'的，没有任何可能性能够超越它。此在的本真存在就是'向死而在'——不是'想死'，而是'意识到死亡的不可逾越性，从而选择自己的存在可能性'。畏（Angst / anxiety）是向死而在的情绪——不是对某个具体事物的恐惧，而是对'存在的根基'的颤动。",
+      "keyWorks": ["《存在与时间》第六章"],
+      "primaryQuotes": [
+        {"chinese": "死亡是此在最本己的、无所关联的、确知而不确定的可能性。", "english": "Death is Dasein's ownmost possibility, non-relational, certain, and yet indefinite.", "source": "Being and Time, §53"},
+        {"chinese": "畏启示出虚无。", "english": "Anxiety reveals the nothing.", "source": "What is Metaphysics?"}
+      ]
+    },
+    {
+      "id": "das-man",
+      "title": "常人",
+      "title_en": "Das Man / The They",
+      "category": "社会哲学 / 存在论",
+      "description": "常人（Das Man）是海德格尔对'非本真存在'的分析。在日常生活中，此在不是'自己'，而是'常人'——我们按照'人们'（man / one）的标准生活：'人们这样说'、'人们这样做'、'人们这样感受'。常人消解了一切责任：如果事情出错，那是'人们'的错，不是'我'的错。常人的统治方式是'闲谈'（Gerede / idle talk）、'好奇'（Neugier / curiosity）和'两可'（Zweideutigkeit / ambiguity）。本真存在（Eigentlichkeit / authenticity）意味着从常人的统治中解放出来，选择自己的可能性。",
+      "keyWorks": ["《存在与时间》第四章"],
+      "primaryQuotes": [
+        {"chinese": "常人统治着日常生活的此在。", "english": "The they dominates everyday Dasein.", "source": "Being and Time, §27"},
+        {"chinese": "本真性意味着从常人的统治中解放出来。", "english": "Authenticity means liberation from the domination of the they.", "source": "Being and Time, §54"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《存在与时间》", "title_de": "Sein und Zeit", "year": "1927", "summary": "海德格尔最重要的著作，系统阐述此在分析和存在论。"},
+    {"title": "《技术的追问》", "title_de": "Die Frage nach der Technik", "year": "1953", "summary": "批判技术时代'存在的遗忘'，提出'座驾'（Gestell）概念。"},
+    {"title": "《形而上学是什么？》", "title_de": "Was ist Metaphysik?", "year": "1929", "summary": "阐述'畏'和'虚无'的概念。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "此在的本质在于它的生存。", "english": "The essence of Dasein lies in its existence.", "source": "Being and Time, §9"},
+    {"chinese": "畏启示出虚无。", "english": "Anxiety reveals the nothing.", "source": "What is Metaphysics?"},
+    {"chinese": "常人统治着日常生活的此在。", "english": "The they dominates everyday Dasein.", "source": "Being and Time, §27"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较海德格尔'向死而在'与克尔凯郭尔'焦虑'概念的关系。",
+      "output": "海德格尔的'向死而在'（Being-toward-death）与克尔凯郭尔的'焦虑'（Angst）既有继承关系，也有根本差异。\n\n继承关系：\n1）两者都将'焦虑'视为揭示存在真相的关键情绪。\n2）两者都区分了'恐惧'（对具体事物的害怕）和'焦虑'（对存在本身的颤动）。\n3）克尔凯郭尔的《焦虑的概念》直接影响了海德格尔的《存在与时间》第四章。\n\n根本差异：\n1）克尔凯郭尔的焦虑是'自由的眩晕'——面对无限可能性时的眩晕；海德格尔的焦虑是'向死而在'——面对死亡的不可逾越性时的颤动。\n2）克尔凯郭尔的焦虑导向'信仰飞跃'——通过选择基督教来克服焦虑；海德格尔的向死而在导向'本真性'——通过选择自己的存在可能性来克服常人的统治。\n3）克尔凯郭尔的焦虑是'宗教的'，海德格尔的焦虑是'存在论的'——不预设任何宗教信仰。\n\n互补性：克尔凯郭尔的焦虑提供了'心理学的'深度，海德格尔的向死而在提供了'存在论的'框架。两者共同构成了20世纪存在主义的核心。",
+      "source": "Heidegger, Being and Time; Kierkegaard, The Concept of Anxiety; Dreyfus, Being-in-the-World (1991)",
+      "tier": 1
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "philosopher": {
+    "name": "叔本华",
+    "name_en": "Arthur Schopenhauer",
+    "name_de": "Arthur Schopenhauer",
+    "lived": "1788年2月22日—1860年9月21日",
+    "birthplace": "但泽（今波兰格但斯克）",
+    "deathplace": "德国法兰克福",
+    "era": "19世纪",
+    "school": "德国观念论 / 非理性主义",
+    "occupation": "哲学家",
+    "summary": "叔本华是康德之后第一位真正原创的德国哲学家，尼采的精神父亲。以《作为意志和表象的世界》构建了以意志为本体的形而上学。核心思想：世界是我的表象，世界更是我的意志；生命本质上是痛苦，艺术和同情是暂时的救赎。深受印度哲学（吠檀多、佛教）影响。",
+    "summary_en": "Schopenhauer was the first truly original German philosopher after Kant. His The World as Will and Representation constructs a metaphysics of the will as the thing-in-itself. Life is fundamentally suffering; art and compassion are temporary redemption."
+  },
+  "lifeEvents": [
+    {"year": "1788", "event": "出生于但泽", "details": "父亲海因里希·弗洛里斯·叔本华为富商，母亲约翰娜·叔本华为畅销小说家（与歌德相识）。"},
+    {"year": "1809", "event": "进入哥廷根大学", "details": "学习医学和哲学，接触到柏拉图和康德，深受康德影响。"},
+    {"year": "1813", "event": "获得耶拿大学博士学位", "details": "博士论文《论充足理由律的四重根》。"},
+    {"year": "1814—1818", "event": "撰写《作为意志和表象的世界》", "details": "在德累斯顿隐居期间完成这部巨著，时年30岁。此后40余年致力于推销此书，但长期被忽视。"},
+    {"year": "1820", "event": "与黑格尔公开冲突", "details": "故意将柏林讲座安排在黑格尔讲座的同一时间，结果听众寥寥无几，以惨败告终。此后终身敌视黑格尔。"},
+    {"year": "1833", "event": "定居法兰克福", "details": "此后27年深居简出，与一只卷毛狗为伴（取名'宇宙'），过着规律的独居生活。"},
+    {"year": "1851", "event": "出版《附录与补遗》", "details": "这本随笔集意外畅销，使叔本华在晚年获得迟来的声誉。"},
+    {"year": "1860", "event": "逝世于法兰克福", "details": "享年72岁。死于肺炎，临终前平静。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "will-and-representation",
+      "title": "意志与表象",
+      "title_en": "Will and Representation",
+      "category": "形而上学",
+      "description": "叔本华继承了康德的现象/本体区分，但做了根本修正：康德认为物自体不可知，叔本华认为物自体就是'意志'（Wille）。世界有两面：作为表象（Vorstellung）——被主体所认识的现象世界；作为意志——物自体，万物背后的终极实在。意志不是'想要'（wanting），而是一种盲目的、非理性的、永恒的'内在冲动'，表现为无机物的物理力、植物的生长力、动物的欲望和人类的理性。人通过内省（身体行为背后的内在动力）直接'认识'意志，而不需要透过表象。",
+      "keyWorks": ["《作为意志和表象的世界》第一卷"],
+      "primaryQuotes": [
+        {"chinese": "世界是我的表象。", "english": "The world is my representation.", "source": "The World as Will and Representation, Book I, §1"},
+        {"chinese": "世界是我的意志。", "english": "The world is my will.", "source": "The World as Will and Representation, Book II, §17"},
+        {"chinese": "意志是自在之物，是世界的内在本质。", "english": "The will is the thing-in-itself, the inner essence of the world.", "source": "The World as Will and Representation, Book II"}
+      ]
+    },
+    {
+      "id": "pessimism",
+      "title": "悲观主义",
+      "title_en": "Pessimism",
+      "category": "伦理学 / 生命哲学",
+      "description": "叔本华的悲观主义不是情绪化的'不开心'，而是基于形而上学的系统论证。论证结构：1）意志的本质是'缺乏'（want / 想要什么）——每一个欲望都是对一个不足的意识；2）满足欲望只能带来短暂的满足，随后新的欲望又产生；3）欲望不能满足时痛苦，满足时无聊——人生在痛苦与无聊之间摇摆；4）幸福是消极的（缺乏痛苦），而非积极的（获得快乐）。因此，生命的本质是痛苦，快乐只是痛苦的间歇。",
+      "keyWorks": ["《作为意志和表象的世界》第二卷"],
+      "primaryQuotes": [
+        {"chinese": "生命是一团欲望，欲望不能满足便痛苦，满足便无聊。人生就在痛苦和无聊之间摇摆。", "english": "Life is a pendulum between pain and boredom.", "source": "Parerga and Paralipomena"},
+        {"chinese": "幸福是一种消极的东西——它是痛苦的缺席，而非快乐的获得。", "english": "Happiness is of a negative nature — it is the absence of pain, not the acquisition of pleasure.", "source": "The World as Will and Representation"}
+      ]
+    },
+    {
+      "id": "aesthetic-contemplation",
+      "title": "审美静观",
+      "title_en": "Aesthetic Contemplation",
+      "category": "美学",
+      "description": "审美静观是叔本华提出的暂时解脱意志的方式。当人沉浸于对美的静观（contemplation）中时，主体不再是被意志驱动的'个体'，而是成为'纯粹的认识主体'（pure subject of knowing），意志暂时安静下来。艺术是最有效的解脱方式，因为它将'理念'（Platonic Ideas / 物自体的直接客体化）从具体事物中抽离出来，供人纯粹静观。艺术有等级：建筑（最低，表现意志的低级客体化）→ 绘画、雕塑 → 诗歌 → 音乐（最高，直接表现意志本身）。",
+      "keyWorks": ["《作为意志和表象的世界》第三卷"],
+      "primaryQuotes": [
+        {"chinese": "在审美静观中，我们不再是服务于意志的个体，而是纯粹的认识主体。", "english": "In aesthetic contemplation, we are no longer the individual serving the will, but the pure subject of knowing.", "source": "The World as Will and Representation, Book III"}
+      ]
+    },
+    {
+      "id": "compassion",
+      "title": "同情伦理学",
+      "title_en": "Ethics of Compassion",
+      "category": "伦理学",
+      "description": "叔本华的伦理学以'同情'（Mitleid / compassion）为基础，而非康德式的义务或功利主义的后果。同情之所以可能，是因为在形而上学的层面，'我'与'他人'的区分是表象层面的幻觉——在意志的层面，所有生命都是同一意志的不同客体化。因此，伤害他人就是伤害自己。同情是'看穿'个体化原理（principium individuationis）后的自然情感。",
+      "keyWorks": ["《作为意志和表象的世界》第四卷"],
+      "primaryQuotes": [
+        {"chinese": "所有道德的基础都是同情。", "english": "All moral principles are based on compassion.", "source": "On the Basis of Morality"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《作为意志和表象的世界》", "title_de": "Die Welt als Wille und Vorstellung", "year": "1819", "summary": "叔本华最重要的著作，系统阐述意志本体论、悲观主义、美学和伦理学。"},
+    {"title": "《论充足理由律的四重根》", "title_de": "Über die vierfache Wurzel des Satzes vom zureichenden Grunde", "year": "1813", "summary": "博士论文，提出充足理由律的四种表现形式。"},
+    {"title": "《附录与补遗》", "title_de": "Parerga und Paralipomena", "year": "1851", "summary": "随笔集，使叔本华晚年获得声誉。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "世界是我的表象。", "english": "The world is my representation.", "source": "WWR, Book I"},
+    {"chinese": "生命在痛苦和无聊之间摇摆。", "english": "Life oscillates between pain and boredom.", "source": "Parerga and Paralipomena"},
+    {"chinese": "人能够做他所想做的，但不能要他想要的。", "english": "Man can do what he wills, but he cannot will what he wills.", "source": "On the Freedom of the Will"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "解释叔本华'意志'概念与尼采'权力意志'概念的关系。",
+      "output": "叔本华的'意志'与尼采的'权力意志'既有继承关系，也有根本分歧。\n\n继承关系：\n1）尼采直接受叔本华影响，青年时期深读《作为意志和表象的世界》，称其为'我见过的最伟大思想'。\n2）两者都将'意志'置于形而上学的核心——不是理性或意识，而是意志构成存在的本质。\n\n根本分歧：\n1）叔本华的意志是'盲目的'、'无目的的'、'破坏性的'——它只能被否定（通过艺术、禁欲、同情），不能被肯定。尼采的意志是'创造性的'、'自我超越的'、'肯定生命的'——它应该被肯定，而非否定。\n2）叔本华走向悲观主义和禁欲主义；尼采走向酒神精神和永恒轮回的肯定。\n3）叔本华认为艺术的最高形式是音乐（直接表现意志），尼采继承了这一点但赋予了更积极的意义——音乐是'肯定'而非'逃避'。\n\n尼采的批评：在《悲剧的诞生》中，尼采借用叔本华的'意志'概念但反转了价值判断：叔本华认为表象是对意志的暂时解脱，尼采认为表象（阿波罗精神）是对意志的美化；叔本华认为音乐直接表现意志的痛苦，尼采认为音乐是对生命意志的最高肯定。",
+      "source": "Schopenhauer, WWR; Nietzsche, The Birth of Tragedy; Beyond Good and Evil §56; Young, Schopenhauer (2005)",
+      "tier": 1
+    }
+  ]
+}

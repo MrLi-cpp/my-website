@@ -1,0 +1,82 @@
+{
+  "philosopher": {
+    "name": "加缪",
+    "name_en": "Albert Camus",
+    "name_fr": "Albert Camus",
+    "lived": "1913年11月7日—1960年1月4日",
+    "birthplace": "法属阿尔及利亚蒙多维",
+    "deathplace": "法国卢尔马兰",
+    "era": "20世纪",
+    "school": "存在主义 / 荒诞主义",
+    "occupation": "作家、哲学家、剧作家",
+    "summary": "加缪是法国存在主义（虽然他本人否认这个标签）和荒诞主义的核心人物。核心思想：荒诞（世界无意义但人要求意义）、反抗（面对荒诞不屈服）、西西弗是幸福的。拒绝虚无主义，主张在荒诞中创造意义。",
+    "summary_en": "Camus was a central figure in French existentialism (though he rejected the label) and absurdism. Core ideas include the absurd (the world is meaningless but humans demand meaning), revolt (refusing to surrender to the absurd), and Sisyphus as happy."
+  },
+  "lifeEvents": [
+    {"year": "1913", "event": "出生于阿尔及利亚", "details": "父亲为西班牙裔法国移民，一战阵亡。母亲为文盲清洁工，家境贫寒。"},
+    {"year": "1930", "event": "进入阿尔及尔大学", "details": "攻读哲学，获得学士学位。"},
+    {"year": "1942", "event": "出版《局外人》和《西西弗神话》", "details": "《局外人》以冷漠的叙事风格震惊文坛；《西西弗神话》系统阐述荒诞哲学。"},
+    {"year": "1943", "event": "加入《战斗报》", "details": "积极参与法国抵抗运动。"},
+    {"year": "1947", "event": "出版《鼠疫》", "details": "以寓言形式描写纳粹占领下的法国，探讨反抗与团结。"},
+    {"year": "1951", "event": "出版《反抗者》", "details": "系统阐述'反抗'概念，与萨特公开决裂。"},
+    {"year": "1957", "event": "获得诺贝尔文学奖", "details": "史上最年轻的诺贝尔文学奖得主之一（44岁）。"},
+    {"year": "1960", "event": "车祸逝世", "details": "乘坐出版商米歇尔·加利马的车发生车祸，当场死亡，享年46岁。车内还有《第一人》手稿。"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "absurd",
+      "title": "荒诞",
+      "title_en": "The Absurd",
+      "category": "形而上学 / 伦理学",
+      "description": "荒诞是加缪哲学的核心概念。荒诞不是世界的属性，也不是人的属性，而是'世界'与'人'之间的关系——人对意义的要求与世界的'沉默'之间的断裂。'荒诞诞生于人的呼唤与世界无理性的沉默之间的对峙'（《西西弗神话》）。荒诞有三个层次：1）荒诞的感知——意识到生活的无意义；2）荒诞的确认——接受荒诞而不试图逃避（不通过自杀、不通过宗教、不通过希望）；3）荒诞的反抗——在荒诞中创造意义。",
+      "keyWorks": ["《西西弗神话》"],
+      "primaryQuotes": [
+        {"chinese": "荒诞诞生于人的呼唤与世界无理性的沉默之间的对峙。", "english": "The absurd is born of this confrontation between the human need and the unreasonable silence of the world.", "source": "The Myth of Sisyphus"},
+        {"chinese": "唯一真正严肃的哲学问题是自杀。", "english": "There is but one truly serious philosophical problem, and that is suicide.", "source": "The Myth of Sisyphus"}
+      ]
+    },
+    {
+      "id": "revolt",
+      "title": "反抗",
+      "title_en": "Revolt",
+      "category": "政治哲学 / 伦理学",
+      "description": "反抗是加缪对荒诞的回应。面对荒诞，有三种可能的态度：1）自杀——承认荒诞不可忍受，选择结束生命；2）希望——通过宗教或意识形态赋予世界虚假的意义；3）反抗——承认荒诞，但不屈服于它。反抗不是'革命'（推翻旧制度建立新制度），而是'持续的抵抗'——'我反抗，故我们存在'（Je me révolte, donc nous sommes）。反抗的伦理学是'限度'的伦理学——反抗不能变成恐怖，不能以'历史必然'的名义牺牲个体。加缪因此与萨特决裂——萨特支持苏联，加缪批评一切形式的极权主义。",
+      "keyWorks": ["《反抗者》"],
+      "primaryQuotes": [
+        {"chinese": "我反抗，故我们存在。", "english": "I rebel, therefore we exist.", "source": "The Rebel"},
+        {"chinese": "反抗是人对自身处境的肯定。", "english": "Revolt is the affirmation of the human condition.", "source": "The Rebel"}
+      ]
+    },
+    {
+      "id": "sisyphus",
+      "title": "西西弗是幸福的",
+      "title_en": "Sisyphus as Happy",
+      "category": "伦理学 / 生命哲学",
+      "description": "西西弗神话是加缪最著名的寓言。西西弗被诸神惩罚，永无止境地推巨石上山，石头每次到达山顶就会滚回山下。加缪问：我们能否想象西西弗是幸福的？答案是：可以——因为'登上顶峰的斗争本身足以充实人的心灵'。西西弗的幸福不是'完成任务后的满足'，而是'过程中的反抗'——他知道自己的命运，但他仍然选择推巨石。这象征着人类面对荒诞时的态度：不否认荒诞，但也不放弃——在过程中找到尊严和意义。",
+      "keyWorks": ["《西西弗神话》"],
+      "primaryQuotes": [
+        {"chinese": "我们应该想象西西弗是幸福的。", "english": "One must imagine Sisyphus happy.", "source": "The Myth of Sisyphus"},
+        {"chinese": "登上顶峰的斗争本身足以充实人的心灵。", "english": "The struggle itself toward the heights is enough to fill a man's heart.", "source": "The Myth of Sisyphus"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《西西弗神话》", "title_fr": "Le Mythe de Sisyphe", "year": "1942", "summary": "系统阐述荒诞哲学，提出自杀、希望和反抗三种面对荒诞的态度。"},
+    {"title": "《局外人》", "title_fr": "L'Étranger", "year": "1942", "summary": "小说，以冷漠的叙事风格描绘荒诞——主人公默尔索对母亲的死、爱情、杀人、死刑都表现出冷漠的'荒诞'。"},
+    {"title": "《反抗者》", "title_fr": "L'Homme révolté", "year": "1951", "summary": "系统阐述反抗概念，批评一切形式的极权主义。"},
+    {"title": "《鼠疫》", "title_fr": "La Peste", "year": "1947", "summary": "以寓言形式描写纳粹占领下的法国，探讨反抗与团结。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "唯一真正严肃的哲学问题是自杀。", "english": "There is but one truly serious philosophical problem, and that is suicide.", "source": "The Myth of Sisyphus"},
+    {"chinese": "我们应该想象西西弗是幸福的。", "english": "One must imagine Sisyphus happy.", "source": "The Myth of Sisyphus"},
+    {"chinese": "我反抗，故我们存在。", "english": "I rebel, therefore we exist.", "source": "The Rebel"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较加缪'荒诞'与尼采'永恒轮回'对'无意义'的回应方式。",
+      "output": "加缪的荒诞与尼采的永恒轮回都是对'生命无意义'的回应，但路径截然不同。\n\n尼采的永恒轮回：\n1）'如果人生的一切会无限重复，你是否愿意？'——这是对生命的最高肯定。\n2）不是承认无意义，而是'肯定'无意义——将无意义本身转化为意义。\n3）酒神精神：在痛苦中舞蹈，在毁灭中创造。\n\n加缪的荒诞：\n1）承认荒诞——世界无意义，人的要求无回应。\n2）不自杀、不寄希望于宗教或意识形态。\n3）在荒诞中'反抗'——过程本身就是意义。\n\n根本差异：\n1）尼采是'肯定'的——通过永恒轮回将无意义转化为意义；加缪是'接受'的——接受荒诞但不屈服。\n2）尼采有'形而上学'色彩（永恒轮回是宇宙论命题），加缪是'现象学'的——荒诞只是人与世界的关系。\n3）尼采追求'超人'，加缪追求'反抗者'——两者都是超越常人的存在方式，但路径不同。\n\n互补性：尼采提供了'肯定的激情'，加缪提供了'清醒的尊严'。两者共同构成了20世纪对虚无主义的两种回应。",
+      "source": "Camus, The Myth of Sisyphus; Nietzsche, The Gay Science §341; Sartre, Being and Nothingness",
+      "tier": 1
+    }
+  ]
+}
