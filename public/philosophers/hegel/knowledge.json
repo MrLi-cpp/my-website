@@ -1,0 +1,83 @@
+{
+  "philosopher": {
+    "name": "黑格尔",
+    "name_en": "Hegel",
+    "name_de": "Georg Wilhelm Friedrich Hegel",
+    "lived": "1770年8月27日—1831年11月14日",
+    "birthplace": "德国斯图加特",
+    "deathplace": "德国柏林",
+    "era": "19世纪",
+    "school": "德国观念论",
+    "occupation": "哲学家、教育家",
+    "summary": "19世纪德国观念论集大成者，耶拿、海德堡与柏林大学教授。以辩证法展示精神如何从抽象存在逐步展开为绝对知识。马克思主义的直接理论来源。",
+    "summary_en": "Hegel was the culminating figure of German Idealism. His dialectical method traced the self-unfolding of Spirit from abstract being to Absolute Knowing. The direct theoretical source of Marxism."
+  },
+  "lifeEvents": [
+    {"year": "1770", "event": "出生于斯图加特", "details": "父亲是税务局书记官，家庭虔诚但开明。"},
+    {"year": "1788", "event": "进入图宾根神学院", "details": "与荷尔德林、谢林同窗。三人一起研究康德与法国大革命。"},
+    {"year": "1801", "event": "耶拿时期", "details": "与谢林合办《哲学批判杂志》。发表《费希特与谢林哲学体系之差异》。"},
+    {"year": "1807", "event": "出版《精神现象学》", "details": "耶拿战役前夕完成手稿，被称为'哲学革命'。"},
+    {"year": "1812—1816", "event": "出版《逻辑学》", "details": '大逻辑学，包含存在论、本质论、概念论。'},
+    {"year": "1817", "event": "出版《哲学科学全书纲要》", "details": "逻辑学、自然哲学、精神哲学的系统总纲。"},
+    {"year": "1821", "event": "出版《法哲学原理》", "details": "提出著名命题：凡是合乎理性的都是现实的，凡是现实的都是合乎理性的。"},
+    {"year": "1831", "event": "逝世于柏林", "details": "霍乱流行期间去世，享年61岁。临终前说：'我只说过一句话，而所有人都误解了。'"}
+  ],
+  "coreConcepts": [
+    {
+      "id": "dialectic",
+      "title": "辩证法",
+      "title_en": "Dialectic",
+      "category": "方法论 / 形而上学",
+      "description": "辩证法是黑格尔哲学的核心方法。正题（These）→反题（Antithese）→合题（Synthese）。不是外在的对立斗争，而是概念自身的内在矛盾推动自我发展。例如：存在（Sein）→无（Nichts）→生成（Werden）。黑格尔的辩证法是'概念的自我运动'——不是人用辩证法去分析世界，而是世界（作为概念）自身在辩证地展开。",
+      "keyWorks": ["《逻辑学》", "《精神现象学》"],
+      "primaryQuotes": [
+        {"chinese": "真理是整个的。", "english": "The truth is the whole.", "source": "《精神现象学》序言"},
+        {"chinese": "凡是合乎理性的都是现实的，凡是现实的都是合乎理性的。", "english": "What is rational is actual and what is actual is rational.", "source": "《法哲学原理》序言"}
+      ]
+    },
+    {
+      "id": "absolute-spirit",
+      "title": "绝对精神",
+      "title_en": "Absolute Spirit / Geist",
+      "category": "形而上学",
+      "description": "绝对精神（Geist）不是个人的心灵，而是宇宙性的理性主体。它经历了三个主要阶段：主观精神（个人意识）、客观精神（法律、道德、国家）、绝对精神（艺术、宗教、哲学）。精神的目标是绝对知识——认识自身。哲学是绝对精神的最高形式，因为它用概念来把握概念。黑格尔的体系是一个巨大的'精神自传'。",
+      "keyWorks": ["《精神现象学》", "《哲学科学全书纲要》"],
+      "primaryQuotes": [
+        {"chinese": "实体即主体。", "english": "Substance is subject.", "source": "《精神现象学》序言"},
+        {"chinese": "精神在历史中实现自身。", "english": "Spirit realizes itself in history.", "source": "《历史哲学讲演录》"}
+      ]
+    },
+    {
+      "id": "master-slave-dialectic",
+      "title": "主奴辩证法",
+      "title_en": "Master-Slave Dialectic / Herrschaft und Knechtschaft",
+      "category": "政治哲学 / 承认理论",
+      "description": "主奴辩证法是黑格尔最著名的思想之一，来自《精神现象学》第四章。自我意识通过'承认'（Anerkennung）产生：两个自我意识相遇，为获得承认而斗争。一方宁愿死也不愿被奴役（主人），另一方选择活着而接受奴役（奴隶）。但历史讽刺在于：主人依赖奴隶的承认，奴隶通过劳动改造世界反而获得了真正的自我。这一思想直接启发了马克思的阶级斗争理论。",
+      "keyWorks": ["《精神现象学》"],
+      "primaryQuotes": [
+        {"chinese": "劳动是受到限制或节制的欲望。", "english": "Labour is desire restrained and checked.", "source": "《精神现象学》第四章"},
+        {"chinese": "主人通过奴隶的中介与物相关联。", "english": "The master relates himself to the thing mediately through the slave.", "source": "《精神现象学》第四章"}
+      ]
+    }
+  ],
+  "keyWorks": [
+    {"title": "《精神现象学》", "title_en": "Phenomenology of Spirit", "year": "1807", "summary": "黑格尔最著名的著作，精神从感性确定性到绝对知识的辩证历程。"},
+    {"title": "《逻辑学》", "title_en": "Science of Logic", "year": "1812—1816", "summary": '大逻辑学，包含存在论、本质论、概念论。'},
+    {"title": "《哲学科学全书纲要》", "title_en": "Encyclopedia of the Philosophical Sciences", "year": "1817", "summary": "逻辑学、自然哲学、精神哲学的系统总纲。"},
+    {"title": "《法哲学原理》", "title_en": "Elements of the Philosophy of Right", "year": "1821", "summary": "国家哲学，提出凡是合乎理性的都是现实的。"}
+  ],
+  "thematicQuotes": [
+    {"chinese": "真理是整个的。", "english": "The truth is the whole.", "source": "《精神现象学》序言"},
+    {"chinese": "凡是合乎理性的都是现实的，凡是现实的都是合乎理性的。", "english": "What is rational is actual and what is actual is rational.", "source": "《法哲学原理》序言"},
+    {"chinese": "实体即主体。", "english": "Substance is subject.", "source": "《精神现象学》序言"},
+    {"chinese": "密涅瓦的猫头鹰在黄昏起飞。", "english": "The owl of Minerva takes its flight only when the shades of night are gathering.", "source": "《法哲学原理》序言"}
+  ],
+  "sftDataset": [
+    {
+      "instruction": "比较黑格尔主奴辩证法与马克思阶级斗争理论对'劳动'的不同理解。",
+      "output": "黑格尔的主奴辩证法与马克思的阶级斗争理论对'劳动'的理解既有继承又有根本差异。\n\n黑格尔的理解：\n1）劳动是'受到限制或节制的欲望'——奴隶通过劳动改造对象，将自我意识投射到世界中。\n2）劳动的解放功能在于：奴隶通过劳动获得'形成性'（Bildung），即自我塑造的能力。\n3）但黑格尔认为主奴辩证最终会在'普遍自我意识'（斯多葛主义和怀疑主义）中'扬弃'——不是通过革命。\n\n马克思的理解：\n1）劳动是'人的本质力量的对象化'——但在资本主义条件下，劳动被异化为'非人的活动'。\n2）劳动的解放功能在于：工人阶级通过集体劳动认识到共同的剥削处境，从而产生阶级意识。\n3）马克思认为必须通过革命推翻资本主义制度，才能恢复劳动的解放功能。\n\n根本差异：\n1）黑格尔是'观念的'：劳动是精神自我展开的一个阶段；马克思是'物质的'：劳动是人类生存的基本条件。\n2）黑格尔的解放是'精神的'（自我意识的发展）；马克思的解放是'实践的'（推翻私有制）。\n3）黑格尔相信体系内的扬弃；马克思主张体系外的革命。\n\n继承关系：马克思继承了黑格尔关于'劳动塑造人'和'斗争产生自我意识'的核心洞见，但将其实现方式从'精神辩证法'改造为'物质革命'。",
+      "source": "Hegel, Phenomenology of Spirit, Ch. IV; Marx, Economic and Philosophic Manuscripts of 1844; Lukács, History and Class Consciousness",
+      "tier": 1
+    }
+  ]
+}
