@@ -2809,9 +2809,64 @@ function applyRandomGateAndTruncate(evaluations, silenceRate = 0.12) {
   return { speakers: finalSpeakers, silenced, all: [...finalSpeakers, ...silenced] };
 }
 
+// 发言风格池：每次为单个哲学家随机抽取一种表达模式
+const SPEAKING_STYLES = [
+  {
+    name: '概念阐发型',
+    weight: 18,
+    instruction: '深入展开2-3个核心概念，带一点抽象，但用具体比喻收束。不要罗列条目。'
+  },
+  {
+    name: '故事/历史举例型',
+    weight: 35,
+    instruction: '用一个具体历史事件、个人经历或寓言来回应话题。让概念活在场景里。不要总结成"总之"。'
+  },
+  {
+    name: '回应补充型',
+    weight: 18,
+    instruction: '先简短抓出前一个人发言中最有意思的一个点——可以同意、可以质疑、可以拐个弯——然后顺着它说自己的东西。不要"我的观点是"开头。'
+  },
+  {
+    name: '短促追问型',
+    weight: 12,
+    instruction: '只抓最尖锐的一个矛盾或缺口，用一两句话反问或短评。然后停住，留白。不要展开长篇。'
+  },
+  {
+    name: '发散联想型',
+    weight: 10,
+    instruction: '从这个话题跳到另一个看似无关但深层相连的维度。用直觉和联想，不要论证链条太长。'
+  },
+  {
+    name: '沉默/留白型',
+    weight: 7,
+    instruction: '你觉得这个话题已经被说透，或者你不想说。用一句意味深长的话带过，或者干脆只给一个意象/比喻，然后停止。'
+  }
+];
+
+function pickSpeakingStyle() {
+  const total = SPEAKING_STYLES.reduce((sum, s) => sum + s.weight, 0);
+  let r = Math.random() * total;
+  for (const s of SPEAKING_STYLES) {
+    r -= s.weight;
+    if (r <= 0) return s;
+  }
+  return SPEAKING_STYLES[0];
+}
+
+function pickLengthInstruction() {
+  const r = Math.random();
+  if (r < 0.18) return '短：80-150字。像茶馆闲聊的一句点评。';
+  if (r < 0.50) return '中：200-350字。足够展开一个念头，但别写论文。';
+  if (r < 0.80) return '中长：400-600字。可以讲一个完整的小故事或深入一个论证。';
+  return '长：700-1000字。你确实有话要说，但不要超过这个范围。';
+}
+
 // 构建群聊专用system prompt（含引用指令）
 function buildGroupSystemPrompt(philosopher, previousReplies) {
   const base = philosopher.systemPromptBase || `你是${philosopher.name}，用第一人称回应。`;
+
+  const style = pickSpeakingStyle();
+  const length = pickLengthInstruction();
 
   let contextPrompt = '';
   if (previousReplies.length > 0) {
@@ -2820,12 +2875,12 @@ function buildGroupSystemPrompt(philosopher, previousReplies) {
       return `- ${p ? p.name : r.philosopherId}：「${r.reply.substring(0, 200)}${r.reply.length > 200 ? '...' : ''}」`;
     }).join('\n');
 
-    contextPrompt = `\n\n【圆桌上下文】\n你正在参与一场哲学圆桌讨论。前面已有${previousReplies.length}位哲学家发表了观点：\n${others}\n\n【回应要求】\n1. 仔细阅读前面哲学家的发言\n2. 选择你的回应策略之一：\n   - 同意并深化：「我同意XX的观点，但想补充……」\n   - 不同意并反驳：「XX说……，但我认为这是错误的，因为……」\n   - 侧面切入：「XX从A角度说了……，我想从B角度补充……」\n   - 沉默：如果你认为已说透，可以说「关于这个问题，我暂无更多补充。」\n3. 必须引用或回应至少一位前面发言者的观点\n4. 保持你的人格特征和语言风格\n5. 简洁有力，200-400字`;
+    contextPrompt = `\n\n【圆桌上下文】\n你正在参与一场哲学圆桌讨论。前面已有${previousReplies.length}位哲学家发表了观点：\n${others}\n\n【回应要求】\n1. 你是${style.name}：${style.instruction}\n2. 长度要求：${length}\n3. 保持你的人格特征和语言风格\n4. 可以回应前面的人，也可以完全不回应，按你的风格来`;
   } else {
-    contextPrompt = `\n\n【圆桌上下文】\n你是本场讨论的第一位发言者。请直接回应用户的哲学问题，提出你的核心观点。\n保持你的人格特征，简洁有力，200-400字。`;
+    contextPrompt = `\n\n【圆桌上下文】\n你是本场讨论的第一位发言者。\n\n【回应要求】\n1. 你是${style.name}：${style.instruction}\n2. 长度要求：${length}\n3. 保持你的人格特征和语言风格`;
   }
 
-  return base + contextPrompt + '\n\n【绝对禁止】\n- 第三人称提及自己（"尼采"、"尼采的哲学"）\n- 舞台动作描述\n- 感叹号和情感化表达\n- 编造不存在的学者观点';
+  return base + contextPrompt + `\n\n【绝对禁止】\n- 以"我认为/我的观点是/我的理解是/我想指出/我要反驳"等固定句式开头。直接说内容，像真人一样起句。\n- 第三人称提及自己（"${philosopher.name}的哲学"、"${philosopher.name}认为"）\n- 舞台动作描述（"微微一笑"、"沉思片刻"）\n- 感叹号和情感化表达堆砌\n- 编造不存在的学者观点\n- 机械地分点论述（1. 2. 3.），除非你的哲学家人格本身就是体系化的\n- 每轮都必须总结"总之"`;
 }
 
 // SSE辅助

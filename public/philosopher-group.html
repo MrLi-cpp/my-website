@@ -7,9 +7,10 @@
   <link rel="stylesheet" href="/style.css?v=2">
   <style>
     /* ========== 页面总高度锁定，禁止整体滚动 ========== */
+    html, body { margin: 0; padding: 0; height: 100%; background: var(--bg-primary); }
     .group-page {
       background: var(--bg-primary);
-      height: calc(100vh - 56px);        /* 减去顶部固定导航 */
+      height: 100vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -180,6 +181,11 @@
       flex-direction: column;
       gap: 16px;
       min-height: 0;
+    }
+    /* 消息少时自动把消息推到底部，避免justify-content:flex-end的滚动bug */
+    .group-messages::before {
+      content: '';
+      flex: 1 0 auto;
     }
     .group-messages::-webkit-scrollbar { width: 4px; }
     .group-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -864,16 +870,6 @@
 
         case 'done':
           // 讨论结束
-          if (data.speakerCount !== undefined) {
-            const total = (data.speakerCount || 0) + (data.silencedCount || 0);
-            addMessage({
-              id: 'done_' + Date.now(),
-              role: 'system',
-              content: `✦ 本轮讨论结束 — ${data.speakerCount}位哲学家发言，${data.silencedCount}位沉默`,
-              time: Date.now(),
-              type: 'system'
-            });
-          }
           break;
       }
     }
