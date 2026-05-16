@@ -219,16 +219,6 @@ db.serialize(() => {
     else console.log('[INIT] 管理员账号已存在');
   });
 
-  // 清理残留视频数据
-  db.run("UPDATE posts SET video = NULL", (err) => {
-    if (err) console.error('[INIT] 清理 posts 视频失败:', err.message);
-    else console.log('[INIT] 已清空 posts 表 video 字段');
-  });
-  db.run("DELETE FROM messages WHERE type = 'video'", (err) => {
-    if (err) console.error('[INIT] 清理视频消息失败:', err.message);
-    else console.log('[INIT] 已删除视频类型消息');
-  });
-
   // ===== 学习站资料表 =====
   db.run(`CREATE TABLE IF NOT EXISTS learning_items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -306,52 +296,6 @@ db.serialize(() => {
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
   db.run(`CREATE INDEX IF NOT EXISTS idx_philo_summaries_user ON philosopher_summaries(user_id, philosopher_id)`, [], (err) => { if (err) console.error('[INIT] idx_philo_summaries_user:', err.message); });
-
-  // ===== 数据迁移：旧JSON画像 → 结构化表 =====
-  db.get("SELECT COUNT(*) as cnt FROM sqlite_master WHERE type='table' AND name='philosopher_profiles'", [], (err, row) => {
-    if (err || !row || row.cnt === 0) return;
-    db.all('SELECT * FROM philosopher_profiles WHERE concept_mastery IS NOT NULL AND concept_mastery != \'{}\'', [], (err, oldProfiles) => {
-      if (err || !oldProfiles || !oldProfiles.length) return;
-      console.log(`[INIT] 发现 ${oldProfiles.length} 个旧版画像，开始迁移...`);
-      for (const p of oldProfiles) {
-        const userId = p.user_id;
-        const mastery = JSON.parse(p.concept_mastery || '{}');
-        const prefs = JSON.parse(p.user_preferences || '{}');
-        const summaries = JSON.parse(p.session_summaries || '[]');
-
-        // 迁移 stance + preferences
-        db.run(
-          'INSERT OR REPLACE INTO philosopher_profiles (user_id, stance, preferred_examples, disliked_styles, total_messages, updated_at) VALUES (?, ?, ?, ?, ?, ?)',
-          [userId, prefs.stance || null, JSON.stringify(prefs.preferredExamples || []), JSON.stringify(prefs.dislikedStyles || []), summaries.length * 2, p.updated_at]
-        );
-
-        // 迁移概念
-        for (const [name, data] of Object.entries(mastery)) {
-          db.run(
-            'INSERT OR REPLACE INTO philosopher_concepts (user_id, philosopher_id, concept_name, level, depth, discuss_count, last_discussed, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [userId, 'nietzsche', name, data.level || 'novice', data.depth || 'basic', 1, data.lastDiscussed || null, p.updated_at]
-          );
-        }
-
-        // 迁移学者
-        for (const s of (prefs.engagedScholars || [])) {
-          db.run(
-            'INSERT OR REPLACE INTO philosopher_scholars (user_id, philosopher_id, scholar_name, interest_score, first_seen, last_seen) VALUES (?, ?, ?, ?, ?, ?)',
-            [userId, 'nietzsche', s, 1, p.updated_at, p.updated_at]
-          );
-        }
-
-        // 迁移摘要
-        for (const sum of summaries) {
-          db.run(
-            'INSERT INTO philosopher_summaries (user_id, philosopher_id, session_id, summary, key_concepts, created_at) VALUES (?, ?, ?, ?, ?, ?)',
-            [userId, 'nietzsche', sum.sessionId || `sess_${Date.now()}`, sum.summary, JSON.stringify(sum.keyConcepts || []), sum.timestamp || p.updated_at]
-          );
-        }
-      }
-      console.log('[INIT] 画像数据迁移完成');
-    });
-  });
 
   // ===== 群聊圆桌数据表 =====
   db.run(`CREATE TABLE IF NOT EXISTS group_chat_sessions (
@@ -1139,7 +1083,6 @@ app.get('/api/profile', (req, res) => {
 });
 
 // ========== 我的故事 API ==========
-const STORY_ACCESS_KEY = 'jiguang2026'; // 故事访问密钥
 
 // 验证故事访问密钥（验证当前登录用户的个人密钥）
 app.post('/api/story-verify', (req, res) => {
@@ -1476,15 +1419,6 @@ function insertMessage(senderId, receiverId, content, msgType, fileUrl, res) {
     );
   });
 }
-
-// 标记管理员在线状态（用于前端判断）
-app.get('/api/me/admin', requireLogin, (req, res) => {
-  db.get('SELECT id, username, is_admin, avatar, gender, bio, deleted_at FROM users WHERE id = ?', [req.session.userId], (err, user) => {
-    if (err || !user) return res.status(404).json({ error: '用户不存在' });
-    req.session.isAdmin = !!user.is_admin;
-    res.json({ is_admin: !!user.is_admin, user_id: req.session.userId, deleted_at: user.deleted_at });
-  });
-});
 
 // 获取用户列表（所有已登录用户可见，过滤已注销）
 app.get('/api/users', requireLogin, (req, res) => {
@@ -2412,11 +2346,6 @@ app.get('/api/philosopher-profile/summaries', requireLogin, (req, res) => {
       res.json(rows || []);
     }
   );
-});
-
-// 学者数据
-app.get('/api/philosopher-scholars', (req, res) => {
-  res.json(scholarsData);
 });
 
 // 清空会话（保留画像）
