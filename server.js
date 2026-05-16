@@ -402,6 +402,165 @@ app.use((req, res, next) => {
   next();
 });
 app.use(csrfProtection);
+
+// ========== 通用 Service 层 ==========
+
+/**
+ * 创建点赞/取消点赞路由 handler
+ * @param {Object} config
+ * @param {string} config.likeTable - 点赞表名
+ * @param {string} config.targetIdField - 目标ID字段名
+ * @param {string} [config.countTable] - 计数表名（可选）
+ * @param {string} [config.countColumn] - 计数字段名（可选）
+ */
+function createToggleLikeHandler({ likeTable, targetIdField, countTable, countColumn }) {
+  return (req, res) => {
+    const targetId = req.params.id;
+    const userId = req.session.userId;
+    db.serialize(() => {
+      db.run('BEGIN IMMEDIATE');
+      db.get(`SELECT id FROM ${likeTable} WHERE ${targetIdField} = ? AND user_id = ?`, [targetId, userId], (err, row) => {
+        if (err) {
+          db.run('ROLLBACK');
+          return res.status(500).json({ error: err.message });
+        }
+        if (row) {
+          db.run(`DELETE FROM ${likeTable} WHERE ${targetIdField} = ? AND user_id = ?`, [targetId, userId], function(err) {
+            if (err) { db.run('ROLLBACK'); return res.status(500).json({ error: err.message }); }
+            if (countTable && countColumn) {
+              db.run(`UPDATE ${countTable} SET ${countColumn} = MAX(0, ${countColumn} - 1) WHERE id = ?`, [targetId], function(err2) {
+                if (err2) { db.run('ROLLBACK'); return res.status(500).json({ error: err2.message }); }
+                db.run('COMMIT');
+                res.json({ liked: false });
+              });
+            } else {
+              db.run('COMMIT');
+              res.json({ liked: false });
+            }
+          });
+        } else {
+          db.run(`INSERT INTO ${likeTable} (${targetIdField}, user_id) VALUES (?, ?)`, [targetId, userId], function(err) {
+            if (err) { db.run('ROLLBACK'); return res.status(500).json({ error: err.message }); }
+            if (countTable && countColumn) {
+              db.run(`UPDATE ${countTable} SET ${countColumn} = ${countColumn} + 1 WHERE id = ?`, [targetId], function(err2) {
+                if (err2) { db.run('ROLLBACK'); return res.status(500).json({ error: err2.message }); }
+                db.run('COMMIT');
+                res.json({ liked: true });
+              });
+            } else {
+              db.run('COMMIT');
+              res.json({ liked: true });
+            }
+          });
+        }
+      });
+    });
+  };
+}
+
+/**
+ * 创建添加评论路由 handler
+ * @param {Object} config
+ * @param {string} config.commentTable - 评论表名
+ * @param {string} config.targetField - 目标ID字段名
+ */
+function createAddCommentHandler({ commentTable, targetField }) {
+  return (req, res) => {
+    const { content, parent_id } = req.body;
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({ error: '评论内容不能为空' });
+    }
+    db.run(`INSERT INTO ${commentTable} (${targetField}, user_id, content, parent_id) VALUES (?, ?, ?, ?)`,
+      [req.params.id, req.session.userId, content.trim(), parent_id || null],
+      function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ id: this.lastID, message: '评论成功' });
+      }
+    );
+  };
+}
+
+/**
+ * 创建获取评论列表路由 handler
+ * @param {Object} config
+ * @param {string} config.commentTable - 评论表名
+ * @param {string} config.targetField - 目标ID字段名
+ * @param {string} [config.orderBy] - 排序子句
+ */
+function createListCommentsHandler({ commentTable, targetField, orderBy = 'c.created_at ASC' }) {
+  return (req, res) => {
+    db.all(`
+      SELECT c.*, u.username
+      FROM ${commentTable} c
+      JOIN users u ON u.id = c.user_id
+      WHERE c.${targetField} = ?
+      ORDER BY ${orderBy}
+    `, [req.params.id], (err, comments) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(comments);
+    });
+  };
+}
+
+/**
+ * 创建修改评论路由 handler
+ * @param {Object} config
+ * @param {string} config.commentTable - 评论表名
+ */
+function createUpdateCommentHandler({ commentTable }) {
+  return (req, res) => {
+    const { content } = req.body;
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({ error: '评论内容不能为空' });
+    }
+    db.get(`SELECT user_id FROM ${commentTable} WHERE id = ?`, [req.params.id], (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (!row) return res.status(404).json({ error: '评论不存在' });
+      if (row.user_id !== req.session.userId) return res.status(403).json({ error: '无权修改' });
+      db.run(`UPDATE ${commentTable} SET content = ? WHERE id = ?`, [content.trim(), req.params.id], function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: '修改成功' });
+      });
+    });
+  };
+}
+
+/**
+ * 创建删除评论路由 handler
+ * @param {Object} config
+ * @param {string} config.commentTable - 评论表名
+ * @param {boolean} [config.checkAdmin] - 非本人时是否检查管理员权限
+ */
+function createDeleteCommentHandler({ commentTable, checkAdmin = false }) {
+  return (req, res) => {
+    const commentId = req.params.id;
+    const userId = req.session.userId;
+    db.get(`SELECT user_id FROM ${commentTable} WHERE id = ?`, [commentId], (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (!row) return res.status(404).json({ error: '评论不存在' });
+      if (row.user_id !== userId) {
+        if (checkAdmin) {
+          db.get('SELECT is_admin FROM users WHERE id = ?', [userId], (err2, user) => {
+            if (err2) return res.status(500).json({ error: err2.message });
+            if (!user || !user.is_admin) return res.status(403).json({ error: '无权删除' });
+            db.run(`DELETE FROM ${commentTable} WHERE id = ?`, [commentId], function(err) {
+              if (err) return res.status(500).json({ error: err.message });
+              res.json({ success: true });
+            });
+          });
+        } else {
+          return res.status(403).json({ error: '无权删除' });
+        }
+      } else {
+        db.run(`DELETE FROM ${commentTable} WHERE id = ?`, [commentId], function(err) {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ success: true });
+        });
+      }
+    });
+  };
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
@@ -696,145 +855,30 @@ app.get('/api/users/:id', (req, res) => {
 // ========== 点赞/评论 ==========
 
 // 点赞/取消点赞（原子操作）
-app.post('/api/posts/:id/like', requireLogin, (req, res) => {
-  const postId = req.params.id;
-  const userId = req.session.userId;
-
-  db.serialize(() => {
-    db.run('BEGIN IMMEDIATE');
-    db.get('SELECT id FROM likes WHERE post_id = ? AND user_id = ?', [postId, userId], (err, existing) => {
-      if (err) {
-        db.run('ROLLBACK');
-        return res.status(500).json({ error: err.message });
-      }
-      if (existing) {
-        db.run('DELETE FROM likes WHERE post_id = ? AND user_id = ?', [postId, userId], function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: err.message });
-          }
-          db.run('UPDATE posts SET likes_count = MAX(0, likes_count - 1) WHERE id = ?', [postId], function(err2) {
-            if (err2) {
-              db.run('ROLLBACK');
-              return res.status(500).json({ error: err2.message });
-            }
-            db.run('COMMIT');
-            res.json({ liked: false });
-          });
-        });
-      } else {
-        db.run('INSERT INTO likes (post_id, user_id) VALUES (?, ?)', [postId, userId], function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: err.message });
-          }
-          db.run('UPDATE posts SET likes_count = likes_count + 1 WHERE id = ?', [postId], function(err2) {
-            if (err2) {
-              db.run('ROLLBACK');
-              return res.status(500).json({ error: err2.message });
-            }
-            db.run('COMMIT');
-            res.json({ liked: true });
-          });
-        });
-      }
-    });
-  });
-});
+app.post('/api/posts/:id/like', requireLogin, createToggleLikeHandler({
+  likeTable: 'likes', targetIdField: 'post_id', countTable: 'posts', countColumn: 'likes_count'
+}));
 
 // 评论
-app.post('/api/posts/:id/comment', requireLogin, (req, res) => {
-  const { content, parent_id } = req.body;
-  if (!content || content.trim().length === 0) return res.status(400).json({ error: '评论内容不能为空' });
-  db.run('INSERT INTO comments (post_id, user_id, content, parent_id) VALUES (?, ?, ?, ?)',
-    [req.params.id, req.session.userId, content.trim(), parent_id || null],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ id: this.lastID, message: '评论成功' });
-    }
-  );
-});
+app.post('/api/posts/:id/comment', requireLogin, createAddCommentHandler({
+  commentTable: 'comments', targetField: 'post_id'
+}));
 
 // 获取评论
-app.get('/api/posts/:id/comments', (req, res) => {
-  db.all(`
-    SELECT c.*, u.username
-    FROM comments c
-    JOIN users u ON u.id = c.user_id
-    WHERE c.post_id = ?
-    ORDER BY c.created_at ASC
-  `, [req.params.id], (err, comments) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(comments);
-  });
-});
+app.get('/api/posts/:id/comments', createListCommentsHandler({
+  commentTable: 'comments', targetField: 'post_id'
+}));
 
 // 评论点赞（原子操作）
-app.post('/api/comments/:id/like', requireLogin, (req, res) => {
-  const commentId = req.params.id;
-  const userId = req.session.userId;
-  db.serialize(() => {
-    db.run('BEGIN IMMEDIATE');
-    db.get('SELECT id FROM comment_likes WHERE comment_id = ? AND user_id = ?', [commentId, userId], (err, row) => {
-      if (err) {
-        db.run('ROLLBACK');
-        return res.status(500).json({ error: err.message });
-      }
-      if (row) {
-        db.run('DELETE FROM comment_likes WHERE comment_id = ? AND user_id = ?', [commentId, userId], function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: err.message });
-          }
-          db.run('COMMIT');
-          res.json({ liked: false });
-        });
-      } else {
-        db.run('INSERT INTO comment_likes (comment_id, user_id) VALUES (?, ?)', [commentId, userId], function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: err.message });
-          }
-          db.run('COMMIT');
-          res.json({ liked: true });
-        });
-      }
-    });
-  });
-});
+app.post('/api/comments/:id/like', requireLogin, createToggleLikeHandler({
+  likeTable: 'comment_likes', targetIdField: 'comment_id'
+}));
 
 // 修改评论（朋友圈）
-app.put('/api/comments/:id', requireLogin, (req, res) => {
-  const { content } = req.body;
-  if (!content || content.trim().length === 0) return res.status(400).json({ error: '评论内容不能为空' });
-  db.get('SELECT user_id FROM comments WHERE id = ?', [req.params.id], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: '评论不存在' });
-    if (row.user_id !== req.session.userId) return res.status(403).json({ error: '无权修改' });
-    db.run('UPDATE comments SET content = ? WHERE id = ?', [content.trim(), req.params.id], function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: '修改成功' });
-    });
-  });
-});
+app.put('/api/comments/:id', requireLogin, createUpdateCommentHandler({ commentTable: 'comments' }));
 
 // 删除评论（自己或管理员）
-app.delete('/api/comments/:id', requireLogin, (req, res) => {
-  const commentId = req.params.id;
-  const userId = req.session.userId;
-  db.get('SELECT user_id FROM comments WHERE id = ?', [commentId], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: '评论不存在' });
-    db.get('SELECT is_admin FROM users WHERE id = ?', [userId], (err2, user) => {
-      if (err2) return res.status(500).json({ error: err2.message });
-      if (row.user_id !== userId && (!user || !user.is_admin)) return res.status(403).json({ error: '无权删除' });
-      db.run('DELETE FROM comments WHERE id = ?', [commentId], function(err) {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ success: true });
-      });
-    });
-  });
-});
+app.delete('/api/comments/:id', requireLogin, createDeleteCommentHandler({ commentTable: 'comments', checkAdmin: true }));
 
 // ========== 博客系统 ==========
 
@@ -952,105 +996,25 @@ app.delete('/api/blogs/:id', requireAdmin, (req, res) => {
 });
 
 // 博客点赞/取消点赞（原子操作）
-app.post('/api/blogs/:id/like', requireLogin, (req, res) => {
-  const blogId = req.params.id;
-  const userId = req.session.userId;
-  db.serialize(() => {
-    db.run('BEGIN IMMEDIATE');
-    db.get('SELECT id FROM blog_likes WHERE blog_id = ? AND user_id = ?', [blogId, userId], (err, existing) => {
-      if (err) {
-        db.run('ROLLBACK');
-        return res.status(500).json({ error: err.message });
-      }
-      if (existing) {
-        db.run('DELETE FROM blog_likes WHERE blog_id = ? AND user_id = ?', [blogId, userId], function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: err.message });
-          }
-          db.run('UPDATE blogs SET likes_count = MAX(0, likes_count - 1) WHERE id = ?', [blogId], function(err2) {
-            if (err2) {
-              db.run('ROLLBACK');
-              return res.status(500).json({ error: err2.message });
-            }
-            db.run('COMMIT');
-            res.json({ liked: false });
-          });
-        });
-      } else {
-        db.run('INSERT INTO blog_likes (blog_id, user_id) VALUES (?, ?)', [blogId, userId], function(err) {
-          if (err) {
-            db.run('ROLLBACK');
-            return res.status(500).json({ error: err.message });
-          }
-          db.run('UPDATE blogs SET likes_count = likes_count + 1 WHERE id = ?', [blogId], function(err2) {
-            if (err2) {
-              db.run('ROLLBACK');
-              return res.status(500).json({ error: err2.message });
-            }
-            db.run('COMMIT');
-            res.json({ liked: true });
-          });
-        });
-      }
-    });
-  });
-});
+app.post('/api/blogs/:id/like', requireLogin, createToggleLikeHandler({
+  likeTable: 'blog_likes', targetIdField: 'blog_id', countTable: 'blogs', countColumn: 'likes_count'
+}));
 
 // 博客评论
-app.post('/api/blogs/:id/comment', requireLogin, (req, res) => {
-  const { content } = req.body;
-  if (!content || content.trim().length === 0) return res.status(400).json({ error: '评论内容不能为空' });
-  db.run('INSERT INTO blog_comments (blog_id, user_id, content) VALUES (?, ?, ?)',
-    [req.params.id, req.session.userId, content.trim()],
-    function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ id: this.lastID, message: '评论成功' });
-    }
-  );
-});
+app.post('/api/blogs/:id/comment', requireLogin, createAddCommentHandler({
+  commentTable: 'blog_comments', targetField: 'blog_id'
+}));
 
 // 获取博客评论
-app.get('/api/blogs/:id/comments', (req, res) => {
-  db.all(`
-    SELECT c.*, u.username
-    FROM blog_comments c
-    JOIN users u ON u.id = c.user_id
-    WHERE c.blog_id = ?
-    ORDER BY c.parent_id ASC, c.created_at ASC
-  `, [req.params.id], (err, comments) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(comments);
-  });
-});
+app.get('/api/blogs/:id/comments', createListCommentsHandler({
+  commentTable: 'blog_comments', targetField: 'blog_id', orderBy: 'c.parent_id ASC, c.created_at ASC'
+}));
 
 // 修改博客评论
-app.put('/api/blog-comments/:id', requireLogin, (req, res) => {
-  const { content } = req.body;
-  if (!content || content.trim().length === 0) return res.status(400).json({ error: '评论内容不能为空' });
-  db.get('SELECT user_id FROM blog_comments WHERE id = ?', [req.params.id], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: '评论不存在' });
-    if (row.user_id !== req.session.userId) return res.status(403).json({ error: '无权修改' });
-    db.run('UPDATE blog_comments SET content = ? WHERE id = ?', [content.trim(), req.params.id], function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: '修改成功' });
-    });
-  });
-});
+app.put('/api/blog-comments/:id', requireLogin, createUpdateCommentHandler({ commentTable: 'blog_comments' }));
 
 // 删除博客评论
-app.delete('/api/blog-comments/:id', requireLogin, (req, res) => {
-  db.get('SELECT user_id FROM blog_comments WHERE id = ?', [req.params.id], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: '评论不存在' });
-    if (row.user_id !== req.session.userId) return res.status(403).json({ error: '无权删除' });
-    db.run('DELETE FROM blog_comments WHERE id = ?', [req.params.id], function(err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ message: '删除成功' });
-    });
-  });
-});
+app.delete('/api/blog-comments/:id', requireLogin, createDeleteCommentHandler({ commentTable: 'blog_comments' }));
 
 // 回复博客评论
 app.post('/api/blog-comments/:id/reply', requireLogin, (req, res) => {
